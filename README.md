@@ -14,6 +14,14 @@ Product demo videos and the WeChat community for PenguinHarness. Click a video c
 
 The latest Electron interface with matching narration and subtitles. 1080p, approximately 3.2–3.3 MB per video.
 
+https://github.com/user-attachments/assets/4d039c13-af23-463c-b9a9-e07616872b86
+
+https://github.com/user-attachments/assets/f310e817-69fd-4c53-a3e0-ffc7181a16bb
+
+https://github.com/user-attachments/assets/c2c0ea5a-a07b-4d8f-b0e9-63bc03b72ce2
+
+https://github.com/user-attachments/assets/841f0537-eeac-4af9-8304-83509ceab3b3
+
 | 中文 / Chinese | English |
 | --- | --- |
 | [<img src="videos/previews/PenguinHarness-Self-Evolution-ZH-poster.png" width="420" alt="决策智能体自进化 / Decision agent self-evolution">](videos/PenguinHarness-Self-Evolution-ZH.mp4?raw=true)<br>**决策智能体自进化 / Decision agent self-evolution**<br>[下载 / Download · ZH · 1:55](videos/PenguinHarness-Self-Evolution-ZH.mp4?raw=true) | [<img src="videos/previews/PenguinHarness-Self-Evolution-EN-poster.png" width="420" alt="决策智能体自进化 / Decision agent self-evolution">](videos/PenguinHarness-Self-Evolution-EN.mp4?raw=true)<br>**决策智能体自进化 / Decision agent self-evolution**<br>[下载 / Download · EN · 1:53](videos/PenguinHarness-Self-Evolution-EN.mp4?raw=true) |
