@@ -1,0 +1,87 @@
+1
+00:00:00,450 --> 00:00:03,869
+How far can an agent evolve for fifteen cents?
+
+2
+00:00:04,783 --> 00:00:11,688
+In this decision-agent demo, the same model improved its average evaluation score from eighty-four to one hundred.
+
+3
+00:00:12,575 --> 00:00:17,121
+A procurement decision depends on conflicting reports and revised rules.
+
+4
+00:00:17,163 --> 00:00:21,029
+Miss the source records, and the conclusion can change.
+
+5
+00:00:21,992 --> 00:00:25,288
+Turn business problems into an evaluation set.
+
+6
+00:00:25,329 --> 00:00:28,426
+Run a baseline to expose the weaknesses.
+
+7
+00:00:29,367 --> 00:00:32,013
+Procurement scored just fifty-seven.
+
+8
+00:00:32,055 --> 00:00:36,787
+The gap was in evidence retrieval, version checks and calculations.
+
+9
+00:00:37,742 --> 00:00:42,423
+PenguinHarness uses the failure trace to improve the agent’s working method.
+
+10
+00:00:43,325 --> 00:00:49,677
+Retrieve the evidence, identify the current rules, recalculate the numbers, then make the decision.
+
+11
+00:00:50,575 --> 00:00:52,657
+The model stayed the same.
+
+12
+00:00:52,699 --> 00:00:57,706
+The agent configuration changed; the evaluation materials did not.
+
+13
+00:00:58,658 --> 00:01:02,747
+On retesting, procurement rose from fifty-seven to one hundred.
+
+14
+00:01:02,789 --> 00:01:05,886
+The average improved by sixteen points.
+
+15
+00:01:06,825 --> 00:01:14,716
+Including the baseline, optimization, scoring and six test runs, estimated model-call cost was about fifteen cents.
+
+16
+00:01:15,617 --> 00:01:18,275
+Track each attempt in the cost center.
+
+17
+00:01:18,317 --> 00:01:22,532
+Low costs make repeated testing and iteration more accessible.
+
+18
+00:01:23,492 --> 00:01:32,620
+On the published coding benchmark, PenguinHarness matched Codex at seventy-one point two five percent accuracy, for about one fifty-eighth the cost.
+
+19
+00:01:33,533 --> 00:01:40,150
+Connect evaluations, memory, tools and applications, so improvements return to the business.
+
+20
+00:01:41,033 --> 00:01:42,719
+PenguinHarness.
+
+21
+00:01:42,760 --> 00:01:46,925
+Building the most comprehensive platform for agent self-evolution.
+
+22
+00:01:46,967 --> 00:01:50,857
+Download the app, or start with the open-source repository.
