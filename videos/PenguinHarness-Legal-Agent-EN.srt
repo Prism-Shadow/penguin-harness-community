@@ -1,75 +1,87 @@
 1
-00:00:00,450 --> 00:00:03,809
-A contract-review interface is just the beginning.
+00:00:00,450 --> 00:00:04,191
+This contract-review workspace was built from one request.
 
 2
-00:00:04,700 --> 00:00:06,974
-Company policies change.
+00:00:04,232 --> 00:00:09,240
+Users can upload contracts, follow review progress and download reports.
 
 3
-00:00:07,016 --> 00:00:10,544
-Teams need a different interface and fewer missed risks.
+00:00:10,200 --> 00:00:17,970
+Ask Penguin Harness for a legal agent that identifies risky clauses, suggests revisions and provides a working interface.
 
 4
-00:00:10,586 --> 00:00:12,937
-Can your legal agent keep up?
+00:00:18,867 --> 00:00:21,081
+Upload a sample contract.
 
 5
-00:00:13,867 --> 00:00:20,868
-With PenguinHarness, describe what you need in one request to build a legal agent application with its own interface.
+00:00:21,122 --> 00:00:26,226
+The agent reads it and runs the review in the background, while the page shows progress.
 
 6
-00:00:21,783 --> 00:00:29,121
-Upload a contract, let the agent review it, then receive risks and suggested revisions in a working business process.
+00:00:27,158 --> 00:00:32,497
+The report cites clauses, explains business risks and suggests alternative wording.
 
 7
-00:00:30,033 --> 00:00:35,893
-Save your company’s review preferences in long-term memory, so you do not have to explain them again.
+00:00:32,539 --> 00:00:35,648
+Read it here or download it for legal review.
 
 8
-00:00:36,783 --> 00:00:44,313
-In a fresh session, the agent applies those preferences to payment terms, data reuse and one-sided liability caps.
+00:00:36,617 --> 00:00:43,891
+The company requires written acceptance before payment, limits client-data reuse and flags one-sided liability caps.
 
 9
-00:00:45,200 --> 00:00:51,817
-Adapt the interface to your team, adding branded dashboards, status cards and an inline report preview.
+00:00:43,933 --> 00:00:46,633
+Save these requirements to memory.
 
 10
-00:00:52,700 --> 00:00:59,833
-Changes hot reload into the application while existing reviews remain, helping the workflow keep pace with new requirements.
+00:00:47,575 --> 00:00:55,165
+In a new session, the agent reads those saved requirements and applies them to the payment, data-use and liability clauses.
 
 11
-00:01:00,742 --> 00:01:03,953
-The interface updates as processing progresses.
+00:00:56,033 --> 00:01:00,086
+Add status counts, company branding and report previews.
 
 12
-00:01:03,995 --> 00:01:07,957
-When a review finishes, its report is ready to inspect.
+00:01:00,128 --> 00:01:03,670
+Here, we switch the workspace to a card layout.
 
 13
-00:01:08,908 --> 00:01:16,234
-Turn missed risks into evaluation tasks, then use the same self-evolution loop to test and improve the review method.
+00:01:04,617 --> 00:01:07,504
+Saving changes reloads the application.
 
 14
-00:01:17,117 --> 00:01:24,815
-In our decision demo, this loop raised the average score from eighty-four to one hundred, for about fifteen cents in model calls.
+00:01:07,546 --> 00:01:13,226
+Existing review records remain available, so users do not need to upload their files again.
 
 15
-00:01:25,700 --> 00:01:33,122
-Here, five sample contract reviews cost about four cents in model calls: less than one cent each, on average.
+00:01:14,158 --> 00:01:18,945
+When the agent misses a risk, add that contract as an evaluation case.
 
 16
-00:01:33,992 --> 00:01:41,582
-Bring creation, memory, interface updates and low-cost evolution together, so your application grows with your business.
+00:01:18,986 --> 00:01:22,804
+The optimizer can revise the review method and retest.
 
 17
-00:01:42,450 --> 00:01:44,135
-PenguinHarness.
+00:01:23,783 --> 00:01:28,654
+In the separate decision-agent demo, scores improve from eighty-four to one hundred.
 
 18
-00:01:44,177 --> 00:01:48,342
-Building the most comprehensive platform for agent self-evolution.
+00:01:28,695 --> 00:01:32,670
+That cycle costs about fifteen cents in model calls.
 
 19
-00:01:48,384 --> 00:01:52,033
-Download the app and explore the open-source repository.
+00:01:33,617 --> 00:01:39,172
+These five sample reviews cost about four cents in total: under one cent each on average.
+
+20
+00:01:39,214 --> 00:01:42,070
+Application creation is excluded.
+
+21
+00:01:43,033 --> 00:01:47,207
+Our goal is the most comprehensive agent self-evolution platform.
+
+22
+00:01:47,248 --> 00:01:50,886
+Download the app or explore the source at these addresses.
