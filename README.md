@@ -6,45 +6,45 @@ Product demo videos and the WeChat community for PenguinHarness.
 
 ## 产品演示 / Product demos
 
-1080p · 中文与英文界面、配音及字幕 · 1:50–1:54 · 每支约 2.5–2.9 MB
+1080p · 中文与英文界面、配音及字幕 · 1:51–1:53 · 每支约 2.4–2.9 MB
 
-1080p · Matching Chinese or English interface, narration and subtitles · 1:50–1:54 · About 2.5–2.9 MB each
+1080p · Matching Chinese or English interface, narration and subtitles · 1:51–1:53 · About 2.4–2.9 MB each
 
 ### 超低成本自进化 / Ultra-low-cost self-evolution
 
 #### English
 
-See a decision agent improve from 84 to 100 with the same model for about $0.15 in model calls for the demonstrated evaluation-and-optimization cycle.
+Follow a decision agent through evaluation, optimization and retesting: the demonstration score rises from 84 to 100, with about $0.15 in estimated model calls for the cycle.
 
-https://github.com/user-attachments/assets/5f942585-95f0-4465-8009-6a7ce2231847
+https://github.com/user-attachments/assets/7390cad5-487c-49e3-8ca3-b692d90281d3
 
-[MP4 · 1:51 · 2.6 MB](videos/PenguinHarness-Self-Evolution-EN.mp4?raw=true) · [SRT](videos/PenguinHarness-Self-Evolution-EN.srt)
+[MP4 · 1:53 · 2.5 MB](videos/PenguinHarness-Self-Evolution-EN.mp4?raw=true) · [SRT](videos/PenguinHarness-Self-Evolution-EN.srt)
 
 #### 中文
 
-同一模型下，决策智能体通过评测、诊断和复测将演示集均分从 84 提升到 100，本轮模型调用估算仅约 15 美分。
+展示决策智能体的评测、优化和复测过程：演示集均分从 84 提高到 100，本轮模型调用估算约 15 美分。
 
-https://github.com/user-attachments/assets/1332f433-4514-46a3-96d4-2c0b803985e9
+https://github.com/user-attachments/assets/8edb2f8b-b74f-4929-91ab-9bcb16c57108
 
-[MP4 · 1:50 · 2.5 MB](videos/PenguinHarness-Self-Evolution-ZH.mp4?raw=true) · [SRT](videos/PenguinHarness-Self-Evolution-ZH.srt)
+[MP4 · 1:53 · 2.4 MB](videos/PenguinHarness-Self-Evolution-ZH.mp4?raw=true) · [SRT](videos/PenguinHarness-Self-Evolution-ZH.srt)
 
-### 一句话构建持续成长的应用 / Build an app that keeps improving
+### 法务智能体应用 / Legal-agent application
 
 #### English
 
-Build a legal-agent app from one request, with long-term memory, hot reload, a customizable live interface and sample review calls averaging under one cent.
+Create a contract-review workspace from one request, then use saved company requirements, customize the interface and apply changes with hot reload; five sample reviews average under one cent in model calls.
 
-https://github.com/user-attachments/assets/9833ac74-c094-4adf-b67f-a19bcec67f8c
+https://github.com/user-attachments/assets/f2283795-6fa0-419c-a15e-5f12ed0d560b
 
-[MP4 · 1:53 · 2.9 MB](videos/PenguinHarness-Legal-Agent-EN.mp4?raw=true) · [SRT](videos/PenguinHarness-Legal-Agent-EN.srt)
+[MP4 · 1:51 · 2.7 MB](videos/PenguinHarness-Legal-Agent-EN.mp4?raw=true) · [SRT](videos/PenguinHarness-Legal-Agent-EN.srt)
 
 #### 中文
 
-一句话构建法务智能体应用，具备长期记忆、热更新、界面定制和实时状态展示能力，本次样本审阅的平均调用费不到 1 美分。
+用一句话创建合同审阅工作台，再演示长期记忆、界面定制与热更新；五次样本审阅的平均调用费不到 1 美分。
 
-https://github.com/user-attachments/assets/9c58e0a0-7d0e-4a53-9447-95943ea3a1e2
+https://github.com/user-attachments/assets/1dbb57be-80be-45fa-8601-1322c74700dd
 
-[MP4 · 1:54 · 2.8 MB](videos/PenguinHarness-Legal-Agent-ZH.mp4?raw=true) · [SRT](videos/PenguinHarness-Legal-Agent-ZH.srt)
+[MP4 · 1:53 · 2.9 MB](videos/PenguinHarness-Legal-Agent-ZH.mp4?raw=true) · [SRT](videos/PenguinHarness-Legal-Agent-ZH.srt)
 
 [数据口径、费用明细与基准来源 / Measurement scope, cost breakdown and benchmark source](videos/demo-measurements.md)
 
