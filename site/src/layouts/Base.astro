@@ -1,0 +1,278 @@
+---
+import "../styles/global.css";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+import { STRINGS, localePath, stripLocale, type Locale } from "../shared/i18n";
+import { SITE_NAME } from "../shared/site";
+
+interface Props {
+  locale: Locale;
+  title: string;
+  description?: string;
+  active: string;
+  entry?: boolean;
+  kind?: "website" | "article";
+}
+
+const {
+  locale,
+  title,
+  description = STRINGS[locale].description,
+  active,
+  entry = false,
+  kind = "article",
+} = Astro.props;
+const s = STRINGS[locale];
+const pageTitle = title === SITE_NAME ? s.siteTitle : `${title} | ${SITE_NAME}`;
+const path = stripLocale(Astro.url.pathname);
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const alternates = (["en", "zh"] as Locale[]).map((other) => ({
+  locale: other,
+  href: new URL(localePath(other, path), Astro.site),
+}));
+const ogLocale = { en: "en_US", zh: "zh_CN" };
+---
+
+<!doctype html>
+<html lang={s.htmlLang} data-locale={locale} data-entry={entry ? "" : undefined}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {alternates.map((alt) => <link rel="alternate" hreflang={alt.locale === "zh" ? "zh-CN" : "en"} href={alt.href} />)}
+    <link rel="alternate" hreflang="x-default" href={alternates[0].href} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta property="og:type" content={kind} />
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:locale" content={ogLocale[locale]} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <script is:inline>
+      (function () {
+        try {
+          var theme = localStorage.getItem("phc-site.theme");
+          if (theme === "dark" || (theme !== "light" && matchMedia("(prefers-color-scheme: dark)").matches))
+            document.documentElement.classList.add("dark");
+        } catch (e) {}
+        try {
+          var html = document.documentElement;
+          var stored = localStorage.getItem("phc-site.lang");
+          var wanted =
+            stored === "en" || stored === "zh"
+              ? stored
+              : html.hasAttribute("data-entry")
+                ? (navigator.language || "zh").toLowerCase().indexOf("en") === 0
+                  ? "en"
+                  : "zh"
+                : null;
+          if (wanted && wanted !== html.getAttribute("data-locale")) {
+            var path = location.pathname.replace(/^\/zh(?=\/|$)/, "") || "/";
+            location.replace((wanted === "zh" ? "/zh" + path : path) + location.search + location.hash);
+          }
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <Nav locale={locale} active={active} />
+    <main class="flex-1">
+      <slot />
+    </main>
+    <Footer locale={locale} />
+
+    <dialog
+      aria-labelledby="site-leave-title"
+      aria-describedby="site-leave-body"
+      class="site-leave m-auto w-[calc(100%-2rem)] max-w-sm text-left"
+      data-leave-dialog
+    >
+      <div class="site-leave-body">
+        <h2 id="site-leave-title" class="text-base font-semibold tracking-tight">
+          {s.externalLink.title}
+        </h2>
+        <div id="site-leave-body" class="site-leave-text mt-2 text-sm leading-6">
+          <p>{s.externalLink.body}</p>
+          <p class="site-leave-href mono mt-1.5 text-xs leading-5 break-all" data-leave-href></p>
+        </div>
+        <div class="mt-5 flex flex-wrap justify-end gap-2">
+          <button
+            type="button"
+            class="site-leave-cancel inline-flex h-9 items-center justify-center px-4 text-sm font-medium"
+            data-leave-cancel
+          >
+            {s.externalLink.cancel}
+          </button>
+          <a
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="site-leave-open inline-flex h-9 items-center justify-center gap-1.5 px-4 text-sm font-semibold"
+            data-leave-open
+          >
+            <span>{s.externalLink.open}</span>
+            <svg
+              viewBox="0 0 24 24"
+              class="h-3.5 w-3.5"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+              <path d="M15 3h6v6"></path>
+              <path d="M10 14 21 3"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </dialog>
+
+    <script>
+      const stored = (key: string) => {
+        try {
+          return localStorage.getItem(key);
+        } catch {
+          return null;
+        }
+      };
+      const store = (key: string, value: string) => {
+        try {
+          if (value === "system") localStorage.removeItem(key);
+          else localStorage.setItem(key, value);
+        } catch {}
+      };
+
+      const THEMES = ["system", "light", "dark"] as const;
+      const themeButton = document.querySelector<HTMLButtonElement>("[data-theme-toggle]")!;
+      const system = matchMedia("(prefers-color-scheme: dark)");
+      const themeMode = () => {
+        const mode = stored("phc-site.theme");
+        return mode === "light" || mode === "dark" ? mode : "system";
+      };
+      const applyTheme = () => {
+        const mode = themeMode();
+        document.documentElement.classList.toggle("dark", mode === "dark" || (mode === "system" && system.matches));
+        for (const icon of themeButton.querySelectorAll<SVGElement>("[data-theme-icon]")) {
+          icon.classList.toggle("hidden", icon.dataset.themeIcon !== mode);
+        }
+        const name = `${themeButton.dataset.label}: ${themeButton.dataset[mode]}`;
+        themeButton.title = name;
+        themeButton.setAttribute("aria-label", name);
+      };
+      themeButton.addEventListener("click", () => {
+        store("phc-site.theme", THEMES[(THEMES.indexOf(themeMode()) + 1) % THEMES.length]);
+        applyTheme();
+      });
+      system.addEventListener("change", applyTheme);
+      applyTheme();
+
+      document.querySelector("[data-lang-toggle]")!.addEventListener("click", () => {
+        const wanted = document.documentElement.dataset.locale === "zh" ? "en" : "zh";
+        store("phc-site.lang", wanted);
+        const path = location.pathname.replace(/^\/zh(?=\/|$)/, "") || "/";
+        location.assign((wanted === "zh" ? "/zh" + path : path) + location.hash);
+      });
+
+      const stars = document.querySelector<HTMLElement>("[data-stars]");
+      if (stars) {
+        const show = (count: number) => {
+          stars.querySelector("[data-stars-count]")!.textContent =
+            count >= 1000 ? `${(count / 1000).toFixed(1).replace(/\.0$/, "")}k` : String(count);
+          stars.hidden = false;
+        };
+        const cached = stored("phc-site.stars");
+        const fresh = cached ? (JSON.parse(cached) as { count: number; at: number }) : null;
+        if (fresh && Date.now() - fresh.at < 3600_000) {
+          show(fresh.count);
+        } else {
+          const api = stars.dataset.stars!.replace("https://github.com/", "https://api.github.com/repos/");
+          fetch(api, { headers: { accept: "application/vnd.github+json" } })
+            .then((response) => (response.ok ? response.json() : Promise.reject(response.status)))
+            .then((repo: { stargazers_count: number }) => {
+              show(repo.stargazers_count);
+              store("phc-site.stars", JSON.stringify({ count: repo.stargazers_count, at: Date.now() }));
+            })
+            .catch(() => {
+              if (fresh) show(fresh.count);
+            });
+        }
+      }
+
+      // External-link confirmation modal (like penguin.ooo)
+      for (const a of document.querySelectorAll<HTMLAnchorElement>("a[data-self-url]")) {
+        a.textContent = a.href;
+      }
+      const leaveDialog = document.querySelector<HTMLDialogElement>("[data-leave-dialog]");
+      if (leaveDialog) {
+        const leaveHref = leaveDialog.querySelector<HTMLElement>("[data-leave-href]")!;
+        const leaveCancel = leaveDialog.querySelector<HTMLButtonElement>("[data-leave-cancel]")!;
+        const leaveOpen = leaveDialog.querySelector<HTMLAnchorElement>("[data-leave-open]")!;
+        let activeTrigger: HTMLElement | null = null;
+        let pressedBackdrop = false;
+
+        const isExternalAnchor = (a: HTMLAnchorElement): boolean => {
+          if (leaveDialog.contains(a)) return false;
+          const raw = a.getAttribute("href");
+          if (!raw || raw.startsWith("#") || raw.startsWith("/")) return false;
+          try {
+            const url = new URL(raw, location.href);
+            if (url.protocol !== "http:" && url.protocol !== "https:") return true;
+            return url.hostname !== location.hostname;
+          } catch {
+            return false;
+          }
+        };
+
+        for (const a of document.querySelectorAll<HTMLAnchorElement>("a[href]")) {
+          if (isExternalAnchor(a)) {
+            a.target = "_blank";
+            a.rel = "noopener noreferrer";
+          }
+        }
+
+        const openLeaveModal = (href: string, trigger: HTMLElement) => {
+          activeTrigger = trigger;
+          leaveHref.textContent = href;
+          leaveOpen.href = href;
+          if (!leaveDialog.open) {
+            leaveDialog.showModal();
+            leaveCancel.focus();
+          }
+        };
+
+        const handleDocLink = (event: MouseEvent) => {
+          const target = event.target instanceof Element ? event.target.closest("a[href]") : null;
+          if (!(target instanceof HTMLAnchorElement)) return;
+          if (!isExternalAnchor(target)) return;
+          event.preventDefault();
+          openLeaveModal(target.href, target);
+        };
+
+        document.addEventListener("click", handleDocLink);
+        document.addEventListener("auxclick", (event) => {
+          if (event.button === 1) handleDocLink(event);
+        });
+
+        leaveCancel.addEventListener("click", () => leaveDialog.close());
+        leaveOpen.addEventListener("click", () => leaveDialog.close());
+        leaveDialog.addEventListener("pointerdown", (event) => {
+          pressedBackdrop = event.target === leaveDialog;
+        });
+        leaveDialog.addEventListener("click", (event) => {
+          if (event.target === leaveDialog && pressedBackdrop) leaveDialog.close();
+        });
+        leaveDialog.addEventListener("close", () => {
+          activeTrigger?.focus({ preventScroll: true });
+          activeTrigger = null;
+        });
+      }
+    </script>
+  </body>
+</html>
