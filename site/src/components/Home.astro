@@ -1,0 +1,445 @@
+---
+import Logo from "./Logo.astro";
+import { localePath, type Locale } from "../shared/i18n";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const href = (path: string) => localePath(locale, path);
+
+const COPY = {
+  zh: {
+    ctaRoadmap: "路线图",
+    ctaProcess: "流程",
+    ctaRfcs: "标准文件",
+  },
+  en: {
+    ctaRoadmap: "Roadmap",
+    ctaProcess: "Workflow",
+    ctaRfcs: "RFCs",
+  },
+}[locale];
+---
+
+<section class="lg:flex lg:flex-1 lg:items-center" data-hero>
+  <div class="relative mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:py-8">
+    <div>
+      <div class="rise flex items-center gap-3">
+        <Logo class="h-10 w-10 shrink-0" />
+      </div>
+
+      <h1
+        class="rise mt-6 text-4xl leading-[1.15] font-semibold tracking-tight sm:text-5xl"
+        style="animation-delay: 50ms"
+      >
+        Shared <span class="text-brand-600 dark:text-brand-400">RSI</span> Community
+      </h1>
+
+      <p
+        class="rise mono mt-4 text-base text-gray-600 sm:text-lg dark:text-gray-400"
+        style="animation-delay: 100ms"
+      >
+        RSI Benchmark × Evaluation × Algorithm
+      </p>
+
+      <div class="rise mt-8 flex flex-wrap gap-3" style="animation-delay: 150ms">
+        <a
+          href={href("/roadmap/")}
+          class="inline-flex h-11 items-center gap-2 rounded-lg bg-black px-5 text-[15px] font-medium text-white transition-colors hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200"
+        >
+          {COPY.ctaRoadmap}
+        </a>
+        <a
+          href={href("/workflow/")}
+          class="inline-flex h-11 items-center gap-2 rounded-lg border border-gray-200 bg-white px-5 text-[15px] font-medium text-gray-900 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-100 dark:hover:bg-gray-900"
+        >
+          {COPY.ctaProcess}
+        </a>
+        <a
+          href={href("/rfcs/")}
+          class="inline-flex h-11 items-center gap-2 rounded-lg border border-gray-200 bg-white px-5 text-[15px] font-medium text-gray-900 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-100 dark:hover:bg-gray-900"
+        >
+          {COPY.ctaRfcs}
+        </a>
+      </div>
+    </div>
+
+    <!-- Right: Neural Network Self-Evolution Animation -->
+    <div class="rise min-w-0" style="animation-delay: 120ms">
+      <div
+        class="relative overflow-hidden rounded-2xl border border-gray-200 bg-white/90 p-4 shadow-xs sm:p-6 dark:border-gray-800 dark:bg-gray-950/90"
+        data-rsi-net
+      >
+        <div class="mb-3 flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+          <div class="flex items-center gap-2">
+            <span class="inline-block h-2 w-2 rounded-full bg-brand-500 animate-pulse"></span>
+            <span class="mono font-medium text-gray-700 dark:text-gray-300" data-gen-label>GEN 01</span>
+            <span class="mono text-gray-400 dark:text-gray-500" data-phase-label>FORWARD</span>
+          </div>
+          <div class="mono flex items-center gap-2">
+            <span>FITNESS</span>
+            <span class="font-semibold text-brand-600 dark:text-brand-400" data-fitness-label>64.0%</span>
+          </div>
+        </div>
+
+        <svg
+          viewBox="0 0 560 300"
+          class="block h-auto w-full select-none"
+          aria-label="Neural Network Self-Evolution"
+        >
+          <defs>
+            <linearGradient id="edge-active" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#477dfb" stop-opacity="0.35" />
+              <stop offset="50%" stop-color="#477dfb" stop-opacity="0.95" />
+              <stop offset="100%" stop-color="#7aa2f7" stop-opacity="0.95" />
+            </linearGradient>
+            <linearGradient id="feedback-grad" x1="1" y1="0" x2="0" y2="0">
+              <stop offset="0%" stop-color="#7aa2f7" stop-opacity="0.9" />
+              <stop offset="100%" stop-color="#477dfb" stop-opacity="0.25" />
+            </linearGradient>
+            <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+              <feGaussianBlur stdDeviation="3" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+
+          <!-- Subtle background grid -->
+          <g class="stroke-gray-100 dark:stroke-gray-900" stroke-width="1">
+            <line x1="70" y1="24" x2="70" y2="265" />
+            <line x1="210" y1="24" x2="210" y2="265" />
+            <line x1="350" y1="24" x2="350" y2="265" />
+            <line x1="490" y1="24" x2="490" y2="265" />
+          </g>
+
+          <!-- Recursive Self-Improvement Feedback Arc (Eval -> Policy/Weights) -->
+          <path
+            d="M 490 95 C 430 14, 150 14, 210 62"
+            fill="none"
+            stroke="url(#feedback-grad)"
+            stroke-width="1.75"
+            stroke-dasharray="5 5"
+            class="rsi-feedback-arc"
+            data-feedback-arc
+          />
+          <path
+            d="M 490 205 C 430 286, 290 286, 350 238"
+            fill="none"
+            stroke="url(#feedback-grad)"
+            stroke-width="1.75"
+            stroke-dasharray="5 5"
+            class="rsi-feedback-arc"
+            data-feedback-arc-2
+          />
+
+          <!-- Dynamic Edges Layer -->
+          <g data-edges-layer></g>
+
+          <!-- Signal Pulses Layer -->
+          <g data-pulses-layer filter="url(#glow)"></g>
+
+          <!-- Dynamic Nodes Layer -->
+          <g data-nodes-layer></g>
+
+          <!-- Bottom Layer Captions -->
+          <g class="mono fill-gray-400 text-[10px] dark:fill-gray-500" text-anchor="middle">
+            <text x="70" y="286">BENCHMARK</text>
+            <text x="210" y="286">HARNESS</text>
+            <text x="350" y="286">ALGORITHM</text>
+            <text x="490" y="286">EVALUATION</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  @media (min-width: 1024px) {
+    :global(main:has(> [data-hero])) {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  .rise {
+    animation: rise 0.55s cubic-bezier(0.23, 1, 0.32, 1) both;
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+  }
+
+  .rsi-feedback-arc {
+    opacity: 0.25;
+    transition: opacity 0.4s ease, stroke-width 0.4s ease;
+  }
+
+  .rsi-feedback-arc.is-evolving {
+    opacity: 0.95;
+    stroke-width: 2.4;
+    animation: dash-reverse 0.9s linear infinite;
+  }
+
+  @keyframes dash-reverse {
+    to {
+      stroke-dashoffset: -20;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rise {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  const container = document.querySelector<HTMLElement>("[data-rsi-net]");
+  if (container) {
+    const edgesLayer = container.querySelector<SVGGElement>("[data-edges-layer]")!;
+    const pulsesLayer = container.querySelector<SVGGElement>("[data-pulses-layer]")!;
+    const nodesLayer = container.querySelector<SVGGElement>("[data-nodes-layer]")!;
+    const genLabel = container.querySelector<HTMLElement>("[data-gen-label]")!;
+    const phaseLabel = container.querySelector<HTMLElement>("[data-phase-label]")!;
+    const fitnessLabel = container.querySelector<HTMLElement>("[data-fitness-label]")!;
+    const feedbackArc1 = container.querySelector<SVGPathElement>("[data-feedback-arc]")!;
+    const feedbackArc2 = container.querySelector<SVGPathElement>("[data-feedback-arc-2]")!;
+
+    const NS = "http://www.w3.org/2000/svg";
+
+    interface NodeDef {
+      id: string;
+      layer: number;
+      x: number;
+      y: number;
+      minGen?: number;
+    }
+
+    const nodes: NodeDef[] = [
+      // Layer 0: Benchmark (x=70)
+      { id: "l0_0", layer: 0, x: 70, y: 78 },
+      { id: "l0_1", layer: 0, x: 70, y: 150 },
+      { id: "l0_2", layer: 0, x: 70, y: 222 },
+      // Layer 1: Harness (x=210)
+      { id: "l1_0", layer: 1, x: 210, y: 62 },
+      { id: "l1_1", layer: 1, x: 210, y: 120 },
+      { id: "l1_2", layer: 1, x: 210, y: 180 },
+      { id: "l1_3", layer: 1, x: 210, y: 238 },
+      // Layer 2: RSI Algorithm (x=350)
+      { id: "l2_0", layer: 2, x: 350, y: 62 },
+      { id: "l2_1", layer: 2, x: 350, y: 120 },
+      { id: "l2_2", layer: 2, x: 350, y: 180 },
+      { id: "l2_3", layer: 2, x: 350, y: 238 },
+      // Layer 3: Evaluation (x=490)
+      { id: "l3_0", layer: 3, x: 490, y: 95 },
+      { id: "l3_1", layer: 3, x: 490, y: 205 },
+    ];
+
+    const nodeMap = new Map(nodes.map((n) => [n.id, n]));
+
+    interface EdgeDef {
+      id: string;
+      from: NodeDef;
+      to: NodeDef;
+      weights: [number, number, number, number]; // Gen 1..4 weights (0 = pruned, 1 = weak, 2 = strong, 3 = evolved core)
+      el?: SVGLineElement;
+    }
+
+    const edgeDefs: EdgeDef[] = [];
+    const pairs: [string, string, [number, number, number, number]][] = [
+      // L0 -> L1
+      ["l0_0", "l1_0", [2, 2, 3, 3]],
+      ["l0_0", "l1_1", [1, 2, 2, 3]],
+      ["l0_0", "l1_2", [1, 0, 0, 0]],
+      ["l0_1", "l1_0", [1, 1, 2, 2]],
+      ["l0_1", "l1_1", [2, 3, 3, 3]],
+      ["l0_1", "l1_2", [2, 2, 3, 3]],
+      ["l0_1", "l1_3", [1, 0, 0, 1]],
+      ["l0_2", "l1_1", [1, 0, 0, 0]],
+      ["l0_2", "l1_2", [1, 2, 2, 3]],
+      ["l0_2", "l1_3", [2, 2, 3, 3]],
+      // L1 -> L2
+      ["l1_0", "l2_0", [2, 3, 3, 3]],
+      ["l1_0", "l2_1", [1, 2, 3, 3]],
+      ["l1_0", "l2_2", [1, 0, 0, 0]],
+      ["l1_1", "l2_0", [1, 2, 2, 3]],
+      ["l1_1", "l2_1", [2, 3, 3, 3]],
+      ["l1_1", "l2_2", [1, 2, 3, 3]],
+      ["l1_2", "l2_1", [1, 1, 2, 3]],
+      ["l1_2", "l2_2", [2, 2, 3, 3]],
+      ["l1_2", "l2_3", [1, 2, 2, 2]],
+      ["l1_3", "l2_2", [1, 0, 1, 2]],
+      ["l1_3", "l2_3", [2, 2, 3, 3]],
+      // L2 -> L3
+      ["l2_0", "l3_0", [2, 3, 3, 3]],
+      ["l2_0", "l3_1", [1, 0, 0, 0]],
+      ["l2_1", "l3_0", [2, 3, 3, 3]],
+      ["l2_1", "l3_1", [1, 2, 2, 3]],
+      ["l2_2", "l3_0", [1, 2, 2, 3]],
+      ["l2_2", "l3_1", [2, 3, 3, 3]],
+      ["l2_3", "l3_0", [1, 0, 0, 0]],
+      ["l2_3", "l3_1", [2, 2, 3, 3]],
+    ];
+
+    for (const [u, v, w] of pairs) {
+      const from = nodeMap.get(u)!;
+      const to = nodeMap.get(v)!;
+      const line = document.createElementNS(NS, "line");
+      line.setAttribute("x1", String(from.x));
+      line.setAttribute("y1", String(from.y));
+      line.setAttribute("x2", String(to.x));
+      line.setAttribute("y2", String(to.y));
+      line.setAttribute("stroke-linecap", "round");
+      line.style.transition = "stroke-width 0.45s ease, opacity 0.45s ease, stroke 0.45s ease";
+      edgesLayer.appendChild(line);
+      edgeDefs.push({ id: `${u}-${v}`, from, to, weights: w, el: line });
+    }
+
+    const nodeEls = new Map<string, { group: SVGGElement; halo: SVGCircleElement; core: SVGCircleElement }>();
+    for (const n of nodes) {
+      const g = document.createElementNS(NS, "g");
+      const halo = document.createElementNS(NS, "circle");
+      halo.setAttribute("cx", String(n.x));
+      halo.setAttribute("cy", String(n.y));
+      halo.setAttribute("r", "12");
+      halo.setAttribute("fill", "#477dfb");
+      halo.setAttribute("opacity", "0.12");
+      halo.style.transition = "r 0.35s ease, opacity 0.35s ease";
+
+      const core = document.createElementNS(NS, "circle");
+      core.setAttribute("cx", String(n.x));
+      core.setAttribute("cy", String(n.y));
+      core.setAttribute("r", "6");
+      core.setAttribute("fill", "#477dfb");
+      core.setAttribute("stroke", "#ffffff");
+      core.setAttribute("stroke-width", "2");
+      core.style.transition = "r 0.35s ease, fill 0.35s ease";
+
+      g.appendChild(halo);
+      g.appendChild(core);
+      nodesLayer.appendChild(g);
+      nodeEls.set(n.id, { group: g, halo, core });
+    }
+
+    const fitnessScores = ["64.2%", "76.8%", "88.5%", "95.4%"];
+    let genIndex = 0;
+
+    function applyGenStyle(idx: number) {
+      const g = idx % 4;
+      genLabel.textContent = `GEN 0${g + 1}`;
+      fitnessLabel.textContent = fitnessScores[g];
+
+      for (const e of edgeDefs) {
+        const w = e.weights[g];
+        const line = e.el!;
+        if (w === 0) {
+          line.setAttribute("stroke", "#9ca3af");
+          line.setAttribute("stroke-width", "1");
+          line.setAttribute("stroke-dasharray", "3 4");
+          line.setAttribute("opacity", "0.16");
+        } else if (w === 1) {
+          line.setAttribute("stroke", "#7aa2f7");
+          line.setAttribute("stroke-width", "1.3");
+          line.removeAttribute("stroke-dasharray");
+          line.setAttribute("opacity", "0.38");
+        } else if (w === 2) {
+          line.setAttribute("stroke", "#477dfb");
+          line.setAttribute("stroke-width", "2.1");
+          line.removeAttribute("stroke-dasharray");
+          line.setAttribute("opacity", "0.72");
+        } else {
+          line.setAttribute("stroke", "url(#edge-active)");
+          line.setAttribute("stroke-width", "2.8");
+          line.removeAttribute("stroke-dasharray");
+          line.setAttribute("opacity", "0.96");
+        }
+      }
+    }
+
+    function pulseNode(nodeId: string, color = "#477dfb") {
+      const item = nodeEls.get(nodeId);
+      if (!item) return;
+      item.halo.setAttribute("r", "16");
+      item.halo.setAttribute("opacity", "0.32");
+      item.core.setAttribute("r", "7.5");
+      item.core.setAttribute("fill", color);
+      setTimeout(() => {
+        item.halo.setAttribute("r", "12");
+        item.halo.setAttribute("opacity", "0.14");
+        item.core.setAttribute("r", "6");
+        item.core.setAttribute("fill", "#477dfb");
+      }, 320);
+    }
+
+    function spawnEdgeParticles(layerIdx: number, gen: number) {
+      const g = gen % 4;
+      const active = edgeDefs.filter((e) => e.from.layer === layerIdx && e.weights[g] >= 2);
+      for (const e of active) {
+        const dot = document.createElementNS(NS, "circle");
+        dot.setAttribute("r", e.weights[g] === 3 ? "3.6" : "2.8");
+        dot.setAttribute("fill", "#477dfb");
+        pulsesLayer.appendChild(dot);
+
+        const start = performance.now();
+        const dur = 420;
+        function step(now: number) {
+          const t = Math.min(1, (now - start) / dur);
+          const x = e.from.x + (e.to.x - e.from.x) * t;
+          const y = e.from.y + (e.to.y - e.from.y) * t;
+          dot.setAttribute("cx", String(x));
+          dot.setAttribute("cy", String(y));
+          if (t < 1) {
+            requestAnimationFrame(step);
+          } else {
+            dot.remove();
+            pulseNode(e.to.id, "#7aa2f7");
+          }
+        }
+        requestAnimationFrame(step);
+      }
+    }
+
+    applyGenStyle(0);
+
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!prefersReducedMotion) {
+      function runCycle() {
+        phaseLabel.textContent = "FORWARD · EVAL";
+        feedbackArc1.classList.remove("is-evolving");
+        feedbackArc2.classList.remove("is-evolving");
+
+        // Pulse L0 nodes & send L0->L1
+        nodes.filter((n) => n.layer === 0).forEach((n) => pulseNode(n.id));
+        spawnEdgeParticles(0, genIndex);
+
+        // L1->L2
+        setTimeout(() => spawnEdgeParticles(1, genIndex), 420);
+
+        // L2->L3
+        setTimeout(() => spawnEdgeParticles(2, genIndex), 840);
+
+        // Recursive Self-Evolution feedback phase
+        setTimeout(() => {
+          phaseLabel.textContent = "SELF-EVOLVE ↻";
+          feedbackArc1.classList.add("is-evolving");
+          feedbackArc2.classList.add("is-evolving");
+          genIndex = (genIndex + 1) % 4;
+          applyGenStyle(genIndex);
+          nodes
+            .filter((n) => n.layer === 1 || n.layer === 2)
+            .forEach((n) => pulseNode(n.id, "#7aa2f7"));
+        }, 1350);
+      }
+
+      runCycle();
+      setInterval(runCycle, 2400);
+    }
+  }
+</script>
