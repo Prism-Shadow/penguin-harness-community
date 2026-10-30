@@ -3,7 +3,7 @@
 - Feature Name: `evaluation`
 - Start Date: 2026-10-29
 - RFC PR: [#14](https://github.com/Prism-Shadow/penguin-harness-community/pull/14)
-- Updated by: [#15](https://github.com/Prism-Shadow/penguin-harness-community/pull/15)
+- Updated by: [#15](https://github.com/Prism-Shadow/penguin-harness-community/pull/15), [#21](https://github.com/Prism-Shadow/penguin-harness-community/pull/21)
 
 [English](RFC-0002-evaluation.md)
 
@@ -61,6 +61,8 @@ validation_data:                        # 选填。验证集 benchmark-id 列表
   - "penguinharness-benchmark-gdpevo-crm-val"
 test_data:                              # 必填。测试集 benchmark-id 列表
   - "penguinharness-benchmark-gdpevo-crm-test"
+references:                             # 选填。原始引用链接列表（如实验结果来源论文、榜单或报告链接）
+  - "https://arxiv.org/abs/..."
 author:                                 # 必填。作者与提交者信息
   name: "Author Name"                   # 必填。作者姓名或团队名称
   email: "author@example.com"           # 选填。联系邮箱
@@ -88,6 +90,7 @@ author:                                 # 必填。作者与提交者信息
 - `algorithm` — 实验所使用的 RSI 算法插件标识符（字符串），必须是合法的 `plugin_id`。
 - `training_data` — 训练集列表（字符串数组），每个元素必须是合法的 `benchmark-id`。
 - `validation_data` — 验证集列表（字符串数组），每个元素必须是合法的 `benchmark-id`。
+- `references` — 原始引用链接列表（字符串数组），用于存放该组 Evaluation 实验数字或评测设置的原始出处（如相关论文链接、技术报告或公开榜单地址）。
 - `author.email` — 作者联系邮箱。
 - `author.homepage` — 作者主页链接（默认可填写 GitHub 主页链接）。
 

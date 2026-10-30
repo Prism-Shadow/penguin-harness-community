@@ -3,7 +3,7 @@
 - Feature Name: `benchmark`
 - Start Date: 2026-10-29
 - RFC PR: [#14](https://github.com/Prism-Shadow/penguin-harness-community/pull/14)
-- Updated by: [#15](https://github.com/Prism-Shadow/penguin-harness-community/pull/15)
+- Updated by: [#15](https://github.com/Prism-Shadow/penguin-harness-community/pull/15), [#21](https://github.com/Prism-Shadow/penguin-harness-community/pull/21)
 
 [English](RFC-0001-benchmark.md)
 
@@ -55,6 +55,10 @@ description_zh = "..."                  # 选填。Benchmark 的中文简介
 version = "0.1.0"                       # 必填。版本号，采用标准的 x.y.z 格式
 last_update = "2026-10-29T12:00:00Z"    # 必填。最后更新时间，精确到秒（ISO 8601）
 status = "draft"                        # 必填。状态：提交时为 draft，审核通过后为 published
+references = [                          # 选填。原始引用链接列表（如数据来源、原论文或原仓库链接）
+  "https://arxiv.org/abs/...",
+  "https://github.com/..."
+]
 
 [author]                                # 必填。作者与维护者信息
 name = "Author Name"                    # 必填。作者姓名或团队名称
@@ -79,6 +83,7 @@ homepage = "https://github.com/..."     # 选填。作者主页链接（默认�
 
 - `title_zh` — Benchmark 的中文显示名称。
 - `description_zh` — Benchmark 的中文描述。
+- `references` — 原始引用链接列表（字符串数组），用于存放该 Benchmark 的数据来源、原始论文链接或上游开源仓库地址等。
 - `author.email` — 作者联系邮箱。
 - `author.homepage` — 作者主页链接（默认可填写 GitHub 主页链接）。
 

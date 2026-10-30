@@ -31,7 +31,7 @@
 - 如何参与 PenguinHarness 项目: [../workflow/harness.zh.md](../workflow/harness.zh.md)
 - 如何提交论文到 Awesome RSI: [../workflow/survey.zh.md](../workflow/survey.zh.md)
 
-我们会通过**双周会**的形式来进行社区讨论，会议链接会在前一天发布在交流群。
+我们会通过**[双周会](../rfcs/RFC-0004-meeting.zh.md)**的形式来进行社区讨论，会议链接会在前一天发布在交流群。
 
 欢迎大家来参与到我们的开源社区建设中，我们也承诺：
 - 每月活跃的贡献者将获得 Gemini 等一线模型的 **Token 资源包**。
