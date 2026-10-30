@@ -56,6 +56,11 @@ export const STRINGS = {
       cancel: "Cancel",
       open: "Open link",
     },
+    wechatModal: {
+      title: "Join RSI Community WeChat Group",
+      subtitle: "Scan the QR code with WeChat to join",
+      close: "Close",
+    },
   },
   zh: {
     htmlLang: "zh-CN",
@@ -97,6 +102,11 @@ export const STRINGS = {
       body: "这个链接指向 Shared RSI Community 之外的网站，会在新标签页中打开：",
       cancel: "取消",
       open: "继续打开",
+    },
+    wechatModal: {
+      title: "加入 RSI 社区微信群",
+      subtitle: "使用微信扫描下方二维码加入交流群",
+      close: "关闭",
     },
   },
 } as const;

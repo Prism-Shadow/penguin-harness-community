@@ -5,6 +5,7 @@ export const SITE_NAME = "Shared RSI Community";
 export const REPO_URL = "https://github.com/Prism-Shadow/penguin-harness-community";
 export const MAIN_REPO_URL = "https://github.com/Prism-Shadow/penguin-harness";
 export const DISCORD_URL = "https://discord.gg/eFHKqqcU3D";
+export const WECHAT_QR_PATH = "/wechat-rsi.jpg";
 export const X_URL = "https://x.com/code_hiyouga";
 
 let starsAtBuild: Promise<number | null> | undefined;

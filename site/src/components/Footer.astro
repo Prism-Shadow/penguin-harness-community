@@ -21,7 +21,8 @@ const link = "transition-colors hover:text-gray-700 dark:hover:text-gray-300";
       <a href={localePath(locale, "/rfcs/")} class={link}>{locale === "zh" ? "标准文件" : "RFCs"}</a>
       <a href={REPO_URL} class={link} target="_blank" rel="noreferrer">GitHub</a>
       <a href={MAIN_REPO_URL} class={link} target="_blank" rel="noreferrer">PenguinHarness</a>
-      <a href={DISCORD_URL} class={link} target="_blank" rel="noreferrer">Discord</a>
+      <button type="button" data-wechat-trigger class={link}>{locale === "zh" ? "微信群" : "WeChat"}</button>
+      <a href={DISCORD_URL} class={link} target="_blank" rel="noreferrer" data-direct-external>Discord</a>
       <a href={X_URL} class={link} target="_blank" rel="noreferrer">X</a>
       <a href="https://penguin.ooo/" class={link} target="_blank" rel="noreferrer">penguin.ooo</a>
     </div>
