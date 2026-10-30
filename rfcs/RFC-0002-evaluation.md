@@ -99,7 +99,7 @@ summary: "Improved prompt and skills."  # Optional. English summary of what chan
 summary_zh: "优化了提示词与技能库。"      # Optional. Chinese summary of what changed in this phase
 score_mean: 72.5                        # Required. Mean score across attempts
 score_std: 1.8                          # Required. Sample standard deviation of scores
-pass@k: 60.0                            # Required. Mean score of tasks passed across all n attempts (no std)
+pass@k: 60.0                            # Optional. Percentage of tasks passed at least once in k attempts (k = n_attempt)
 n_attempt: 3                            # Required. Number of repeated attempts
 cost: 4.25                              # Required. Single-experiment cost in USD (based on MMSP list price)
 duration_ms: 540000                     # Required. Single-experiment total duration in milliseconds
@@ -115,7 +115,6 @@ Required fields:
 - `time` — Timestamp when the phase finished, in ISO 8601 UTC format accurate to seconds (e.g., `"2026-10-29T12:00:00Z"`).
 - `score_mean` — Mean score across repeated attempts in this phase (computed by first calculating each attempt's overall score and then averaging over attempts).
 - `score_std` — Sample standard deviation of the attempt scores across repeated attempts in this phase.
-- `pass@k` — Mean score of tasks that pass in **all $n$ attempts** ($k = \text{n\_attempt}$), averaged across all tasks. `pass@k` does not have a standard deviation.
 - `n_attempt` — Number of repeated attempts in this phase (positive integer matching the number of `attempt-<n>.yaml` files, typically $n = 3$).
 - `cost` — Cost of a single experiment in USD, calculated using the [MMSP Model List Prices](https://mmsp.penguin.ooo/zh/models/).
 - `duration_ms` — Total duration of a single experiment in milliseconds.
@@ -125,6 +124,7 @@ Required fields:
 
 Optional fields:
 
+- `pass@k` — Percentage of tasks that pass in **at least one of $k$ attempts**; this format uses $k = \text{n\_attempt}$. No standard deviation is reported for this field. Use the Benchmark's predefined pass criterion; omit the field when it is not calculated or no pass criterion is defined.
 - `summary` — English summary describing key changes or improvements in this phase.
 - `summary_zh` — Chinese summary describing key changes or improvements in this phase.
 
@@ -142,9 +142,11 @@ $$\text{score\_mean} = \bar{S} = \frac{1}{n} \sum_{j=1}^{n} S_j$$
 
 $$\text{score\_std} = \sqrt{\frac{1}{n - 1} \sum_{j=1}^{n} \left(S_j - \bar{S}\right)^2}$$
 
-3. **`pass@k` ($k = n$)**: `pass@k` does not compute a standard deviation; it only counts the score of tasks that pass in **all $n$ attempts**, averaged across all $M$ tasks. Let $\mathbb{I}_i \in \{0, 1\}$ indicate whether task $i$ passes in all $n$ attempts ($\mathbb{I}_i = 1$ if all $n$ attempts pass, and $0$ otherwise), and let $s_i^*$ be the passing score of task $i$ ($100$ on a 100-point scale):
+3. **Optional `pass@k` ($k = n$)**: Following the [HumanEval definition](https://arxiv.org/html/2107.03374v2#S2.SS1), a task is counted if **at least one of its $k$ attempts passes**. Here $k = n = \text{n\_attempt}$, so let $\mathbb{I}_i = 1$ if task $i$ passes at least once among the recorded attempts, and $0$ otherwise. Report the percentage across all $M$ tasks:
 
-$$\text{pass@}k = \frac{1}{M} \sum_{i=1}^{M} \mathbb{I}_i \cdot s_i^*$$
+$$\text{pass@}k = \frac{100}{M} \sum_{i=1}^{M} \mathbb{I}_i$$
+
+For example, a task that passes once and fails twice counts as passed for `pass@3`. This metric has no standard deviation here and does not replace `score_mean` or `score_std`. A Benchmark with continuous scores but no defined pass criterion may omit it.
 
 3. Inside each phase directory `experiments/<experiment-id>/<phase>/`, create `attempt-<n>.yaml` files (e.g., `attempt-1.yaml`, `attempt-2.yaml`) recording the fine-grained task-level results for each attempt as a YAML list of objects:
 

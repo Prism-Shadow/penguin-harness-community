@@ -14,7 +14,7 @@ All community contributions follow a unified collaboration workflow:
 
 To keep experimental costs low and results directly comparable across the community, we recommend the following guidelines:
 
-- **Submit Benchmark**: When verifying a newly formatted Benchmark, we recommend running **`pass@k`** (e.g., `n_attempt: 3`) with the **DeepSeek Flash** model, following the built-in example [`penguinharness-benchmark-sec-a`](https://github.com/Prism-Shadow/penguin-harness-benchmark/tree/main/packages/penguinharness-benchmark-sec-a).
+- **Submit Benchmark**: When verifying a newly formatted Benchmark, we recommend 3 repeated attempts with **DeepSeek Flash**, reporting `score_mean` and `score_std`. `pass@k` is optional when the Benchmark defines a pass criterion. See the built-in example [`penguinharness-benchmark-sec-a`](https://github.com/Prism-Shadow/penguin-harness-benchmark/tree/main/packages/penguinharness-benchmark-sec-a).
 - **Submit Evaluation**: For self-evolving (RSI) algorithms, we recommend evaluating with the **DeepSeek Flash** model on the **`GDPevo-essential`** dataset (covering six domain task groups—CRM, ERP, Finance, Healthcare, Legal, and DataAnalysis—training on each group's `*-train` split, evaluating on its paired `*-test` split, and averaging across task groups).
 - **Submit Algorithm (Plugin)**: Keep the Plugin implementation decoupled from specific datasets (containing only the algorithm method), and test it with **DeepSeek Flash** on **`GDPevo-essential`** after implementation to verify whether it improves over the baseline.
 - **Model Version Requirement**: When using models such as `deepseek-flash`, always include the explicit version suffix in `model_name` (for example, `deepseek-flash-1017`).
