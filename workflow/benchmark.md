@@ -13,6 +13,14 @@
 4. **Submit a PR**: Organize the Benchmark files according to `RFC-0001` (with `status = "draft"` in `benchmark_config.toml`) and open a Pull Request linked to the Issue.
 5. **Maintainer Review & Merge**: Wait for a maintainer to review the task statements, rubrics, and configuration; once approved, `status` is updated to `"published"` and the PR is merged.
 
+## Recommended Verification & Examples
+
+- **Recommended Model & Metric**: After organizing a Benchmark, we recommend running **`pass@k`** (for example, $k = 3$ repeated attempts, averaging the score of tasks passed across all $k$ attempts) with the **DeepSeek Flash** model to verify that tasks are solvable, discriminative, and graded deterministically.
+- **Model Version Suffix**: If you also submit baseline evaluation records using models like `deepseek-flash`, always include the explicit version suffix in `model_name` (e.g., `deepseek-flash-1017`).
+- **Reference Examples**:
+  - General evaluation benchmarks: [`penguinharness-benchmark-sec-a`](https://github.com/Prism-Shadow/penguin-harness-benchmark/tree/main/packages/penguinharness-benchmark-sec-a) (Data Analysis Bench subset) through [`penguinharness-benchmark-sec-e`](https://github.com/Prism-Shadow/penguin-harness-benchmark/tree/main/packages/penguinharness-benchmark-sec-e) (Terminal-Bench subset).
+  - Self-evolution paired train/test splits: `GDPevo-essential` training package [`penguinharness-benchmark-gdpevo-crm-train`](https://github.com/Prism-Shadow/penguin-harness-benchmark/tree/main/packages/penguinharness-benchmark-gdpevo-crm-train) and test package [`penguinharness-benchmark-gdpevo-crm-test`](https://github.com/Prism-Shadow/penguin-harness-benchmark/tree/main/packages/penguinharness-benchmark-gdpevo-crm-test).
+
 ## Format Examples
 
 ### 1. Issue Example
@@ -29,7 +37,7 @@
 ### Plan
 - [ ] Prepare `packages/<benchmark-id>/benchmark_config.toml` and `<task-id>/` directories
 - [ ] Prepare `data/<benchmark-id>/` raw task files (if applicable)
-- [ ] Verify that an Agent can run and score tasks following `statement/README.md`
+- [ ] Verify `pass@k` with `deepseek-flash-1017` to ensure tasks run and score properly
 ```
 
 ### 2. Issue Claim Comment Example (Optional)
@@ -52,5 +60,5 @@ Closes #<issue-number>
 ### Checklist
 - [x] Directory layout and manifest fields conform to RFC-0001 Benchmark
 - [x] `status` in `benchmark_config.toml` is set to `"draft"`
-- [x] Verified sample tasks run and score properly
+- [x] Verified tasks with `deepseek-flash-1017` (`pass@k`)
 ```

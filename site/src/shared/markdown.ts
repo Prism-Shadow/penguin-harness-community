@@ -20,6 +20,7 @@ export function docBody(locale: Locale, doc: DocLink, page: DocFile): string {
     .rawContent()
     .replace(/^# .*\n+/, "")
     .replace(/^\[(?:中文版|English)\]\([^)]*\.md\)\n+/m, "")
+    .replace(/<figure class="flowchart">[\s\S]*?<\/figure>/g, flowchartAsText)
     .split(/(`[^`\n]*`)/)
     .map((part, index) =>
       index % 2
@@ -30,4 +31,11 @@ export function docBody(locale: Locale, doc: DocLink, page: DocFile): string {
     )
     .join("")
     .trim();
+}
+
+function flowchartAsText(figure: string): string {
+  const items = [...figure.matchAll(/<li>(.*?)<\/li>/g)].map((match) =>
+    match[1].replace(/<code>(.*?)<\/code>/g, "`$1`").replace(/<[^>]+>/g, ""),
+  );
+  return items.map((item, index) => `${index + 1}. ${item}`).join("\n");
 }

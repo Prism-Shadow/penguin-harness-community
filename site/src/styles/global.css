@@ -180,6 +180,172 @@ html.dark .astro-code span {
   @apply my-4 border-gray-200 dark:border-gray-800;
 }
 
+/* ---------- Flowchart diagrams (MMSP style + soft stage backgrounds) ---------- */
+.flowchart {
+  @apply my-6;
+}
+.flowchart-svg {
+  @apply mx-auto block h-auto w-full max-w-[560px];
+}
+.flowchart-svg.flowchart-wide {
+  max-width: 680px;
+}
+.flowchart-svg .fc-stage-primary {
+  fill: var(--color-brand-50);
+  stroke: var(--color-brand-200);
+  stroke-width: 1.25;
+}
+.flowchart-svg .fc-stage-secondary {
+  fill: var(--color-gray-50);
+  stroke: var(--color-gray-300);
+  stroke-width: 1.25;
+}
+.flowchart-svg .fc-terminal,
+.flowchart-svg .fc-process,
+.flowchart-svg .fc-decision {
+  fill: var(--color-white);
+  stroke: var(--color-gray-300);
+  stroke-width: 1.25;
+}
+.flowchart-svg .fc-decision {
+  fill: var(--color-gray-50);
+}
+.flowchart-svg .fc-edge {
+  fill: none;
+  stroke: var(--color-gray-500);
+  stroke-width: 1.25;
+}
+.flowchart-svg .fc-arrowhead {
+  fill: var(--color-gray-500);
+}
+.flowchart-svg text {
+  font-size: 12px;
+  fill: var(--color-gray-600);
+}
+.flowchart-svg .fc-stage-title {
+  font-size: 13.5px;
+  font-weight: 600;
+  fill: var(--color-brand-800);
+}
+.flowchart-svg .fc-stage-badge {
+  font-size: 11.5px;
+  font-weight: 500;
+  fill: var(--color-brand-700);
+}
+.flowchart-svg .fc-title {
+  font-size: 14px;
+  font-weight: 600;
+  fill: var(--color-gray-900);
+}
+.flowchart-svg .fc-label {
+  font-size: 12px;
+  font-weight: 600;
+  fill: var(--color-brand-700);
+}
+.flowchart-svg .fc-code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: 0.92em;
+}
+html.dark .flowchart-svg .fc-stage-primary {
+  fill: rgb(16 45 121 / 0.28);
+  stroke: var(--color-brand-800);
+}
+html.dark .flowchart-svg .fc-stage-secondary {
+  fill: var(--color-gray-900);
+  stroke: var(--color-gray-700);
+}
+html.dark .flowchart-svg .fc-terminal,
+html.dark .flowchart-svg .fc-process {
+  fill: var(--color-gray-950);
+  stroke: var(--color-gray-700);
+}
+html.dark .flowchart-svg .fc-decision {
+  fill: var(--color-gray-900);
+  stroke: var(--color-gray-600);
+}
+html.dark .flowchart-svg .fc-edge {
+  stroke: var(--color-gray-500);
+}
+html.dark .flowchart-svg text {
+  fill: var(--color-gray-400);
+}
+html.dark .flowchart-svg .fc-stage-title {
+  fill: var(--color-brand-300);
+}
+html.dark .flowchart-svg .fc-stage-badge {
+  fill: var(--color-brand-400);
+}
+html.dark .flowchart-svg .fc-title {
+  fill: var(--color-gray-100);
+}
+html.dark .flowchart-svg .fc-label {
+  fill: var(--color-brand-400);
+}
+.flowchart-steps {
+  @apply sr-only;
+}
+
+/* ---------- Typeset math blocks & inline math ---------- */
+.math-block {
+  @apply my-3 overflow-x-auto rounded-lg border border-gray-200 bg-gray-50/70 px-4 py-3 text-center text-[15px] leading-relaxed dark:border-gray-800 dark:bg-gray-900/70;
+  font-family: "Cambria Math", "STIX Two Math", "Latin Modern Math", ui-serif, Georgia, serif;
+}
+.math-inline {
+  font-family: "Cambria Math", "STIX Two Math", "Latin Modern Math", ui-serif, Georgia, serif;
+  font-size: 1.03em;
+}
+.math-frac {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  vertical-align: middle;
+  margin: 0 0.18em;
+  line-height: 1.15;
+}
+.math-frac-num {
+  border-bottom: 1px solid currentColor;
+  padding: 0 0.25em 0.08em;
+  font-size: 0.9em;
+}
+.math-frac-den {
+  padding: 0.08em 0.25em 0;
+  font-size: 0.9em;
+}
+.math-op {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  vertical-align: middle;
+  margin: 0 0.18em;
+  line-height: 1;
+}
+.math-op-sup,
+.math-op-sub {
+  font-size: 0.72em;
+  line-height: 1.05;
+}
+.math-op-sym {
+  font-size: 1.3em;
+  line-height: 1.05;
+}
+.math-sqrt {
+  display: inline-flex;
+  align-items: baseline;
+  vertical-align: middle;
+}
+.math-sqrt-Sign {
+  font-size: 1.25em;
+  line-height: 1;
+  margin-right: 0.04em;
+}
+.math-sqrt-body {
+  border-top: 1px solid currentColor;
+  padding-top: 0.08em;
+}
+.math-bar {
+  text-decoration: overline;
+}
+
 /* ---------- Segmented control (from MMSP) ---------- */
 .segmented {
   --n: 3;

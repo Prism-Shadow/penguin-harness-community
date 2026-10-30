@@ -1,10 +1,19 @@
 # RFC-0003 Plugin
 
+- Feature Name: `plugin`
+- Start Date: 2026-10-29
+- RFC PR: [#14](https://github.com/Prism-Shadow/penguin-harness-community/pull/14)
+- Updated by: [#15](https://github.com/Prism-Shadow/penguin-harness-community/pull/15)
+
 [English](RFC-0003-plugin.md)
 
 Plugin 是 PenguinHarness 的可插拔组件，可以包含服务端模块、Skills、Hooks 和 Workbenches。与 Benchmark 和 Evaluation 不同，一个 Plugin 必须为标准的 **NPM 包**。
 
 通过可插拔的 Plugin 机制，PenguinHarness 具备同时适配任意数量 RSI 算法的能力。通常我们会将一个 RSI 算法实现为一个独立的 Plugin。我们构建了 [PenguinHarness Plugins](https://github.com/Prism-Shadow/penguin-harness-plugins) 开源仓库来整理所有的 Plugin。
+
+## 高层设计原则：算法与数据解耦
+
+Plugin 的实现**应当尽量与数据解耦**：RSI 算法插件在理论上只包含通用的**方法（Method）**部分（如经验归纳、反思循环、提示词与技能演化策略等），**不得与具体的 Benchmark 数据集或特定任务硬编码绑定**。遵循这一原则，同一个 RSI 算法 Plugin 无需修改代码即可直接迁移并应用于任意符合 [RFC-0001 Benchmark](RFC-0001-benchmark.zh.md) 标准的评测数据集。
 
 ## 目录结构
 
@@ -37,7 +46,7 @@ penguin-harness-plugins/
 
 要向仓库中添加一个新的 Plugin，请按以下步骤组织文件：
 
-1. 创建 `<plugin-id>` 文件夹，并按插件功能组织 `skills/`、`hooks/`、`workbenches/` 及可选的 `icon.svg` 图标。
+1. 创建 `<plugin-id>` 文件夹，并按插件功能组织 `skills/`、`hooks/`、`workbenches/` 及可选的 `icon.svg` 图标。确保算法逻辑与具体数据集保持解耦。
 2. 在 `<plugin-id>/` 下创建 `package.json` 文件，除标准 NPM 包字段外，需包含 `penguin` 扩展字段以辅助界面显示与快速启动：
 
 ```json
@@ -100,9 +109,9 @@ penguin-harness-plugins/
 - `penguin.short_description` — 插件卡片上展示的单行英文简介。
 - `penguin.category` — 插件分类，RSI 算法插件固定填写 `"rsi"`。
 - `penguin.preinstall` — 是否作为默认预装插件，社区提交的插件设为 `false`。
-- `penguin.quick_start` — 插件「快速开始」配置对象，用于在新对话草稿中预填演示指令：
-  - `prompt` — 预填的英文启动提示词（必填）。
-  - `skills` — 启动时默认勾选的 Skill 名称数组（必填，字符串列表）。
+- `penguin.quick_start` — 插件「快速开始」配置对象，**其作用是给出一个该算法的快速调用案例**：当用户在 PenguinHarness 中点击该插件的「快速开始」时，系统会在新对话草稿中自动挂载对应技能并填入调用示例，帮助用户开箱即用地体验算法：
+  - `prompt` — 预填的英文算法快速调用示例提示词（必填）。
+  - `skills` — 启动该调用案例时默认勾选的 Skill 名称数组（必填，字符串列表）。
 
 `penguin` 扩展字段（选填）：
 
@@ -110,4 +119,4 @@ penguin-harness-plugins/
 - `penguin.description_zh` — 插件在中文界面详情页展示的完整中文描述。
 - `penguin.short_description_zh` — 插件卡片在中文界面下展示的单行中文简介。
 - `penguin.icon` — 插件包内 SVG 图标文件的相对路径（例如 `"icon.svg"`）。
-- `penguin.quick_start.prompt_zh` — 中文界面下预填的「快速开始」启动提示词。
+- `penguin.quick_start.prompt_zh` — 中文界面下预填的「快速开始」算法快速调用示例提示词。

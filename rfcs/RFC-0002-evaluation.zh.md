@@ -1,8 +1,13 @@
 # RFC-0002 Evaluation
 
+- Feature Name: `evaluation`
+- Start Date: 2026-10-29
+- RFC PR: [#14](https://github.com/Prism-Shadow/penguin-harness-community/pull/14)
+- Updated by: [#15](https://github.com/Prism-Shadow/penguin-harness-community/pull/15)
+
 [English](RFC-0002-evaluation.md)
 
-Evaluation 是一个 Agent 的一组实验数据，使用 `<experiment-id>` 来区分。一组实验通常可以分成多个实验阶段（phase），例如训练、验证和测试（如 `train-1`、`val-1`、`train-2`、`val-2`、`test`），其中 `test` 后面一定不能跟数字，且每组实验数据必须包含 `test` 测试阶段。
+Evaluation 是一个 Agent 的一组实验数据，使用 `<experiment-id>` 来区分。一组实验通常可以分成多个实验阶段（phase），例如训练、验证和测试（如 `train-1`、`val-1`、`train-2`、`val-2`、`test`），其中 `train` 和 `val` 后面**必须跟数字**（如 `train-1`、`val-1`），`test` 后面**一定不能跟数字**，且每组实验数据必须包含 `test` 测试阶段。
 
 我们同样构建并复用 [PenguinHarness Benchmark](https://github.com/Prism-Shadow/penguin-harness-benchmark) 开源仓库来整理所有的 Agent Evaluation。本标准定义的 Evaluation 数据结构旨在统一不同实验与自进化阶段的结果记录格式，便于实验复现、横向对比与榜单汇总。
 
@@ -27,7 +32,7 @@ penguin-harness-benchmark/
 ```
 
 - `experiments/<experiment-id>/`：存放单组实验的元配置及各阶段评测结果。
-- `<phase>/`（如 `train-1/`、`val-1/`、`test/`）：实验阶段文件夹。训练和验证阶段可按迭代轮次编号（如 `train-1`、`val-1`、`train-2`、`val-2`），最终测试阶段固定命名为 `test`（后不能跟数字），且每组实验必须包含 `test/` 阶段。
+- `<phase>/`（如 `train-1/`、`val-1/`、`test/`）：实验阶段文件夹。训练和验证阶段命名后面**必须跟数字**以标识迭代轮次（如 `train-1`、`val-1`、`train-2`、`val-2`）；最终测试阶段固定命名为 `test`（后面**一定不能跟数字**），且每组实验必须包含 `test/` 阶段。
 - `meta_info.yaml`：记录整组实验的元信息与配置（模型、Harness、RSI 算法、数据集划分及作者信息）。
 - `summary.yaml`：记录对应阶段聚合后的得分统计、耗时、Token 消耗与费用成本。
 - `attempt-<n>.yaml`：记录对应阶段第 `n` 次重复试验在每道题目（Task）上的细粒度评测数据。
@@ -46,8 +51,8 @@ harness_name: "PenguinHarness"          # 必填。所使用的 Harness 名称
 harness_version: "0.2.16"               # 必填。Harness 版本号，采用标准的 x.y.z 格式
 harness_setting:                        # 选填。Harness 附加配置项（任意键值对象）
   max_turns: 100
-model_name: "gemini-2.5-pro"            # 必填。模型名称
-model_provider: "google"                # 必填。模型提供商
+model_name: "deepseek-flash-1017"       # 必填。模型名称（如 deepseek-flash 等模型需附带具体版本号）
+model_provider: "deepseek"              # 必填。模型提供商
 thinking_level: "high"                  # 必填。推理等级：low | medium | high | xhigh | max
 algorithm: "<plugin-id>"                # 选填。所使用的 RSI 算法插件 ID（必须是合法的 plugin_id）
 training_data:                          # 选填。训练集 benchmark-id 列表
@@ -71,8 +76,8 @@ author:                                 # 必填。作者与提交者信息
 - `submit_time` — 实验提交时间，采用精确到秒的 ISO 8601 UTC 时间格式（例如 `"2026-10-29T12:00:00Z"`）。
 - `harness_name` — 所使用的 Agent Harness 名称（字符串）。
 - `harness_version` — Harness 版本号，采用标准的 `x.y.z` 格式（例如 `"0.2.16"`）。
-- `model_name` — 评测所使用的基座模型名称（字符串）。
-- `model_provider` — 模型提供商标识（字符串）。
+- `model_name` — 评测所使用的基座模型名称（字符串）。若使用 `deepseek-flash` 等会随时间更新权重的模型，**必须附带具体的版本号后缀**（例如填写 `"deepseek-flash-1017"`），以保证实验结果的可复现性。
+- `model_provider` — 模型提供商标识（字符串，例如 `"deepseek"`、`"google"`）。
 - `thinking_level` — 模型推理思考等级，取值为 `"low"`、`"medium"`、`"high"`、`"xhigh"` 或 `"max"`。
 - `test_data` — 测试集列表（字符串数组），每个元素必须是合法的 `benchmark-id`。
 - `author` — 作者信息对象，其中 `author.name`（作者姓名或团队名称）为必填。
@@ -86,7 +91,7 @@ author:                                 # 必填。作者与提交者信息
 - `author.email` — 作者联系邮箱。
 - `author.homepage` — 作者主页链接（默认可填写 GitHub 主页链接）。
 
-2. 在每个实验阶段文件夹 `experiments/<experiment-id>/<phase>/`（如 `train-1/`、`test/`，其中必须包含 `test/` 且 `test` 后不能跟数字）下创建 `summary.yaml` 阶段汇总文件：
+2. 在每个实验阶段文件夹 `experiments/<experiment-id>/<phase>/`（`train`、`val` 后必须跟数字，如 `train-1/`、`val-1/`；`test` 后一定不能跟数字，且必须包含 `test/`）下创建 `summary.yaml` 阶段汇总文件：
 
 ```yaml
 time: "2026-10-29T12:00:00Z"            # 必填。阶段实验完成时间（ISO 8601 UTC 时间）
@@ -94,6 +99,7 @@ summary: "Improved prompt and skills."  # 选填。英文阶段总结（如记�
 summary_zh: "优化了提示词与技能库。"      # 选填。中文阶段总结
 score_mean: 72.5                        # 必填。阶段平均分
 score_std: 1.8                          # 必填。样本标准差
+pass@k: 60.0                            # 必填。n 次实验均通过的题目得分均值（不计算标准差）
 n_attempt: 3                            # 必填。重复试验次数
 cost: 4.25                              # 必填。单次实验费用成本（美元，按 MMSP 目录价计算）
 duration_ms: 540000                     # 必填。单次实验总耗时（毫秒）
@@ -107,9 +113,10 @@ n_output_tokens: 85000                  # 必填。单次实验总输出 Token �
 必填字段：
 
 - `time` — 该阶段实验记录的时间，采用精确到秒的 ISO 8601 UTC 时间格式（例如 `"2026-10-29T12:00:00Z"`）。
-- `score_mean` — 该阶段多次重复试验的平均分。
+- `score_mean` — 该阶段多次重复试验的平均分（先计算单次实验总分，再对多次重复试验取均值）。
 - `score_std` — 该阶段多次重复试验得分的样本标准差。
-- `n_attempt` — 该阶段的重复试验次数（正整数，与目录下的 `attempt-<n>.yaml` 文件数量一致）。
+- `pass@k` — $n$ 次重复试验均通过的题目得分均值（$k = \text{n\_attempt}$）。`pass@k` 不计算标准差，只计算在 $n$ 次实验中都通过的题目分值，并对所有题目取平均。
+- `n_attempt` — 该阶段的重复试验次数（正整数，与目录下的 `attempt-<n>.yaml` 文件数量一致，通常 $n = 3$）。
 - `cost` — 单次实验的费用成本（单位：美元），统一按照 [MMSP 模型目录价](https://mmsp.penguin.ooo/zh/models/) 计算。
 - `duration_ms` — 单次实验的总耗时（单位：毫秒）。
 - `n_input_tokens` — 单次实验的总输入 Token 数（包含命中缓存的 Token 数）。
@@ -120,6 +127,24 @@ n_output_tokens: 85000                  # 必填。单次实验总输出 Token �
 
 - `summary` — 英文阶段摘要，例如记录该阶段实验相较上一阶段改进了什么。
 - `summary_zh` — 中文阶段摘要。
+
+### 得分计算公式
+
+设当前阶段共有 $M$ 道题目（$i = 1, \dots, M$），重复进行了 $n = \text{n\_attempt}$ 次独立实验（$j = 1, \dots, n$，通常 $n = 3$），记第 $i$ 道题目在第 $j$ 次实验（`attempt-j.yaml`）中的得分为 $s_{i,j}$：
+
+1. **单次实验总分（$S_j$）**：先汇总计算第 $j$ 次实验在全部 $M$ 道题目上的总得分（或百分制均分）：
+
+$$S_j = \frac{1}{M} \sum_{i=1}^{M} s_{i,j}$$
+
+2. **平均分（`score_mean`）与样本标准差（`score_std`）**：基于 $n$ 次实验（例如 3 次实验）的总分 $S_1, S_2, \dots, S_n$，计算算术平均值与样本标准差：
+
+$$\text{score\_mean} = \bar{S} = \frac{1}{n} \sum_{j=1}^{n} S_j$$
+
+$$\text{score\_std} = \sqrt{\frac{1}{n - 1} \sum_{j=1}^{n} \left(S_j - \bar{S}\right)^2}$$
+
+3. **`pass@k`（$k = n$）**：`pass@k` 不计算标准差，仅计算在 $n$ 次实验中**全部通过**的题目得分，并对所有 $M$ 道题目取平均。记 $\mathbb{I}_i \in \{0, 1\}$ 为第 $i$ 道题在 $n$ 次实验中是否全部通过的指示函数（若 $n$ 次实验均通过则 $\mathbb{I}_i = 1$，否则 $\mathbb{I}_i = 0$），$s_i^*$ 为第 $i$ 道题通过时的分值（百分制下为 $100$）：
+
+$$\text{pass@}k = \frac{1}{M} \sum_{i=1}^{M} \mathbb{I}_i \cdot s_i^*$$
 
 3. 在每个实验阶段文件夹 `experiments/<experiment-id>/<phase>/` 下创建每次重复试验的细粒度结果文件 `attempt-<n>.yaml`（如 `attempt-1.yaml`、`attempt-2.yaml`），文件内容为一个对象数组：
 
@@ -157,3 +182,13 @@ n_output_tokens: 85000                  # 必填。单次实验总输出 Token �
 
 - `trace_filepath` — 该题运行轨迹（Trace）文件的相对路径或存档路径。
 - `error_reason` — 记录当前题目运行或评分出错的原因（字符串）。
+
+## GDPevo 评估方法
+
+在评估自进化算法时，推荐使用 [GDPevo](https://arxiv.org/pdf/2608.03764)（如 `GDPevo-essential` 子集）。GDPevo 按不同的真实业务场景划分为多个独立的**任务组（Task Group）**，每个任务组均包含配对的训练集（`*-train`）和测试集（`*-test`）：
+
+1. **按任务组独立自进化**：对于第 $g$ 个任务组（$g = 1, \dots, G$），Agent 先在该任务组的训练集（如 `penguinharness-benchmark-gdpevo-crm-train`）上运行自进化算法，完成提示词、技能库或工作流的优化。
+2. **在对应测试集上评估**：将进化后的 Agent 冻结，在该任务组对应的测试集（如 `penguinharness-benchmark-gdpevo-crm-test`）上运行评估，得到该任务组的测试得分 $\bar{S}^{(g)}$。不同任务组之间的训练与评估相互隔离，不得跨任务组混用或泄露状态。
+3. **跨任务组取平均**：最终的 GDPevo 总成绩为全部 $G$ 个任务组测试集评估得分的算术平均值：
+
+$$S_{\text{GDPevo}} = \frac{1}{G} \sum_{g=1}^{G} \bar{S}^{(g)}$$
