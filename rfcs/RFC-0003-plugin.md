@@ -3,7 +3,7 @@
 - Feature Name: `plugin`
 - Start Date: 2026-10-29
 - RFC PR: [#14](https://github.com/Prism-Shadow/penguin-harness-community/pull/14)
-- Updated by: [#15](https://github.com/Prism-Shadow/penguin-harness-community/pull/15)
+- Updated by: [#15](https://github.com/Prism-Shadow/penguin-harness-community/pull/15), [#17](https://github.com/Prism-Shadow/penguin-harness-community/pull/17)
 
 [中文版](RFC-0003-plugin.zh.md)
 
@@ -11,7 +11,7 @@ A Plugin is a pluggable component of PenguinHarness that can bundle server modul
 
 Through this pluggable Plugin architecture, PenguinHarness can adapt to an unlimited variety of RSI algorithms simultaneously. Typically, we implement each RSI algorithm as a standalone Plugin. We built the open-source [PenguinHarness Plugins](https://github.com/Prism-Shadow/penguin-harness-plugins) repository to curate all community Plugins.
 
-## High-Level Rule: Decoupling Algorithm from Data
+## Design Principle: Decoupling Algorithm from Data
 
 A Plugin implementation **should be decoupled from specific datasets**: in principle, an RSI algorithm Plugin should contain only the **method** itself (such as experience distillation, reflection loops, or prompt and skill evolution procedures) and **must not be hardcoded or bound to any particular Benchmark dataset**. By keeping the algorithm decoupled from data, the same RSI Plugin can be applied directly to any Benchmark conforming to [RFC-0001 Benchmark](RFC-0001-benchmark.md).
 

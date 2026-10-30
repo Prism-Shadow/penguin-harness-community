@@ -3,7 +3,7 @@
 - Feature Name: `plugin`
 - Start Date: 2026-10-29
 - RFC PR: [#14](https://github.com/Prism-Shadow/penguin-harness-community/pull/14)
-- Updated by: [#15](https://github.com/Prism-Shadow/penguin-harness-community/pull/15)
+- Updated by: [#15](https://github.com/Prism-Shadow/penguin-harness-community/pull/15), [#17](https://github.com/Prism-Shadow/penguin-harness-community/pull/17)
 
 [English](RFC-0003-plugin.md)
 
@@ -11,7 +11,7 @@ Plugin 是 PenguinHarness 的可插拔组件，可以包含服务端模块、Ski
 
 通过可插拔的 Plugin 机制，PenguinHarness 具备同时适配任意数量 RSI 算法的能力。通常我们会将一个 RSI 算法实现为一个独立的 Plugin。我们构建了 [PenguinHarness Plugins](https://github.com/Prism-Shadow/penguin-harness-plugins) 开源仓库来整理所有的 Plugin。
 
-## 高层设计原则：算法与数据解耦
+## 设计原则：算法与数据解耦
 
 Plugin 的实现**应当尽量与数据解耦**：RSI 算法插件在理论上只包含通用的**方法（Method）**部分（如经验归纳、反思循环、提示词与技能演化策略等），**不得与具体的 Benchmark 数据集或特定任务硬编码绑定**。遵循这一原则，同一个 RSI 算法 Plugin 无需修改代码即可直接迁移并应用于任意符合 [RFC-0001 Benchmark](RFC-0001-benchmark.zh.md) 标准的评测数据集。
 
