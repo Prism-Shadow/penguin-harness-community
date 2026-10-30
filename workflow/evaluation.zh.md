@@ -18,7 +18,7 @@
 - **自进化（RSI）算法推荐配置**：对于自进化算法的评估，推荐使用 **DeepSeek Flash** 模型配合 **[GDPevo](https://arxiv.org/pdf/2608.03764)（`GDPevo-essential`）** 数据集进行实验：
   - `GDPevo-essential` 分为六个领域的任务组（Task Group）：`crm`、`erp`、`finance`、`healthcare`、`legal`、`data-analysis`。
   - 先在各自任务组的训练集（如 `penguinharness-benchmark-gdpevo-crm-train`）上训练自进化，再在对应的测试集（如 `penguinharness-benchmark-gdpevo-crm-test`）上评估，最后对所有任务组的测试结果取平均。
-- **通用 Benchmark 推荐配置**：对于常规 Benchmark（如 `penguinharness-benchmark-sec-a` 至 `sec-e`），推荐使用 **DeepSeek Flash** 模型运行 3 次重复实验（`n_attempt: 3`），同时记录 `score_mean`、`score_std` 与 `pass@k`。
+- **通用 Benchmark 推荐配置**：对于常规 Benchmark（如 `penguinharness-benchmark-sec-a` 至 `sec-e`），推荐使用 **DeepSeek Flash** 模型运行 3 次重复实验（`n_attempt: 3`），记录 `score_mean` 和 `score_std`。若 Benchmark 定义了通过标准，可选报 `pass@k`，这里 $k = \text{n\_attempt}$。
 - **模型版本号要求**：若使用 `deepseek-flash` 这类模型，必须在 `meta_info.yaml` 的 `model_name` 字段中写明具体版本号，例如填写 `deepseek-flash-1017`。
 
 ## 格式示例
@@ -53,7 +53,8 @@ Closes #<issue-number>
 ### 实验结果摘要
 - **Experiment ID**: `<experiment-id>`
 - **Model**: `deepseek/deepseek-flash-1017`
-- **测试集 (`test`) 平均分**: `<score_mean> ± <score_std>`，`pass@k`: `<pass@k>`（`n_attempt: 3`）
+- **测试集 (`test`) 平均分**: `<score_mean> ± <score_std>`（`n_attempt: 3`）
+- **选填的 `pass@k`**: `<pass@k>`（不报告时省略）
 - **单次实验成本 / 耗时**: `$<cost>` / `<duration_ms> ms`
 
 ### 自查清单

@@ -18,7 +18,7 @@
 - **Recommended Setup for Self-Evolving (RSI) Algorithms**: When evaluating self-evolution algorithms, we recommend using the **DeepSeek Flash** model together with the **[GDPevo](https://arxiv.org/pdf/2608.03764) (`GDPevo-essential`)** dataset:
   - `GDPevo-essential` comprises six domain Task Groups: `crm`, `erp`, `finance`, `healthcare`, `legal`, and `data-analysis`.
   - First train the Agent on each Task Group's training split (e.g., `penguinharness-benchmark-gdpevo-crm-train`), then evaluate the frozen Agent on the corresponding test split (e.g., `penguinharness-benchmark-gdpevo-crm-test`), and average the test scores across all Task Groups.
-- **Recommended Setup for General Benchmarks**: For general Benchmarks (such as `penguinharness-benchmark-sec-a` through `sec-e`), we recommend running 3 repeated attempts (`n_attempt: 3`) with **DeepSeek Flash** and reporting `score_mean`, `score_std`, and `pass@k`.
+- **Recommended Setup for General Benchmarks**: For general Benchmarks (such as `penguinharness-benchmark-sec-a` through `sec-e`), we recommend running 3 repeated attempts (`n_attempt: 3`) with **DeepSeek Flash** and reporting `score_mean` and `score_std`. `pass@k` is optional when the Benchmark defines a pass criterion; here $k = \text{n\_attempt}$.
 - **Model Version Requirement**: When using models such as `deepseek-flash`, always include the specific version suffix in `model_name` inside `meta_info.yaml` (for example, `deepseek-flash-1017`).
 
 ## Format Examples
@@ -53,7 +53,8 @@ Closes #<issue-number>
 ### Results Summary
 - **Experiment ID**: `<experiment-id>`
 - **Model**: `deepseek/deepseek-flash-1017`
-- **Test Phase (`test`) Score**: `<score_mean> ± <score_std>`, `pass@k`: `<pass@k>` (`n_attempt: 3`)
+- **Test Phase (`test`) Score**: `<score_mean> ± <score_std>` (`n_attempt: 3`)
+- **Optional `pass@k`**: `<pass@k>` (omit if not reported)
 - **Single-Experiment Cost / Duration**: `$<cost>` / `<duration_ms> ms`
 
 ### Checklist

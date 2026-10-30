@@ -14,7 +14,7 @@
 
 为保证社区贡献的实验成本可控且结果可横向对比，各方向推荐遵循以下实验指导：
 
-- **提交 Benchmark**：整理好新的 Benchmark 后，推荐使用 **DeepSeek Flash** 模型跑 **`pass@k`**（如 `n_attempt: 3`）进行验证与难度校准，可参考内置样例 [`penguinharness-benchmark-sec-a`](https://github.com/Prism-Shadow/penguin-harness-benchmark/tree/main/packages/penguinharness-benchmark-sec-a)。
+- **提交 Benchmark**：整理好新的 Benchmark 后，推荐使用 **DeepSeek Flash** 模型运行 3 次重复实验，记录 `score_mean` 和 `score_std`；若 Benchmark 定义了通过标准，可选报 `pass@k`。可参考内置样例 [`penguinharness-benchmark-sec-a`](https://github.com/Prism-Shadow/penguin-harness-benchmark/tree/main/packages/penguinharness-benchmark-sec-a)。
 - **提交 Evaluation**：对于自进化（RSI）算法的评估实验，推荐使用 **DeepSeek Flash** 模型配合 **`GDPevo-essential`** 数据集（包含 CRM、ERP、Finance、Healthcare、Legal、DataAnalysis 六个任务组，先在各自任务组的 `*-train` 上训练，再在对应的 `*-test` 上评估并取平均）。
 - **提交 Algorithm（Plugin）**：插件实现应与具体数据解耦（仅包含算法方法部分）；实现完成后，推荐使用 **DeepSeek Flash** 模型和 **`GDPevo-essential`** 数据集测试算法相比基线是否有提升。
 - **模型版本号要求**：若使用 `deepseek-flash` 等会随时间迭代权重的模型，在记录实验 `model_name` 时**必须加上具体版本号**，例如填写 `deepseek-flash-1017`。

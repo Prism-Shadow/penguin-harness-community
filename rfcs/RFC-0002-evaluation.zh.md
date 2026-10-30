@@ -99,7 +99,7 @@ summary: "Improved prompt and skills."  # 选填。英文阶段总结（如记�
 summary_zh: "优化了提示词与技能库。"      # 选填。中文阶段总结
 score_mean: 72.5                        # 必填。阶段平均分
 score_std: 1.8                          # 必填。样本标准差
-pass@k: 60.0                            # 必填。n 次实验均通过的题目得分均值（不计算标准差）
+pass@k: 60.0                            # 选填。k 次实验中至少通过一次的题目比例，按百分比报告（k = n_attempt）
 n_attempt: 3                            # 必填。重复试验次数
 cost: 4.25                              # 必填。单次实验费用成本（美元，按 MMSP 目录价计算）
 duration_ms: 540000                     # 必填。单次实验总耗时（毫秒）
@@ -115,7 +115,6 @@ n_output_tokens: 85000                  # 必填。单次实验总输出 Token �
 - `time` — 该阶段实验记录的时间，采用精确到秒的 ISO 8601 UTC 时间格式（例如 `"2026-10-29T12:00:00Z"`）。
 - `score_mean` — 该阶段多次重复试验的平均分（先计算单次实验总分，再对多次重复试验取均值）。
 - `score_std` — 该阶段多次重复试验得分的样本标准差。
-- `pass@k` — $n$ 次重复试验均通过的题目得分均值（$k = \text{n\_attempt}$）。`pass@k` 不计算标准差，只计算在 $n$ 次实验中都通过的题目分值，并对所有题目取平均。
 - `n_attempt` — 该阶段的重复试验次数（正整数，与目录下的 `attempt-<n>.yaml` 文件数量一致，通常 $n = 3$）。
 - `cost` — 单次实验的费用成本（单位：美元），统一按照 [MMSP 模型目录价](https://mmsp.penguin.ooo/zh/models/) 计算。
 - `duration_ms` — 单次实验的总耗时（单位：毫秒）。
@@ -125,6 +124,7 @@ n_output_tokens: 85000                  # 必填。单次实验总输出 Token �
 
 选填字段：
 
+- `pass@k` — **$k$ 次尝试中至少通过一次**的题目比例，按百分比报告；本格式取 $k = \text{n\_attempt}$。该字段不报告标准差。通过与否采用 Benchmark 预先定义的判定标准；未计算或未定义通过标准时省略此字段。
 - `summary` — 英文阶段摘要，例如记录该阶段实验相较上一阶段改进了什么。
 - `summary_zh` — 中文阶段摘要。
 
@@ -142,9 +142,11 @@ $$\text{score\_mean} = \bar{S} = \frac{1}{n} \sum_{j=1}^{n} S_j$$
 
 $$\text{score\_std} = \sqrt{\frac{1}{n - 1} \sum_{j=1}^{n} \left(S_j - \bar{S}\right)^2}$$
 
-3. **`pass@k`（$k = n$）**：`pass@k` 不计算标准差，仅计算在 $n$ 次实验中**全部通过**的题目得分，并对所有 $M$ 道题目取平均。记 $\mathbb{I}_i \in \{0, 1\}$ 为第 $i$ 道题在 $n$ 次实验中是否全部通过的指示函数（若 $n$ 次实验均通过则 $\mathbb{I}_i = 1$，否则 $\mathbb{I}_i = 0$），$s_i^*$ 为第 $i$ 道题通过时的分值（百分制下为 $100$）：
+3. **选填的 `pass@k`（$k = n$）**：按照 [HumanEval 的定义](https://arxiv.org/html/2107.03374v2#S2.SS1)，一道题只要在 **$k$ 次尝试中至少通过一次**就计为通过。这里 $k = n = \text{n\_attempt}$，若第 $i$ 道题在已记录的尝试中至少通过一次，则 $\mathbb{I}_i = 1$，否则为 $0$。对全部 $M$ 道题计算百分比：
 
-$$\text{pass@}k = \frac{1}{M} \sum_{i=1}^{M} \mathbb{I}_i \cdot s_i^*$$
+$$\text{pass@}k = \frac{100}{M} \sum_{i=1}^{M} \mathbb{I}_i$$
+
+例如，一道题三次尝试中一次通过、两次失败，在 `pass@3` 中计为通过。这里不为该指标报告标准差，它也不替代 `score_mean` 和 `score_std`。只有连续得分、未定义通过标准的 Benchmark 可以省略该字段。
 
 3. 在每个实验阶段文件夹 `experiments/<experiment-id>/<phase>/` 下创建每次重复试验的细粒度结果文件 `attempt-<n>.yaml`（如 `attempt-1.yaml`、`attempt-2.yaml`），文件内容为一个对象数组：
 
