@@ -1,5 +1,10 @@
 # RFC-0001 Benchmark
 
+- Feature Name: `benchmark`
+- Start Date: 2026-10-29
+- RFC PR: [#14](https://github.com/Prism-Shadow/penguin-harness-community/pull/14)
+- Updated by: [#15](https://github.com/Prism-Shadow/penguin-harness-community/pull/15)
+
 [English](RFC-0001-benchmark.md)
 
 Benchmark 是用来评估 Agent 的一组数据，不包含评估结果。Benchmark 包含多道题目，每道题目通常都包含题干（`statement`）和评分标准（`rubric`）。
@@ -115,6 +120,11 @@ gpus = 0                                # 选填。GPU 数量限制（单位：�
 
 4. （可选）如果题目包含体积较大的原始数据或沙箱环境文件（如 Harbor 任务），请将原始数据归纳到 `data/<benchmark-id>/` 文件夹中，并提供 `README.md` 说明文件。`data/<benchmark-id>/` 内部的数据组织形式不限，只要 Agent 可以参考 `packages/<benchmark-id>/` 中的元信息运行该 Benchmark 即可。
 
-## 训练数据
+## 训练数据与 GDPevo 评估方法
 
-训练数据同样可以组织成标准的 Benchmark 形式：在 `packages/<benchmark-id>/` 下按每道题一个 `<task-id>` 文件夹进行存放，并与测试数据集相对应（例如 GDPevo 的训练数据 [penguinharness-benchmark-gdpevo-crm-train](https://github.com/Prism-Shadow/penguin-harness-benchmark/tree/main/packages/penguinharness-benchmark-gdpevo-crm-train) 与测试数据 [penguinharness-benchmark-gdpevo-crm-test](https://github.com/Prism-Shadow/penguin-harness-benchmark/tree/main/packages/penguinharness-benchmark-gdpevo-crm-test)）。
+训练数据同样可以组织成标准的 Benchmark 形式：在 `packages/<benchmark-id>/` 下按每道题一个 `<task-id>` 文件夹进行存放，并与测试数据集相对应（例如 [GDPevo](https://arxiv.org/pdf/2608.03764) 的训练数据 [penguinharness-benchmark-gdpevo-crm-train](https://github.com/Prism-Shadow/penguin-harness-benchmark/tree/main/packages/penguinharness-benchmark-gdpevo-crm-train) 与测试数据 [penguinharness-benchmark-gdpevo-crm-test](https://github.com/Prism-Shadow/penguin-harness-benchmark/tree/main/packages/penguinharness-benchmark-gdpevo-crm-test)）。
+
+在 [GDPevo](https://arxiv.org/pdf/2608.03764) 的自进化评估协议中，数据按不同业务场景划分为多个独立的**任务组（Task Group）**（例如 `GDPevo-essential` 包含 CRM、ERP、Finance、Healthcare、Legal、DataAnalysis 六个领域的任务组）：
+1. **分组自进化训练**：Agent 先在各自 Task Group 的训练集（`*-train`）上进行自进化训练（如归纳规则、沉淀或优化 Skill）。
+2. **配对测试集评估**：训练完成后冻结 Agent 状态，在该 Task Group 对应的独立测试集（`*-test`）上进行评估。
+3. **跨任务组取平均**：最后对所有 Task Group 在各自测试集上的评估结果取算术平均值，作为整个 GDPevo 数据集的最终成绩。

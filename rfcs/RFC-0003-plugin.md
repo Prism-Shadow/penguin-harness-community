@@ -1,10 +1,19 @@
 # RFC-0003 Plugin
 
+- Feature Name: `plugin`
+- Start Date: 2026-10-29
+- RFC PR: [#14](https://github.com/Prism-Shadow/penguin-harness-community/pull/14)
+- Updated by: [#15](https://github.com/Prism-Shadow/penguin-harness-community/pull/15)
+
 [中文版](RFC-0003-plugin.zh.md)
 
 A Plugin is a pluggable component of PenguinHarness that can bundle server modules, Skills, Hooks, and Workbenches. Unlike Benchmarks and Evaluations, a Plugin must be a standard **NPM package**.
 
 Through this pluggable Plugin architecture, PenguinHarness can adapt to an unlimited variety of RSI algorithms simultaneously. Typically, we implement each RSI algorithm as a standalone Plugin. We built the open-source [PenguinHarness Plugins](https://github.com/Prism-Shadow/penguin-harness-plugins) repository to curate all community Plugins.
+
+## High-Level Rule: Decoupling Algorithm from Data
+
+A Plugin implementation **should be decoupled from specific datasets**: in principle, an RSI algorithm Plugin should contain only the **method** itself (such as experience distillation, reflection loops, or prompt and skill evolution procedures) and **must not be hardcoded or bound to any particular Benchmark dataset**. By keeping the algorithm decoupled from data, the same RSI Plugin can be applied directly to any Benchmark conforming to [RFC-0001 Benchmark](RFC-0001-benchmark.md).
 
 ## Directory Structure
 
@@ -37,7 +46,7 @@ Example: [opro-rsi-toolkit/package.json](https://github.com/Prism-Shadow/penguin
 
 To add a new Plugin to the repository, organize its files as follows:
 
-1. Create a `<plugin-id>` directory and organize `skills/`, `hooks/`, `workbenches/`, and an optional `icon.svg` according to the plugin's capabilities.
+1. Create a `<plugin-id>` directory and organize `skills/`, `hooks/`, `workbenches/`, and an optional `icon.svg` according to the plugin's capabilities, keeping the algorithm logic decoupled from specific datasets.
 2. Create a `package.json` file inside `<plugin-id>/` containing standard NPM fields together with the `penguin` metadata block:
 
 ```json
@@ -100,9 +109,9 @@ Standard NPM fields:
 - `penguin.short_description` — One-line English summary shown on the plugin card.
 - `penguin.category` — Plugin category; set to `"rsi"` for RSI algorithm plugins.
 - `penguin.preinstall` — Whether the plugin is preinstalled by default; set to `false` for community plugins.
-- `penguin.quick_start` — Quick-start configuration object that pre-fills a new chat draft:
-  - `prompt` — Pre-filled English starter prompt (required).
-  - `skills` — Array of Skill IDs pre-selected when starting the prompt (required, array of strings).
+- `penguin.quick_start` — Quick-start configuration object whose role is to **provide a ready-to-run invocation example for the algorithm**: when a user clicks Quick Start on the plugin in PenguinHarness, it opens a new chat draft with the required Skills pre-selected and an example invocation prompt pre-filled:
+  - `prompt` — Pre-filled English quick-start invocation prompt (required).
+  - `skills` — Array of Skill IDs pre-selected for the quick-start example (required, array of strings).
 
 `penguin` extension fields (optional):
 
@@ -110,4 +119,4 @@ Standard NPM fields:
 - `penguin.description_zh` — Full Chinese description shown in the plugin detail view.
 - `penguin.short_description_zh` — One-line Chinese summary shown on the plugin card.
 - `penguin.icon` — Relative path to the SVG icon inside the package (e.g., `"icon.svg"`).
-- `penguin.quick_start.prompt_zh` — Pre-filled Chinese starter prompt in the Chinese UI.
+- `penguin.quick_start.prompt_zh` — Pre-filled Chinese quick-start invocation prompt in the Chinese UI.

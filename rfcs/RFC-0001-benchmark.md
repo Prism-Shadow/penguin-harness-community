@@ -1,5 +1,10 @@
 # RFC-0001 Benchmark
 
+- Feature Name: `benchmark`
+- Start Date: 2026-10-29
+- RFC PR: [#14](https://github.com/Prism-Shadow/penguin-harness-community/pull/14)
+- Updated by: [#15](https://github.com/Prism-Shadow/penguin-harness-community/pull/15)
+
 [中文版](RFC-0001-benchmark.zh.md)
 
 A Benchmark is a dataset used to evaluate an Agent and does not contain evaluation results. A Benchmark consists of multiple tasks, and each task typically includes a problem statement (`statement`) and a scoring rubric (`rubric`).
@@ -115,6 +120,11 @@ Optional fields:
 
 4. (Optional) If the tasks include large raw datasets or sandbox environment files (such as Harbor tasks), place the raw data under `data/<benchmark-id>/` along with a `README.md` entrypoint. The internal layout of `data/<benchmark-id>/` is unrestricted as long as an Agent can run the Benchmark by following the metadata and instructions in `packages/<benchmark-id>/`.
 
-## Training Data
+## Training Data & GDPevo Evaluation Protocol
 
-Training datasets can also be organized in the standard Benchmark format—stored under `packages/<benchmark-id>/` with one `<task-id>` directory per task—and paired with their corresponding test datasets (for example, GDPevo's training split [penguinharness-benchmark-gdpevo-crm-train](https://github.com/Prism-Shadow/penguin-harness-benchmark/tree/main/packages/penguinharness-benchmark-gdpevo-crm-train) and test split [penguinharness-benchmark-gdpevo-crm-test](https://github.com/Prism-Shadow/penguin-harness-benchmark/tree/main/packages/penguinharness-benchmark-gdpevo-crm-test)).
+Training datasets can also be organized in the standard Benchmark format—stored under `packages/<benchmark-id>/` with one `<task-id>` directory per task—and paired with their corresponding test datasets (for example, [GDPevo](https://arxiv.org/pdf/2608.03764)'s training split [penguinharness-benchmark-gdpevo-crm-train](https://github.com/Prism-Shadow/penguin-harness-benchmark/tree/main/packages/penguinharness-benchmark-gdpevo-crm-train) and test split [penguinharness-benchmark-gdpevo-crm-test](https://github.com/Prism-Shadow/penguin-harness-benchmark/tree/main/packages/penguinharness-benchmark-gdpevo-crm-test)).
+
+Under the [GDPevo](https://arxiv.org/pdf/2608.03764) self-evolution evaluation protocol, tasks are organized into independent **Task Groups** across business domains (for example, `GDPevo-essential` comprises six domain Task Groups: CRM, ERP, Finance, Healthcare, Legal, and DataAnalysis):
+1. **Per-Group Self-Evolution Training**: The Agent first undergoes self-evolution training on a Task Group's training split (`*-train`), such as distilling rules or evolving Skills.
+2. **Paired Test-Split Evaluation**: The evolved Agent state is then frozen and evaluated on the corresponding held-out test split (`*-test`) of that same Task Group.
+3. **Macro-Average Across Task Groups**: Finally, the evaluation scores on the test splits across all Task Groups are averaged to produce the overall GDPevo score.
