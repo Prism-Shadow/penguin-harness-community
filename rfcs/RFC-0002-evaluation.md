@@ -35,7 +35,7 @@ penguin-harness-benchmark/
 - `<phase>/` (e.g., `train-1/`, `val-1/`, `test/`): Phase directory. Training and validation phases **must have a numeric suffix** indicating the iteration round (such as `train-1`, `val-1`, `train-2`, `val-2`), whereas the final test phase must be named `test` (**never with a trailing number**), and every experiment must contain a `test/` phase.
 - `meta_info.yaml`: Records the experiment-level metadata and runtime configuration (model, Harness, RSI algorithm, dataset splits, and author information).
 - `summary.yaml`: Records the aggregated score statistics, duration, token usage, and cost for that phase.
-- `attempt-<n>.yaml`: Records the fine-grained task results for the `n`-th repeated trial of that phase.
+- `attempt-<n>.yaml`: Records the fine-grained per-task results for the `n`-th repeated trial of that phase.
 
 ## Adding an Evaluation
 
@@ -99,7 +99,7 @@ summary: "Improved prompt and skills."  # Optional. English summary of what chan
 summary_zh: "优化了提示词与技能库。"      # Optional. Chinese summary of what changed in this phase
 score_mean: 72.5                        # Required. Mean score across attempts
 score_std: 1.8                          # Required. Sample standard deviation of scores
-pass@k: 60.0                            # Optional. Percentage of tasks passed at least once in k attempts (k = n_attempt)
+pass@k: 60.0                            # Optional. Percentage of tasks passed at least once in n attempts (no std)
 n_attempt: 3                            # Required. Number of repeated attempts
 cost: 4.25                              # Required. Single-experiment cost in USD (based on MMSP list price)
 duration_ms: 540000                     # Required. Single-experiment total duration in milliseconds
@@ -124,7 +124,7 @@ Required fields:
 
 Optional fields:
 
-- `pass@k` — Percentage of tasks that pass in **at least one of $k$ attempts**; this format uses $k = \text{n\_attempt}$. No standard deviation is reported for this field. Use the Benchmark's predefined pass criterion; omit the field when it is not calculated or no pass criterion is defined.
+- `pass@k` — Percentage of tasks that pass at least once in $k$ attempts ($k = \text{n\_attempt}$).
 - `summary` — English summary describing key changes or improvements in this phase.
 - `summary_zh` — Chinese summary describing key changes or improvements in this phase.
 
@@ -142,11 +142,9 @@ $$\text{score\_mean} = \bar{S} = \frac{1}{n} \sum_{j=1}^{n} S_j$$
 
 $$\text{score\_std} = \sqrt{\frac{1}{n - 1} \sum_{j=1}^{n} \left(S_j - \bar{S}\right)^2}$$
 
-3. **Optional `pass@k` ($k = n$)**: A task is counted if **at least one of its $k$ attempts passes**. Here $k = n = \text{n\_attempt}$, so let $\mathbb{I}_i = 1$ if task $i$ passes at least once among the recorded attempts, and $0$ otherwise. Report the percentage across all $M$ tasks:
+3. **Optional `pass@k` ($k = n$)**: For each task, let $\mathbb{I}_i = 1$ if at least one of its $k$ attempts passes, and $0$ otherwise. Report the percentage across all $M$ tasks; no standard deviation is computed:
 
 $$\text{pass@}k = \frac{100}{M} \sum_{i=1}^{M} \mathbb{I}_i$$
-
-For example, a task that passes once and fails twice counts as passed for `pass@3`. This metric has no standard deviation here. A Benchmark with continuous scores but no defined pass criterion may omit it.
 
 3. Inside each phase directory `experiments/<experiment-id>/<phase>/`, create `attempt-<n>.yaml` files (e.g., `attempt-1.yaml`, `attempt-2.yaml`) recording the fine-grained task-level results for each attempt as a YAML list of objects:
 

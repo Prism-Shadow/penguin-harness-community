@@ -15,7 +15,7 @@
 
 ## Recommended Verification & Examples
 
-- **Recommended Model & Metrics**: After organizing a Benchmark, we recommend running 3 repeated attempts with **DeepSeek Flash** to verify task execution and scoring. If the Benchmark defines a pass criterion, optionally report `pass@k`: the percentage of tasks passed at least once across the $k = 3$ attempts.
+- **Recommended Model & Metric**: After organizing a Benchmark, we recommend running $k = 3$ repeated attempts with the **DeepSeek Flash** model to verify that tasks are solvable, discriminative, and graded deterministically, optionally reporting **`pass@k`**.
 - **Model Version Suffix**: If you also submit baseline evaluation records using models like `deepseek-flash`, always include the explicit version suffix in `model_name` (e.g., `deepseek-flash-1017`).
 - **Reference Examples**:
   - General evaluation benchmarks: [`penguinharness-benchmark-sec-a`](https://github.com/Prism-Shadow/penguin-harness-benchmark/tree/main/packages/penguinharness-benchmark-sec-a) (Data Analysis Bench subset) through [`penguinharness-benchmark-sec-e`](https://github.com/Prism-Shadow/penguin-harness-benchmark/tree/main/packages/penguinharness-benchmark-sec-e) (Terminal-Bench subset).
@@ -37,7 +37,7 @@
 ### Plan
 - [ ] Prepare `packages/<benchmark-id>/benchmark_config.toml` and `<task-id>/` directories
 - [ ] Prepare `data/<benchmark-id>/` raw task files (if applicable)
-- [ ] Verify task execution and scoring with `deepseek-flash-1017`
+- [ ] Verify tasks with `deepseek-flash-1017` to ensure tasks run and score properly
 ```
 
 ### 2. Issue Claim Comment Example (Optional)
@@ -60,5 +60,5 @@ Closes #<issue-number>
 ### Checklist
 - [x] Directory layout and manifest fields conform to RFC-0001 Benchmark
 - [x] `status` in `benchmark_config.toml` is set to `"draft"`
-- [x] Verified task execution and scoring with `deepseek-flash-1017`
+- [x] Verified tasks with `deepseek-flash-1017`
 ```

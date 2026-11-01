@@ -35,7 +35,7 @@ penguin-harness-benchmark/
 - `<phase>/`（如 `train-1/`、`val-1/`、`test/`）：实验阶段文件夹。训练和验证阶段命名后面**必须跟数字**以标识迭代轮次（如 `train-1`、`val-1`、`train-2`、`val-2`）；最终测试阶段固定命名为 `test`（后面**一定不能跟数字**），且每组实验必须包含 `test/` 阶段。
 - `meta_info.yaml`：记录整组实验的元信息与配置（模型、Harness、RSI 算法、数据集划分及作者信息）。
 - `summary.yaml`：记录对应阶段聚合后的得分统计、耗时、Token 消耗与费用成本。
-- `attempt-<n>.yaml`：记录对应阶段第 `n` 次重复试验在题目（Task）上的细粒度评测数据。
+- `attempt-<n>.yaml`：记录对应阶段第 `n` 次重复试验在每道题目（Task）上的细粒度评测数据。
 
 ## 添加 Evaluation
 
@@ -99,7 +99,7 @@ summary: "Improved prompt and skills."  # 选填。英文阶段总结（如记�
 summary_zh: "优化了提示词与技能库。"      # 选填。中文阶段总结
 score_mean: 72.5                        # 必填。阶段平均分
 score_std: 1.8                          # 必填。样本标准差
-pass@k: 60.0                            # 选填。k 次实验中至少通过一次的题目比例，按百分比报告（k = n_attempt）
+pass@k: 60.0                            # 选填。n 次实验中至少通过一次的题目百分比（不计算标准差）
 n_attempt: 3                            # 必填。重复试验次数
 cost: 4.25                              # 必填。单次实验费用成本（美元，按 MMSP 目录价计算）
 duration_ms: 540000                     # 必填。单次实验总耗时（毫秒）
@@ -124,7 +124,7 @@ n_output_tokens: 85000                  # 必填。单次实验总输出 Token �
 
 选填字段：
 
-- `pass@k` — **$k$ 次尝试中至少通过一次**的题目比例，按百分比报告；本格式取 $k = \text{n\_attempt}$。该字段不报告标准差。通过与否采用 Benchmark 预先定义的判定标准；未计算或未定义通过标准时省略此字段。
+- `pass@k` — $k$ 次尝试中至少通过一次的题目百分比（$k = \text{n\_attempt}$）。
 - `summary` — 英文阶段摘要，例如记录该阶段实验相较上一阶段改进了什么。
 - `summary_zh` — 中文阶段摘要。
 
@@ -142,11 +142,9 @@ $$\text{score\_mean} = \bar{S} = \frac{1}{n} \sum_{j=1}^{n} S_j$$
 
 $$\text{score\_std} = \sqrt{\frac{1}{n - 1} \sum_{j=1}^{n} \left(S_j - \bar{S}\right)^2}$$
 
-3. **选填的 `pass@k`（$k = n$）**：一道题只要在 **$k$ 次尝试中至少通过一次**就计为通过。这里 $k = n = \text{n\_attempt}$，若第 $i$ 道题在已记录的尝试中至少通过一次，则 $\mathbb{I}_i = 1$，否则为 $0$。对全部 $M$ 道题计算百分比：
+3. **选填的 `pass@k`（$k = n$）**：每道题在 $k$ 次尝试中至少通过一次，记 $\mathbb{I}_i = 1$，否则为 $0$。对全部 $M$ 道题计算通过百分比，不计算标准差：
 
 $$\text{pass@}k = \frac{100}{M} \sum_{i=1}^{M} \mathbb{I}_i$$
-
-例如，一道题三次尝试中一次通过、两次失败，在 `pass@3` 中计为通过。这里不为该指标报告标准差。只有连续得分、未定义通过标准的 Benchmark 可以省略该字段。
 
 3. 在每个实验阶段文件夹 `experiments/<experiment-id>/<phase>/` 下创建每次重复试验的细粒度结果文件 `attempt-<n>.yaml`（如 `attempt-1.yaml`、`attempt-2.yaml`），文件内容为一个对象数组：
 
