@@ -35,7 +35,7 @@ penguin-harness-benchmark/
 - `<phase>/`（如 `train-1/`、`val-1/`、`test/`）：实验阶段文件夹。训练和验证阶段命名后面**必须跟数字**以标识迭代轮次（如 `train-1`、`val-1`、`train-2`、`val-2`）；最终测试阶段固定命名为 `test`（后面**一定不能跟数字**），且每组实验必须包含 `test/` 阶段。
 - `meta_info.yaml`：记录整组实验的元信息与配置（模型、Harness、RSI 算法、数据集划分及作者信息）。
 - `summary.yaml`：记录对应阶段聚合后的得分统计、耗时、Token 消耗与费用成本。
-- `attempt-<n>.yaml`：记录对应阶段第 `n` 次重复试验的细粒度评测数据。
+- `attempt-<n>.yaml`：记录对应阶段第 `n` 次重复试验在题目（Task）上的细粒度评测数据。
 
 ## 添加 Evaluation
 
@@ -151,39 +151,39 @@ $$\text{pass@}k = \frac{100}{M} \sum_{i=1}^{M} \mathbb{I}_i$$
 3. 在每个实验阶段文件夹 `experiments/<experiment-id>/<phase>/` 下创建每次重复试验的细粒度结果文件 `attempt-<n>.yaml`（如 `attempt-1.yaml`、`attempt-2.yaml`），文件内容为一个对象数组：
 
 ```yaml
-- source:                                                 # 必填。本条记录对应的任务
+- source:                                                 # 必填。题目来源
     - benchmark_id: "penguinharness-benchmark-gdpevo-crm-test" # 必填。所属 Benchmark ID
       task_id: "CASE-001-account-renewal"                   # 必填。题目 ID
-  time: "2026-10-29T12:00:00Z"                             # 必填。完成时间（ISO 8601 UTC 时间）
-  score: 85.0                                              # 必填。本条记录的得分
-  cost: 0.42                                               # 必填。本条记录的费用成本（美元）
-  duration_ms: 52000                                       # 必填。本条记录的运行耗时（毫秒）
-  n_input_tokens: 125000                                   # 必填。本条记录的总输入 Token 数（包含缓存）
-  n_cache_tokens: 98000                                    # 必填。本条记录的总缓存 Token 数
-  n_output_tokens: 8500                                    # 必填。本条记录的总输出 Token 数
+  time: "2026-10-29T12:00:00Z"                             # 必填。单题完成时间（ISO 8601 UTC 时间）
+  score: 85.0                                              # 必填。单题得分
+  cost: 0.42                                               # 必填。单题费用成本（美元）
+  duration_ms: 52000                                       # 必填。单题运行耗时（毫秒）
+  n_input_tokens: 125000                                   # 必填。单题总输入 Token 数（包含缓存）
+  n_cache_tokens: 98000                                    # 必填。单题总缓存 Token 数
+  n_output_tokens: 8500                                    # 必填。单题总输出 Token 数
   trace_filepath: "traces/attempt-1/CASE-001.jsonl"        # 选填。运行轨迹文件路径
-  error_reason: ""                                         # 选填。本次运行出错的原因
+  error_reason: ""                                         # 选填。当前题目出错的原因
 ```
 
 ### `attempt-<n>.yaml` 字段说明
 
-数组中的每个元素对应当次试验中一道或多道题目的评测记录，包含以下字段：
+数组中的每个元素对应一道或多道题目在当次试验中的评测记录，包含以下字段：
 
 必填字段：
 
-- `source` — 任务来源的对象数组，每个对象包含必填的 Benchmark 标识 `benchmark_id` 和题目标识 `task_id`。
-- `time` — 本条记录的评测完成时间，采用精确到秒的 ISO 8601 UTC 时间格式（例如 `"2026-10-29T12:00:00Z"`）。
-- `score` — 本条记录的得分。
-- `cost` — 本条记录的费用成本（单位：美元，按 [MMSP 模型目录价](https://mmsp.penguin.ooo/zh/models/) 计算）。
-- `duration_ms` — 本条记录的运行耗时（单位：毫秒）。
-- `n_input_tokens` — 本条记录的总输入 Token 数（包含命中缓存的 Token 数）。
-- `n_cache_tokens` — 本条记录的总缓存命中 Token 数。
-- `n_output_tokens` — 本条记录的总输出 Token 数。
+- `source` — 题目来源的对象数组，每个对象包含必填的 `benchmark_id` 和 `task_id`。包含多道题时，以下字段记录这些题目的整体结果。
+- `time` — 该题在当次试验中完成记录的时间，采用精确到秒的 ISO 8601 UTC 时间格式（例如 `"2026-10-29T12:00:00Z"`）。
+- `score` — 该题在当次试验中的得分。
+- `cost` — 该题在当次试验中的费用成本（单位：美元，按 [MMSP 模型目录价](https://mmsp.penguin.ooo/zh/models/) 计算）。
+- `duration_ms` — 该题在当次试验中的运行耗时（单位：毫秒）。
+- `n_input_tokens` — 该题在当次试验中的总输入 Token 数（包含命中缓存的 Token 数）。
+- `n_cache_tokens` — 该题在当次试验中的总缓存命中 Token 数。
+- `n_output_tokens` — 该题在当次试验中的总输出 Token 数。
 
 选填字段：
 
-- `trace_filepath` — 本条记录的运行轨迹（Trace）文件的相对路径或存档路径。
-- `error_reason` — 本次运行或评分出错的原因（字符串）。
+- `trace_filepath` — 该题运行轨迹（Trace）文件的相对路径或存档路径。
+- `error_reason` — 记录当前题目运行或评分出错的原因（字符串）。
 
 ## GDPevo 评估方法
 

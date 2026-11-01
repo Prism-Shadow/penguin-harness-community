@@ -35,7 +35,7 @@ penguin-harness-benchmark/
 - `<phase>/` (e.g., `train-1/`, `val-1/`, `test/`): Phase directory. Training and validation phases **must have a numeric suffix** indicating the iteration round (such as `train-1`, `val-1`, `train-2`, `val-2`), whereas the final test phase must be named `test` (**never with a trailing number**), and every experiment must contain a `test/` phase.
 - `meta_info.yaml`: Records the experiment-level metadata and runtime configuration (model, Harness, RSI algorithm, dataset splits, and author information).
 - `summary.yaml`: Records the aggregated score statistics, duration, token usage, and cost for that phase.
-- `attempt-<n>.yaml`: Records the fine-grained results for the `n`-th repeated trial of that phase.
+- `attempt-<n>.yaml`: Records the fine-grained task results for the `n`-th repeated trial of that phase.
 
 ## Adding an Evaluation
 
@@ -148,42 +148,42 @@ $$\text{pass@}k = \frac{100}{M} \sum_{i=1}^{M} \mathbb{I}_i$$
 
 For example, a task that passes once and fails twice counts as passed for `pass@3`. This metric has no standard deviation here. A Benchmark with continuous scores but no defined pass criterion may omit it.
 
-3. Inside each phase directory `experiments/<experiment-id>/<phase>/`, create `attempt-<n>.yaml` files (e.g., `attempt-1.yaml`, `attempt-2.yaml`) recording the fine-grained results for each attempt as a YAML list of objects:
+3. Inside each phase directory `experiments/<experiment-id>/<phase>/`, create `attempt-<n>.yaml` files (e.g., `attempt-1.yaml`, `attempt-2.yaml`) recording the fine-grained task-level results for each attempt as a YAML list of objects:
 
 ```yaml
-- source:                                                 # Required. Source tasks for this record
+- source:                                                 # Required. Source tasks
     - benchmark_id: "penguinharness-benchmark-gdpevo-crm-test" # Required. Benchmark ID
       task_id: "CASE-001-account-renewal"                   # Required. Task ID
-  time: "2026-10-29T12:00:00Z"                             # Required. Completion timestamp (ISO 8601 UTC)
-  score: 85.0                                              # Required. Score for this record
-  cost: 0.42                                               # Required. Cost for this record in USD
-  duration_ms: 52000                                       # Required. Duration for this record in milliseconds
-  n_input_tokens: 125000                                   # Required. Total input tokens for this record (including cached tokens)
-  n_cache_tokens: 98000                                    # Required. Total cached tokens for this record
-  n_output_tokens: 8500                                    # Required. Total output tokens for this record
+  time: "2026-10-29T12:00:00Z"                             # Required. Task completion timestamp (ISO 8601 UTC)
+  score: 85.0                                              # Required. Score on this task
+  cost: 0.42                                               # Required. Cost on this task in USD
+  duration_ms: 52000                                       # Required. Duration on this task in milliseconds
+  n_input_tokens: 125000                                   # Required. Total input tokens on this task (including cached tokens)
+  n_cache_tokens: 98000                                    # Required. Total cached tokens on this task
+  n_output_tokens: 8500                                    # Required. Total output tokens on this task
   trace_filepath: "traces/attempt-1/CASE-001.jsonl"        # Optional. Path to the execution trace file
-  error_reason: ""                                         # Optional. Reason why this run failed or errored
+  error_reason: ""                                         # Optional. Reason why the task failed or errored
 ```
 
 ### `attempt-<n>.yaml` Specification
 
-Each item in the list records a result covering one or more tasks in that attempt:
+Each item in the list records the result of one or more tasks in that attempt:
 
 Required fields:
 
-- `source` — Array of source tasks. Each object contains the required Benchmark identifier `benchmark_id` and task identifier `task_id`.
-- `time` — Timestamp when this record's evaluation completed, in ISO 8601 UTC format accurate to seconds (e.g., `"2026-10-29T12:00:00Z"`).
-- `score` — Score for this record.
-- `cost` — Cost for this record in USD (calculated using the [MMSP Model List Prices](https://mmsp.penguin.ooo/zh/models/)).
-- `duration_ms` — Execution duration for this record in milliseconds.
-- `n_input_tokens` — Total input tokens for this record (including cached tokens).
-- `n_cache_tokens` — Total cached input tokens for this record.
-- `n_output_tokens` — Total output tokens for this record.
+- `source` — Array of source tasks, each with required `benchmark_id` and `task_id` fields. When multiple tasks are listed, the fields below describe their combined result.
+- `time` — Timestamp when the task evaluation completed, in ISO 8601 UTC format accurate to seconds (e.g., `"2026-10-29T12:00:00Z"`).
+- `score` — Score achieved on the task in this attempt.
+- `cost` — Cost incurred on the task in USD (calculated using the [MMSP Model List Prices](https://mmsp.penguin.ooo/zh/models/)).
+- `duration_ms` — Execution duration of the task in milliseconds.
+- `n_input_tokens` — Total input tokens for the task in this attempt (including cached tokens).
+- `n_cache_tokens` — Total cached input tokens for the task in this attempt.
+- `n_output_tokens` — Total output tokens for the task in this attempt.
 
 Optional fields:
 
-- `trace_filepath` — Relative or archived file path to the execution trace for this record.
-- `error_reason` — Reason why this run errored or failed during execution or grading (string).
+- `trace_filepath` — Relative or archived file path to the execution trace for the task.
+- `error_reason` — Reason why the current task errored or failed during execution or grading (string).
 
 ## GDPevo Evaluation Method
 
