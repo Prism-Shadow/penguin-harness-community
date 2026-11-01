@@ -15,7 +15,7 @@
 
 ## Recommended Verification & Examples
 
-- **Recommended Model & Metrics**: After organizing a Benchmark, we recommend running 3 repeated attempts with **DeepSeek Flash** and reporting `score_mean` and `score_std` to verify task execution and scoring. If the Benchmark defines a pass criterion, optionally report `pass@k`: the percentage of tasks passed at least once across the $k = 3$ attempts.
+- **Recommended Model & Metrics**: After organizing a Benchmark, we recommend running 3 repeated attempts with **DeepSeek Flash** to verify task execution and scoring. If the Benchmark defines a pass criterion, optionally report `pass@k`: the percentage of tasks passed at least once across the $k = 3$ attempts.
 - **Model Version Suffix**: If you also submit baseline evaluation records using models like `deepseek-flash`, always include the explicit version suffix in `model_name` (e.g., `deepseek-flash-1017`).
 - **Reference Examples**:
   - General evaluation benchmarks: [`penguinharness-benchmark-sec-a`](https://github.com/Prism-Shadow/penguin-harness-benchmark/tree/main/packages/penguinharness-benchmark-sec-a) (Data Analysis Bench subset) through [`penguinharness-benchmark-sec-e`](https://github.com/Prism-Shadow/penguin-harness-benchmark/tree/main/packages/penguinharness-benchmark-sec-e) (Terminal-Bench subset).

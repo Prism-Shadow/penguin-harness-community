@@ -15,7 +15,7 @@
 
 ## 推荐验证指导与参考样例
 
-- **推荐验证模型与指标**：完成 Benchmark 整理后，推荐使用 **DeepSeek Flash** 模型运行 3 次重复实验，记录 `score_mean` 和 `score_std`，验证题目运行与评分。若 Benchmark 定义了通过标准，可选报 `pass@k`：$k = 3$ 次尝试中至少通过一次的题目比例，按百分比报告。
+- **推荐验证模型与指标**：完成 Benchmark 整理后，推荐使用 **DeepSeek Flash** 模型运行 3 次重复实验，验证题目运行与评分。若 Benchmark 定义了通过标准，可选报 `pass@k`：$k = 3$ 次尝试中至少通过一次的题目比例，按百分比报告。
 - **记录模型版本号**：若一并提交基线验证结果，使用 `deepseek-flash` 这类模型时必须在 `model_name` 中注明具体版本号（例如 `deepseek-flash-1017`）。
 - **参考样例**：
   - 通用评测基准样例：[`penguinharness-benchmark-sec-a`](https://github.com/Prism-Shadow/penguin-harness-benchmark/tree/main/packages/penguinharness-benchmark-sec-a)（Data Analysis Bench 子集）至 [`penguinharness-benchmark-sec-e`](https://github.com/Prism-Shadow/penguin-harness-benchmark/tree/main/packages/penguinharness-benchmark-sec-e)（Terminal-Bench 子集）。

@@ -142,11 +142,11 @@ $$\text{score\_mean} = \bar{S} = \frac{1}{n} \sum_{j=1}^{n} S_j$$
 
 $$\text{score\_std} = \sqrt{\frac{1}{n - 1} \sum_{j=1}^{n} \left(S_j - \bar{S}\right)^2}$$
 
-3. **Optional `pass@k` ($k = n$)**: Following the [HumanEval definition](https://arxiv.org/html/2107.03374v2#S2.SS1), a task is counted if **at least one of its $k$ attempts passes**. Here $k = n = \text{n\_attempt}$, so let $\mathbb{I}_i = 1$ if task $i$ passes at least once among the recorded attempts, and $0$ otherwise. Report the percentage across all $M$ tasks:
+3. **Optional `pass@k` ($k = n$)**: A task is counted if **at least one of its $k$ attempts passes**. Here $k = n = \text{n\_attempt}$, so let $\mathbb{I}_i = 1$ if task $i$ passes at least once among the recorded attempts, and $0$ otherwise. Report the percentage across all $M$ tasks:
 
 $$\text{pass@}k = \frac{100}{M} \sum_{i=1}^{M} \mathbb{I}_i$$
 
-For example, a task that passes once and fails twice counts as passed for `pass@3`. This metric has no standard deviation here and does not replace `score_mean` or `score_std`. A Benchmark with continuous scores but no defined pass criterion may omit it.
+For example, a task that passes once and fails twice counts as passed for `pass@3`. This metric has no standard deviation here. A Benchmark with continuous scores but no defined pass criterion may omit it.
 
 3. Inside each phase directory `experiments/<experiment-id>/<phase>/`, create `attempt-<n>.yaml` files (e.g., `attempt-1.yaml`, `attempt-2.yaml`) recording the fine-grained results for each attempt as a YAML list of objects:
 

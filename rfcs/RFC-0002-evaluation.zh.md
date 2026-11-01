@@ -142,11 +142,11 @@ $$\text{score\_mean} = \bar{S} = \frac{1}{n} \sum_{j=1}^{n} S_j$$
 
 $$\text{score\_std} = \sqrt{\frac{1}{n - 1} \sum_{j=1}^{n} \left(S_j - \bar{S}\right)^2}$$
 
-3. **选填的 `pass@k`（$k = n$）**：按照 [HumanEval 的定义](https://arxiv.org/html/2107.03374v2#S2.SS1)，一道题只要在 **$k$ 次尝试中至少通过一次**就计为通过。这里 $k = n = \text{n\_attempt}$，若第 $i$ 道题在已记录的尝试中至少通过一次，则 $\mathbb{I}_i = 1$，否则为 $0$。对全部 $M$ 道题计算百分比：
+3. **选填的 `pass@k`（$k = n$）**：一道题只要在 **$k$ 次尝试中至少通过一次**就计为通过。这里 $k = n = \text{n\_attempt}$，若第 $i$ 道题在已记录的尝试中至少通过一次，则 $\mathbb{I}_i = 1$，否则为 $0$。对全部 $M$ 道题计算百分比：
 
 $$\text{pass@}k = \frac{100}{M} \sum_{i=1}^{M} \mathbb{I}_i$$
 
-例如，一道题三次尝试中一次通过、两次失败，在 `pass@3` 中计为通过。这里不为该指标报告标准差，它也不替代 `score_mean` 和 `score_std`。只有连续得分、未定义通过标准的 Benchmark 可以省略该字段。
+例如，一道题三次尝试中一次通过、两次失败，在 `pass@3` 中计为通过。这里不为该指标报告标准差。只有连续得分、未定义通过标准的 Benchmark 可以省略该字段。
 
 3. 在每个实验阶段文件夹 `experiments/<experiment-id>/<phase>/` 下创建每次重复试验的细粒度结果文件 `attempt-<n>.yaml`（如 `attempt-1.yaml`、`attempt-2.yaml`），文件内容为一个对象数组：
 
