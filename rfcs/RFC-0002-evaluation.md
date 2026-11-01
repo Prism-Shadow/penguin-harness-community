@@ -169,7 +169,7 @@ Each item in the list records the result of one or more tasks in that attempt:
 
 Required fields:
 
-- `source` — Array of source tasks, each with required `benchmark_id` and `task_id` fields. When multiple tasks are listed, the fields below describe their combined result.
+- `source` — Tasks included in this record, listed as objects with required `benchmark_id` and `task_id` fields. For example, if one training run covers multiple tasks, list each task in this array.
 - `time` — Timestamp when the task evaluation completed, in ISO 8601 UTC format accurate to seconds (e.g., `"2026-10-29T12:00:00Z"`).
 - `score` — Score achieved on the task in this attempt.
 - `cost` — Cost incurred on the task in USD (calculated using the [MMSP Model List Prices](https://mmsp.penguin.ooo/zh/models/)).

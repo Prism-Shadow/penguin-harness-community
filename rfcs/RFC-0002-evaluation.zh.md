@@ -169,7 +169,7 @@ $$\text{pass@}k = \frac{100}{M} \sum_{i=1}^{M} \mathbb{I}_i$$
 
 必填字段：
 
-- `source` — 题目来源的对象数组，每个对象包含必填的 `benchmark_id` 和 `task_id`。包含多道题时，以下字段记录这些题目的整体结果。
+- `source` — 本条记录涉及的题目列表，每项包含必填的 `benchmark_id` 和 `task_id`。例如，同一次训练包含多道题时，将这些题目逐项列入该数组。
 - `time` — 该题在当次试验中完成记录的时间，采用精确到秒的 ISO 8601 UTC 时间格式（例如 `"2026-10-29T12:00:00Z"`）。
 - `score` — 该题在当次试验中的得分。
 - `cost` — 该题在当次试验中的费用成本（单位：美元，按 [MMSP 模型目录价](https://mmsp.penguin.ooo/zh/models/) 计算）。
