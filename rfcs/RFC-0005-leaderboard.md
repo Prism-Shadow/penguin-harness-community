@@ -13,8 +13,8 @@ Inspired by [Terminal-Bench (tbench.ai)](https://www.tbench.ai/), each Leaderboa
 
 ## Core Design Principles
 
-1. **ID References and `values` Expressions Only, No Precomputed Numbers**: Leaderboard configuration files **store only references to `experiment_id`, phase names (such as `train-1` or `test`), metric keys, and `values` expression objects—never hardcoded or precomputed numeric scores**. All values are computed dynamically from `experiments/<experiment-id>/<phase>/summary.yaml` (and `attempt-<n>.yaml`) at build or render time.
-2. **Only `values` Is Required—`(Harness, Model, Algorithm, Phase)` Is Extracted Automatically**: None of the chart files require `rows`, `columns`, or a manual Cartesian product of `(harness_name, model_name, algorithm, phase)`. You only provide the list of expressions under `values`; for each expression, the renderer automatically inspects `experiments/<experiment-id>/meta_info.yaml` of the referenced experiments and the referenced `phase`, extracts `harness_name`, `model_name`, `algorithm` (treating an omitted `algorithm` as Baseline), and `phase`, and automatically displays and classifies the entry.
+1. **ID References and `values` Expressions Only, No Precomputed Numbers**: Leaderboard configuration files **store only references to `experiment_id`, phase names (such as `train-1` or `test`), metric keys, and `values` expression objects—never hardcoded or precomputed numeric scores**. All values are computed dynamically from `experiments/<leaderboard-id>/<experiment-id>/<phase>/summary.yaml` (and `attempt-<n>.yaml`) at build or render time.
+2. **Only `values` Is Required—`(Harness, Model, Algorithm, Phase)` Is Extracted Automatically**: None of the chart files require `rows`, `columns`, or a manual Cartesian product of `(harness_name, model_name, algorithm, phase)`. You only provide the list of expressions under `values`; for each expression, the renderer automatically inspects `experiments/<leaderboard-id>/<experiment-id>/meta_info.yaml` of the referenced experiments and the referenced `phase`, extracts `harness_name`, `model_name`, `algorithm` (treating an omitted `algorithm` as Baseline), and `phase`, and automatically displays and classifies the entry.
 3. **Unified `values` Structure Across All Three Views**:
    - **`table.yaml`**: Specifies only `values` (each item is an expression object). Rows are sorted by the evaluated score from high to low by default and rendered with a horizontal bar chart + number.
    - **`pareto.yaml`**: Specifies only `values` (vertical axis score expressions) without specifying `x`; the horizontal axis `x` **defaults to the sum of `cost` across all `(experiment_id, phase)` pairs referenced in each expression**.
@@ -62,7 +62,7 @@ In `table.yaml`, `pareto.yaml`, and `waffle.yaml`, each item in `values` is an *
 
 ### Leaf Reference
 
-References a specific `experiment_id` and `phase` (e.g., `train-1` or `test`) and reads a field from `experiments/<experiment-id>/<phase>/summary.yaml`:
+References a specific `experiment_id` and `phase` (e.g., `train-1` or `test`) and reads a field from `experiments/<leaderboard-id>/<experiment-id>/<phase>/summary.yaml`:
 
 ```yaml
 experiment_id: "gdpevo-essential-court-clerk-operations-skillopt-deepseek-flash-1017-20261030"
@@ -81,7 +81,7 @@ Combines multiple child expression objects via `op` and `args`:
 
 ### Automatic `(harness_name, model_name, algorithm, phase)` Extraction
 
-For each expression in `values`, the renderer loads `experiments/<experiment-id>/meta_info.yaml` from the referenced experiments along with the referenced `phase`, and automatically extracts `(harness_name, model_name, algorithm, phase)` to display and classify the entry on the chart (all child experiments within a single expression belong to the same `(harness_name, model_name, algorithm)`).
+For each expression in `values`, the renderer loads `experiments/<leaderboard-id>/<experiment-id>/meta_info.yaml` from the referenced experiments along with the referenced `phase`, and automatically extracts `(harness_name, model_name, algorithm, phase)` to display and classify the entry on the chart (all child experiments within a single expression belong to the same `(harness_name, model_name, algorithm)`).
 
 ### Mean & Sample Standard Deviation of an Expression
 

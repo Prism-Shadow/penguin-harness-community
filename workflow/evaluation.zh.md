@@ -7,10 +7,10 @@
 
 ## 提交流程
 
-1. **学习 RFC 数据结构**：先阅读 [RFC-0002 Evaluation](../rfcs/RFC-0002-evaluation.zh.md)，了解 `experiments/<experiment-id>/` 下 `meta_info.yaml` 以及各实验阶段（`train-<n>/`、`val-<n>/`、`test/`，其中 `train` 和 `val` 后必须跟数字，`test` 后一定不能跟数字）中 `summary.yaml` 和 `attempt-<n>.yaml` 的字段规范。
+1. **学习 RFC 数据结构**：先阅读 [RFC-0002 Evaluation](../rfcs/RFC-0002-evaluation.zh.md)，了解 `experiments/<leaderboard-id>/<experiment-id>/` 下 `meta_info.yaml` 以及各实验阶段（`train-<n>/`、`val-<n>/`、`test/`，其中 `train` 和 `val` 后必须跟数字，`test` 后一定不能跟数字）中 `summary.yaml` 和 `attempt-<n>.yaml` 的字段规范。
 2. **提出 Issue**：在 [PenguinHarness Benchmark Issues](https://github.com/Prism-Shadow/penguin-harness-benchmark/issues) 中创建 Issue，说明计划评测的 Benchmark、基座模型、Harness 与 RSI 算法组合。
 3. **Issue 评论区占坑（可选）**：在 Issue 评论区留言认领该组实验（占坑是可选步骤，主要用于防止多人跑完全相同的实验配置撞车）。
-4. **提交 PR**：完成评测实验后，按 `RFC-0002` 整理好 `experiments/<experiment-id>/` 下的 `meta_info.yaml`（`status` 设为 `"draft"`）、各阶段 `summary.yaml` 与 `attempt-<n>.yaml`，提交 Pull Request。
+4. **提交 PR**：完成评测实验后，按 `RFC-0002` 整理好 `experiments/<leaderboard-id>/<experiment-id>/` 下的 `meta_info.yaml`（`status` 设为 `"draft"`）、各阶段 `summary.yaml` 与 `attempt-<n>.yaml`，提交 Pull Request。
 5. **Maintainer 审核合并**：等待 Maintainer 审核实验配置、分数统计与计费数据；审核通过后将 `status` 更新为 `"published"` 并合并入库。
 
 ## 推荐实验指导与例子

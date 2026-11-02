@@ -13,25 +13,26 @@ We also use the open-source [PenguinHarness Benchmark](https://github.com/Prism-
 
 ## Directory Structure
 
-Each experiment is stored under `experiments/<experiment-id>/`. The file structure of the repository is organized as follows:
+Each experiment is organized by its parent `<leaderboard-id>` and stored under `experiments/<leaderboard-id>/<experiment-id>/`. The file structure of the repository is organized as follows:
 
 ```text
 penguin-harness-benchmark/
 └── experiments/
-    └── <experiment-id>/
-        ├── train-1/
-        │   ├── attempt-1.yaml
-        │   ├── attempt-2.yaml
-        │   └── summary.yaml
-        ├── test/
-        │   ├── attempt-1.yaml
-        │   ├── attempt-2.yaml
-        │   ├── attempt-3.yaml
-        │   └── summary.yaml
-        └── meta_info.yaml
+    └── <leaderboard-id>/
+        └── <experiment-id>/
+            ├── train-1/
+            │   ├── attempt-1.yaml
+            │   ├── attempt-2.yaml
+            │   └── summary.yaml
+            ├── test/
+            │   ├── attempt-1.yaml
+            │   ├── attempt-2.yaml
+            │   ├── attempt-3.yaml
+            │   └── summary.yaml
+            └── meta_info.yaml
 ```
 
-- `experiments/<experiment-id>/`: Stores the metadata configuration and phase-by-phase evaluation records for a single experiment.
+- `experiments/<leaderboard-id>/<experiment-id>/`: Stores the metadata configuration and phase-by-phase evaluation records for a single experiment under `<leaderboard-id>`.
 - `<phase>/` (e.g., `train-1/`, `val-1/`, `test/`): Phase directory. Training and validation phases **must have a numeric suffix** indicating the iteration round (such as `train-1`, `val-1`, `train-2`, `val-2`), whereas the final test phase must be named `test` (**never with a trailing number**), and every experiment must contain a `test/` phase.
 - `meta_info.yaml`: Records the experiment-level metadata and runtime configuration (model, Harness, RSI algorithm, dataset splits, and author information).
 - `summary.yaml`: Records the aggregated score statistics, duration, token usage, and cost for that phase.
@@ -41,7 +42,7 @@ penguin-harness-benchmark/
 
 To add a new Evaluation experiment to the repository, organize its files as follows:
 
-1. Create an `experiments/<experiment-id>` directory and add a `meta_info.yaml` configuration file inside it:
+1. Create an `experiments/<leaderboard-id>/<experiment-id>` directory and add a `meta_info.yaml` configuration file inside it:
 
 ```yaml
 experiment_id: "<experiment-id>"        # Required. Unique experiment ID (must match the folder name)
@@ -100,7 +101,7 @@ In `meta_info.yaml` of a single experiment (`<experiment-id>`):
 - **Multiple Datasets Mean Joint Training & Evaluation**: Listing multiple `benchmark-id`s in `training_data`, `validation_data`, or `test_data` means those datasets **must be combined and trained, validated, and evaluated together as a single unified set—never trained or evaluated separately**.
 - **Separate Training & Evaluation Must Be Split into Separate Experiments**: If a protocol requires **independent training and evaluation on each sub-benchmark** (such as [GDPevo](https://arxiv.org/pdf/2608.03764), where the Agent evolves and is tested on each of the six sub-benchmarks separately without sharing state), **each sub-benchmark must be split into its own independent `<experiment-id>` folder**—just as in [penguin-harness-benchmark#18](https://github.com/Prism-Shadow/penguin-harness-benchmark/pull/18)—with each folder listing only that sub-benchmark's `*-train` and `*-test`. Cross-benchmark aggregation is then defined declaratively in [RFC-0005 Leaderboard](RFC-0005-leaderboard.md).
 
-2. Inside each phase directory `experiments/<experiment-id>/<phase>/` (where `train` and `val` must have a numeric suffix like `train-1/`, `val-1/`, and `test/` is required and must never have a numeric suffix), create a `summary.yaml` file:
+2. Inside each phase directory `experiments/<leaderboard-id>/<experiment-id>/<phase>/` (where `train` and `val` must have a numeric suffix like `train-1/`, `val-1/`, and `test/` is required and must never have a numeric suffix), create a `summary.yaml` file:
 
 ```yaml
 time: "2026-10-29T12:00:00Z"            # Required. Phase completion timestamp (ISO 8601 UTC)
@@ -155,7 +156,7 @@ $$\text{score\_std} = \sqrt{\frac{1}{n - 1} \sum_{j=1}^{n} \left(S_j - \bar{S}\r
 
 $$\text{pass@}k = \frac{100}{M} \sum_{i=1}^{M} \mathbb{I}_i$$
 
-3. Inside each phase directory `experiments/<experiment-id>/<phase>/`, create `attempt-<n>.yaml` files (e.g., `attempt-1.yaml`, `attempt-2.yaml`) recording the fine-grained task-level results for each attempt as a YAML list of objects:
+3. Inside each phase directory `experiments/<leaderboard-id>/<experiment-id>/<phase>/`, create `attempt-<n>.yaml` files (e.g., `attempt-1.yaml`, `attempt-2.yaml`) recording the fine-grained task-level results for each attempt as a YAML list of objects:
 
 ```yaml
 - source:                                                 # Required. Source tasks

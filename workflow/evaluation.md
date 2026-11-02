@@ -7,10 +7,10 @@
 
 ## Submission Workflow
 
-1. **Learn the RFC Data Structure**: Read [RFC-0002 Evaluation](../rfcs/RFC-0002-evaluation.md) to understand the schema of `meta_info.yaml`, `summary.yaml`, and `attempt-<n>.yaml` under `experiments/<experiment-id>/` (where `train-<n>` and `val-<n>` must be followed by a number, and `test` must never be followed by a number).
+1. **Learn the RFC Data Structure**: Read [RFC-0002 Evaluation](../rfcs/RFC-0002-evaluation.md) to understand the schema of `meta_info.yaml`, `summary.yaml`, and `attempt-<n>.yaml` under `experiments/<leaderboard-id>/<experiment-id>/` (where `train-<n>` and `val-<n>` must be followed by a number, and `test` must never be followed by a number).
 2. **Open an Issue**: Open an Issue in [PenguinHarness Benchmark Issues](https://github.com/Prism-Shadow/penguin-harness-benchmark/issues) describing the target Benchmark, backbone model, Harness, and RSI algorithm setup.
 3. **Claim in Issue Comments (Optional)**: Leave a comment on the Issue to claim the experiment (claiming is optional and prevents duplicate evaluation runs).
-4. **Submit a PR**: Run the evaluation, organize `experiments/<experiment-id>/` according to `RFC-0002` (with `status: "draft"` in `meta_info.yaml`), and open a Pull Request linked to the Issue.
+4. **Submit a PR**: Run the evaluation, organize `experiments/<leaderboard-id>/<experiment-id>/` according to `RFC-0002` (with `status: "draft"` in `meta_info.yaml`), and open a Pull Request linked to the Issue.
 5. **Maintainer Review & Merge**: Wait for a maintainer to verify the experiment metadata, score statistics, and cost calculation; once approved, `status` is updated to `"published"` and the PR is merged.
 
 ## Recommended Evaluation Guidelines & Examples

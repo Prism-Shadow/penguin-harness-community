@@ -13,25 +13,26 @@ Evaluation 是一个 Agent 的一组实验数据，使用 `<experiment-id>` 来�
 
 ## 目录结构
 
-每组实验数据存放在 `experiments/<experiment-id>/` 目录下，仓库的文件组织格式如下：
+每组实验数据按照所属榜单 `<leaderboard-id>` 分类收纳在 `experiments/<leaderboard-id>/<experiment-id>/` 目录下，仓库的文件组织格式如下：
 
 ```text
 penguin-harness-benchmark/
 └── experiments/
-    └── <experiment-id>/
-        ├── train-1/
-        │   ├── attempt-1.yaml
-        │   ├── attempt-2.yaml
-        │   └── summary.yaml
-        ├── test/
-        │   ├── attempt-1.yaml
-        │   ├── attempt-2.yaml
-        │   ├── attempt-3.yaml
-        │   └── summary.yaml
-        └── meta_info.yaml
+    └── <leaderboard-id>/
+        └── <experiment-id>/
+            ├── train-1/
+            │   ├── attempt-1.yaml
+            │   ├── attempt-2.yaml
+            │   └── summary.yaml
+            ├── test/
+            │   ├── attempt-1.yaml
+            │   ├── attempt-2.yaml
+            │   ├── attempt-3.yaml
+            │   └── summary.yaml
+            └── meta_info.yaml
 ```
 
-- `experiments/<experiment-id>/`：存放单组实验的元配置及各阶段评测结果。
+- `experiments/<leaderboard-id>/<experiment-id>/`：存放所属 `<leaderboard-id>` 下单组实验的元配置及各阶段评测结果。
 - `<phase>/`（如 `train-1/`、`val-1/`、`test/`）：实验阶段文件夹。训练和验证阶段命名后面**必须跟数字**以标识迭代轮次（如 `train-1`、`val-1`、`train-2`、`val-2`）；最终测试阶段固定命名为 `test`（后面**一定不能跟数字**），且每组实验必须包含 `test/` 阶段。
 - `meta_info.yaml`：记录整组实验的元信息与配置（模型、Harness、RSI 算法、数据集划分及作者信息）。
 - `summary.yaml`：记录对应阶段聚合后的得分统计、耗时、Token 消耗与费用成本。
@@ -41,7 +42,7 @@ penguin-harness-benchmark/
 
 要向仓库中添加一组新的 Evaluation 实验数据，请按以下步骤组织文件：
 
-1. 创建 `experiments/<experiment-id>` 文件夹，并在其下创建 `meta_info.yaml` 配置文件：
+1. 创建 `experiments/<leaderboard-id>/<experiment-id>` 文件夹，并在其下创建 `meta_info.yaml` 配置文件：
 
 ```yaml
 experiment_id: "<experiment-id>"        # 必填。实验唯一标识，必须与文件夹名称一致
@@ -100,7 +101,7 @@ author:                                 # 必填。作者与提交者信息
 - **填写多个数据集代表合并训练与评估**：如果 `training_data`、`validation_data` 或 `test_data` 中列出了多个 `benchmark-id`，代表这些数据集在该实验中**必须合并在一起作为统一集合进行训练、验证和评估，绝不能分开独立运行**。
 - **分开独立训练与评估必须拆分为多个 Experiment**：如果实验协议要求在不同子基准（Sub-benchmark / Task Group）上**分别独立训练、独立评估**（例如 [GDPevo](https://arxiv.org/pdf/2608.03764) 的六个子基准各自独立进化、互不共享状态），则**必须像 [penguin-harness-benchmark#18](https://github.com/Prism-Shadow/penguin-harness-benchmark/pull/18) 一样，将每个子基准拆分为独立的 `<experiment-id>` 文件夹**（每个 `<experiment-id>` 只包含单个子基准的 `*-train` 与 `*-test`），再通过 [RFC-0005 Leaderboard](RFC-0005-leaderboard.zh.md) 将多个 `<experiment-id>` 的结果聚合计算。
 
-2. 在每个实验阶段文件夹 `experiments/<experiment-id>/<phase>/`（`train`、`val` 后必须跟数字，如 `train-1/`、`val-1/`；`test` 后一定不能跟数字，且必须包含 `test/`）下创建 `summary.yaml` 阶段汇总文件：
+2. 在每个实验阶段文件夹 `experiments/<leaderboard-id>/<experiment-id>/<phase>/`（`train`、`val` 后必须跟数字，如 `train-1/`、`val-1/`；`test` 后一定不能跟数字，且必须包含 `test/`）下创建 `summary.yaml` 阶段汇总文件：
 
 ```yaml
 time: "2026-10-29T12:00:00Z"            # 必填。阶段实验完成时间（ISO 8601 UTC 时间）
@@ -155,7 +156,7 @@ $$\text{score\_std} = \sqrt{\frac{1}{n - 1} \sum_{j=1}^{n} \left(S_j - \bar{S}\r
 
 $$\text{pass@}k = \frac{100}{M} \sum_{i=1}^{M} \mathbb{I}_i$$
 
-3. 在每个实验阶段文件夹 `experiments/<experiment-id>/<phase>/` 下创建每次重复试验的细粒度结果文件 `attempt-<n>.yaml`（如 `attempt-1.yaml`、`attempt-2.yaml`），文件内容为一个对象数组：
+3. 在每个实验阶段文件夹 `experiments/<leaderboard-id>/<experiment-id>/<phase>/` 下创建每次重复试验的细粒度结果文件 `attempt-<n>.yaml`（如 `attempt-1.yaml`、`attempt-2.yaml`），文件内容为一个对象数组：
 
 ```yaml
 - source:                                                 # 必填。题目来源

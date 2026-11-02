@@ -13,8 +13,8 @@ Leaderboard（榜单）用于将一组或多组 [RFC-0002 Evaluation](RFC-0002-e
 
 ## 核心设计原则
 
-1. **只存 ID 引用与 `values` 计算表达式，不存计算结果**：Leaderboard 配置文件中**仅包含对 `experiment_id`、实验阶段（如 `train-1`、`test`）及指标字段的引用和计算表达式，绝不直接存储计算后的分值或标准差数字**。所有数值均在渲染时通过查找 `experiments/<experiment-id>/<phase>/summary.yaml`（及 `attempt-<n>.yaml`）实时计算。
-2. **仅配置 `values`，自动提取 `(Harness, Model, Algorithm, Phase)`**：三种图表均**不需要写 `rows` 或 `columns`，也不需要手动写出 `(harness_name, model_name, algorithm, phase)` 的叉乘组合**。只需在 `values` 列表中给出每个参赛条目的计算表达式，渲染器会自动读取该表达式所引用的 `experiments/<experiment-id>/meta_info.yaml` 中的 `harness_name`、`model_name`、`algorithm`（无自进化插件的基线实验 `algorithm` 为空，自动归类为 Baseline）以及表达式引用的 `phase`，并自动显示和分类。
+1. **只存 ID 引用与 `values` 计算表达式，不存计算结果**：Leaderboard 配置文件中**仅包含对 `experiment_id`、实验阶段（如 `train-1`、`test`）及指标字段的引用和计算表达式，绝不直接存储计算后的分值或标准差数字**。所有数值均在渲染时通过查找 `experiments/<leaderboard-id>/<experiment-id>/<phase>/summary.yaml`（及 `attempt-<n>.yaml`）实时计算。
+2. **仅配置 `values`，自动提取 `(Harness, Model, Algorithm, Phase)`**：三种图表均**不需要写 `rows` 或 `columns`，也不需要手动写出 `(harness_name, model_name, algorithm, phase)` 的叉乘组合**。只需在 `values` 列表中给出每个参赛条目的计算表达式，渲染器会自动读取该表达式所引用的 `experiments/<leaderboard-id>/<experiment-id>/meta_info.yaml` 中的 `harness_name`、`model_name`、`algorithm`（无自进化插件的基线实验 `algorithm` 为空，自动归类为 Baseline）以及表达式引用的 `phase`，并自动显示和分类。
 3. **三种视图共享统一的 `values` 表达式结构**：
    - **`table.yaml`**：只需指定 `values`（每个元素为一个表达式），默认按计算出的数值从高到低排序，并展示水平柱状图 + 数字。
    - **`pareto.yaml`**：只需指定 `values`（纵轴得分表达式），无需指定横轴 `x`，横轴**默认使用该表达式所引用的全部实验阶段的成本（`cost`）总和**。
@@ -62,7 +62,7 @@ author:                                 # 必填。作者与提交者信息
 
 ### 叶节点引用（Leaf Reference）
 
-直接通过 `experiment_id` 和阶段名 `phase`（如 `train-1` 或 `test`）查找 `experiments/<experiment-id>/<phase>/summary.yaml` 中的统计字段：
+直接通过 `experiment_id` 和阶段名 `phase`（如 `train-1` 或 `test`）查找 `experiments/<leaderboard-id>/<experiment-id>/<phase>/summary.yaml` 中的统计字段：
 
 ```yaml
 experiment_id: "gdpevo-essential-court-clerk-operations-skillopt-deepseek-flash-1017-20261030"
@@ -81,7 +81,7 @@ metric: "score_mean"                    # 选填。读取 summary.yaml 中的字
 
 ### `(harness_name, model_name, algorithm, phase)` 自动提取规则
 
-在 `values` 数组的每个表达式中，渲染器读取其引用的 `experiments/<experiment-id>/meta_info.yaml` 以及表达式中指定的 `phase`，自动提取 `(harness_name, model_name, algorithm, phase)` 作为该参赛条目在图表左侧展示的 Harness、Model、Algorithm 和 Phase 分类信息（同一表达式内引用的子实验属于同一组 `(harness_name, model_name, algorithm)`）。
+在 `values` 数组的每个表达式中，渲染器读取其引用的 `experiments/<leaderboard-id>/<experiment-id>/meta_info.yaml` 以及表达式中指定的 `phase`，自动提取 `(harness_name, model_name, algorithm, phase)` 作为该参赛条目在图表左侧展示的 Harness、Model、Algorithm 和 Phase 分类信息（同一表达式内引用的子实验属于同一组 `(harness_name, model_name, algorithm)`）。
 
 ### 表达式的均值与样本标准差计算公式
 
