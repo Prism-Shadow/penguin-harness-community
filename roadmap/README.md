@@ -31,7 +31,7 @@ For detailed workflows, please refer to the **[Workflow](../workflow/README.md)*
 - How to contribute to PenguinHarness: [../workflow/harness.md](../workflow/harness.md)
 - How to submit papers to Awesome RSI: [../workflow/survey.md](../workflow/survey.md)
 
-We hold **Bi-weekly Sync** community meetings for discussion, with meeting links posted in our community group the day before.
+We hold **[Bi-weekly Sync](../rfcs/RFC-0004-meeting.md)** community meetings for discussion, with meeting links posted in our community group the day before.
 
 We warmly welcome everyone to join our open-source community, and we commit to the following for contributors:
 - Active monthly contributors will receive **token resource packages** for frontier models such as Gemini.

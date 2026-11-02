@@ -3,7 +3,7 @@
 - Feature Name: `plugin`
 - Start Date: 2026-10-29
 - RFC PR: [#14](https://github.com/Prism-Shadow/penguin-harness-community/pull/14)
-- Updated by: [#15](https://github.com/Prism-Shadow/penguin-harness-community/pull/15), [#17](https://github.com/Prism-Shadow/penguin-harness-community/pull/17)
+- Updated by: [#15](https://github.com/Prism-Shadow/penguin-harness-community/pull/15), [#17](https://github.com/Prism-Shadow/penguin-harness-community/pull/17), [#21](https://github.com/Prism-Shadow/penguin-harness-community/pull/21)
 
 [English](RFC-0003-plugin.md)
 
@@ -79,6 +79,10 @@ penguin-harness-plugins/
     "category": "rsi",
     "preinstall": false,
     "icon": "icon.svg",
+    "references": [
+      "https://arxiv.org/abs/...",
+      "https://github.com/..."
+    ],
     "quick_start": {
       "prompt": "Use the `<skill-id>` Skill to ...",
       "prompt_zh": "使用 `<skill-id>` 技能……",
@@ -119,4 +123,5 @@ penguin-harness-plugins/
 - `penguin.description_zh` — 插件在中文界面详情页展示的完整中文描述。
 - `penguin.short_description_zh` — 插件卡片在中文界面下展示的单行中文简介。
 - `penguin.icon` — 插件包内 SVG 图标文件的相对路径（例如 `"icon.svg"`）。
+- `penguin.references` — 原始引用链接列表（字符串数组），用于存放该 RSI 算法的原始论文链接、上游开源实现仓库或项目主页地址。
 - `penguin.quick_start.prompt_zh` — 中文界面下预填的「快速开始」算法快速调用示例提示词。

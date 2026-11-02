@@ -3,7 +3,7 @@
 - Feature Name: `benchmark`
 - Start Date: 2026-10-29
 - RFC PR: [#14](https://github.com/Prism-Shadow/penguin-harness-community/pull/14)
-- Updated by: [#15](https://github.com/Prism-Shadow/penguin-harness-community/pull/15)
+- Updated by: [#15](https://github.com/Prism-Shadow/penguin-harness-community/pull/15), [#21](https://github.com/Prism-Shadow/penguin-harness-community/pull/21)
 
 [中文版](RFC-0001-benchmark.zh.md)
 
@@ -55,6 +55,10 @@ description_zh = "..."                  # Optional. Short Chinese description of
 version = "0.1.0"                       # Required. Version in standard x.y.z format
 last_update = "2026-10-29T12:00:00Z"    # Required. Last update timestamp accurate to seconds (ISO 8601)
 status = "draft"                        # Required. Status: draft when submitted, published after review
+references = [                          # Optional. Array of original reference URLs (e.g., data source, paper, repo)
+  "https://arxiv.org/abs/...",
+  "https://github.com/..."
+]
 
 [author]                                # Required. Author and maintainer information
 name = "Author Name"                    # Required. Author or team name
@@ -79,6 +83,7 @@ Optional fields:
 
 - `title_zh` — Chinese display name for the Benchmark.
 - `description_zh` — Chinese description of the Benchmark.
+- `references` — List of original reference links (array of strings) recording where the Benchmark data comes from, such as the original paper, dataset homepage, or upstream repository URLs.
 - `author.email` — Contact email address of the author.
 - `author.homepage` — Author homepage link (can default to a GitHub profile URL).
 

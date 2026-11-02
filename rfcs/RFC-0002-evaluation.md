@@ -3,7 +3,7 @@
 - Feature Name: `evaluation`
 - Start Date: 2026-10-29
 - RFC PR: [#14](https://github.com/Prism-Shadow/penguin-harness-community/pull/14)
-- Updated by: [#15](https://github.com/Prism-Shadow/penguin-harness-community/pull/15)
+- Updated by: [#15](https://github.com/Prism-Shadow/penguin-harness-community/pull/15), [#21](https://github.com/Prism-Shadow/penguin-harness-community/pull/21)
 
 [中文版](RFC-0002-evaluation.zh.md)
 
@@ -61,6 +61,8 @@ validation_data:                        # Optional. List of validation benchmark
   - "penguinharness-benchmark-gdpevo-crm-val"
 test_data:                              # Required. List of test benchmark-ids
   - "penguinharness-benchmark-gdpevo-crm-test"
+references:                             # Optional. List of original reference URLs (e.g., paper, report, or leaderboard)
+  - "https://arxiv.org/abs/..."
 author:                                 # Required. Author and submitter metadata
   name: "Author Name"                   # Required. Author or team name
   email: "author@example.com"           # Optional. Contact email
@@ -88,6 +90,7 @@ Optional fields:
 - `algorithm` — RSI algorithm plugin identifier (string); must be a valid `plugin_id`.
 - `training_data` — List of training Benchmark IDs (array of strings); each item must be a valid `benchmark-id`.
 - `validation_data` — List of validation Benchmark IDs (array of strings); each item must be a valid `benchmark-id`.
+- `references` — List of original reference links (array of strings) recording where the Evaluation results or experimental setup originate from (e.g., paper URLs, technical reports, or public leaderboards).
 - `author.email` — Contact email address of the author.
 - `author.homepage` — Author homepage link (can default to a GitHub profile URL).
 

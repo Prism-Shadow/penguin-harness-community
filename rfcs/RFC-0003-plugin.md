@@ -3,7 +3,7 @@
 - Feature Name: `plugin`
 - Start Date: 2026-10-29
 - RFC PR: [#14](https://github.com/Prism-Shadow/penguin-harness-community/pull/14)
-- Updated by: [#15](https://github.com/Prism-Shadow/penguin-harness-community/pull/15), [#17](https://github.com/Prism-Shadow/penguin-harness-community/pull/17)
+- Updated by: [#15](https://github.com/Prism-Shadow/penguin-harness-community/pull/15), [#17](https://github.com/Prism-Shadow/penguin-harness-community/pull/17), [#21](https://github.com/Prism-Shadow/penguin-harness-community/pull/21)
 
 [中文版](RFC-0003-plugin.zh.md)
 
@@ -79,6 +79,10 @@ To add a new Plugin to the repository, organize its files as follows:
     "category": "rsi",
     "preinstall": false,
     "icon": "icon.svg",
+    "references": [
+      "https://arxiv.org/abs/...",
+      "https://github.com/..."
+    ],
     "quick_start": {
       "prompt": "Use the `<skill-id>` Skill to ...",
       "prompt_zh": "使用 `<skill-id>` 技能……",
@@ -119,4 +123,5 @@ Standard NPM fields:
 - `penguin.description_zh` — Full Chinese description shown in the plugin detail view.
 - `penguin.short_description_zh` — One-line Chinese summary shown on the plugin card.
 - `penguin.icon` — Relative path to the SVG icon inside the package (e.g., `"icon.svg"`).
+- `penguin.references` — List of original reference links (array of strings) recording the RSI algorithm's original paper URL, upstream code repository, or project page.
 - `penguin.quick_start.prompt_zh` — Pre-filled Chinese quick-start invocation prompt in the Chinese UI.
