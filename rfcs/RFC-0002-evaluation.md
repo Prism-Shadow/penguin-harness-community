@@ -99,7 +99,7 @@ summary: "Improved prompt and skills."  # Optional. English summary of what chan
 summary_zh: "优化了提示词与技能库。"      # Optional. Chinese summary of what changed in this phase
 score_mean: 72.5                        # Required. Mean score across attempts
 score_std: 1.8                          # Required. Sample standard deviation of scores
-pass@k: 60.0                            # Required. Mean score of tasks passed across all n attempts (no std)
+pass@k: 60.0                            # Optional. Percentage of tasks passed at least once in n attempts (no std)
 n_attempt: 3                            # Required. Number of repeated attempts
 cost: 4.25                              # Required. Single-experiment cost in USD (based on MMSP list price)
 duration_ms: 540000                     # Required. Single-experiment total duration in milliseconds
@@ -115,7 +115,6 @@ Required fields:
 - `time` — Timestamp when the phase finished, in ISO 8601 UTC format accurate to seconds (e.g., `"2026-10-29T12:00:00Z"`).
 - `score_mean` — Mean score across repeated attempts in this phase (computed by first calculating each attempt's overall score and then averaging over attempts).
 - `score_std` — Sample standard deviation of the attempt scores across repeated attempts in this phase.
-- `pass@k` — Mean score of tasks that pass in **all $n$ attempts** ($k = \text{n\_attempt}$), averaged across all tasks. `pass@k` does not have a standard deviation.
 - `n_attempt` — Number of repeated attempts in this phase (positive integer matching the number of `attempt-<n>.yaml` files, typically $n = 3$).
 - `cost` — Cost of a single experiment in USD, calculated using the [MMSP Model List Prices](https://mmsp.penguin.ooo/zh/models/).
 - `duration_ms` — Total duration of a single experiment in milliseconds.
@@ -125,6 +124,7 @@ Required fields:
 
 Optional fields:
 
+- `pass@k` — Percentage of tasks that pass at least once in $k$ attempts ($k = \text{n\_attempt}$).
 - `summary` — English summary describing key changes or improvements in this phase.
 - `summary_zh` — Chinese summary describing key changes or improvements in this phase.
 
@@ -142,15 +142,16 @@ $$\text{score\_mean} = \bar{S} = \frac{1}{n} \sum_{j=1}^{n} S_j$$
 
 $$\text{score\_std} = \sqrt{\frac{1}{n - 1} \sum_{j=1}^{n} \left(S_j - \bar{S}\right)^2}$$
 
-3. **`pass@k` ($k = n$)**: `pass@k` does not compute a standard deviation; it only counts the score of tasks that pass in **all $n$ attempts**, averaged across all $M$ tasks. Let $\mathbb{I}_i \in \{0, 1\}$ indicate whether task $i$ passes in all $n$ attempts ($\mathbb{I}_i = 1$ if all $n$ attempts pass, and $0$ otherwise), and let $s_i^*$ be the passing score of task $i$ ($100$ on a 100-point scale):
+3. **Optional `pass@k` ($k = n$)**: For each task, let $\mathbb{I}_i = 1$ if at least one of its $k$ attempts passes, and $0$ otherwise. Report the percentage across all $M$ tasks; no standard deviation is computed:
 
-$$\text{pass@}k = \frac{1}{M} \sum_{i=1}^{M} \mathbb{I}_i \cdot s_i^*$$
+$$\text{pass@}k = \frac{100}{M} \sum_{i=1}^{M} \mathbb{I}_i$$
 
 3. Inside each phase directory `experiments/<experiment-id>/<phase>/`, create `attempt-<n>.yaml` files (e.g., `attempt-1.yaml`, `attempt-2.yaml`) recording the fine-grained task-level results for each attempt as a YAML list of objects:
 
 ```yaml
-- benchmark_id: "penguinharness-benchmark-gdpevo-crm-test" # Required. Benchmark ID
-  task_id: "CASE-001-account-renewal"                      # Required. Task ID
+- source:                                                 # Required. Source tasks
+    - benchmark_id: "penguinharness-benchmark-gdpevo-crm-test" # Required. Benchmark ID
+      task_id: "CASE-001-account-renewal"                   # Required. Task ID
   time: "2026-10-29T12:00:00Z"                             # Required. Task completion timestamp (ISO 8601 UTC)
   score: 85.0                                              # Required. Score on this task
   cost: 0.42                                               # Required. Cost on this task in USD
@@ -164,12 +165,11 @@ $$\text{pass@}k = \frac{1}{M} \sum_{i=1}^{M} \mathbb{I}_i \cdot s_i^*$$
 
 ### `attempt-<n>.yaml` Specification
 
-Each item in the list records the result of a single task in that attempt:
+Each item in the list records the result of one or more tasks in that attempt:
 
 Required fields:
 
-- `benchmark_id` — Unique identifier of the Benchmark (`benchmark-id`) to which the task belongs.
-- `task_id` — Unique identifier of the task (`task-id`).
+- `source` — Tasks included in this record, listed as objects with required `benchmark_id` and `task_id` fields. For example, if one training run covers multiple tasks, list each task in this array.
 - `time` — Timestamp when the task evaluation completed, in ISO 8601 UTC format accurate to seconds (e.g., `"2026-10-29T12:00:00Z"`).
 - `score` — Score achieved on the task in this attempt.
 - `cost` — Cost incurred on the task in USD (calculated using the [MMSP Model List Prices](https://mmsp.penguin.ooo/zh/models/)).
