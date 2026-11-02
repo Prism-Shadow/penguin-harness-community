@@ -9,36 +9,58 @@
 
 A Leaderboard aggregates one or more [RFC-0002 Evaluation](RFC-0002-evaluation.md) experiments into statistical charts and rankings. All Leaderboard definitions are stored in the open-source [PenguinHarness Benchmark](https://github.com/Prism-Shadow/penguin-harness-benchmark) repository, and this RFC specifies the declarative file format for Leaderboards.
 
-Inspired by [Terminal-Bench (tbench.ai)](https://www.tbench.ai/), each Leaderboard supports up to three optional chart views: **Table (`table`)**, **Pareto Frontier (`pareto`)**, and **Waffle Grid (`waffle`)**.
+Inspired by [Terminal-Bench (tbench.ai)](https://www.tbench.ai/), each Leaderboard directory contains a required `meta_info.yaml` metadata file and up to three optional chart configurations: **Table (`table.yaml`)**, **Pareto Frontier (`pareto.yaml`)**, and **Waffle Grid (`waffle.yaml`)**.
 
 ## Core Design Principles
 
-1. **ID References Only, No Precomputed Numbers**: Leaderboard configuration files **store only references to `experiment_id`, phase names (such as `train-1` or `test`), metric keys, and expression objects—never hardcoded or precomputed numeric scores**. All values are computed dynamically from `experiments/<experiment-id>/<phase>/summary.yaml` (and `attempt-<n>.yaml`) at build or render time.
-2. **Row Variables Default to the Cartesian Product of `(Harness, Model, Algorithm)`**: Across `table`, `pareto`, and `waffle`, each entry (row or point) is uniquely identified by the **Cartesian product of `(harness_name, model_name, algorithm)`** (for baseline runs without an RSI plugin, `algorithm` is `null` or `"baseline"`).
+1. **ID References and Expressions Only, No Precomputed Numbers**: Leaderboard configuration files **store only references to `experiment_id`, phase names (such as `train-1` or `test`), metric keys, and `value` expression objects—never hardcoded or precomputed numeric scores**. All values are computed dynamically from `experiments/<experiment-id>/<phase>/summary.yaml` (and `attempt-<n>.yaml`) at build or render time.
+2. **Automatic `(Harness, Model, Algorithm)` Extraction and Grouping—No Manual `rows`**: Configuration files **do not define `rows` or manually write out the Cartesian product of `(harness_name, model_name, algorithm)`**. You only specify how `value` is computed; the renderer automatically inspects `experiments/<experiment-id>/meta_info.yaml` for the experiments referenced in `value`, extracts `harness_name`, `model_name`, and `algorithm` (treating an omitted `algorithm` as Baseline), and automatically displays, aligns, and classifies entries by `(harness_name, model_name, algorithm)`.
 3. **Object-Based Expressions (`Expression Object`)**: How each metric is computed—such as averaging results across the six independently split sub-benchmarks of [GDPevo](https://arxiv.org/pdf/2608.03764)—is represented as a structured YAML object.
-4. **Sorted High-to-Low by Default**: `table.yaml` sorts rows by the evaluated value of the primary expression in **descending order (from high to low)** by default.
+4. **`columns` + `sort_by` in `table.yaml` Renders a Horizontal Bar Chart + Number Only on the `sort_by` Column**: `table.yaml` defines one or more metric columns under `columns` (each specifying per-entry expressions via `value`) and keeps `sort_by` (sorted from high to low by default). **Only the `sort_by` column is placed at the end and rendered with a horizontal bar chart + number; all other columns display numbers only**.
 5. **Sample Standard Deviation Across Multiple Attempts**: When the referenced experiments contain multiple repeated attempts (`n_attempt > 1`), the sample standard deviation of the expression is computed automatically across attempts.
 
 ## Directory Structure
 
-Each Leaderboard is identified by `<leaderboard-id>` and stored under `leaderboards/<leaderboard-id>/` in `penguin-harness-benchmark`, containing optional `table.yaml`, `pareto.yaml`, and `waffle.yaml` files:
+Each Leaderboard is identified by `<leaderboard-id>` and stored under `leaderboards/<leaderboard-id>/` in `penguin-harness-benchmark`, containing a required `meta_info.yaml` and optional `table.yaml`, `pareto.yaml`, and `waffle.yaml` files:
 
 ```text
 penguin-harness-benchmark/
 └── leaderboards/
     └── <leaderboard-id>/
+        ├── meta_info.yaml              # Required. Leaderboard ID, bilingual titles, and author metadata
         ├── table.yaml                  # Optional. Leaderboard ranking table specification
         ├── pareto.yaml                 # Optional. Pareto frontier chart (score vs. cost/duration)
         └── waffle.yaml                 # Optional. Waffle grid chart (sub-benchmark / task breakdown)
 ```
 
-## Expression Object Specification
+## 1. `meta_info.yaml` (Leaderboard Metadata)
+
+`leaderboards/<leaderboard-id>/meta_info.yaml` declares the Leaderboard ID, English and Chinese titles, and author information:
+
+```yaml
+leaderboard_id: "gdpevo-essential"      # Required. Unique leaderboard identifier matching the directory name
+title: "GDPevo-Essential Leaderboard"   # Required. English title
+title_zh: "GDPevo-Essential 排行榜"     # Optional. Chinese title
+author:                                 # Required. Author and submitter metadata
+  name: "Prism-Shadow"                  # Required. Author or team name
+  email: "author@example.com"           # Optional. Contact email
+  homepage: "https://github.com/Prism-Shadow" # Optional. Author homepage URL
+```
+
+### `meta_info.yaml` Field Reference
+
+- `leaderboard_id` (required): Unique identifier of the Leaderboard; must match the enclosing `<leaderboard-id>` folder name and contain only letters, digits, and hyphens `-`.
+- `title` (required): English title of the Leaderboard.
+- `title_zh` (optional): Chinese title of the Leaderboard.
+- `author` (required): Author object where `author.name` is required and `author.email` and `author.homepage` are optional.
+
+## 2. Expression Objects & Automatic Classification
 
 In `table.yaml`, `pareto.yaml`, and `waffle.yaml`, every numeric metric is declared as an **Expression Object**, which is either a **Leaf Reference** or a **Composite Operator Expression**:
 
-### 1. Leaf Reference
+### Leaf Reference
 
-Looks up a specific `experiment_id` and `phase` (e.g., `train-1` or `test`) and reads a field from `experiments/<experiment-id>/<phase>/summary.yaml`:
+References a specific `experiment_id` and `phase` (e.g., `train-1` or `test`) and reads a field from `experiments/<experiment-id>/<phase>/summary.yaml`:
 
 ```yaml
 experiment_id: "gdpevo-essential-court-clerk-operations-skillopt-deepseek-flash-1017-20261030"
@@ -46,39 +68,19 @@ phase: "test"                           # Required. Phase folder name, e.g., "tr
 metric: "score_mean"                    # Optional. Field in summary.yaml; defaults to "score_mean" (or "cost", "duration_ms", "pass@k")
 ```
 
-### 2. Composite Operator Expression
+### Composite Operator Expression
 
 Combines multiple child expression objects via `op` and `args`:
 - `op: "mean"`: Arithmetic mean over `args` (e.g., averaging the six sub-benchmarks of `GDPevo-essential`).
 - `op: "sum"`: Sum over `args` (e.g., summing total `cost` or `duration_ms` across sub-benchmarks).
-- `op: "sub"`: Difference `args[0] - args[1]` (e.g., computing self-evolution gain $\Delta$ between `test` and baseline or `train-1`).
+- `op: "sub"`: Difference `args[0] - args[1]` (e.g., computing self-evolution gain $\Delta$ between `test` and `train-1`).
 - `op: "div"`: Ratio `args[0] / args[1]`.
 - `op: "weighted_mean"`: Weighted average across `args` (where each item specifies `weight`).
 
-For example, the expression object that averages the `test` scores across the six sub-benchmarks of `GDPevo-essential` is:
+### Automatic `(harness_name, model_name, algorithm)` Extraction & Alignment
 
-```yaml
-op: "mean"
-args:
-  - experiment_id: "gdpevo-essential-court-clerk-operations-skillopt-deepseek-flash-1017-20261030"
-    phase: "test"
-    metric: "score_mean"
-  - experiment_id: "gdpevo-essential-coverage-review-skillopt-deepseek-flash-1017-20261030"
-    phase: "test"
-    metric: "score_mean"
-  - experiment_id: "gdpevo-essential-engineering-portfolio-analytics-skillopt-deepseek-flash-1017-20261030"
-    phase: "test"
-    metric: "score_mean"
-  - experiment_id: "gdpevo-essential-financial-control-skillopt-deepseek-flash-1017-20261030"
-    phase: "test"
-    metric: "score_mean"
-  - experiment_id: "gdpevo-essential-portfolio-management-skillopt-deepseek-flash-1017-20261030"
-    phase: "test"
-    metric: "score_mean"
-  - experiment_id: "gdpevo-essential-service-ticket-resolution-skillopt-deepseek-flash-1017-20261030"
-    phase: "test"
-    metric: "score_mean"
-```
+1. **Automatic Identity Extraction**: For each expression in `value`, the renderer loads `experiments/<experiment-id>/meta_info.yaml` from the referenced experiments and automatically extracts `(harness_name, model_name, algorithm)` as the entry's identity (all child experiments within a single expression belong to the same `(harness_name, model_name, algorithm)`).
+2. **Automatic Cross-Column Alignment**: When a table defines multiple `columns` (or a Pareto plot defines `x_axis` and `y_axis`), values sharing the same extracted `(harness_name, model_name, algorithm)` are automatically aligned onto the same row or point.
 
 ### Mean & Sample Standard Deviation of an Expression
 
@@ -97,45 +99,24 @@ $$\text{std}(Y) = \sqrt{\frac{1}{n - 1} \sum_{j=1}^{n} \left(Y_j - \bar{Y}\right
 
 $$\text{std}(Y) = \sqrt{\sum_{g=1}^{G} w_g^2 s_g^2}$$
 
-## Chart File Specifications
+## 3. Chart File Specifications
 
-### 1. `table.yaml` (Leaderboard Table)
+Each chart file supports optional `subtitle` (English) and `subtitle_zh` (Chinese) fields and does not require `rows`.
 
-`table.yaml` defines the ranking table. The left columns identify each entry by `(harness_name, model_name, algorithm)`, and the metric columns are defined by expression objects. **Rows are sorted by the primary expression (`sort_by`, defaulting to the first column) from high to low (`desc`) by default**:
+### 3.1 `table.yaml` (Leaderboard Table)
+
+`table.yaml` defines one or more metric columns under `columns`. Each column contains a `value` list of expression objects (one expression per entry, from which `harness_name`, `model_name`, and `algorithm` are automatically extracted). Rows are sorted by `sort_by` from high to low by default; **when rendered, only the `sort_by` column is placed at the end with a horizontal bar chart + number, while all other columns display numbers only**:
 
 ```yaml
-leaderboard_id: "gdpevo-essential"      # Required. Must match the directory name
-title: "GDPevo-Essential Leaderboard"   # Required. English title
-title_zh: "GDPevo-Essential 排行榜"     # Optional. Chinese title
-sort_by: "test_score"                   # Optional. Column key to sort by (defaults to the first column)
-sort_order: "desc"                      # Optional. Sort order: desc (default, high to low) | asc
+subtitle: "Evaluation on 6 Sub-Benchmarks of GDPevo-Essential"
+subtitle_zh: "GDPevo-Essential 六个子基准综合评测"
+sort_by: "test_score"                   # Required. Column key to sort by (high-to-low by default; placed last with horizontal bar chart + number, while other columns show numbers only)
 columns:                                # Required. Metric column definitions
-  - key: "test_score"
-    title: "Test Score"
-    title_zh: "测试集平均分"
-    show_std: true                      # Optional. Whether to display ± sample standard deviation when n_attempt > 1
   - key: "train_1_score"
     title: "Train-1 Score"
     title_zh: "首轮训练分"
-  - key: "total_cost"
-    title: "Cost ($)"
-    title_zh: "单次成本 ($)"
-rows:                                   # Required. Each row corresponds to a (harness, model, algorithm) tuple
-  - harness_name: "PenguinHarness"
-    model_name: "DeepSeek-V4.1-Flash-1017"
-    algorithm: "skillopt-rsi-toolkit"
-    values:
-      test_score:
-        op: "mean"
-        args:
-          - { experiment_id: "gdpevo-essential-court-clerk-operations-skillopt-deepseek-flash-1017-20261030", phase: "test", metric: "score_mean" }
-          - { experiment_id: "gdpevo-essential-coverage-review-skillopt-deepseek-flash-1017-20261030", phase: "test", metric: "score_mean" }
-          - { experiment_id: "gdpevo-essential-engineering-portfolio-analytics-skillopt-deepseek-flash-1017-20261030", phase: "test", metric: "score_mean" }
-          - { experiment_id: "gdpevo-essential-financial-control-skillopt-deepseek-flash-1017-20261030", phase: "test", metric: "score_mean" }
-          - { experiment_id: "gdpevo-essential-portfolio-management-skillopt-deepseek-flash-1017-20261030", phase: "test", metric: "score_mean" }
-          - { experiment_id: "gdpevo-essential-service-ticket-resolution-skillopt-deepseek-flash-1017-20261030", phase: "test", metric: "score_mean" }
-      train_1_score:
-        op: "mean"
+    value:                              # Each item is an expression for one entry; (harness, model, algorithm) is extracted automatically
+      - op: "mean"
         args:
           - { experiment_id: "gdpevo-essential-court-clerk-operations-skillopt-deepseek-flash-1017-20261030", phase: "train-1", metric: "score_mean" }
           - { experiment_id: "gdpevo-essential-coverage-review-skillopt-deepseek-flash-1017-20261030", phase: "train-1", metric: "score_mean" }
@@ -143,40 +124,56 @@ rows:                                   # Required. Each row corresponds to a (h
           - { experiment_id: "gdpevo-essential-financial-control-skillopt-deepseek-flash-1017-20261030", phase: "train-1", metric: "score_mean" }
           - { experiment_id: "gdpevo-essential-portfolio-management-skillopt-deepseek-flash-1017-20261030", phase: "train-1", metric: "score_mean" }
           - { experiment_id: "gdpevo-essential-service-ticket-resolution-skillopt-deepseek-flash-1017-20261030", phase: "train-1", metric: "score_mean" }
-      total_cost:
-        op: "sum"
+      - op: "mean"
         args:
-          - { experiment_id: "gdpevo-essential-court-clerk-operations-skillopt-deepseek-flash-1017-20261030", phase: "test", metric: "cost" }
-          - { experiment_id: "gdpevo-essential-coverage-review-skillopt-deepseek-flash-1017-20261030", phase: "test", metric: "cost" }
-          - { experiment_id: "gdpevo-essential-engineering-portfolio-analytics-skillopt-deepseek-flash-1017-20261030", phase: "test", metric: "cost" }
-          - { experiment_id: "gdpevo-essential-financial-control-skillopt-deepseek-flash-1017-20261030", phase: "test", metric: "cost" }
-          - { experiment_id: "gdpevo-essential-portfolio-management-skillopt-deepseek-flash-1017-20261030", phase: "test", metric: "cost" }
-          - { experiment_id: "gdpevo-essential-service-ticket-resolution-skillopt-deepseek-flash-1017-20261030", phase: "test", metric: "cost" }
+          - { experiment_id: "gdpevo-essential-court-clerk-operations-skilladam-deepseek-flash-1017-20261028", phase: "train-1", metric: "score_mean" }
+          - { experiment_id: "gdpevo-essential-coverage-review-skilladam-deepseek-flash-1017-20261028", phase: "train-1", metric: "score_mean" }
+          - { experiment_id: "gdpevo-essential-engineering-portfolio-analytics-skilladam-deepseek-flash-1017-20261028", phase: "train-1", metric: "score_mean" }
+          - { experiment_id: "gdpevo-essential-financial-control-skilladam-deepseek-flash-1017-20261028", phase: "train-1", metric: "score_mean" }
+          - { experiment_id: "gdpevo-essential-portfolio-management-skilladam-deepseek-flash-1017-20261028", phase: "train-1", metric: "score_mean" }
+          - { experiment_id: "gdpevo-essential-service-ticket-resolution-skilladam-deepseek-flash-1017-20261028", phase: "train-1", metric: "score_mean" }
+  - key: "test_score"
+    title: "Test Score"
+    title_zh: "测试集平均分"
+    value:
+      - op: "mean"
+        args:
+          - { experiment_id: "gdpevo-essential-court-clerk-operations-skillopt-deepseek-flash-1017-20261030", phase: "test", metric: "score_mean" }
+          - { experiment_id: "gdpevo-essential-coverage-review-skillopt-deepseek-flash-1017-20261030", phase: "test", metric: "score_mean" }
+          - { experiment_id: "gdpevo-essential-engineering-portfolio-analytics-skillopt-deepseek-flash-1017-20261030", phase: "test", metric: "score_mean" }
+          - { experiment_id: "gdpevo-essential-financial-control-skillopt-deepseek-flash-1017-20261030", phase: "test", metric: "score_mean" }
+          - { experiment_id: "gdpevo-essential-portfolio-management-skillopt-deepseek-flash-1017-20261030", phase: "test", metric: "score_mean" }
+          - { experiment_id: "gdpevo-essential-service-ticket-resolution-skillopt-deepseek-flash-1017-20261030", phase: "test", metric: "score_mean" }
+      - op: "mean"
+        args:
+          - { experiment_id: "gdpevo-essential-court-clerk-operations-skilladam-deepseek-flash-1017-20261028", phase: "test", metric: "score_mean" }
+          - { experiment_id: "gdpevo-essential-coverage-review-skilladam-deepseek-flash-1017-20261028", phase: "test", metric: "score_mean" }
+          - { experiment_id: "gdpevo-essential-engineering-portfolio-analytics-skilladam-deepseek-flash-1017-20261028", phase: "test", metric: "score_mean" }
+          - { experiment_id: "gdpevo-essential-financial-control-skilladam-deepseek-flash-1017-20261028", phase: "test", metric: "score_mean" }
+          - { experiment_id: "gdpevo-essential-portfolio-management-skilladam-deepseek-flash-1017-20261028", phase: "test", metric: "score_mean" }
+          - { experiment_id: "gdpevo-essential-service-ticket-resolution-skilladam-deepseek-flash-1017-20261028", phase: "test", metric: "score_mean" }
+      - op: "mean"
+        args:
+          - { experiment_id: "gdpevo-essential-court-clerk-operations-baseline-deepseek-flash-1017-20261028", phase: "test", metric: "score_mean" }
+          - { experiment_id: "gdpevo-essential-coverage-review-baseline-deepseek-flash-1017-20261028", phase: "test", metric: "score_mean" }
+          - { experiment_id: "gdpevo-essential-engineering-portfolio-analytics-baseline-deepseek-flash-1017-20261028", phase: "test", metric: "score_mean" }
+          - { experiment_id: "gdpevo-essential-financial-control-baseline-deepseek-flash-1017-20261028", phase: "test", metric: "score_mean" }
+          - { experiment_id: "gdpevo-essential-portfolio-management-baseline-deepseek-flash-1017-20261028", phase: "test", metric: "score_mean" }
+          - { experiment_id: "gdpevo-essential-service-ticket-resolution-baseline-deepseek-flash-1017-20261028", phase: "test", metric: "score_mean" }
 ```
 
-### 2. `pareto.yaml` (Pareto Frontier Chart)
+### 3.2 `pareto.yaml` (Pareto Frontier Chart)
 
-`pareto.yaml` defines the Pareto frontier scatter/line plot comparing performance against resource usage (inspired by [tbench.ai](https://www.tbench.ai/)). Each point corresponds to a `(harness_name, model_name, algorithm)` combination, with expression objects specifying the horizontal axis `x` (e.g., total `cost` or `duration_ms`) and vertical axis `y` (e.g., mean `score_mean`):
+`pareto.yaml` defines the Pareto frontier scatter/line plot comparing performance against resource usage (inspired by [tbench.ai](https://www.tbench.ai/)). `x_axis` and `y_axis` each contain a `value` list of expressions, which are automatically aligned and classified by `(harness_name, model_name, algorithm)` into data points:
 
 ```yaml
-leaderboard_id: "gdpevo-essential"      # Required. Must match the directory name
-title: "Score vs. Cost Pareto Frontier" # Required. English title
-title_zh: "得分 vs. 成本 帕累托前沿"     # Optional. Chinese title
+subtitle: "Test Score vs. Single-Attempt Test Cost"
+subtitle_zh: "测试集平均分 vs. 单次测试成本"
 x_axis:                                 # Required. Horizontal axis configuration
   title: "Test Cost ($)"
   title_zh: "单次测试成本 ($)"
-  better: "lower"
-y_axis:                                 # Required. Vertical axis configuration
-  title: "Test Score"
-  title_zh: "测试集平均分"
-  better: "higher"
-  show_std: true                        # Optional. Whether to render vertical std error bars when n_attempt > 1
-points:                                 # Required. Each point corresponds to a (harness, model, algorithm) tuple
-  - harness_name: "PenguinHarness"
-    model_name: "DeepSeek-V4.1-Flash-1017"
-    algorithm: "skillopt-rsi-toolkit"
-    x:
-      op: "sum"
+  value:
+    - op: "sum"
       args:
         - { experiment_id: "gdpevo-essential-court-clerk-operations-skillopt-deepseek-flash-1017-20261030", phase: "test", metric: "cost" }
         - { experiment_id: "gdpevo-essential-coverage-review-skillopt-deepseek-flash-1017-20261030", phase: "test", metric: "cost" }
@@ -184,8 +181,19 @@ points:                                 # Required. Each point corresponds to a 
         - { experiment_id: "gdpevo-essential-financial-control-skillopt-deepseek-flash-1017-20261030", phase: "test", metric: "cost" }
         - { experiment_id: "gdpevo-essential-portfolio-management-skillopt-deepseek-flash-1017-20261030", phase: "test", metric: "cost" }
         - { experiment_id: "gdpevo-essential-service-ticket-resolution-skillopt-deepseek-flash-1017-20261030", phase: "test", metric: "cost" }
-    y:
-      op: "mean"
+    - op: "sum"
+      args:
+        - { experiment_id: "gdpevo-essential-court-clerk-operations-baseline-deepseek-flash-1017-20261028", phase: "test", metric: "cost" }
+        - { experiment_id: "gdpevo-essential-coverage-review-baseline-deepseek-flash-1017-20261028", phase: "test", metric: "cost" }
+        - { experiment_id: "gdpevo-essential-engineering-portfolio-analytics-baseline-deepseek-flash-1017-20261028", phase: "test", metric: "cost" }
+        - { experiment_id: "gdpevo-essential-financial-control-baseline-deepseek-flash-1017-20261028", phase: "test", metric: "cost" }
+        - { experiment_id: "gdpevo-essential-portfolio-management-baseline-deepseek-flash-1017-20261028", phase: "test", metric: "cost" }
+        - { experiment_id: "gdpevo-essential-service-ticket-resolution-baseline-deepseek-flash-1017-20261028", phase: "test", metric: "cost" }
+y_axis:                                 # Required. Vertical axis configuration
+  title: "Test Score"
+  title_zh: "测试集平均分"
+  value:
+    - op: "mean"
       args:
         - { experiment_id: "gdpevo-essential-court-clerk-operations-skillopt-deepseek-flash-1017-20261030", phase: "test", metric: "score_mean" }
         - { experiment_id: "gdpevo-essential-coverage-review-skillopt-deepseek-flash-1017-20261030", phase: "test", metric: "score_mean" }
@@ -193,63 +201,28 @@ points:                                 # Required. Each point corresponds to a 
         - { experiment_id: "gdpevo-essential-financial-control-skillopt-deepseek-flash-1017-20261030", phase: "test", metric: "score_mean" }
         - { experiment_id: "gdpevo-essential-portfolio-management-skillopt-deepseek-flash-1017-20261030", phase: "test", metric: "score_mean" }
         - { experiment_id: "gdpevo-essential-service-ticket-resolution-skillopt-deepseek-flash-1017-20261030", phase: "test", metric: "score_mean" }
+    - op: "mean"
+      args:
+        - { experiment_id: "gdpevo-essential-court-clerk-operations-baseline-deepseek-flash-1017-20261028", phase: "test", metric: "score_mean" }
+        - { experiment_id: "gdpevo-essential-coverage-review-baseline-deepseek-flash-1017-20261028", phase: "test", metric: "score_mean" }
+        - { experiment_id: "gdpevo-essential-engineering-portfolio-analytics-baseline-deepseek-flash-1017-20261028", phase: "test", metric: "score_mean" }
+        - { experiment_id: "gdpevo-essential-financial-control-baseline-deepseek-flash-1017-20261028", phase: "test", metric: "score_mean" }
+        - { experiment_id: "gdpevo-essential-portfolio-management-baseline-deepseek-flash-1017-20261028", phase: "test", metric: "score_mean" }
+        - { experiment_id: "gdpevo-essential-service-ticket-resolution-baseline-deepseek-flash-1017-20261028", phase: "test", metric: "score_mean" }
 ```
 
-### 3. `waffle.yaml` (Waffle Grid Chart)
+### 3.3 `waffle.yaml` (Waffle Grid Chart)
 
-`waffle.yaml` defines the fine-grained sub-benchmark or task-level grid breakdown (inspired by [tbench.ai](https://www.tbench.ai/)). The left rows default to the Cartesian product of `(harness_name, model_name, algorithm)` (sorted by overall mean score from high to low), while each grid cell references the corresponding `(experiment_id, phase)` expression:
+`waffle.yaml` defines the fine-grained sub-benchmark or task-level grid breakdown (inspired by [tbench.ai](https://www.tbench.ai/)). You only list the referenced experiments and phases under `value` (or `columns`); the renderer automatically extracts `(harness_name, model_name, algorithm)` for each row (sorted by overall mean score from high to low) and populates grid cells from the sub-benchmarks or per-task records in `attempt-<n>.yaml`:
 
 ```yaml
-leaderboard_id: "gdpevo-essential"      # Required. Must match the directory name
-title: "Sub-Benchmark Score Breakdown"  # Required. English title
-title_zh: "子基准得分分布网格"           # Optional. Chinese title
-granularity: "benchmark"                # Optional. Grid granularity: "benchmark" (per sub-benchmark) | "task" (per task in attempt-<n>.yaml)
-items:                                  # Required. Grid columns (sub-benchmark keys or task keys)
-  - key: "court-clerk-operations"
-    title: "Court Clerk"
-    title_zh: "法院书记员"
-  - key: "coverage-review"
-    title: "Coverage Review"
-    title_zh: "保险核保"
-  - key: "engineering-portfolio-analytics"
-    title: "Eng. Portfolio"
-    title_zh: "工程组合分析"
-  - key: "financial-control"
-    title: "Financial Control"
-    title_zh: "财务内控"
-  - key: "portfolio-management"
-    title: "Portfolio Mgmt"
-    title_zh: "投资组合管理"
-  - key: "service-ticket-resolution"
-    title: "Service Ticket"
-    title_zh: "工单处理"
-rows:                                   # Required. Each row corresponds to a (harness, model, algorithm) tuple
-  - harness_name: "PenguinHarness"
-    model_name: "DeepSeek-V4.1-Flash-1017"
-    algorithm: "skillopt-rsi-toolkit"
-    cells:
-      court-clerk-operations:
-        experiment_id: "gdpevo-essential-court-clerk-operations-skillopt-deepseek-flash-1017-20261030"
-        phase: "test"
-        metric: "score_mean"
-      coverage-review:
-        experiment_id: "gdpevo-essential-coverage-review-skillopt-deepseek-flash-1017-20261030"
-        phase: "test"
-        metric: "score_mean"
-      engineering-portfolio-analytics:
-        experiment_id: "gdpevo-essential-engineering-portfolio-analytics-skillopt-deepseek-flash-1017-20261030"
-        phase: "test"
-        metric: "score_mean"
-      financial-control:
-        experiment_id: "gdpevo-essential-financial-control-skillopt-deepseek-flash-1017-20261030"
-        phase: "test"
-        metric: "score_mean"
-      portfolio-management:
-        experiment_id: "gdpevo-essential-portfolio-management-skillopt-deepseek-flash-1017-20261030"
-        phase: "test"
-        metric: "score_mean"
-      service-ticket-resolution:
-        experiment_id: "gdpevo-essential-service-ticket-resolution-skillopt-deepseek-flash-1017-20261030"
-        phase: "test"
-        metric: "score_mean"
+subtitle: "Sub-Benchmark Score Breakdown"
+subtitle_zh: "子基准得分分布网格"
+value:                                  # Required. Automatically grouped by (harness, model, algorithm) and broken down by sub-benchmark/task
+  - { experiment_id: "gdpevo-essential-court-clerk-operations-skillopt-deepseek-flash-1017-20261030", phase: "test", metric: "score_mean" }
+  - { experiment_id: "gdpevo-essential-coverage-review-skillopt-deepseek-flash-1017-20261030", phase: "test", metric: "score_mean" }
+  - { experiment_id: "gdpevo-essential-engineering-portfolio-analytics-skillopt-deepseek-flash-1017-20261030", phase: "test", metric: "score_mean" }
+  - { experiment_id: "gdpevo-essential-financial-control-skillopt-deepseek-flash-1017-20261030", phase: "test", metric: "score_mean" }
+  - { experiment_id: "gdpevo-essential-portfolio-management-skillopt-deepseek-flash-1017-20261030", phase: "test", metric: "score_mean" }
+  - { experiment_id: "gdpevo-essential-service-ticket-resolution-skillopt-deepseek-flash-1017-20261030", phase: "test", metric: "score_mean" }
 ```
