@@ -127,9 +127,8 @@ gpus = 0                                # 选填。GPU 数量限制（单位：�
 
 ## 训练数据与 GDPevo 评估方法
 
-训练数据同样可以组织成标准的 Benchmark 形式：在 `packages/<benchmark-id>/` 下按每道题一个 `<task-id>` 文件夹进行存放，并与测试数据集相对应（例如 [GDPevo](https://arxiv.org/pdf/2608.03764) 的训练数据 [penguinharness-benchmark-gdpevo-crm-train](https://github.com/Prism-Shadow/penguin-harness-benchmark/tree/main/packages/penguinharness-benchmark-gdpevo-crm-train) 与测试数据 [penguinharness-benchmark-gdpevo-crm-test](https://github.com/Prism-Shadow/penguin-harness-benchmark/tree/main/packages/penguinharness-benchmark-gdpevo-crm-test)）。
+训练数据同样可以组织成标准的 Benchmark 形式：在 `packages/<benchmark-id>/` 下按每道题一个 `<task-id>` 文件夹进行存放，并与测试数据集相对应（例如 [GDPevo](https://arxiv.org/pdf/2608.03764) 的训练数据 [penguinharness-benchmark-gdpevo-essential-court-clerk-operations-train](https://github.com/Prism-Shadow/penguin-harness-benchmark/tree/main/packages/penguinharness-benchmark-gdpevo-essential-court-clerk-operations-train) 与测试数据 [penguinharness-benchmark-gdpevo-essential-court-clerk-operations-test](https://github.com/Prism-Shadow/penguin-harness-benchmark/tree/main/packages/penguinharness-benchmark-gdpevo-essential-court-clerk-operations-test)）。
 
-在 [GDPevo](https://arxiv.org/pdf/2608.03764) 的自进化评估协议中，数据按不同业务场景划分为多个独立的**任务组（Task Group）**（例如 `GDPevo-essential` 包含 CRM、ERP、Finance、Healthcare、Legal、DataAnalysis 六个领域的任务组）：
-1. **分组自进化训练**：Agent 先在各自 Task Group 的训练集（`*-train`）上进行自进化训练（如归纳规则、沉淀或优化 Skill）。
-2. **配对测试集评估**：训练完成后冻结 Agent 状态，在该 Task Group 对应的独立测试集（`*-test`）上进行评估。
-3. **跨任务组取平均**：最后对所有 Task Group 在各自测试集上的评估结果取算术平均值，作为整个 GDPevo 数据集的最终成绩。
+在 [GDPevo](https://arxiv.org/pdf/2608.03764) 的自进化评估协议中，数据按不同业务场景划分为多个独立的**子基准 / 任务组（Sub-benchmark / Task Group）**（例如 `GDPevo-essential` 包含 `court-clerk-operations`、`coverage-review`、`engineering-portfolio-analytics`、`financial-control`、`portfolio-management`、`service-ticket-resolution` 六个子基准）：
+1. **按子基准独立训练与评估**：Agent 在每个子基准的训练集（`*-train`）上独立进行自进化训练，随后冻结状态并在该子基准对应的测试集（`*-test`）上评估。在提交 Evaluation 时，**每个独立训练与评估的子基准必须拆分为单独的 `<experiment-id>` 文件夹**（参见 [penguin-harness-benchmark#18](https://github.com/Prism-Shadow/penguin-harness-benchmark/pull/18) 及 [RFC-0002 Evaluation](RFC-0002-evaluation.zh.md)）。
+2. **在 Leaderboard 层聚合取平均**：所有子基准测试集结果的算术平均值与标准差通过 [RFC-0005 Leaderboard](RFC-0005-leaderboard.zh.md) 中的表达式统一聚合计算。

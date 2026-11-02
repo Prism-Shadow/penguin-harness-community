@@ -65,6 +65,7 @@ function renderLatexExpr(tex: string): string {
     .trim()
     .replace(/\\text\{([^}]*)\}/g, (_, t: string) => `<span class="font-sans not-italic">${t.replace(/\\?_/g, "&#95;")}</span>`)
     .replace(/\\mathbb\{I\}/g, "𝕀")
+    .replace(/\\Delta/g, "Δ")
     .replace(/\\bar\{([^}]+)\}/g, '<span class="math-bar"><i>$1</i></span>')
     .replace(/\\left\(/g, "(")
     .replace(/\\right\)/g, ")")
