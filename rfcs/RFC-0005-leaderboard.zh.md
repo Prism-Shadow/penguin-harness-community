@@ -16,8 +16,8 @@ Leaderboard（榜单）用于将一组或多组 [RFC-0002 Evaluation](RFC-0002-e
 1. **只存 ID 引用与 `values` 计算表达式，不存计算结果**：Leaderboard 配置文件中**仅包含对 `experiment_id`、实验阶段（如 `train-1`、`test`）及指标字段的引用和计算表达式，绝不直接存储计算后的分值或标准差数字**。所有数值均在渲染时通过查找 `experiments/<leaderboard-id>/<experiment-id>/<phase>/summary.yaml`（及 `attempt-<n>.yaml`）实时计算。
 2. **仅配置 `values`，自动提取 `(Harness, Model, Algorithm, Phase)`**：三种图表均**不需要写 `rows` 或 `columns`，也不需要手动写出 `(harness_name, model_name, algorithm, phase)` 的叉乘组合**。只需在 `values` 列表中给出每个参赛条目的计算表达式，渲染器会自动读取该表达式所引用的 `experiments/<leaderboard-id>/<experiment-id>/meta_info.yaml` 中的 `harness_name`、`model_name`、`algorithm`（无自进化插件的基线实验 `algorithm` 为空，自动归类为 Baseline）以及表达式引用的 `phase`，并自动显示和分类。
 3. **三种视图共享统一的 `values` 表达式结构**：
-   - **`table.yaml`**：只需指定 `values`（每个元素为一个表达式），默认按计算出的数值从高到低排序，并展示水平柱状图 + 数字。
-   - **`pareto.yaml`**：只需指定 `values`（纵轴得分表达式），无需指定横轴 `x`，横轴**默认使用该表达式所引用的全部实验阶段的成本（`cost`）总和**。
+   - **`table.yaml`**：只需指定 `values`（每个元素为一个跨 Benchmark 表达式，同一个表达式内的 `harness_name`、`model_name`、`algorithm` 和 `phase` 必须完全相同，仅 Benchmark 不同），默认按计算出的数值从高到低排序，并展示水平柱状图 + 数字。
+   - **`pareto.yaml`**：文件中同样只需指定 `values`（得分表达式），无需配置坐标轴字段；前端图表默认以所引用实验阶段的成本（`cost`）总和作为开销轴，并**支持切换为成本（`cost`）、耗时（`duration_ms`）或 Token（`n_input_tokens` / `n_cache_tokens` / `n_output_tokens`）的总和**。
    - **`waffle.yaml`**：只需指定 `values`，渲染器直接读取所引用实验阶段 `attempt-<n>.yaml` 中的 `source`（`benchmark_id` 与 `task_id`）及 `score` 来展示细粒度网格分数。
 4. **支持多 Attempt 表达式样本标准差**：若所引用的 Experiment 包含多次重复试验（`n_attempt > 1`），可根据各次 Attempt 或 `summary.yaml` 自动合成整个表达式的样本标准差。
 
@@ -72,16 +72,17 @@ metric: "score_mean"                    # 选填。读取 summary.yaml 中的字
 
 ### 复合运算表达式（Operator Expression）
 
-通过 `op` 指定聚合或二元运算符，通过 `args` 数组传入子表达式对象列表：
-- `op: "mean"`：对 `args` 中所有子表达式的值求算术平均（例如将 `GDPevo-essential` 的六个子 Benchmark 结果平均到一起）。
-- `op: "sum"`：对 `args` 中所有子表达式的值求和。
-- `op: "sub"`：计算 `args[0] - args[1]`（例如用 `test` 阶段得分减去 `train-1` 阶段得分以计算自进化增益 $\Delta$）。
+用于对**同一组 `(harness_name, model_name, algorithm, phase)` 在不同子 Benchmark 上的实验结果**进行跨 Benchmark 聚合计算（通过 `op` 指定运算符，通过 `args` 数组传入子表达式对象列表）：
+- `op: "mean"`：对 `args` 中各子 Benchmark 的值求算术平均（例如将 `GDPevo-essential` 的六个子 Benchmark 结果平均到一起）。
+- `op: "sum"`：对 `args` 中各子 Benchmark 的值求和。
+- `op: "sub"`：计算 `args[0] - args[1]`。
 - `op: "div"`：计算 `args[0] / args[1]`。
-- `op: "weighted_mean"`：加权平均（每个子项可附带 `weight` 权重）。
+- `op: "weighted_mean"`：跨子 Benchmark 加权平均（每个子项可附带 `weight` 权重）。
 
-### `(harness_name, model_name, algorithm, phase)` 自动提取规则
+### `(harness_name, model_name, algorithm, phase)` 一致性约束与自动提取规则
 
-在 `values` 数组的每个表达式中，渲染器读取其引用的 `experiments/<leaderboard-id>/<experiment-id>/meta_info.yaml` 以及表达式中指定的 `phase`，自动提取 `(harness_name, model_name, algorithm, phase)` 作为该参赛条目在图表左侧展示的 Harness、Model、Algorithm 和 Phase 分类信息（同一表达式内引用的子实验属于同一组 `(harness_name, model_name, algorithm)`）。
+- **单表达式一致性约束**：**同一个表达式内引用的所有子实验，其 `harness_name`、`model_name`、`algorithm` 和 `phase` 必须完全一致，只能是所评测的 Benchmark 不同**（用于计算多个子 Benchmark 的聚合表达式）。
+- **自动提取分类信息**：在 `values` 数组的每个表达式中，渲染器读取其引用的 `experiments/<leaderboard-id>/<experiment-id>/meta_info.yaml` 以及表达式中指定的 `phase`，自动提取唯一的 `(harness_name, model_name, algorithm, phase)` 作为该参赛条目在图表左侧展示的分类信息。
 
 ### 表达式的均值与样本标准差计算公式
 
@@ -106,7 +107,7 @@ $$\text{std}(Y) = \sqrt{\sum_{g=1}^{G} w_g^2 s_g^2}$$
 
 ### 3.1 `table.yaml`（排行榜表格）
 
-`table.yaml` 只需指定 `values`，其中每个元素都是一个表达式对象。渲染器自动从表达式及其引用的实验中提取 `harness_name`、`model_name`、`algorithm` 和 `phase` 进行展示和分类，**默认按表达式计算出的值从高到低排序，并展示水平柱状图 + 数字**：
+`table.yaml` 只需指定 `values`，其中每个元素都是一个表达式对象（同一个表达式内的 `harness_name`、`model_name`、`algorithm` 和 `phase` 必须一致，仅 Benchmark 不同）。渲染器自动提取 `(harness_name, model_name, algorithm, phase)` 进行展示和分类，**默认按表达式计算出的值从高到低排序，并展示水平柱状图 + 数字**：
 
 ```yaml
 subtitle: "Test Score on 6 Sub-Benchmarks of GDPevo-Essential"
@@ -140,12 +141,12 @@ values:                                 # 必填。每个元素为一个参赛�
 
 ### 3.2 `pareto.yaml`（帕累托前沿图）
 
-`pareto.yaml` 定义性能与成本权衡的帕累托前沿图（参考 [tbench.ai](https://www.tbench.ai/)）。**无需指定横轴 `x`**，只需在 `values` 中给出每个参赛条目的得分表达式（作为纵轴 `y`），横轴 `x` **默认自动计算该表达式所引用的所有 `(experiment_id, phase)` 的 `cost` 成本总和**：
+`pareto.yaml` 定义性能与资源开销权衡的帕累托前沿图（参考 [tbench.ai](https://www.tbench.ai/)）。**配置文件中同样只需要写 `values`**（以及选填的 `subtitle` / `subtitle_zh`）；图表渲染时默认统计表达式所引用的所有 `(experiment_id, phase)` 的 `cost` 成本总和，并**支持在页面上切换开销轴为 `cost`（成本总和）、`duration`（`duration_ms` 耗时总和）或 `token`（Token 总和）**：
 
 ```yaml
-subtitle: "Test Score vs. Total Cost"
-subtitle_zh: "测试集平均分 vs. 成本总和"
-values:                                 # 必填。纵轴为表达式计算出的分数，横轴默认取所引用实验阶段的 cost 总和
+subtitle: "Test Score vs. Resource Usage"
+subtitle_zh: "测试集平均分 vs. 资源开销"
+values:                                 # 必填。只需指定 values，页面支持切换开销轴为 cost / duration / token 总和（默认 cost 总和）
   - op: "mean"
     args:
       - { experiment_id: "gdpevo-essential-court-clerk-operations-skillopt-deepseek-flash-1017-20261030", phase: "test", metric: "score_mean" }

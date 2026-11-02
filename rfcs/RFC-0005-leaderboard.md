@@ -16,8 +16,8 @@ Inspired by [Terminal-Bench (tbench.ai)](https://www.tbench.ai/), each Leaderboa
 1. **ID References and `values` Expressions Only, No Precomputed Numbers**: Leaderboard configuration files **store only references to `experiment_id`, phase names (such as `train-1` or `test`), metric keys, and `values` expression objects—never hardcoded or precomputed numeric scores**. All values are computed dynamically from `experiments/<leaderboard-id>/<experiment-id>/<phase>/summary.yaml` (and `attempt-<n>.yaml`) at build or render time.
 2. **Only `values` Is Required—`(Harness, Model, Algorithm, Phase)` Is Extracted Automatically**: None of the chart files require `rows`, `columns`, or a manual Cartesian product of `(harness_name, model_name, algorithm, phase)`. You only provide the list of expressions under `values`; for each expression, the renderer automatically inspects `experiments/<leaderboard-id>/<experiment-id>/meta_info.yaml` of the referenced experiments and the referenced `phase`, extracts `harness_name`, `model_name`, `algorithm` (treating an omitted `algorithm` as Baseline), and `phase`, and automatically displays and classifies the entry.
 3. **Unified `values` Structure Across All Three Views**:
-   - **`table.yaml`**: Specifies only `values` (each item is an expression object). Rows are sorted by the evaluated score from high to low by default and rendered with a horizontal bar chart + number.
-   - **`pareto.yaml`**: Specifies only `values` (vertical axis score expressions) without specifying `x`; the horizontal axis `x` **defaults to the sum of `cost` across all `(experiment_id, phase)` pairs referenced in each expression**.
+   - **`table.yaml`**: Specifies only `values` (each item is a cross-benchmark expression object whose referenced experiments must share the exact same `harness_name`, `model_name`, `algorithm`, and `phase`, differing only in Benchmark). Rows are sorted by the evaluated score from high to low by default and rendered with a horizontal bar chart + number.
+   - **`pareto.yaml`**: Also specifies only `values` in the YAML file without extra axis fields; the chart defaults to the sum of `cost` across all `(experiment_id, phase)` pairs referenced in each expression and **supports switching the resource axis between total `cost`, total `duration` (`duration_ms`), or total `token`s (`n_input_tokens` / `n_cache_tokens` / `n_output_tokens`)**.
    - **`waffle.yaml`**: Specifies only `values`; the renderer directly reads `source` (`benchmark_id` and `task_id`) and `score` from `attempt-<n>.yaml` in the referenced experiment phases to display per-task scores in the grid.
 4. **Sample Standard Deviation Across Multiple Attempts**: When the referenced experiments contain multiple repeated attempts (`n_attempt > 1`), the sample standard deviation of the expression is computed automatically across attempts.
 
@@ -72,16 +72,17 @@ metric: "score_mean"                    # Optional. Field in summary.yaml; defau
 
 ### Composite Operator Expression
 
-Combines multiple child expression objects via `op` and `args`:
-- `op: "mean"`: Arithmetic mean over `args` (e.g., averaging the six sub-benchmarks of `GDPevo-essential`).
-- `op: "sum"`: Sum over `args`.
-- `op: "sub"`: Difference `args[0] - args[1]` (e.g., computing self-evolution gain $\Delta$ between `test` and `train-1`).
+Aggregates results across multiple sub-benchmarks for **the same `(harness_name, model_name, algorithm, phase)`** via `op` and `args`:
+- `op: "mean"`: Arithmetic mean over `args` across sub-benchmarks (e.g., averaging the six sub-benchmarks of `GDPevo-essential`).
+- `op: "sum"`: Sum over `args` across sub-benchmarks.
+- `op: "sub"`: Difference `args[0] - args[1]`.
 - `op: "div"`: Ratio `args[0] / args[1]`.
 - `op: "weighted_mean"`: Weighted average across `args` (where each item specifies `weight`).
 
-### Automatic `(harness_name, model_name, algorithm, phase)` Extraction
+### `(harness_name, model_name, algorithm, phase)` Consistency Constraint & Automatic Extraction
 
-For each expression in `values`, the renderer loads `experiments/<leaderboard-id>/<experiment-id>/meta_info.yaml` from the referenced experiments along with the referenced `phase`, and automatically extracts `(harness_name, model_name, algorithm, phase)` to display and classify the entry on the chart (all child experiments within a single expression belong to the same `(harness_name, model_name, algorithm)`).
+- **Single-Expression Consistency Constraint**: **All experiments referenced within a single expression must have the exact same `harness_name`, `model_name`, `algorithm`, and `phase`, and may only differ in Benchmark** (used to compute an expression across multiple benchmarks).
+- **Automatic Classification Extraction**: For each expression in `values`, the renderer loads `experiments/<leaderboard-id>/<experiment-id>/meta_info.yaml` from the referenced experiments along with the referenced `phase`, and automatically extracts the unique `(harness_name, model_name, algorithm, phase)` tuple to display and classify the entry on the chart.
 
 ### Mean & Sample Standard Deviation of an Expression
 
@@ -106,7 +107,7 @@ Each chart file supports optional `subtitle` (English) and `subtitle_zh` (Chines
 
 ### 3.1 `table.yaml` (Leaderboard Table)
 
-`table.yaml` only specifies `values`, where each item is an expression object. The renderer automatically extracts `harness_name`, `model_name`, `algorithm`, and `phase` from the expression and its referenced experiments for display and classification, **sorts rows by the evaluated value from high to low by default, and renders a horizontal bar chart + number**:
+`table.yaml` only specifies `values`, where each item is an expression object (within a single expression, `harness_name`, `model_name`, `algorithm`, and `phase` must be identical, differing only in Benchmark). The renderer automatically extracts `(harness_name, model_name, algorithm, phase)` for display and classification, **sorts rows by the evaluated value from high to low by default, and renders a horizontal bar chart + number**:
 
 ```yaml
 subtitle: "Test Score on 6 Sub-Benchmarks of GDPevo-Essential"
@@ -140,12 +141,12 @@ values:                                 # Required. Each item is an expression f
 
 ### 3.2 `pareto.yaml` (Pareto Frontier Chart)
 
-`pareto.yaml` defines the Pareto frontier chart comparing score against cost (inspired by [tbench.ai](https://www.tbench.ai/)). **There is no need to specify `x`**: you only provide the score expressions under `values` (as the vertical axis `y`), and the horizontal axis `x` **defaults to the sum of `cost` across all `(experiment_id, phase)` pairs referenced in that expression**:
+`pareto.yaml` defines the Pareto frontier chart comparing score against resource usage (inspired by [tbench.ai](https://www.tbench.ai/)). **The configuration file only needs `values`** (plus optional `subtitle` / `subtitle_zh`); the chart defaults to the sum of `cost` across all `(experiment_id, phase)` pairs referenced in each expression, and **supports switching the resource axis in the UI between total `cost`, total `duration` (`duration_ms`), or total `token`s**:
 
 ```yaml
-subtitle: "Test Score vs. Total Cost"
-subtitle_zh: "测试集平均分 vs. 成本总和"
-values:                                 # Required. Y-axis is the evaluated expression value; X-axis defaults to the sum of cost across referenced experiment phases
+subtitle: "Test Score vs. Resource Usage"
+subtitle_zh: "测试集平均分 vs. 资源开销"
+values:                                 # Required. Only values is needed in the file; UI supports switching between total cost (default), duration, or tokens
   - op: "mean"
     args:
       - { experiment_id: "gdpevo-essential-court-clerk-operations-skillopt-deepseek-flash-1017-20261030", phase: "test", metric: "score_mean" }
