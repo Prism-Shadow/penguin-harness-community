@@ -14,7 +14,7 @@ Leaderboard（榜单）用于将一组或多组 [RFC-0002 Evaluation](RFC-0002-e
 ## 核心设计原则
 
 1. **只存 ID 引用与 `values` 计算表达式，不存计算结果**：Leaderboard 配置文件中**仅包含对 `experiment_id`、实验阶段（如 `train-1`、`test`）及指标字段的引用和计算表达式，绝不直接存储计算后的分值或标准差数字**。所有数值均在渲染时通过查找 `experiments/<experiment-id>/<phase>/summary.yaml`（及 `attempt-<n>.yaml`）实时计算。
-2. **仅配置 `values`，自动提取 `(Harness, Model, Algorithm)`**：三种图表均**不需要写 `rows` 或 `columns`，也不需要手动写出 `(harness_name, model_name, algorithm)` 的叉乘组合**。只需在 `values` 列表中给出每个参赛条目的计算表达式，渲染器会自动读取该表达式所引用的 `experiments/<experiment-id>/meta_info.yaml` 中的 `harness_name`、`model_name` 和 `algorithm`（无自进化插件的基线实验 `algorithm` 为空，自动归类为 Baseline）并自动显示和分类。
+2. **仅配置 `values`，自动提取 `(Harness, Model, Algorithm, Phase)`**：三种图表均**不需要写 `rows` 或 `columns`，也不需要手动写出 `(harness_name, model_name, algorithm, phase)` 的叉乘组合**。只需在 `values` 列表中给出每个参赛条目的计算表达式，渲染器会自动读取该表达式所引用的 `experiments/<experiment-id>/meta_info.yaml` 中的 `harness_name`、`model_name`、`algorithm`（无自进化插件的基线实验 `algorithm` 为空，自动归类为 Baseline）以及表达式引用的 `phase`，并自动显示和分类。
 3. **三种视图共享统一的 `values` 表达式结构**：
    - **`table.yaml`**：只需指定 `values`（每个元素为一个表达式），默认按计算出的数值从高到低排序，并展示水平柱状图 + 数字。
    - **`pareto.yaml`**：只需指定 `values`（纵轴得分表达式），无需指定横轴 `x`，横轴**默认使用该表达式所引用的全部实验阶段的成本（`cost`）总和**。
@@ -79,9 +79,9 @@ metric: "score_mean"                    # 选填。读取 summary.yaml 中的字
 - `op: "div"`：计算 `args[0] / args[1]`。
 - `op: "weighted_mean"`：加权平均（每个子项可附带 `weight` 权重）。
 
-### `(harness_name, model_name, algorithm)` 自动提取规则
+### `(harness_name, model_name, algorithm, phase)` 自动提取规则
 
-在 `values` 数组的每个表达式中，渲染器读取其引用的 `experiments/<experiment-id>/meta_info.yaml`，自动提取 `(harness_name, model_name, algorithm)` 作为该参赛条目在图表左侧展示的 Harness、Model 和 Algorithm 分类信息（同一表达式内引用的子实验属于同一组 `(harness_name, model_name, algorithm)`）。
+在 `values` 数组的每个表达式中，渲染器读取其引用的 `experiments/<experiment-id>/meta_info.yaml` 以及表达式中指定的 `phase`，自动提取 `(harness_name, model_name, algorithm, phase)` 作为该参赛条目在图表左侧展示的 Harness、Model、Algorithm 和 Phase 分类信息（同一表达式内引用的子实验属于同一组 `(harness_name, model_name, algorithm)`）。
 
 ### 表达式的均值与样本标准差计算公式
 
@@ -106,12 +106,12 @@ $$\text{std}(Y) = \sqrt{\sum_{g=1}^{G} w_g^2 s_g^2}$$
 
 ### 3.1 `table.yaml`（排行榜表格）
 
-`table.yaml` 只需指定 `values`，其中每个元素都是一个表达式对象。渲染器自动从表达式引用的实验中提取 `harness_name`、`model_name` 和 `algorithm` 进行展示和分类，**默认按表达式计算出的值从高到低排序，并展示水平柱状图 + 数字**：
+`table.yaml` 只需指定 `values`，其中每个元素都是一个表达式对象。渲染器自动从表达式及其引用的实验中提取 `harness_name`、`model_name`、`algorithm` 和 `phase` 进行展示和分类，**默认按表达式计算出的值从高到低排序，并展示水平柱状图 + 数字**：
 
 ```yaml
 subtitle: "Test Score on 6 Sub-Benchmarks of GDPevo-Essential"
 subtitle_zh: "GDPevo-Essential 六个子基准测试集平均得分"
-values:                                 # 必填。每个元素为一个参赛条目的计算表达式，自动提取其 (harness, model, algorithm)
+values:                                 # 必填。每个元素为一个参赛条目的计算表达式，自动提取其 (harness, model, algorithm, phase)
   - op: "mean"
     args:
       - { experiment_id: "gdpevo-essential-court-clerk-operations-skillopt-deepseek-flash-1017-20261030", phase: "test", metric: "score_mean" }
@@ -166,7 +166,7 @@ values:                                 # 必填。纵轴为表达式计算出�
 
 ### 3.3 `waffle.yaml`（华夫饼图 / 网格热力视图）
 
-`waffle.yaml` 定义细粒度题目级华夫饼网格图（参考 [tbench.ai](https://www.tbench.ai/)）。同样只需在 `values` 中指定每个参赛条目的表达式，渲染器除了自动从实验 `meta_info.yaml` 提取 `(harness_name, model_name, algorithm)` 并按表达式均分从高到低排列外，会**直接读取所引用实验阶段 `attempt-<n>.yaml` 中的 `source`（`benchmark_id` 与 `task_id`）及 `score` 字段**来渲染每个网格单元的分数：
+`waffle.yaml` 定义细粒度题目级华夫饼网格图（参考 [tbench.ai](https://www.tbench.ai/)）。同样只需在 `values` 中指定每个参赛条目的表达式，渲染器除了自动提取 `(harness_name, model_name, algorithm, phase)` 并按表达式均分从高到低排列外，会**直接读取所引用实验阶段 `attempt-<n>.yaml` 中的 `source`（`benchmark_id` 与 `task_id`）及 `score` 字段**来渲染每个网格单元的分数：
 
 ```yaml
 subtitle: "Task-Level Score Breakdown"

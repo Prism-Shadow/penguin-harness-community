@@ -14,7 +14,7 @@ Inspired by [Terminal-Bench (tbench.ai)](https://www.tbench.ai/), each Leaderboa
 ## Core Design Principles
 
 1. **ID References and `values` Expressions Only, No Precomputed Numbers**: Leaderboard configuration files **store only references to `experiment_id`, phase names (such as `train-1` or `test`), metric keys, and `values` expression objects—never hardcoded or precomputed numeric scores**. All values are computed dynamically from `experiments/<experiment-id>/<phase>/summary.yaml` (and `attempt-<n>.yaml`) at build or render time.
-2. **Only `values` Is Required—`(Harness, Model, Algorithm)` Is Extracted Automatically**: None of the chart files require `rows`, `columns`, or a manual Cartesian product of `(harness_name, model_name, algorithm)`. You only provide the list of expressions under `values`; for each expression, the renderer automatically inspects `experiments/<experiment-id>/meta_info.yaml` of the referenced experiments, extracts `harness_name`, `model_name`, and `algorithm` (treating an omitted `algorithm` as Baseline), and automatically displays and classifies the entry.
+2. **Only `values` Is Required—`(Harness, Model, Algorithm, Phase)` Is Extracted Automatically**: None of the chart files require `rows`, `columns`, or a manual Cartesian product of `(harness_name, model_name, algorithm, phase)`. You only provide the list of expressions under `values`; for each expression, the renderer automatically inspects `experiments/<experiment-id>/meta_info.yaml` of the referenced experiments and the referenced `phase`, extracts `harness_name`, `model_name`, `algorithm` (treating an omitted `algorithm` as Baseline), and `phase`, and automatically displays and classifies the entry.
 3. **Unified `values` Structure Across All Three Views**:
    - **`table.yaml`**: Specifies only `values` (each item is an expression object). Rows are sorted by the evaluated score from high to low by default and rendered with a horizontal bar chart + number.
    - **`pareto.yaml`**: Specifies only `values` (vertical axis score expressions) without specifying `x`; the horizontal axis `x` **defaults to the sum of `cost` across all `(experiment_id, phase)` pairs referenced in each expression**.
@@ -79,9 +79,9 @@ Combines multiple child expression objects via `op` and `args`:
 - `op: "div"`: Ratio `args[0] / args[1]`.
 - `op: "weighted_mean"`: Weighted average across `args` (where each item specifies `weight`).
 
-### Automatic `(harness_name, model_name, algorithm)` Extraction
+### Automatic `(harness_name, model_name, algorithm, phase)` Extraction
 
-For each expression in `values`, the renderer loads `experiments/<experiment-id>/meta_info.yaml` from the referenced experiments and automatically extracts `(harness_name, model_name, algorithm)` to display and classify the entry on the chart (all child experiments within a single expression belong to the same `(harness_name, model_name, algorithm)`).
+For each expression in `values`, the renderer loads `experiments/<experiment-id>/meta_info.yaml` from the referenced experiments along with the referenced `phase`, and automatically extracts `(harness_name, model_name, algorithm, phase)` to display and classify the entry on the chart (all child experiments within a single expression belong to the same `(harness_name, model_name, algorithm)`).
 
 ### Mean & Sample Standard Deviation of an Expression
 
@@ -106,12 +106,12 @@ Each chart file supports optional `subtitle` (English) and `subtitle_zh` (Chines
 
 ### 3.1 `table.yaml` (Leaderboard Table)
 
-`table.yaml` only specifies `values`, where each item is an expression object. The renderer automatically extracts `harness_name`, `model_name`, and `algorithm` from the referenced experiments for display and classification, **sorts rows by the evaluated value from high to low by default, and renders a horizontal bar chart + number**:
+`table.yaml` only specifies `values`, where each item is an expression object. The renderer automatically extracts `harness_name`, `model_name`, `algorithm`, and `phase` from the expression and its referenced experiments for display and classification, **sorts rows by the evaluated value from high to low by default, and renders a horizontal bar chart + number**:
 
 ```yaml
 subtitle: "Test Score on 6 Sub-Benchmarks of GDPevo-Essential"
 subtitle_zh: "GDPevo-Essential 六个子基准测试集平均得分"
-values:                                 # Required. Each item is an expression for one entry; (harness, model, algorithm) is extracted automatically
+values:                                 # Required. Each item is an expression for one entry; (harness, model, algorithm, phase) is extracted automatically
   - op: "mean"
     args:
       - { experiment_id: "gdpevo-essential-court-clerk-operations-skillopt-deepseek-flash-1017-20261030", phase: "test", metric: "score_mean" }
@@ -166,7 +166,7 @@ values:                                 # Required. Y-axis is the evaluated expr
 
 ### 3.3 `waffle.yaml` (Waffle Grid Chart)
 
-`waffle.yaml` defines the fine-grained task-level Waffle grid breakdown (inspired by [tbench.ai](https://www.tbench.ai/)). You only specify `values`; in addition to extracting `(harness_name, model_name, algorithm)` and sorting entries from high to low, the renderer **directly reads `source` (`benchmark_id` and `task_id`) and `score` from `attempt-<n>.yaml` in the referenced experiment phases** to display each task's score in the grid:
+`waffle.yaml` defines the fine-grained task-level Waffle grid breakdown (inspired by [tbench.ai](https://www.tbench.ai/)). You only specify `values`; in addition to extracting `(harness_name, model_name, algorithm, phase)` and sorting entries from high to low, the renderer **directly reads `source` (`benchmark_id` and `task_id`) and `score` from `attempt-<n>.yaml` in the referenced experiment phases** to display each task's score in the grid:
 
 ```yaml
 subtitle: "Task-Level Score Breakdown"
