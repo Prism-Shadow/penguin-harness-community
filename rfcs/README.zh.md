@@ -8,3 +8,4 @@
 | [RFC-0002](RFC-0002-evaluation.zh.md) | Evaluation | 标准 Evaluation 数据结构 | 草稿 |
 | [RFC-0003](RFC-0003-plugin.zh.md) | Plugin | 标准 Plugin 文件结构 | 草稿 |
 | [RFC-0004](RFC-0004-meeting.zh.md) | 双周会 | 社区双周会流程规范 | 草稿 |
+| [RFC-0005](RFC-0005-leaderboard.zh.md) | Leaderboard | 标准 Leaderboard 统计图配置格式 | 草稿 |

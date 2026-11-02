@@ -55,12 +55,12 @@ model_name: "deepseek-flash-1017"       # 必填。模型名称（如 deepseek-f
 model_provider: "deepseek"              # 必填。模型提供商
 thinking_level: "high"                  # 必填。推理等级：low | medium | high | xhigh | max
 algorithm: "<plugin-id>"                # 选填。所使用的 RSI 算法插件 ID（必须是合法的 plugin_id）
-training_data:                          # 选填。训练集 benchmark-id 列表
-  - "penguinharness-benchmark-gdpevo-crm-train"
-validation_data:                        # 选填。验证集 benchmark-id 列表
-  - "penguinharness-benchmark-gdpevo-crm-val"
-test_data:                              # 必填。测试集 benchmark-id 列表
-  - "penguinharness-benchmark-gdpevo-crm-test"
+training_data:                          # 选填。联合训练的训练集 benchmark-id 列表
+  - "penguinharness-benchmark-gdpevo-essential-court-clerk-operations-train"
+validation_data:                        # 选填。联合验证的验证集 benchmark-id 列表
+  - "penguinharness-benchmark-gdpevo-essential-court-clerk-operations-val"
+test_data:                              # 必填。联合评估的测试集 benchmark-id 列表
+  - "penguinharness-benchmark-gdpevo-essential-court-clerk-operations-test"
 references:                             # 选填。原始引用链接列表（如实验结果来源论文、榜单或报告链接）
   - "https://arxiv.org/abs/..."
 author:                                 # 必填。作者与提交者信息
@@ -93,6 +93,12 @@ author:                                 # 必填。作者与提交者信息
 - `references` — 原始引用链接列表（字符串数组），用于存放该组 Evaluation 实验数字或评测设置的原始出处（如相关论文链接、技术报告或公开榜单地址）。
 - `author.email` — 作者联系邮箱。
 - `author.homepage` — 作者主页链接（默认可填写 GitHub 主页链接）。
+
+### 多数据集联合训练与拆分规范
+
+在单个实验（`<experiment-id>`）的 `meta_info.yaml` 中：
+- **填写多个数据集代表合并训练与评估**：如果 `training_data`、`validation_data` 或 `test_data` 中列出了多个 `benchmark-id`，代表这些数据集在该实验中**必须合并在一起作为统一集合进行训练、验证和评估，绝不能分开独立运行**。
+- **分开独立训练与评估必须拆分为多个 Experiment**：如果实验协议要求在不同子基准（Sub-benchmark / Task Group）上**分别独立训练、独立评估**（例如 [GDPevo](https://arxiv.org/pdf/2608.03764) 的六个子基准各自独立进化、互不共享状态），则**必须像 [penguin-harness-benchmark#18](https://github.com/Prism-Shadow/penguin-harness-benchmark/pull/18) 一样，将每个子基准拆分为独立的 `<experiment-id>` 文件夹**（每个 `<experiment-id>` 只包含单个子基准的 `*-train` 与 `*-test`），再通过 [RFC-0005 Leaderboard](RFC-0005-leaderboard.zh.md) 将多个 `<experiment-id>` 的结果聚合计算。
 
 2. 在每个实验阶段文件夹 `experiments/<experiment-id>/<phase>/`（`train`、`val` 后必须跟数字，如 `train-1/`、`val-1/`；`test` 后一定不能跟数字，且必须包含 `test/`）下创建 `summary.yaml` 阶段汇总文件：
 
@@ -186,12 +192,9 @@ $$\text{pass@}k = \frac{100}{M} \sum_{i=1}^{M} \mathbb{I}_i$$
 - `trace_filepath` — 该题运行轨迹（Trace）文件的相对路径或存档路径。
 - `error_reason` — 记录当前题目运行或评分出错的原因（字符串）。
 
-## GDPevo 评估方法
+## GDPevo 评估与拆分方法
 
-在评估自进化算法时，推荐使用 [GDPevo](https://arxiv.org/pdf/2608.03764)（如 `GDPevo-essential` 子集）。GDPevo 按不同的真实业务场景划分为多个独立的**任务组（Task Group）**，每个任务组均包含配对的训练集（`*-train`）和测试集（`*-test`）：
+在评估自进化算法时，推荐使用 [GDPevo](https://arxiv.org/pdf/2608.03764)（如 `GDPevo-essential` 子集）。`GDPevo-essential` 按不同业务场景划分为六个独立的**子基准（Sub-benchmark）**（`court-clerk-operations`、`coverage-review`、`engineering-portfolio-analytics`、`financial-control`、`portfolio-management`、`service-ticket-resolution`），每个子基准均包含配对的训练集（`*-train`）和测试集（`*-test`）：
 
-1. **按任务组独立自进化**：对于第 $g$ 个任务组（$g = 1, \dots, G$），Agent 先在该任务组的训练集（如 `penguinharness-benchmark-gdpevo-crm-train`）上运行自进化算法，完成提示词、技能库或工作流的优化。
-2. **在对应测试集上评估**：将进化后的 Agent 冻结，在该任务组对应的测试集（如 `penguinharness-benchmark-gdpevo-crm-test`）上运行评估，得到该任务组的测试得分 $\bar{S}^{(g)}$。不同任务组之间的训练与评估相互隔离，不得跨任务组混用或泄露状态。
-3. **跨任务组取平均**：最终的 GDPevo 总成绩为全部 $G$ 个任务组测试集评估得分的算术平均值：
-
-$$S_{\text{GDPevo}} = \frac{1}{G} \sum_{g=1}^{G} \bar{S}^{(g)}$$
+1. **按子基准拆分为独立 Experiment**：因为不同子基准之间的训练与评估相互隔离（不能合并在一起训练），每种方法在每个子基准上的实验**必须拆分为独立的 `<experiment-id>` 文件夹**（参见 [penguin-harness-benchmark#18](https://github.com/Prism-Shadow/penguin-harness-benchmark/pull/18)）。例如对于第 $g$ 个子基准（$g = 1, \dots, 6$），在其独立 `<experiment-id>` 中记录 `train-1`、`train-2` 等训练阶段以及最终在对应 `*-test` 上的 `test` 评估阶段。
+2. **通过 Leaderboard 表达式跨子基准聚合**：单个 `<experiment-id>` 的 `summary.yaml` 仅计算该子基准自身的统计量；六个子基准测试集结果的算术平均与合成样本标准差统一在 [RFC-0005 Leaderboard](RFC-0005-leaderboard.zh.md) 中通过表达式引用计算。

@@ -55,12 +55,12 @@ model_name: "deepseek-flash-1017"       # Required. Model name (include explicit
 model_provider: "deepseek"              # Required. Model provider
 thinking_level: "high"                  # Required. Reasoning level: low | medium | high | xhigh | max
 algorithm: "<plugin-id>"                # Optional. RSI algorithm plugin ID (must be a valid plugin_id)
-training_data:                          # Optional. List of training benchmark-ids
-  - "penguinharness-benchmark-gdpevo-crm-train"
-validation_data:                        # Optional. List of validation benchmark-ids
-  - "penguinharness-benchmark-gdpevo-crm-val"
-test_data:                              # Required. List of test benchmark-ids
-  - "penguinharness-benchmark-gdpevo-crm-test"
+training_data:                          # Optional. List of jointly trained benchmark-ids
+  - "penguinharness-benchmark-gdpevo-essential-court-clerk-operations-train"
+validation_data:                        # Optional. List of jointly validated benchmark-ids
+  - "penguinharness-benchmark-gdpevo-essential-court-clerk-operations-val"
+test_data:                              # Required. List of jointly evaluated test benchmark-ids
+  - "penguinharness-benchmark-gdpevo-essential-court-clerk-operations-test"
 references:                             # Optional. List of original reference URLs (e.g., paper, report, or leaderboard)
   - "https://arxiv.org/abs/..."
 author:                                 # Required. Author and submitter metadata
@@ -93,6 +93,12 @@ Optional fields:
 - `references` — List of original reference links (array of strings) recording where the Evaluation results or experimental setup originate from (e.g., paper URLs, technical reports, or public leaderboards).
 - `author.email` — Contact email address of the author.
 - `author.homepage` — Author homepage link (can default to a GitHub profile URL).
+
+### Multi-Dataset Joint Training vs. Splitting Rule
+
+In `meta_info.yaml` of a single experiment (`<experiment-id>`):
+- **Multiple Datasets Mean Joint Training & Evaluation**: Listing multiple `benchmark-id`s in `training_data`, `validation_data`, or `test_data` means those datasets **must be combined and trained, validated, and evaluated together as a single unified set—never trained or evaluated separately**.
+- **Separate Training & Evaluation Must Be Split into Separate Experiments**: If a protocol requires **independent training and evaluation on each sub-benchmark** (such as [GDPevo](https://arxiv.org/pdf/2608.03764), where the Agent evolves and is tested on each of the six sub-benchmarks separately without sharing state), **each sub-benchmark must be split into its own independent `<experiment-id>` folder**—just as in [penguin-harness-benchmark#18](https://github.com/Prism-Shadow/penguin-harness-benchmark/pull/18)—with each folder listing only that sub-benchmark's `*-train` and `*-test`. Cross-benchmark aggregation is then defined declaratively in [RFC-0005 Leaderboard](RFC-0005-leaderboard.md).
 
 2. Inside each phase directory `experiments/<experiment-id>/<phase>/` (where `train` and `val` must have a numeric suffix like `train-1/`, `val-1/`, and `test/` is required and must never have a numeric suffix), create a `summary.yaml` file:
 
@@ -186,12 +192,9 @@ Optional fields:
 - `trace_filepath` — Relative or archived file path to the execution trace for the task.
 - `error_reason` — Reason why the current task errored or failed during execution or grading (string).
 
-## GDPevo Evaluation Method
+## GDPevo Evaluation & Splitting Method
 
-When evaluating self-evolution algorithms, we recommend using [GDPevo](https://arxiv.org/pdf/2608.03764) (such as the `GDPevo-essential` subset). GDPevo is partitioned into independent **Task Groups** across realistic enterprise domains, with each Task Group consisting of a training split (`*-train`) and a corresponding held-out test split (`*-test`):
+When evaluating self-evolution algorithms, we recommend using [GDPevo](https://arxiv.org/pdf/2608.03764) (such as the `GDPevo-essential` subset). `GDPevo-essential` is partitioned into six independent **Sub-benchmarks** (`court-clerk-operations`, `coverage-review`, `engineering-portfolio-analytics`, `financial-control`, `portfolio-management`, and `service-ticket-resolution`), each with a paired training split (`*-train`) and test split (`*-test`):
 
-1. **Per-Group Training**: For each Task Group $g \in \{1, \dots, G\}$, the Agent first runs the self-evolution algorithm on that group's training split (e.g., `penguinharness-benchmark-gdpevo-crm-train`) to evolve its prompts, skills, or workflow.
-2. **Paired Test Evaluation**: The evolved Agent is then frozen and evaluated on the corresponding test split of the same Task Group (e.g., `penguinharness-benchmark-gdpevo-crm-test`), yielding the group test score $\bar{S}^{(g)}$. Training and evaluation across different Task Groups are strictly isolated.
-3. **Average Across Task Groups**: The final GDPevo score is the arithmetic mean across all $G$ Task Groups:
-
-$$S_{\text{GDPevo}} = \frac{1}{G} \sum_{g=1}^{G} \bar{S}^{(g)}$$
+1. **Split Each Sub-Benchmark into an Independent Experiment**: Because training and evaluation across sub-benchmarks are strictly isolated (they must not be combined into one joint training run), each method on each sub-benchmark **must be recorded as its own separate `<experiment-id>` folder** (see [penguin-harness-benchmark#18](https://github.com/Prism-Shadow/penguin-harness-benchmark/pull/18)). Each `<experiment-id>` records its own `train-1`, `train-2`, ... phases and its paired `test` phase.
+2. **Aggregate Across Sub-Benchmarks via Leaderboard Expressions**: Each `<experiment-id>`'s `summary.yaml` summarizes only that single sub-benchmark; averaging scores and propagating sample standard deviations across the six sub-benchmarks is performed via expressions in [RFC-0005 Leaderboard](RFC-0005-leaderboard.md).

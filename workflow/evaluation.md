@@ -16,8 +16,8 @@
 ## Recommended Evaluation Guidelines & Examples
 
 - **Recommended Setup for Self-Evolving (RSI) Algorithms**: When evaluating self-evolution algorithms, we recommend using the **DeepSeek Flash** model together with the **[GDPevo](https://arxiv.org/pdf/2608.03764) (`GDPevo-essential`)** dataset:
-  - `GDPevo-essential` comprises six domain Task Groups: `crm`, `erp`, `finance`, `healthcare`, `legal`, and `data-analysis`.
-  - First train the Agent on each Task Group's training split (e.g., `penguinharness-benchmark-gdpevo-crm-train`), then evaluate the frozen Agent on the corresponding test split (e.g., `penguinharness-benchmark-gdpevo-crm-test`), and average the test scores across all Task Groups.
+  - `GDPevo-essential` comprises six independent sub-benchmarks: `court-clerk-operations`, `coverage-review`, `engineering-portfolio-analytics`, `financial-control`, `portfolio-management`, and `service-ticket-resolution`.
+  - Because each sub-benchmark is trained and evaluated independently (never combined into a single joint training run), **each sub-benchmark must be submitted as its own separate `<experiment-id>` folder** (see [penguin-harness-benchmark#18](https://github.com/Prism-Shadow/penguin-harness-benchmark/pull/18)), and then aggregated across the six sub-benchmarks via [RFC-0005 Leaderboard](../rfcs/RFC-0005-leaderboard.md).
 - **Recommended Setup for General Benchmarks**: For general Benchmarks (such as `penguinharness-benchmark-sec-a` through `sec-e`), we recommend running 3 repeated attempts (`n_attempt: 3`) with **DeepSeek Flash** and reporting `score_mean`, `score_std`, and optionally `pass@k`.
 - **Model Version Requirement**: When using models such as `deepseek-flash`, always include the specific version suffix in `model_name` inside `meta_info.yaml` (for example, `deepseek-flash-1017`).
 

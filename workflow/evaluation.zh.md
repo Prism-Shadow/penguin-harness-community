@@ -16,8 +16,8 @@
 ## 推荐实验指导与例子
 
 - **自进化（RSI）算法推荐配置**：对于自进化算法的评估，推荐使用 **DeepSeek Flash** 模型配合 **[GDPevo](https://arxiv.org/pdf/2608.03764)（`GDPevo-essential`）** 数据集进行实验：
-  - `GDPevo-essential` 分为六个领域的任务组（Task Group）：`crm`、`erp`、`finance`、`healthcare`、`legal`、`data-analysis`。
-  - 先在各自任务组的训练集（如 `penguinharness-benchmark-gdpevo-crm-train`）上训练自进化，再在对应的测试集（如 `penguinharness-benchmark-gdpevo-crm-test`）上评估，最后对所有任务组的测试结果取平均。
+  - `GDPevo-essential` 分为六个独立的子基准（Sub-benchmark）：`court-clerk-operations`、`coverage-review`、`engineering-portfolio-analytics`、`financial-control`、`portfolio-management`、`service-ticket-resolution`。
+  - 因为不同子基准需分别独立训练和评估（不能合并在一起训练），**每个子基准必须拆分为独立的 `<experiment-id>` 文件夹提交**（参考 [penguin-harness-benchmark#18](https://github.com/Prism-Shadow/penguin-harness-benchmark/pull/18)），再通过 [RFC-0005 Leaderboard](../rfcs/RFC-0005-leaderboard.zh.md) 将六个子基准的结果平均汇总。
 - **通用 Benchmark 推荐配置**：对于常规 Benchmark（如 `penguinharness-benchmark-sec-a` 至 `sec-e`），推荐使用 **DeepSeek Flash** 模型运行 3 次重复实验（`n_attempt: 3`），同时记录 `score_mean`、`score_std`，可选报告 `pass@k`。
 - **模型版本号要求**：若使用 `deepseek-flash` 这类模型，必须在 `meta_info.yaml` 的 `model_name` 字段中写明具体版本号，例如填写 `deepseek-flash-1017`。
 
