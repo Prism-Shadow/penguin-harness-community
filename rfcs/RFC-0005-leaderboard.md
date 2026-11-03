@@ -3,7 +3,7 @@
 - Feature Name: `leaderboard`
 - Start Date: 2026-10-30
 - RFC PR: [#23](https://github.com/Prism-Shadow/penguin-harness-community/pull/23)
-- Updated by: [#25](https://github.com/Prism-Shadow/penguin-harness-community/pull/25)
+- Updated by: [#25](https://github.com/Prism-Shadow/penguin-harness-community/pull/25), [#27](https://github.com/Prism-Shadow/penguin-harness-community/pull/27)
 
 [中文版](RFC-0005-leaderboard.zh.md)
 
@@ -34,6 +34,7 @@ To add a new Leaderboard to the repository, create a `leaderboards/<leaderboard-
 
 ```yaml
 leaderboard_id: "gdpevo-essential"          # Required. Unique leaderboard ID (must match the folder name)
+status: "draft"                             # Required. Status: draft when submitted, published after review
 title: "GDPevo-Essential Leaderboard"       # Required. English title
 title_zh: "GDPevo-Essential 排行榜"         # Optional. Chinese title
 author:                                     # Required. Author and submitter metadata
@@ -64,6 +65,7 @@ values:                                     # Required. List of entry expression
 Required fields:
 
 - `leaderboard_id` — Unique identifier for the Leaderboard. Must match the `<leaderboard-id>` directory name and contain only letters, digits, and hyphens `-`.
+- `status` — Current status: defaults to `"draft"` upon submission and becomes `"published"` after passing review.
 - `title` — English display title for the Leaderboard.
 - `author` — Author metadata object, where `author.name` (author or team name) is required.
 - `values` — List of expression objects, where each item corresponds to one entry on the Leaderboard:
