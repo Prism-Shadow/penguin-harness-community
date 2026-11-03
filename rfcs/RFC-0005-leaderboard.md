@@ -35,8 +35,6 @@ To add a new Leaderboard to the repository, create a `<leaderboard-id>.yaml` con
 leaderboard_id: "gdpevo-essential"          # Required. Unique leaderboard ID (must match the file name)
 title: "GDPevo-Essential Leaderboard"       # Required. English title
 title_zh: "GDPevo-Essential 排行榜"         # Optional. Chinese title
-subtitle: "Test Score on 6 Sub-Benchmarks"  # Optional. English subtitle
-subtitle_zh: "六个子基准测试集平均得分"      # Optional. Chinese subtitle
 author:                                     # Required. Author and submitter metadata
   name: "Prism-Shadow"                      # Required. Author or team name
   email: "author@example.com"               # Optional. Contact email
@@ -75,8 +73,6 @@ Required fields:
 Optional fields:
 
 - `title_zh` — Chinese display title for the Leaderboard.
-- `subtitle` — English subtitle for the Leaderboard.
-- `subtitle_zh` — Chinese subtitle for the Leaderboard.
 - `author.email` — Contact email address of the author.
 - `author.homepage` — Author homepage link (can default to a GitHub profile URL).
 

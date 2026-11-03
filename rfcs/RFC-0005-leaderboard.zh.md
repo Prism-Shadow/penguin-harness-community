@@ -35,8 +35,6 @@ penguin-harness-benchmark/
 leaderboard_id: "gdpevo-essential"          # 必填。榜单唯一标识，必须与文件名一致
 title: "GDPevo-Essential Leaderboard"       # 必填。榜单英文标题
 title_zh: "GDPevo-Essential 排行榜"         # 选填。榜单中文标题
-subtitle: "Test Score on 6 Sub-Benchmarks"  # 选填。图表英文副标题
-subtitle_zh: "六个子基准测试集平均得分"      # 选填。图表中文副标题
 author:                                     # 必填。作者与提交者信息
   name: "Prism-Shadow"                      # 必填。作者姓名或团队名称
   email: "author@example.com"               # 选填。联系邮箱
@@ -75,8 +73,6 @@ values:                                     # 必填。参赛条目计算表达�
 选填字段：
 
 - `title_zh` — 榜单中文标题。
-- `subtitle` — 榜单英文副标题。
-- `subtitle_zh` — 榜单中文副标题。
 - `author.email` — 作者联系邮箱。
 - `author.homepage` — 作者主页链接（默认可填写 GitHub 主页链接）。
 
