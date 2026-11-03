@@ -3,7 +3,7 @@
 - Feature Name: `leaderboard`
 - Start Date: 2026-10-30
 - RFC PR: [#23](https://github.com/Prism-Shadow/penguin-harness-community/pull/23)
-- Updated by: [#25](https://github.com/Prism-Shadow/penguin-harness-community/pull/25)
+- Updated by: [#25](https://github.com/Prism-Shadow/penguin-harness-community/pull/25), [#27](https://github.com/Prism-Shadow/penguin-harness-community/pull/27)
 
 [English](RFC-0005-leaderboard.md)
 
@@ -34,6 +34,7 @@ penguin-harness-benchmark/
 
 ```yaml
 leaderboard_id: "gdpevo-essential"          # 必填。榜单唯一标识，必须与文件夹名称一致
+status: "draft"                             # 必填。状态：提交时为 draft，审核通过后为 published
 title: "GDPevo-Essential Leaderboard"       # 必填。榜单英文标题
 title_zh: "GDPevo-Essential 排行榜"         # 选填。榜单中文标题
 author:                                     # 必填。作者与提交者信息
@@ -64,6 +65,7 @@ values:                                     # 必填。参赛条目计算表达�
 必填字段：
 
 - `leaderboard_id` — 榜单唯一标识符，必须与所在的 `<leaderboard-id>` 文件夹名称一致，仅允许包含字母、数字和连字符 `-`。
+- `status` — 当前状态，提交时默认为 `"draft"`，通过审核后为 `"published"`。
 - `title` — 榜单英文标题。
 - `author` — 作者信息对象，其中 `author.name`（作者姓名或团队名称）为必填。
 - `values` — 表达式对象数组，每个元素对应榜单中的一个参赛条目：
