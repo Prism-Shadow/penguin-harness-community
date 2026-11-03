@@ -16,12 +16,13 @@ Leaderboard（榜单）用于将一组或多组 [RFC-0002 Evaluation](RFC-0002-e
 
 ## 目录结构
 
-每个 Leaderboard 统一为一个配置文件 `leaderboards/<leaderboard-id>.yaml`，关联的实验数据存放在 `experiments/<leaderboard-id>/<experiment-id>/` 下：
+每个 Leaderboard 存放在 `leaderboards/<leaderboard-id>/` 文件夹下，统一为一个配置文件 `leaderboard.yaml`；关联的实验数据存放在 `experiments/<leaderboard-id>/<experiment-id>/` 下：
 
 ```text
 penguin-harness-benchmark/
 ├── leaderboards/
-│   └── <leaderboard-id>.yaml
+│   └── <leaderboard-id>/
+│       └── leaderboard.yaml
 └── experiments/
     └── <leaderboard-id>/
         └── <experiment-id>/
@@ -29,10 +30,10 @@ penguin-harness-benchmark/
 
 ## 添加 Leaderboard
 
-要向仓库中添加一个新的 Leaderboard，请在 `leaderboards/` 目录下创建 `<leaderboard-id>.yaml` 配置文件：
+要向仓库中添加一个新的 Leaderboard，请创建 `leaderboards/<leaderboard-id>` 文件夹，并在其下创建 `leaderboard.yaml` 配置文件：
 
 ```yaml
-leaderboard_id: "gdpevo-essential"          # 必填。榜单唯一标识，必须与文件名一致
+leaderboard_id: "gdpevo-essential"          # 必填。榜单唯一标识，必须与文件夹名称一致
 title: "GDPevo-Essential Leaderboard"       # 必填。榜单英文标题
 title_zh: "GDPevo-Essential 排行榜"         # 选填。榜单中文标题
 author:                                     # 必填。作者与提交者信息
@@ -58,11 +59,11 @@ values:                                     # 必填。参赛条目计算表达�
       - { experiment_id: "gdpevo-essential-service-ticket-resolution-baseline-deepseek-flash-1017-20261028", phase: "test", metric: "score_mean" }
 ```
 
-### 字段说明
+### `leaderboard.yaml` 字段说明
 
 必填字段：
 
-- `leaderboard_id` — 榜单唯一标识符，必须与 `<leaderboard-id>.yaml` 文件名一致，仅允许包含字母、数字和连字符 `-`。
+- `leaderboard_id` — 榜单唯一标识符，必须与所在的 `<leaderboard-id>` 文件夹名称一致，仅允许包含字母、数字和连字符 `-`。
 - `title` — 榜单英文标题。
 - `author` — 作者信息对象，其中 `author.name`（作者姓名或团队名称）为必填。
 - `values` — 表达式对象数组，每个元素对应榜单中的一个参赛条目：

@@ -16,12 +16,13 @@ We also use the open-source [PenguinHarness Benchmark](https://github.com/Prism-
 
 ## Directory Structure
 
-Each Leaderboard is defined by a single file `leaderboards/<leaderboard-id>.yaml`, and its associated experiments are stored under `experiments/<leaderboard-id>/<experiment-id>/`:
+Each Leaderboard is stored in its own `leaderboards/<leaderboard-id>/` directory as a single `leaderboard.yaml` file, and its associated experiments are stored under `experiments/<leaderboard-id>/<experiment-id>/`:
 
 ```text
 penguin-harness-benchmark/
 ├── leaderboards/
-│   └── <leaderboard-id>.yaml
+│   └── <leaderboard-id>/
+│       └── leaderboard.yaml
 └── experiments/
     └── <leaderboard-id>/
         └── <experiment-id>/
@@ -29,10 +30,10 @@ penguin-harness-benchmark/
 
 ## Adding a Leaderboard
 
-To add a new Leaderboard to the repository, create a `<leaderboard-id>.yaml` configuration file inside `leaderboards/`:
+To add a new Leaderboard to the repository, create a `leaderboards/<leaderboard-id>` directory and add a `leaderboard.yaml` configuration file inside it:
 
 ```yaml
-leaderboard_id: "gdpevo-essential"          # Required. Unique leaderboard ID (must match the file name)
+leaderboard_id: "gdpevo-essential"          # Required. Unique leaderboard ID (must match the folder name)
 title: "GDPevo-Essential Leaderboard"       # Required. English title
 title_zh: "GDPevo-Essential 排行榜"         # Optional. Chinese title
 author:                                     # Required. Author and submitter metadata
@@ -58,11 +59,11 @@ values:                                     # Required. List of entry expression
       - { experiment_id: "gdpevo-essential-service-ticket-resolution-baseline-deepseek-flash-1017-20261028", phase: "test", metric: "score_mean" }
 ```
 
-### Field Specification
+### `leaderboard.yaml` Specification
 
 Required fields:
 
-- `leaderboard_id` — Unique identifier for the Leaderboard. Must match the `<leaderboard-id>.yaml` file name and contain only letters, digits, and hyphens `-`.
+- `leaderboard_id` — Unique identifier for the Leaderboard. Must match the `<leaderboard-id>` directory name and contain only letters, digits, and hyphens `-`.
 - `title` — English display title for the Leaderboard.
 - `author` — Author metadata object, where `author.name` (author or team name) is required.
 - `values` — List of expression objects, where each item corresponds to one entry on the Leaderboard:
