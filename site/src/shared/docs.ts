@@ -1,4 +1,5 @@
 import type { MarkdownInstance } from "astro";
+import katex from "katex";
 import type { Locale } from "./i18n";
 import { ALL_PAGES, REPO_URL, docHref, type DocLink } from "./site";
 
@@ -60,33 +61,22 @@ export function repoHref(locale: Locale, source: string, href: string): string {
   return `${REPO_URL}/${kind}/main/${path}${url.hash}`;
 }
 
-function renderLatexExpr(tex: string): string {
-  let s = tex
+function renderLatexExpr(tex: string, displayMode: boolean): string {
+  const cleaned = tex
     .trim()
-    .replace(/\\text\{([^}]*)\}/g, (_, t: string) => `<span class="font-sans not-italic">${t.replace(/\\?_/g, "&#95;")}</span>`)
-    .replace(/\\mathbb\{I\}/g, "𝕀")
-    .replace(/\\Delta/g, "Δ")
-    .replace(/\\bar\{([^}]+)\}/g, '<span class="math-bar"><i>$1</i></span>')
-    .replace(/\\left\(/g, "(")
-    .replace(/\\right\)/g, ")")
-    .replace(/\\cdot/g, " · ")
-    .replace(/\\dots/g, "…")
-    .replace(/\\in/g, " ∈ ")
-    .replace(/\\{([^}]*)\\}/g, "{$1}")
-    .replace(/\\sum_\{([^}]+)\}\^\{([^}]+)\}/g, '<span class="math-op"><span class="math-op-sup">$2</span><span class="math-op-sym">∑</span><span class="math-op-sub">$1</span></span>')
-    .replace(/\\frac\{([^{}]+)\}\{([^{}]+)\}/g, '<span class="math-frac"><span class="math-frac-num">$1</span><span class="math-frac-den">$2</span></span>');
+    .replace(/<em>([\s\S]*?)<\/em>/g, "_$1_")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&amp;/g, "&")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/\\text\{([^}]*)\}/g, (_, t: string) => `\\text{${t.replace(/(?<!\\)_/g, "\\_")}}`);
 
-  // Handle \sqrt{...} which may wrap inner HTML spans
-  s = s.replace(/\\sqrt\{([\s\S]+)\}$/g, '<span class="math-sqrt"><span class="math-sqrt-Sign">√</span><span class="math-sqrt-body">$1</span></span>');
-
-  // Subscripts and superscripts
-  s = s
-    .replace(/_\{([^}]+)\}/g, "<sub>$1</sub>")
-    .replace(/\^\{([^}]+)\}/g, "<sup>$1</sup>")
-    .replace(/_([a-zA-Z0-9]+)/g, "<sub>$1</sub>")
-    .replace(/\^([a-zA-Z0-9*]+)/g, "<sup>$1</sup>");
-
-  return s;
+  return katex.renderToString(cleaned, {
+    displayMode,
+    throwOnError: false,
+    output: "html",
+  });
 }
 
 function renderMathInHtml(html: string): string {
@@ -95,9 +85,9 @@ function renderMathInHtml(html: string): string {
     .map((segment, idx) => {
       if (idx % 2 === 1) return segment;
       return segment
-        .replace(/<p>\$\$([\s\S]*?)\$\$<\/p>/g, (_, tex: string) => `<div class="math-block">${renderLatexExpr(tex)}</div>`)
-        .replace(/\$\$([\s\S]*?)\$\$/g, (_, tex: string) => `<div class="math-block">${renderLatexExpr(tex)}</div>`)
-        .replace(/\$(?!\s)([^$\n]+?)(?<!\s)\$/g, (_, tex: string) => `<span class="math-inline">${renderLatexExpr(tex)}</span>`);
+        .replace(/<p>\$\$([\s\S]*?)\$\$<\/p>/g, (_, tex: string) => `<div class="math-block">${renderLatexExpr(tex, true)}</div>`)
+        .replace(/\$\$([\s\S]*?)\$\$/g, (_, tex: string) => `<div class="math-block">${renderLatexExpr(tex, true)}</div>`)
+        .replace(/\$(?!\s)([^$\n]+?)(?<!\s)\$/g, (_, tex: string) => `<span class="math-inline">${renderLatexExpr(tex, false)}</span>`);
     })
     .join("");
 }
