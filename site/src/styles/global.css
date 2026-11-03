@@ -285,65 +285,15 @@ html.dark .flowchart-svg .fc-label {
   @apply sr-only;
 }
 
-/* ---------- Typeset math blocks & inline math ---------- */
+/* ---------- Typeset math blocks & inline math (KaTeX) ---------- */
 .math-block {
   @apply my-3 overflow-x-auto rounded-lg border border-gray-200 bg-gray-50/70 px-4 py-3 text-center text-[15px] leading-relaxed dark:border-gray-800 dark:bg-gray-900/70;
-  font-family: "Cambria Math", "STIX Two Math", "Latin Modern Math", ui-serif, Georgia, serif;
 }
-.math-inline {
-  font-family: "Cambria Math", "STIX Two Math", "Latin Modern Math", ui-serif, Georgia, serif;
-  font-size: 1.03em;
+.math-block .katex-display {
+  margin: 0;
 }
-.math-frac {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  vertical-align: middle;
-  margin: 0 0.18em;
-  line-height: 1.15;
-}
-.math-frac-num {
-  border-bottom: 1px solid currentColor;
-  padding: 0 0.25em 0.08em;
-  font-size: 0.9em;
-}
-.math-frac-den {
-  padding: 0.08em 0.25em 0;
-  font-size: 0.9em;
-}
-.math-op {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  vertical-align: middle;
-  margin: 0 0.18em;
-  line-height: 1;
-}
-.math-op-sup,
-.math-op-sub {
-  font-size: 0.72em;
-  line-height: 1.05;
-}
-.math-op-sym {
-  font-size: 1.3em;
-  line-height: 1.05;
-}
-.math-sqrt {
-  display: inline-flex;
-  align-items: baseline;
-  vertical-align: middle;
-}
-.math-sqrt-Sign {
-  font-size: 1.25em;
-  line-height: 1;
-  margin-right: 0.04em;
-}
-.math-sqrt-body {
-  border-top: 1px solid currentColor;
-  padding-top: 0.08em;
-}
-.math-bar {
-  text-decoration: overline;
+.math-inline .katex {
+  font-size: 1.05em;
 }
 
 /* ---------- Segmented control (from MMSP) ---------- */
