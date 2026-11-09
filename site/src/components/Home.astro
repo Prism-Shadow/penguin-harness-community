@@ -1,7 +1,19 @@
 ---
 import Logo from "./Logo.astro";
+import LootIcon from "./LootIcon.astro";
 import { localePath, type Locale } from "../shared/i18n";
 import { DISCORD_URL } from "../shared/site";
+import {
+  ADVENTURER_RANKS,
+  COMMITTEE_DOMAINS,
+  FORUM_THREADS,
+  FOUNDING_MEMBERS,
+  LOOT_MATERIALS,
+  QUESTS,
+  QUEST_CATEGORIES,
+  buildClaimIssueUrl,
+  type LootId,
+} from "../shared/community";
 
 interface Props {
   locale: Locale;
@@ -9,29 +21,75 @@ interface Props {
 const { locale } = Astro.props;
 const href = (path: string) => localePath(locale, path);
 
+const featuredOpenQuests = QUESTS.filter((q) => q.status === "open").slice(0, 6);
+const recentActiveAndCompleted = QUESTS.filter((q) => q.status !== "open").slice(0, 5);
+const openCommitteeCount = COMMITTEE_DOMAINS.reduce(
+  (acc, d) => acc + d.seats.filter((s) => s.status === "recruiting").length,
+  0,
+);
+
 const COPY = {
   zh: {
+    ctaQuests: "任务悬赏 ($2,000/月)",
+    ctaForum: "社区酒馆论坛",
+    ctaPeople: "成员与委员会",
     ctaRoadmap: "路线图",
     ctaProcess: "流程",
     ctaRfcs: "标准文件",
     wechat: "微信群",
     discord: "Discord",
+    secQuestsBadge: "QUEST BOARD · 任务发布、一键认领与自动化 Agent 跨仓追踪",
+    secQuestsTitle: "一起复现必读论文，一起推进 RSI 实验与生态",
+    secQuestsDesc:
+      "所有任务通过 GitHub Issue 与 PR 管理（每人同时认领上限 ≤ 2 项），由自动化管家 Agent (rsi_community_steward) 自动同步 benchmark / plugins 仓库进度并结算成长值（EXP）。",
+    viewAllQuests: "查看全部 " + QUESTS.length + " 项任务与奖励榜单 →",
+    claimNow: "一键认领 (/claim)",
+    liveTrackTitle: "实时任务动态（已完成实验 & PR 审核中）",
+    secArenaBadge: "ESSENTIAL PAPERS & EMPIRICAL NOTES · 社区酒馆精选",
+    secArenaTitle: "必读双璧论文（RSIAgent × RRSI）与 RSI Arena 13,000 GPU 小时实验启示",
+    enterForum: "进入社区酒馆参与讨论 →",
+    secRewardBadge: "GAMIFIED REWARDS · 每月 $2,000 美元激励预算与 RPG 素材掉落",
+    secRewardTitle: "月度贡献等比瓜分 + 冲榜大奖 + $100/月专业委员会津贴",
+    secPeopleBadge: "PEOPLE & COMMITTEE · 社区初始成员与专业委员会公开招募",
+    secPeopleTitle: "连接做 RSI 与 Agent 的人（" + openCommitteeCount + " 个委员会席位正在招募）",
+    viewPeople: "查看全部成员并报名委员会 ($100/月) →",
   },
   en: {
+    ctaQuests: "Quests ($2,000/mo)",
+    ctaForum: "Tavern Forum",
+    ctaPeople: "People & Committee",
     ctaRoadmap: "Roadmap",
     ctaProcess: "Workflow",
     ctaRfcs: "RFCs",
     wechat: "WeChat",
     discord: "Discord",
+    secQuestsBadge: "QUEST BOARD · ONE-CLICK CLAIM & AUTOMATED CROSS-REPO STEWARD",
+    secQuestsTitle: "Reproduce Essential Papers & Build the RSI Ecosystem Together",
+    secQuestsDesc:
+      "Managed via GitHub Issues & PRs (capped at 2 concurrent active claims per contributor) and synchronized across repositories by the Automated Steward Agent (rsi_community_steward).",
+    viewAllQuests: "Explore All " + QUESTS.length + " Quests & Monthly Leaderboard →",
+    claimNow: "Quick Claim (/claim)",
+    liveTrackTitle: "Live Quest Feed (Completed Experiments & In-Review PRs)",
+    secArenaBadge: "ESSENTIAL PAPERS & EMPIRICAL NOTES · FROM THE TAVERN",
+    secArenaTitle: "Must-Read Papers (RSIAgent × RRSI) & Lessons from 13,000 GPU-Hours on RSI Arena",
+    enterForum: "Enter the Community Tavern →",
+    secRewardBadge: "GAMIFIED REWARDS · $2,000/MO REWARD POOL & RPG CRAFTING LOOT",
+    secRewardTitle: "Proportional EXP Pool + Leaderboard Bonuses + $100/mo Committee Stipends",
+    secPeopleBadge: "PEOPLE & COMMITTEE · FOUNDING MEMBERS & OPEN RECRUITMENT",
+    secPeopleTitle: "Meet Our Founding Team & Apply for Open Committee Seats (" + openCommitteeCount + " Recruiting)",
+    viewPeople: "Meet the People & Apply for Committee ($100/mo) →",
   },
 }[locale];
 ---
 
-<section class="lg:flex lg:flex-1 lg:items-center" data-hero>
-  <div class="relative mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:py-8">
+<section class="lg:flex lg:items-center" data-hero>
+  <div class="relative mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:py-12">
     <div>
       <div class="rise flex items-center gap-3">
         <Logo class="h-10 w-10 shrink-0" />
+        <span class="mono rounded-full border border-brand-200 bg-brand-50 px-2.5 py-0.5 text-xs font-medium text-brand-700 dark:border-brand-800 dark:bg-brand-950/60 dark:text-brand-300">
+          $2,000/mo Community Bounties Live
+        </span>
       </div>
 
       <h1
@@ -45,37 +103,55 @@ const COPY = {
         class="rise mono mt-4 text-base text-gray-600 sm:text-lg dark:text-gray-400"
         style="animation-delay: 100ms"
       >
-        RSI Benchmark × Evaluation × Algorithm
+        RSI Benchmark × Evaluation × Algorithm × Quests
       </p>
 
-      <div class="rise mt-8 flex flex-wrap gap-3" style="animation-delay: 150ms">
+      <div class="rise mt-7 flex flex-wrap gap-2.5" style="animation-delay: 150ms">
+        <a
+          href={href("/quests/")}
+          class="inline-flex h-11 items-center gap-2 rounded-lg bg-black px-5 text-[15px] font-medium text-white transition-colors hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200"
+        >
+          <span>{COPY.ctaQuests}</span>
+        </a>
+        <a
+          href={href("/forum/")}
+          class="inline-flex h-11 items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 text-[15px] font-medium text-gray-900 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-100 dark:hover:bg-gray-900"
+        >
+          {COPY.ctaForum}
+        </a>
+        <a
+          href={href("/people/")}
+          class="inline-flex h-11 items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 text-[15px] font-medium text-gray-900 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-100 dark:hover:bg-gray-900"
+        >
+          {COPY.ctaPeople}
+        </a>
+      </div>
+
+      <div class="rise mt-3 flex flex-wrap items-center gap-2.5" style="animation-delay: 190ms">
         <a
           href={href("/roadmap/")}
-          class="inline-flex h-11 items-center gap-2 rounded-lg bg-black px-5 text-[15px] font-medium text-white transition-colors hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200"
+          class="inline-flex h-9 items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3.5 text-xs font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-800 dark:bg-gray-950 dark:text-gray-300 dark:hover:bg-gray-900"
         >
           {COPY.ctaRoadmap}
         </a>
         <a
           href={href("/workflow/")}
-          class="inline-flex h-11 items-center gap-2 rounded-lg border border-gray-200 bg-white px-5 text-[15px] font-medium text-gray-900 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-100 dark:hover:bg-gray-900"
+          class="inline-flex h-9 items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3.5 text-xs font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-800 dark:bg-gray-950 dark:text-gray-300 dark:hover:bg-gray-900"
         >
           {COPY.ctaProcess}
         </a>
         <a
           href={href("/rfcs/")}
-          class="inline-flex h-11 items-center gap-2 rounded-lg border border-gray-200 bg-white px-5 text-[15px] font-medium text-gray-900 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-100 dark:hover:bg-gray-900"
+          class="inline-flex h-9 items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3.5 text-xs font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-800 dark:bg-gray-950 dark:text-gray-300 dark:hover:bg-gray-900"
         >
           {COPY.ctaRfcs}
         </a>
-      </div>
-
-      <div class="rise mt-3 flex flex-wrap items-center gap-3" style="animation-delay: 190ms">
         <button
           type="button"
           data-wechat-trigger
-          class="inline-flex h-10 items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 text-sm font-medium text-gray-800 transition-colors hover:bg-gray-50 hover:text-gray-950 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-200 dark:hover:bg-gray-900 dark:hover:text-white"
+          class="inline-flex h-9 items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3.5 text-xs font-medium text-gray-800 transition-colors hover:bg-gray-50 hover:text-gray-950 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-200 dark:hover:bg-gray-900 dark:hover:text-white"
         >
-          <svg viewBox="0 0 24 24" class="h-4 w-4 shrink-0 text-[#07C160]" fill="currentColor" aria-hidden="true">
+          <svg viewBox="0 0 24 24" class="h-3.5 w-3.5 shrink-0 text-[#07C160]" fill="currentColor" aria-hidden="true">
             <path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 0 1 .213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 0 0 .167-.054l1.903-1.114a.864.864 0 0 1 .717-.098 10.16 10.16 0 0 0 2.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 3.882-1.98 5.853-1.838-.576-3.583-4.196-6.348-8.596-6.348zM5.785 5.991c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178A1.17 1.17 0 0 1 4.623 7.17c0-.651.52-1.18 1.162-1.18zm5.813 0c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178 1.17 1.17 0 0 1-1.162-1.178c0-.651.52-1.18 1.162-1.18zm5.34 2.867c-1.797-.052-3.746.512-5.28 1.786-1.72 1.428-2.687 3.72-1.78 6.22.942 2.453 3.666 4.229 6.884 4.229.826 0 1.622-.12 2.361-.336a.722.722 0 0 1 .598.082l1.584.926a.272.272 0 0 0 .14.047c.134 0 .24-.111.24-.247 0-.06-.023-.12-.038-.177l-.327-1.233a.582.582 0 0 1-.023-.156.49.49 0 0 1 .201-.398C23.024 18.48 24 16.82 24 14.98c0-3.21-2.931-5.837-6.656-6.088V8.89c-.135-.01-.27-.027-.407-.03zm-2.53 3.274c.535 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.434-.982.97-.982zm4.844 0c.535 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.434-.982.969-.982z" />
           </svg>
           <span>{COPY.wechat}</span>
@@ -85,9 +161,9 @@ const COPY = {
           target="_blank"
           rel="noopener noreferrer"
           data-direct-external
-          class="inline-flex h-10 items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 text-sm font-medium text-gray-800 transition-colors hover:bg-gray-50 hover:text-gray-950 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-200 dark:hover:bg-gray-900 dark:hover:text-white"
+          class="inline-flex h-9 items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3.5 text-xs font-medium text-gray-800 transition-colors hover:bg-gray-50 hover:text-gray-950 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-200 dark:hover:bg-gray-900 dark:hover:text-white"
         >
-          <svg viewBox="0 0 24 24" class="h-4 w-4 shrink-0 text-[#5865F2]" fill="currentColor" aria-hidden="true">
+          <svg viewBox="0 0 24 24" class="h-3.5 w-3.5 shrink-0 text-[#5865F2]" fill="currentColor" aria-hidden="true">
             <path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z" />
           </svg>
           <span>{COPY.discord}</span>
@@ -137,7 +213,6 @@ const COPY = {
             </filter>
           </defs>
 
-          <!-- Subtle background grid -->
           <g class="stroke-gray-100 dark:stroke-gray-900" stroke-width="1">
             <line x1="70" y1="24" x2="70" y2="265" />
             <line x1="210" y1="24" x2="210" y2="265" />
@@ -145,7 +220,6 @@ const COPY = {
             <line x1="490" y1="24" x2="490" y2="265" />
           </g>
 
-          <!-- Recursive Self-Improvement Feedback Arc (Eval -> Policy/Weights) -->
           <path
             d="M 490 95 C 430 14, 150 14, 210 62"
             fill="none"
@@ -165,16 +239,10 @@ const COPY = {
             data-feedback-arc-2
           />
 
-          <!-- Dynamic Edges Layer -->
           <g data-edges-layer></g>
-
-          <!-- Signal Pulses Layer -->
           <g data-pulses-layer filter="url(#glow)"></g>
-
-          <!-- Dynamic Nodes Layer -->
           <g data-nodes-layer></g>
 
-          <!-- Bottom Layer Captions -->
           <g class="mono fill-gray-400 text-[10px] dark:fill-gray-500" text-anchor="middle">
             <text x="70" y="286">BENCHMARK</text>
             <text x="210" y="286">HARNESS</text>
@@ -187,14 +255,277 @@ const COPY = {
   </div>
 </section>
 
-<style>
-  @media (min-width: 1024px) {
-    :global(main:has(> [data-hero])) {
-      display: flex;
-      flex-direction: column;
-    }
-  }
+<!-- Dynamic Community Sections Below Hero -->
+<div class="mx-auto w-full max-w-7xl space-y-16 px-4 pb-16 sm:px-6">
+  <!-- 1. Featured Quests & Live Cross-Repo Status -->
+  <section class="border-t border-gray-200 pt-12 dark:border-gray-800">
+    <div class="flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <div class="mono text-xs font-semibold text-brand-600 dark:text-brand-400">
+          {COPY.secQuestsBadge}
+        </div>
+        <h2 class="mt-1.5 text-2xl font-semibold tracking-tight text-gray-950 sm:text-3xl dark:text-white">
+          {COPY.secQuestsTitle}
+        </h2>
+        <p class="mt-2 max-w-3xl text-sm text-gray-600 dark:text-gray-400">
+          {COPY.secQuestsDesc}
+        </p>
+      </div>
+      <a
+        href={href("/quests/")}
+        class="inline-flex items-center gap-1 text-sm font-semibold text-brand-600 hover:underline dark:text-brand-400"
+      >
+        <span>{COPY.viewAllQuests}</span>
+      </a>
+    </div>
 
+    <div class="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+      {
+        featuredOpenQuests.map((q) => (
+          <div class="flex flex-col justify-between rounded-2xl border border-gray-200 bg-white p-5 shadow-2xs transition-all hover:border-gray-300 dark:border-gray-800 dark:bg-gray-950 dark:hover:border-gray-700">
+            <div>
+              <div class="flex items-center justify-between gap-2">
+                <div class="flex items-center gap-1.5">
+                  <span class="mono rounded bg-gray-100 px-2 py-0.5 text-xs font-semibold text-gray-900 dark:bg-gray-800 dark:text-gray-100">
+                    {q.id}
+                  </span>
+                  <span class="rounded-full bg-brand-50 px-2 py-0.5 text-[11px] font-medium text-brand-700 dark:bg-brand-950/60 dark:text-brand-300">
+                    {QUEST_CATEGORIES[q.category][locale]}
+                  </span>
+                </div>
+                <span class="mono rounded bg-amber-50 px-2 py-0.5 text-xs font-bold text-amber-800 dark:bg-amber-950/60 dark:text-amber-300">
+                  +{q.exp} EXP
+                </span>
+              </div>
+
+              <h3 class="mt-3 text-base font-semibold leading-snug text-gray-950 dark:text-white">
+                <a href={href(`/quests/#${q.id.toLowerCase()}`)} class="hover:text-brand-600 dark:hover:text-brand-400">
+                  {q.title[locale]}
+                </a>
+              </h3>
+              <p class="mt-2 line-clamp-3 text-xs leading-5 text-gray-600 dark:text-gray-400">
+                {q.summary[locale]}
+              </p>
+            </div>
+
+            <div class="mt-4 flex items-center justify-between gap-2 border-t border-gray-100 pt-3 dark:border-gray-800/80">
+              <div class="flex items-center gap-1">
+                {q.loot.map((drop) => (
+                  <span
+                    class="inline-flex items-center gap-0.5 rounded border border-gray-200 bg-gray-50 px-1.5 py-0.5 text-[11px] dark:border-gray-700 dark:bg-gray-900"
+                    title={LOOT_MATERIALS[drop.item].name[locale]}
+                  >
+                    <LootIcon item={drop.item} class="h-3.5 w-3.5" />
+                    <span class="mono font-semibold">×{drop.count}</span>
+                  </span>
+                ))}
+              </div>
+              <a
+                href={buildClaimIssueUrl(q, locale)}
+                class="inline-flex h-7 items-center gap-1 rounded-lg bg-brand-600 px-2.5 text-xs font-semibold text-white hover:bg-brand-500"
+              >
+                <span>{COPY.claimNow}</span>
+              </a>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+
+    <!-- Live Completed & In-Review Ticker Bar -->
+    <div class="mt-5 rounded-xl border border-gray-200 bg-gray-50/70 p-4 dark:border-gray-800 dark:bg-gray-900/50">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <span class="text-xs font-semibold text-gray-700 dark:text-gray-300">
+          {COPY.liveTrackTitle}
+        </span>
+        <span class="mono text-[11px] text-gray-500">
+          Synced by <code class="rounded bg-gray-200/70 px-1 py-0.5 dark:bg-gray-800">rsi_community_steward</code>
+        </span>
+      </div>
+      <div class="mt-2.5 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-5">
+        {
+          recentActiveAndCompleted.map((item) => (
+            <a
+              href={item.linkedPrUrl || href(`/quests/#${item.id.toLowerCase()}`)}
+              class="flex flex-col justify-between rounded-lg border border-gray-200/80 bg-white p-2.5 text-xs transition-colors hover:border-brand-300 dark:border-gray-800 dark:bg-gray-950"
+            >
+              <div class="flex items-center justify-between gap-1">
+                <span class="mono font-semibold text-gray-900 dark:text-white">{item.id}</span>
+                <span
+                  class:list={[
+                    "mono rounded px-1.5 py-0.2 text-[10px] font-semibold",
+                    item.status === "completed"
+                      ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/70 dark:text-emerald-300"
+                      : "bg-amber-50 text-amber-700 dark:bg-amber-950/70 dark:text-amber-300",
+                  ]}
+                >
+                  {item.status === "completed" ? "COMPLETED" : "IN REVIEW"}
+                </span>
+              </div>
+              <div class="mt-1 line-clamp-2 text-[11px] text-gray-600 dark:text-gray-400">
+                {item.title[locale]}
+              </div>
+              <div class="mt-1.5 flex items-center justify-between text-[10px] text-gray-500">
+                <span class="mono">@{item.assignee}</span>
+                <span class="mono font-semibold text-amber-700 dark:text-amber-400">+{item.exp} EXP</span>
+              </div>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Essential Papers (RSIAgent & RRSI) + RSI Arena 13,000 GPU-Hours Tavern Preview -->
+  <section class="border-t border-gray-200 pt-12 dark:border-gray-800">
+    <div class="flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <div class="mono text-xs font-semibold text-purple-600 dark:text-purple-400">
+          {COPY.secArenaBadge}
+        </div>
+        <h2 class="mt-1.5 text-2xl font-semibold tracking-tight text-gray-950 sm:text-3xl dark:text-white">
+          {COPY.secArenaTitle}
+        </h2>
+      </div>
+      <a
+        href={href("/forum/")}
+        class="inline-flex items-center gap-1 text-sm font-semibold text-brand-600 hover:underline dark:text-brand-400"
+      >
+        <span>{COPY.enterForum}</span>
+      </a>
+    </div>
+
+    <div class="mt-6 grid grid-cols-1 gap-5 lg:grid-cols-2">
+      {
+        FORUM_THREADS.slice(0, 2).map((t) => (
+          <div class="flex flex-col justify-between rounded-2xl border border-gray-200 bg-white p-6 shadow-2xs dark:border-gray-800 dark:bg-gray-950">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="mono rounded bg-purple-600 px-2 py-0.5 text-[11px] font-bold text-white">
+                  {t.tag[locale]}
+                </span>
+                <span class="mono text-xs text-gray-500">{t.views} views · {t.replies} replies</span>
+              </div>
+              <h3 class="mt-3 text-lg font-semibold leading-snug text-gray-950 dark:text-white">
+                <a href={href("/forum/")} class="hover:text-brand-600 dark:hover:text-brand-400">
+                  {t.title[locale]}
+                </a>
+              </h3>
+              <p class="mt-2.5 text-xs leading-6 text-gray-600 sm:text-sm dark:text-gray-400">
+                {t.excerpt[locale]}
+              </p>
+            </div>
+            <div class="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-gray-100 pt-3.5 dark:border-gray-800">
+              <div class="flex items-center gap-2">
+                <img src={t.author.avatar} alt={t.author.name} class="h-6 w-6 rounded-full" loading="lazy" />
+                <span class="text-xs font-medium text-gray-800 dark:text-gray-200">{t.author.name}</span>
+                <span class="mono text-[11px] text-gray-500">({t.author.badge[locale]})</span>
+              </div>
+              <a
+                href={href("/forum/")}
+                class="text-xs font-semibold text-brand-600 hover:underline dark:text-brand-400"
+              >
+                {locale === "zh" ? "阅读全文与复现讨论 →" : "Read Full Note →"}
+              </a>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- 3. Gamified Loot & $2,000 Monthly Reward Pool Strip -->
+  <section class="border-t border-gray-200 pt-12 dark:border-gray-800">
+    <div class="rounded-2xl border border-gray-200 bg-gradient-to-br from-white via-gray-50/60 to-amber-50/30 p-6 sm:p-8 dark:border-gray-800 dark:from-gray-950 dark:via-gray-900/50 dark:to-amber-950/15">
+      <div class="mono text-xs font-semibold text-amber-600 dark:text-amber-400">
+        {COPY.secRewardBadge}
+      </div>
+      <h2 class="mt-1.5 text-2xl font-semibold tracking-tight text-gray-950 sm:text-3xl dark:text-white">
+        {COPY.secRewardTitle}
+      </h2>
+
+      <div class="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-5">
+        {
+          (Object.keys(LOOT_MATERIALS) as LootId[]).map((id) => {
+            const mat = LOOT_MATERIALS[id];
+            return (
+              <a
+                href={href("/quests/#loot-codex")}
+                class="flex items-center gap-3 rounded-xl border border-gray-200 bg-white p-3 shadow-2xs transition-colors hover:border-brand-300 dark:border-gray-800 dark:bg-gray-950"
+              >
+                <LootIcon item={id} class="h-8 w-8 shrink-0" />
+                <div class="min-w-0">
+                  <div class="truncate text-xs font-semibold text-gray-900 dark:text-white">{mat.name[locale]}</div>
+                  <div class="truncate text-[10px] text-gray-500">{mat.rarity[locale]}</div>
+                </div>
+              </a>
+            );
+          })
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Founding Members & Open Committee Recruitment -->
+  <section class="border-t border-gray-200 pt-12 dark:border-gray-800">
+    <div class="flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <div class="mono text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+          {COPY.secPeopleBadge}
+        </div>
+        <h2 class="mt-1.5 text-2xl font-semibold tracking-tight text-gray-950 sm:text-3xl dark:text-white">
+          {COPY.secPeopleTitle}
+        </h2>
+      </div>
+      <a
+        href={href("/people/")}
+        class="inline-flex items-center gap-1 text-sm font-semibold text-brand-600 hover:underline dark:text-brand-400"
+      >
+        <span>{COPY.viewPeople}</span>
+      </a>
+    </div>
+
+    <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        FOUNDING_MEMBERS.map((m) => {
+          const advRank =
+            [...ADVENTURER_RANKS].reverse().find((r) => m.completedExp >= r.minExp) ?? ADVENTURER_RANKS[0];
+          return (
+            <a
+              href={href("/people/")}
+              class="flex items-center gap-3.5 rounded-2xl border border-gray-200 bg-white p-4 shadow-2xs transition-colors hover:border-gray-300 dark:border-gray-800 dark:bg-gray-950 dark:hover:border-gray-700"
+            >
+              <img
+                src={m.avatar}
+                alt={m.name}
+                class="h-12 w-12 shrink-0 rounded-xl border border-gray-200 object-cover dark:border-gray-700"
+                loading="lazy"
+              />
+              <div class="min-w-0">
+                <div class="truncate text-sm font-semibold text-gray-950 dark:text-white">
+                  {locale === "zh" ? m.nameZh : m.name}
+                </div>
+                <div class="truncate text-xs text-gray-500 dark:text-gray-400">
+                  {m.committeeTrack?.[locale]}
+                </div>
+                <div class="mt-1 flex items-center gap-1.5">
+                  <span class:list={["rounded border px-1.5 py-0.2 text-[10px] font-semibold", advRank.badgeColor]}>
+                    {advRank.title[locale]}
+                  </span>
+                  <span class="mono text-[11px] font-bold text-emerald-600 dark:text-emerald-400">
+                    {m.completedExp} EXP
+                  </span>
+                </div>
+              </div>
+            </a>
+          );
+        })
+      }
+    </div>
+  </section>
+</div>
+
+<style>
   .rise {
     animation: rise 0.55s cubic-bezier(0.23, 1, 0.32, 1) both;
   }
@@ -253,21 +584,17 @@ const COPY = {
     }
 
     const nodes: NodeDef[] = [
-      // Layer 0: Benchmark (x=70)
       { id: "l0_0", layer: 0, x: 70, y: 78 },
       { id: "l0_1", layer: 0, x: 70, y: 150 },
       { id: "l0_2", layer: 0, x: 70, y: 222 },
-      // Layer 1: Harness (x=210)
       { id: "l1_0", layer: 1, x: 210, y: 62 },
       { id: "l1_1", layer: 1, x: 210, y: 120 },
       { id: "l1_2", layer: 1, x: 210, y: 180 },
       { id: "l1_3", layer: 1, x: 210, y: 238 },
-      // Layer 2: RSI Algorithm (x=350)
       { id: "l2_0", layer: 2, x: 350, y: 62 },
       { id: "l2_1", layer: 2, x: 350, y: 120 },
       { id: "l2_2", layer: 2, x: 350, y: 180 },
       { id: "l2_3", layer: 2, x: 350, y: 238 },
-      // Layer 3: Evaluation (x=490)
       { id: "l3_0", layer: 3, x: 490, y: 95 },
       { id: "l3_1", layer: 3, x: 490, y: 205 },
     ];
@@ -278,13 +605,12 @@ const COPY = {
       id: string;
       from: NodeDef;
       to: NodeDef;
-      weights: [number, number, number, number]; // Gen 1..4 weights (0 = pruned, 1 = weak, 2 = strong, 3 = evolved core)
+      weights: [number, number, number, number];
       el?: SVGLineElement;
     }
 
     const edgeDefs: EdgeDef[] = [];
     const pairs: [string, string, [number, number, number, number]][] = [
-      // L0 -> L1
       ["l0_0", "l1_0", [2, 2, 3, 3]],
       ["l0_0", "l1_1", [1, 2, 2, 3]],
       ["l0_0", "l1_2", [1, 0, 0, 0]],
@@ -295,7 +621,6 @@ const COPY = {
       ["l0_2", "l1_1", [1, 0, 0, 0]],
       ["l0_2", "l1_2", [1, 2, 2, 3]],
       ["l0_2", "l1_3", [2, 2, 3, 3]],
-      // L1 -> L2
       ["l1_0", "l2_0", [2, 3, 3, 3]],
       ["l1_0", "l2_1", [1, 2, 3, 3]],
       ["l1_0", "l2_2", [1, 0, 0, 0]],
@@ -307,7 +632,6 @@ const COPY = {
       ["l1_2", "l2_3", [1, 2, 2, 2]],
       ["l1_3", "l2_2", [1, 0, 1, 2]],
       ["l1_3", "l2_3", [2, 2, 3, 3]],
-      // L2 -> L3
       ["l2_0", "l3_0", [2, 3, 3, 3]],
       ["l2_0", "l3_1", [1, 0, 0, 0]],
       ["l2_1", "l3_0", [2, 3, 3, 3]],
@@ -445,17 +769,12 @@ const COPY = {
         feedbackArc1.classList.remove("is-evolving");
         feedbackArc2.classList.remove("is-evolving");
 
-        // Pulse L0 nodes & send L0->L1
         nodes.filter((n) => n.layer === 0).forEach((n) => pulseNode(n.id));
         spawnEdgeParticles(0, genIndex);
 
-        // L1->L2
         setTimeout(() => spawnEdgeParticles(1, genIndex), 420);
-
-        // L2->L3
         setTimeout(() => spawnEdgeParticles(2, genIndex), 840);
 
-        // Recursive Self-Evolution feedback phase
         setTimeout(() => {
           phaseLabel.textContent = "SELF-EVOLVE ↻";
           feedbackArc1.classList.add("is-evolving");

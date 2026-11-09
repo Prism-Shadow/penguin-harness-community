@@ -1,0 +1,360 @@
+---
+import LootIcon from "./LootIcon.astro";
+import { localePath, type Locale } from "../shared/i18n";
+import { DISCORD_URL } from "../shared/site";
+import {
+  ADVENTURER_RANKS,
+  COMMITTEE_DOMAINS,
+  FOUNDING_MEMBERS,
+  LOOT_MATERIALS,
+  PARTICIPATING_AFFILIATIONS,
+  buildCommitteeApplyUrl,
+} from "../shared/community";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const href = (path: string) => localePath(locale, path);
+
+const openSeatsCount = COMMITTEE_DOMAINS.reduce(
+  (acc, d) => acc + d.seats.filter((s) => s.status === "recruiting").length,
+  0,
+);
+
+const COPY = {
+  zh: {
+    badge: "PEOPLE & RSI COMMUNITY COMMITTEE · 社区成员与专业委员会",
+    title: "社区核心成员与 RSI 领域委员会",
+    subtitle:
+      "Shared RSI Community 由开源研究者与工程师共同建设。我们从社群高贡献度成员中遴选并由仓库管理员直接委派成立「RSI 社区委员会」，负责任务发布、实验复现评审与社区运营，每位在任委员享有每月 $100 美元等值的固定奖励。",
+    foundingTitle: "社区发起人与初始核心成员 (Founding Members)",
+    foundingDesc:
+      "主导 PenguinHarness 框架、GDPEVO / Sec A–E 评测基准、ACE / OPRO 自进化算法校准以及 RFC-0001..0006 社区标准建设的初始团队。",
+    committeeTitle: "RSI 社区专业委员会（每人每月 $100 等值固定津贴 · 虚位以待）",
+    committeeDesc:
+      "委员会按六大专业领域划分，由仓库管理员直接指定委派。当前空缺席位均处于「正在招募」状态，欢迎在社群活跃或完成过悬赏任务的研究者与开发者报名参选！",
+    stipendBadge: "固定津贴：$100 USD / 月",
+    recruitingBadge: "虚位以待 · 正在招募 ($100/月)",
+    applyBtn: "立即报名竞聘席位",
+    filledBadge: "在任委员",
+    completedQuestsLabel: "已完成任务",
+    activeQuestsLabel: "进行中",
+    lootLabel: "持有素材",
+    affiliationsTitle: "连接高校、科研院所与开源生态",
+    affiliationsDesc: "参考 Agent Hub 与 RSI Bench 的开放共建模式，让做自进化（RSI）与 Agent 的研究者和工程师在这里彼此找到。",
+    joinQuestsBtn: "浏览悬赏任务看板",
+    joinWechatBtn: "加入微信社群",
+    joinDiscordBtn: "加入 Discord",
+  },
+  en: {
+    badge: "PEOPLE & RSI COMMUNITY COMMITTEE · STEWARDS & CONTRIBUTORS",
+    title: "People & RSI Community Committee",
+    subtitle:
+      "Built by open-source researchers and engineers. Repository administrators appoint the RSI Community Committee from active community contributors to steward domain quests, audit reproducibility, and run community operations — each seat carries a fixed $100 USD equivalent monthly stipend.",
+    foundingTitle: "Founding Members & Project Leadership",
+    foundingDesc:
+      "The founding team behind PenguinHarness, GDPEVO / Sec A–E benchmarks, ACE / OPRO RSI algorithm calibration, and the RFC-0001..0006 community standards.",
+    committeeTitle: "RSI Domain Committees ($100/mo Fixed Stipend · Open Recruitment)",
+    committeeDesc:
+      "Organized into six specialized tracks and appointed by repository administrators. All vacant seats are actively recruiting — contributors and community members are warmly invited to apply!",
+    stipendBadge: "Stipend: $100 USD / mo",
+    recruitingBadge: "OPEN SEAT · RECRUITING ($100/mo)",
+    applyBtn: "Apply for This Seat",
+    filledBadge: "Active Chair",
+    completedQuestsLabel: "Completed Quests",
+    activeQuestsLabel: "Active",
+    lootLabel: "Inventory",
+    affiliationsTitle: "Connecting Universities, Research Labs & Open Source",
+    affiliationsDesc: "Bringing together researchers, faculty, students, and engineers exploring Recursive Self-Improvement and LLM Agents.",
+    joinQuestsBtn: "Explore Quest Board",
+    joinWechatBtn: "Join WeChat Group",
+    joinDiscordBtn: "Join Discord",
+  },
+}[locale];
+---
+
+<div class="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 lg:py-14">
+  <!-- Header -->
+  <div class="rounded-2xl border border-gray-200 bg-gradient-to-br from-white via-gray-50/70 to-emerald-50/30 p-6 sm:p-8 dark:border-gray-800 dark:from-gray-950 dark:via-gray-900/60 dark:to-emerald-950/20">
+    <div class="flex flex-wrap items-center justify-between gap-2">
+      <span class="mono inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50/80 px-3 py-1 text-xs font-medium text-emerald-700 dark:border-emerald-800/70 dark:bg-emerald-950/60 dark:text-emerald-300">
+        <span class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        {COPY.badge}
+      </span>
+      <span class="mono text-xs text-emerald-700 dark:text-emerald-400">
+        {openSeatsCount} {locale === "zh" ? "个委员会席位正在公开招募 ($100/月/人)" : "Committee Seats Open for Application ($100/mo each)"}
+      </span>
+    </div>
+
+    <h1 class="mt-4 text-3xl font-semibold tracking-tight text-gray-950 sm:text-4xl dark:text-white">
+      {COPY.title}
+    </h1>
+    <p class="mt-3 max-w-4xl text-sm leading-6 text-gray-600 sm:text-base dark:text-gray-300">
+      {COPY.subtitle}
+    </p>
+
+    <div class="mt-6 flex flex-wrap gap-3">
+      <a
+        href="#committee"
+        class="inline-flex h-10 items-center gap-2 rounded-lg bg-black px-4 text-sm font-medium text-white transition-colors hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200"
+      >
+        <span>{locale === "zh" ? "查看委员会席位并报名 ($100/月)" : "View Open Committee Seats ($100/mo)"}</span>
+      </a>
+      <a
+        href={href("/quests/")}
+        class="inline-flex h-10 items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 text-sm font-medium text-gray-800 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 dark:hover:bg-gray-800"
+      >
+        <span>{COPY.joinQuestsBtn}</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Section 1: Founding Members & Project Leadership -->
+  <section class="mt-12">
+    <div class="border-b border-gray-200 pb-4 dark:border-gray-800">
+      <h2 class="text-2xl font-semibold tracking-tight text-gray-950 dark:text-white">
+        {COPY.foundingTitle}
+      </h2>
+      <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+        {COPY.foundingDesc}
+      </p>
+    </div>
+
+    <div class="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        FOUNDING_MEMBERS.map((member) => {
+          const advRank =
+            [...ADVENTURER_RANKS].reverse().find((r) => member.completedExp >= r.minExp) ?? ADVENTURER_RANKS[0];
+          return (
+            <article class="flex flex-col justify-between rounded-2xl border border-gray-200 bg-white p-5 shadow-2xs transition-all hover:border-gray-300 dark:border-gray-800 dark:bg-gray-950 dark:hover:border-gray-700">
+              <div>
+                <div class="flex items-center gap-3.5">
+                  <a href={member.github} class="shrink-0">
+                    <img
+                      src={member.avatar}
+                      alt={member.name}
+                      class="h-14 w-14 rounded-xl border border-gray-200 object-cover dark:border-gray-700"
+                      loading="lazy"
+                    />
+                  </a>
+                  <div class="min-w-0">
+                    <a
+                      href={member.github}
+                      class="block truncate text-base font-semibold text-gray-950 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
+                    >
+                      {locale === "zh" ? member.nameZh : member.name}
+                    </a>
+                    <a
+                      href={member.github}
+                      class="mono block truncate text-xs text-gray-500 hover:underline dark:text-gray-400"
+                    >
+                      @{member.handle}
+                    </a>
+                    <span class:list={["mt-1 inline-flex rounded border px-1.5 py-0.5 text-[10px] font-semibold", advRank.badgeColor]}>
+                      {advRank.title[locale]}
+                    </span>
+                  </div>
+                </div>
+
+                <div class="mt-3.5 text-xs font-semibold text-brand-700 dark:text-brand-300">
+                  {member.role[locale]}
+                </div>
+                <p class="mt-1.5 text-xs leading-5 text-gray-600 dark:text-gray-400">
+                  {member.bio[locale]}
+                </p>
+              </div>
+
+              <div class="mt-4 border-t border-gray-100 pt-3 dark:border-gray-800/80">
+                <div class="flex items-center justify-between text-xs">
+                  <span class="text-gray-500">{COPY.completedQuestsLabel}</span>
+                  <span class="mono font-bold text-emerald-600 dark:text-emerald-400">
+                    {member.completedExp} EXP ({member.completedQuests.length})
+                  </span>
+                </div>
+
+                <div class="mt-2 flex flex-wrap gap-1">
+                  {member.completedQuests.map((qid) => (
+                    <a
+                      href={href(`/quests/#${qid.toLowerCase()}`)}
+                      class="mono rounded bg-gray-100 px-1.5 py-0.5 text-[11px] font-medium text-gray-800 hover:bg-brand-50 hover:text-brand-600 dark:bg-gray-800 dark:text-gray-200"
+                    >
+                      {qid}
+                    </a>
+                  ))}
+                  {member.activeQuests.map((qid) => (
+                    <a
+                      href={href(`/quests/#${qid.toLowerCase()}`)}
+                      class="mono rounded bg-amber-50 px-1.5 py-0.5 text-[11px] font-medium text-amber-700 hover:underline dark:bg-amber-950/60 dark:text-amber-300"
+                    >
+                      {qid} (PR)
+                    </a>
+                  ))}
+                </div>
+
+                <div class="mt-2.5 flex flex-wrap items-center gap-1">
+                  {member.lootInventory.map((slot) => (
+                    <span
+                      class="inline-flex items-center gap-0.5 rounded border border-gray-200 bg-gray-50 px-1.5 py-0.5 text-[10px] dark:border-gray-700 dark:bg-gray-900"
+                      title={LOOT_MATERIALS[slot.item].name[locale]}
+                    >
+                      <LootIcon item={slot.item} class="h-3.5 w-3.5" />
+                      <span class="mono font-semibold">×{slot.count}</span>
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </article>
+          );
+        })
+      }
+    </div>
+  </section>
+
+  <!-- Section 2: RSI Community Committee & Open Recruitment -->
+  <section id="committee" class="mt-14 scroll-mt-20">
+    <div class="flex flex-wrap items-end justify-between gap-4 border-b border-gray-200 pb-4 dark:border-gray-800">
+      <div>
+        <h2 class="text-2xl font-semibold tracking-tight text-gray-950 dark:text-white">
+          {COPY.committeeTitle}
+        </h2>
+        <p class="mt-1 max-w-3xl text-sm text-gray-600 dark:text-gray-400">
+          {COPY.committeeDesc}
+        </p>
+      </div>
+      <span class="mono rounded-lg border border-emerald-300 bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-800 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
+        {COPY.stipendBadge}
+      </span>
+    </div>
+
+    <div class="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
+      {
+        COMMITTEE_DOMAINS.map((domain) => (
+          <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-2xs dark:border-gray-800 dark:bg-gray-950">
+            <div class="flex items-start gap-3">
+              <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-900">
+                <LootIcon item={domain.icon} class="h-7 w-7" />
+              </div>
+              <div>
+                <h3 class="text-base font-semibold text-gray-950 dark:text-white">
+                  {domain.title[locale]}
+                </h3>
+                <p class="mt-1 text-xs leading-5 text-gray-600 dark:text-gray-400">
+                  {domain.scope[locale]}
+                </p>
+              </div>
+            </div>
+
+            <div class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+              {domain.seats.map((seat) =>
+                seat.status === "filled" ? (
+                  <div class="flex items-center justify-between rounded-xl border border-gray-200 bg-gray-50/70 p-3 dark:border-gray-800 dark:bg-gray-900/60">
+                    <div class="flex items-center gap-2.5 min-w-0">
+                      <img
+                        src={seat.avatar}
+                        alt={seat.name}
+                        class="h-10 w-10 shrink-0 rounded-full border border-gray-200 dark:border-gray-700"
+                        loading="lazy"
+                      />
+                      <div class="min-w-0">
+                        <div class="flex items-center gap-1.5">
+                          <a
+                            href={seat.github}
+                            class="truncate text-xs font-semibold text-gray-950 hover:underline dark:text-white"
+                          >
+                            {locale === "zh" ? seat.nameZh : seat.name}
+                          </a>
+                        </div>
+                        <div class="truncate text-[11px] text-gray-500 dark:text-gray-400">
+                          {seat.role[locale]}
+                        </div>
+                        <span class="mono mt-0.5 inline-block rounded bg-emerald-100 px-1.5 py-0.2 text-[10px] font-semibold text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+                          {COPY.filledBadge} · ${seat.stipendUsd}/mo
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div class="flex flex-col justify-between rounded-xl border border-dashed border-brand-300 bg-brand-50/30 p-3 dark:border-brand-800/80 dark:bg-brand-950/20">
+                    <div>
+                      <div class="flex items-center justify-between gap-1">
+                        <span class="mono rounded bg-brand-600 px-1.5 py-0.5 text-[10px] font-bold text-white">
+                          {COPY.recruitingBadge}
+                        </span>
+                      </div>
+                      <div class="mt-1.5 text-xs font-semibold text-gray-900 dark:text-gray-100">
+                        {seat.role[locale]}
+                      </div>
+                    </div>
+                    <div class="mt-2.5">
+                      <a
+                        href={buildCommitteeApplyUrl(domain, seat.role[locale], locale)}
+                        class="inline-flex h-7 w-full items-center justify-center gap-1 rounded-lg bg-brand-600 px-2.5 text-xs font-semibold text-white transition-colors hover:bg-brand-500"
+                      >
+                        <span>{COPY.applyBtn}</span>
+                        <svg viewBox="0 0 24 24" class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="2.2">
+                          <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                      </a>
+                    </div>
+                  </div>
+                ),
+              )}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- Section 3: Community Network & Affiliations -->
+  <section class="mt-14">
+    <div class="rounded-2xl border border-gray-200 bg-white p-6 sm:p-8 dark:border-gray-800 dark:bg-gray-950">
+      <h2 class="text-xl font-semibold text-gray-950 dark:text-white">
+        {COPY.affiliationsTitle}
+      </h2>
+      <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+        {COPY.affiliationsDesc}
+      </p>
+
+      <div class="mt-5 grid grid-cols-1 gap-6 md:grid-cols-2">
+        {
+          PARTICIPATING_AFFILIATIONS.map((group) => (
+            <div>
+              <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                {group.category[locale]}
+              </h3>
+              <div class="mt-2.5 flex flex-wrap gap-2">
+                {group.items.map((item) => (
+                  <span class="rounded-lg border border-gray-200 bg-gray-50 px-3 py-1 text-xs font-medium text-gray-800 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-200">
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="mt-6 flex flex-wrap items-center gap-3 border-t border-gray-100 pt-5 dark:border-gray-800">
+        <button
+          type="button"
+          data-wechat-trigger
+          class="inline-flex h-9 items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 text-xs font-medium text-gray-800 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200"
+        >
+          <span>{COPY.joinWechatBtn}</span>
+        </button>
+        <a
+          href={DISCORD_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-direct-external
+          class="inline-flex h-9 items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 text-xs font-medium text-gray-800 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200"
+        >
+          <span>{COPY.joinDiscordBtn}</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</div>

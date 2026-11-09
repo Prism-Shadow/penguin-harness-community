@@ -1,0 +1,791 @@
+---
+import LootIcon from "./LootIcon.astro";
+import { localePath, type Locale } from "../shared/i18n";
+import { REPO_URL } from "../shared/site";
+import {
+  ADVENTURER_RANKS,
+  FOUNDING_MEMBERS,
+  LOOT_MATERIALS,
+  QUESTS,
+  QUEST_CATEGORIES,
+  buildClaimIssueUrl,
+  buildProposeTaskPrUrl,
+  computeMonthlyRewardLeaderboard,
+  type LootId,
+  type QuestCategory,
+} from "../shared/community";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const href = (path: string) => localePath(locale, path);
+
+const openCount = QUESTS.filter((q) => q.status === "open").length;
+const reviewCount = QUESTS.filter((q) => q.status === "in_review" || q.status === "claimed").length;
+const completedCount = QUESTS.filter((q) => q.status === "completed").length;
+const totalOpenExp = QUESTS.filter((q) => q.status === "open").reduce((acc, q) => acc + q.exp, 0);
+
+const { totalCompletedExp, rows: leaderboardRows } = computeMonthlyRewardLeaderboard();
+const memberByHandle = new Map(FOUNDING_MEMBERS.map((m) => [m.handle, m]));
+
+const COPY = {
+  zh: {
+    badge: "QUEST BOARD & MONTHLY REWARD PROTOCOL · RFC-0006",
+    title: "社区悬赏任务看板与月度激励池",
+    subtitle:
+      "通过 GitHub Issue 一键认领前沿论文复现（RSIAgent / RRSI / RSI Arena）、跨框架与多模型进化榜单评测、知识库与本体插件、LangGraph/Dify 优化及趣味博客教程。由本地与云端自动化 Agent (rsi_community_steward) 跨仓库实时追踪进度并结算月度 $2,000 美元奖励池。",
+    proposeBtn: "通过 PR 发布新任务 (tasks.yaml)",
+    viewRfcBtn: "阅读 RFC-0006 规则标准",
+    forumBtn: "前往社区酒馆讨论",
+    statOpen: "待认领悬赏",
+    statReview: "进行中 / PR 审核中",
+    statCompleted: "已合入完结实验与特性",
+    statBudget: "月度总激励预算",
+    ruleBannerTitle: "防滥用并发上限与自动化 Agent 跨仓追踪规则",
+    ruleCap: "同时认领上限 ≤ 2 项/人",
+    ruleCapDesc: "每位社区成员同一时间最多持有 2 项进行中任务（claimed + in_review ≤ 2），14 天无进展自动释放，杜绝恶意占坑。",
+    ruleAgent: "自动化管家 Agent (rsi_community_steward)",
+    ruleAgentDesc: "普通用户只需在社区 Issue 评论区互动（/claim）。Agent 自动在 benchmark / plugins 等目标仓库创建关联 Issue、筛查 PR 状态，并在 PR 合入后自动关单结算成长值。",
+    filterStatusAll: "全部状态",
+    filterStatusOpen: "待认领 (Open)",
+    filterStatusReview: "审核中 (In Review)",
+    filterStatusCompleted: "已完成 (Completed)",
+    filterCatAll: "全部领域",
+    statusLabels: {
+      open: "待认领 · OPEN",
+      claimed: "进行中 · CLAIMED",
+      in_review: "PR 审核中 · IN REVIEW",
+      completed: "已合入 · COMPLETED",
+    },
+    diffLabels: {
+      S: "S 级 · 传说悬赏",
+      A: "A 级 · 史诗任务",
+      B: "B 级 · 稀有任务",
+    },
+    targetRepoLabel: "目标仓库",
+    deliverablesLabel: "交付要求与验收标准",
+    lootLabel: "完成掉落",
+    claimBtn: "一键认领 (/claim)",
+    submitPrBtn: "提交关联 PR",
+    viewPrBtn: "查看已关联 PR",
+    assigneeLabel: "认领人",
+    capFullHint: "当前已达 2/2 并发上限",
+    rewardSectionTitle: "月度 $2,000 美元激励预算与当月成长值（EXP）实时榜单",
+    rewardSectionDesc:
+      "每月末最后一天根据当月已完成任务的成长值（EXP）自动结算，由管理员发放模型 Token 额度（Penguin Go / API Credits）、GPU 算力券或云服务器实例。",
+    pool1Title: "1. 月度贡献等比瓜分池",
+    pool1Amount: "$1,100 / 月",
+    pool1Desc: "面向当月所有完成任务的贡献者，按个人当月 EXP 占全社区总 EXP（当前已结算 " + totalCompletedExp + " EXP）比例等比发放。",
+    pool2Title: "2. 月榜前茅额外冲榜大奖",
+    pool2Amount: "$500 / 月",
+    pool2Desc: "在等比瓜分基础上额外奖励月榜前五名：Top 1 (+$200)、Top 2 (+$150)、Top 3 (+$100)、Top 4–5 (各 +$25)。",
+    pool3Title: "3. RSI 社区委员会固定津贴",
+    pool3Amount: "$400 / 月 ($100/人)",
+    pool3Desc: "由仓库管理员从高贡献成员中委派专业领域委员，负责任务发布与评审，每人每月享 $100 等值固定奖励。",
+    thRank: "排名",
+    thContributor: "社区成员 / 职级",
+    thQuests: "已完成 / 审核中任务",
+    thLoot: "已收集游戏素材",
+    thExp: "当月已结算 EXP (占池比)",
+    thReward: "月末预计激励构成 (USD 等值)",
+    codexTitle: "社区 RPG 锻造素材图鉴与冒险者职级体系",
+    codexDesc: "完成不同类别的社区任务不仅能累积成长值（EXP）参与月末 $2,000 奖金池结算，还会掉落专属的「RSI 锻造素材」并晋升社区职级。",
+    ranksTitle: "冒险者职级晋升阶梯",
+  },
+  en: {
+    badge: "QUEST BOARD & MONTHLY REWARD PROTOCOL · RFC-0006",
+    title: "Community Quests, Bounties & $2,000 Monthly Rewards",
+    subtitle:
+      "Claim frontier RSI paper reproductions (RSIAgent / RRSI / RSI Arena), cross-framework & multi-model leaderboard evaluations, Knowledge Base & Ontology plugins, LangGraph/Dify RSI optimization recipes, and playful blog tutorials. Synchronized across repositories by the Automated Steward Agent (rsi_community_steward).",
+    proposeBtn: "Publish New Quest via PR (tasks.yaml)",
+    viewRfcBtn: "Read RFC-0006 Spec",
+    forumBtn: "Join Tavern Discussions",
+    statOpen: "Open Bounties",
+    statReview: "Active / PR in Review",
+    statCompleted: "Completed Experiments & Features",
+    statBudget: "Monthly Reward Budget",
+    ruleBannerTitle: "Anti-Abuse Concurrent Claim Cap & Automated Cross-Repo Agent",
+    ruleCap: "Max 2 Concurrent Claims / User",
+    ruleCapDesc: "Each contributor may hold at most 2 active quests (claimed + in_review ≤ 2) simultaneously, with 14-day inactivity auto-release to prevent hoarding.",
+    ruleAgent: "Automated Steward Agent (rsi_community_steward)",
+    ruleAgentDesc: "Contributors simply interact in Issue comments (/claim). The agent automatically creates linked Issues in target repos, screens PR status, and closes community Issues via PR upon merge.",
+    filterStatusAll: "All Statuses",
+    filterStatusOpen: "Open Bounties",
+    filterStatusReview: "In Review",
+    filterStatusCompleted: "Completed",
+    filterCatAll: "All Categories",
+    statusLabels: {
+      open: "OPEN BOUNTY",
+      claimed: "CLAIMED",
+      in_review: "PR IN REVIEW",
+      completed: "COMPLETED",
+    },
+    diffLabels: {
+      S: "Tier-S · Legendary",
+      A: "Tier-A · Epic",
+      B: "Tier-B · Rare",
+    },
+    targetRepoLabel: "Target Repo",
+    deliverablesLabel: "Deliverables & Acceptance Criteria",
+    lootLabel: "Loot Drops",
+    claimBtn: "Quick Claim (/claim)",
+    submitPrBtn: "Submit Linked PR",
+    viewPrBtn: "View Linked PR",
+    assigneeLabel: "Assignee",
+    capFullHint: "2/2 Claim Cap Reached",
+    rewardSectionTitle: "Monthly $2,000 USD Reward Pool & Live Growth EXP Leaderboard",
+    rewardSectionDesc:
+      "Settled on the last day of each month based on completed Growth EXP and distributed by administrators as LLM Token Quotas (Penguin Go / API Credits), GPU Compute Vouchers, or Cloud Servers.",
+    pool1Title: "1. Proportional Contribution Pool",
+    pool1Amount: "$1,100 / mo",
+    pool1Desc: "Distributed proportionally among all contributors based on their share of total monthly EXP (currently " + totalCompletedExp + " EXP settled).",
+    pool2Title: "2. Top Leaderboard Bonus Pool",
+    pool2Amount: "$500 / mo",
+    pool2Desc: "Extra tier bonuses on top of proportional rewards: Top 1 (+$200), Top 2 (+$150), Top 3 (+$100), Top 4–5 (+$25 each).",
+    pool3Title: "3. RSI Committee Fixed Stipend",
+    pool3Amount: "$400 / mo ($100/seat)",
+    pool3Desc: "Appointed by repo admins across specialized RSI tracks to publish and review quests; $100 USD equivalent fixed monthly stipend per member.",
+    thRank: "Rank",
+    thContributor: "Contributor / Adventurer Rank",
+    thQuests: "Completed / In-Review",
+    thLoot: "Collected Crafting Loot",
+    thExp: "Settled Monthly EXP (Share)",
+    thReward: "Estimated Monthly Reward (USD Equiv.)",
+    codexTitle: "RPG Crafting Materials Codex & Adventurer Ranks",
+    codexDesc: "Completing community quests awards both Growth EXP for the monthly $2,000 reward settlement and collectible RSI Crafting Materials that unlock community titles.",
+    ranksTitle: "Adventurer Rank Progression",
+  },
+}[locale];
+---
+
+<div class="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 lg:py-14">
+  <!-- Header -->
+  <div class="rounded-2xl border border-gray-200 bg-gradient-to-br from-white via-gray-50/70 to-brand-50/30 p-6 sm:p-8 dark:border-gray-800 dark:from-gray-950 dark:via-gray-900/60 dark:to-brand-950/20">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <span class="mono inline-flex items-center gap-2 rounded-full border border-brand-200 bg-brand-50/80 px-3 py-1 text-xs font-medium text-brand-700 dark:border-brand-800/70 dark:bg-brand-950/60 dark:text-brand-300">
+        <span class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        {COPY.badge}
+      </span>
+      <span class="mono text-xs text-gray-500 dark:text-gray-400">
+        Agent: <code class="rounded bg-gray-100 px-1.5 py-0.5 text-gray-800 dark:bg-gray-800 dark:text-gray-200">rsi_community_steward</code> · Synced with <code class="rounded bg-gray-100 px-1.5 py-0.5 text-gray-800 dark:bg-gray-800 dark:text-gray-200">community/tasks.yaml</code>
+      </span>
+    </div>
+
+    <h1 class="mt-4 text-3xl font-semibold tracking-tight text-gray-950 sm:text-4xl dark:text-white">
+      {COPY.title}
+    </h1>
+    <p class="mt-3 max-w-4xl text-sm leading-6 text-gray-600 sm:text-base dark:text-gray-300">
+      {COPY.subtitle}
+    </p>
+
+    <div class="mt-6 flex flex-wrap gap-3">
+      <a
+        href={buildProposeTaskPrUrl()}
+        class="inline-flex h-10 items-center gap-2 rounded-lg bg-black px-4 text-sm font-medium text-white transition-colors hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200"
+      >
+        <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 5v14M5 12h14"></path>
+        </svg>
+        <span>{COPY.proposeBtn}</span>
+      </a>
+      <a
+        href={href("/rfcs/rfc-0006-community/")}
+        class="inline-flex h-10 items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 text-sm font-medium text-gray-800 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 dark:hover:bg-gray-800"
+      >
+        <span>{COPY.viewRfcBtn}</span>
+      </a>
+      <a
+        href={href("/forum/")}
+        class="inline-flex h-10 items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 text-sm font-medium text-gray-800 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 dark:hover:bg-gray-800"
+      >
+        <span>{COPY.forumBtn}</span>
+      </a>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="mt-7 grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <div class="rounded-xl border border-gray-200/80 bg-white/90 p-4 dark:border-gray-800 dark:bg-gray-950/80">
+        <div class="text-xs text-gray-500 dark:text-gray-400">{COPY.statOpen}</div>
+        <div class="mt-1 flex items-baseline gap-2">
+          <span class="mono text-2xl font-semibold text-brand-600 dark:text-brand-400">{openCount}</span>
+          <span class="mono text-xs text-gray-500">({totalOpenExp} EXP)</span>
+        </div>
+      </div>
+      <div class="rounded-xl border border-gray-200/80 bg-white/90 p-4 dark:border-gray-800 dark:bg-gray-950/80">
+        <div class="text-xs text-gray-500 dark:text-gray-400">{COPY.statReview}</div>
+        <div class="mt-1 flex items-baseline gap-2">
+          <span class="mono text-2xl font-semibold text-amber-600 dark:text-amber-400">{reviewCount}</span>
+          <span class="mono text-xs text-gray-500">PR Tracking</span>
+        </div>
+      </div>
+      <div class="rounded-xl border border-gray-200/80 bg-white/90 p-4 dark:border-gray-800 dark:bg-gray-950/80">
+        <div class="text-xs text-gray-500 dark:text-gray-400">{COPY.statCompleted}</div>
+        <div class="mt-1 flex items-baseline gap-2">
+          <span class="mono text-2xl font-semibold text-emerald-600 dark:text-emerald-400">{completedCount}</span>
+          <span class="mono text-xs text-gray-500">({totalCompletedExp} EXP)</span>
+        </div>
+      </div>
+      <div class="rounded-xl border border-gray-200/80 bg-white/90 p-4 dark:border-gray-800 dark:bg-gray-950/80">
+        <div class="text-xs text-gray-500 dark:text-gray-400">{COPY.statBudget}</div>
+        <div class="mt-1 flex items-baseline gap-2">
+          <span class="mono text-2xl font-semibold text-purple-600 dark:text-purple-400">$2,000</span>
+          <span class="mono text-xs text-gray-500">/ Month</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Anti-Abuse & Automated Steward Banner -->
+  <div class="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-2">
+    <div class="rounded-xl border border-amber-200/80 bg-amber-50/50 p-4 dark:border-amber-900/60 dark:bg-amber-950/20">
+      <div class="flex items-center gap-2 text-sm font-semibold text-amber-900 dark:text-amber-200">
+        <svg viewBox="0 0 24 24" class="h-4 w-4 shrink-0 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+        <span>{COPY.ruleCap}</span>
+      </div>
+      <p class="mt-1.5 text-xs leading-5 text-amber-800/90 dark:text-amber-300/80">
+        {COPY.ruleCapDesc}
+      </p>
+    </div>
+
+    <div class="rounded-xl border border-blue-200/80 bg-blue-50/50 p-4 dark:border-blue-900/60 dark:bg-blue-950/20">
+      <div class="flex items-center gap-2 text-sm font-semibold text-blue-900 dark:text-blue-200">
+        <svg viewBox="0 0 24 24" class="h-4 w-4 shrink-0 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="11" width="18" height="10" rx="2"></rect>
+          <circle cx="12" cy="5" r="2"></circle>
+          <path d="M12 7v4M8 16h.01M16 16h.01"></path>
+        </svg>
+        <span>{COPY.ruleAgent}</span>
+      </div>
+      <p class="mt-1.5 text-xs leading-5 text-blue-800/90 dark:text-blue-300/80">
+        {COPY.ruleAgentDesc}
+      </p>
+    </div>
+  </div>
+
+  <!-- Interactive Filters -->
+  <div class="mt-8 flex flex-col gap-3 border-b border-gray-200 pb-4 sm:flex-row sm:items-center sm:justify-between dark:border-gray-800" data-quest-filters>
+    <div class="flex flex-wrap gap-1.5" role="group" aria-label="Status Filter">
+      <button
+        type="button"
+        data-filter-status="all"
+        class="quest-status-btn is-active rounded-lg px-3 py-1.5 text-xs font-medium transition-colors"
+      >
+        {COPY.filterStatusAll} ({QUESTS.length})
+      </button>
+      <button
+        type="button"
+        data-filter-status="open"
+        class="quest-status-btn rounded-lg px-3 py-1.5 text-xs font-medium transition-colors"
+      >
+        {COPY.filterStatusOpen} ({openCount})
+      </button>
+      <button
+        type="button"
+        data-filter-status="in_review"
+        class="quest-status-btn rounded-lg px-3 py-1.5 text-xs font-medium transition-colors"
+      >
+        {COPY.filterStatusReview} ({reviewCount})
+      </button>
+      <button
+        type="button"
+        data-filter-status="completed"
+        class="quest-status-btn rounded-lg px-3 py-1.5 text-xs font-medium transition-colors"
+      >
+        {COPY.filterStatusCompleted} ({completedCount})
+      </button>
+    </div>
+
+    <div class="flex flex-wrap gap-1.5" role="group" aria-label="Category Filter">
+      <button
+        type="button"
+        data-filter-cat="all"
+        class="quest-cat-btn is-active rounded-md px-2.5 py-1 text-xs font-medium transition-colors"
+      >
+        {COPY.filterCatAll}
+      </button>
+      {
+        (Object.keys(QUEST_CATEGORIES) as QuestCategory[]).map((cat) => (
+          <button
+            type="button"
+            data-filter-cat={cat}
+            class="quest-cat-btn rounded-md px-2.5 py-1 text-xs font-medium transition-colors"
+          >
+            {QUEST_CATEGORIES[cat][locale]}
+          </button>
+        ))
+      }
+    </div>
+  </div>
+
+  <!-- Quests Cards Grid -->
+  <div class="mt-6 grid grid-cols-1 gap-5 lg:grid-cols-2" data-quests-grid>
+    {
+      QUESTS.map((quest) => {
+        const assigneeMember = quest.assignee ? memberByHandle.get(quest.assignee) : undefined;
+        const statusBadgeClass =
+          quest.status === "open"
+            ? "border-brand-300 bg-brand-50 text-brand-700 dark:border-brand-700 dark:bg-brand-950/70 dark:text-brand-300"
+            : quest.status === "in_review" || quest.status === "claimed"
+              ? "border-amber-300 bg-amber-50 text-amber-700 dark:border-amber-700 dark:bg-amber-950/70 dark:text-amber-300"
+              : "border-emerald-300 bg-emerald-50 text-emerald-700 dark:border-emerald-700 dark:bg-emerald-950/70 dark:text-emerald-300";
+
+        const diffBadgeClass =
+          quest.difficulty === "S"
+            ? "border-purple-300 bg-purple-50 text-purple-700 dark:border-purple-800 dark:bg-purple-950/70 dark:text-purple-300"
+            : quest.difficulty === "A"
+              ? "border-blue-300 bg-blue-50 text-blue-700 dark:border-blue-800 dark:bg-blue-950/70 dark:text-blue-300"
+              : "border-gray-300 bg-gray-100 text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300";
+
+        return (
+          <article
+            id={quest.id.toLowerCase()}
+            data-quest-card
+            data-status={quest.status}
+            data-cat={quest.category}
+            class="flex flex-col justify-between rounded-2xl border border-gray-200 bg-white p-5 shadow-2xs transition-all hover:border-gray-300 dark:border-gray-800 dark:bg-gray-950 dark:hover:border-gray-700"
+          >
+            <div>
+              <!-- Card Top Metadata -->
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="mono rounded-md bg-gray-100 px-2 py-0.5 text-xs font-semibold text-gray-900 dark:bg-gray-800 dark:text-gray-100">
+                    {quest.id}
+                  </span>
+                  <span class:list={["mono rounded-full border px-2.5 py-0.5 text-[11px] font-semibold", statusBadgeClass]}>
+                    {COPY.statusLabels[quest.status]}
+                  </span>
+                  <span class:list={["rounded-full border px-2 py-0.5 text-[11px] font-medium", diffBadgeClass]}>
+                    {COPY.diffLabels[quest.difficulty]}
+                  </span>
+                </div>
+
+                <div class="mono inline-flex items-center gap-1 rounded-lg border border-amber-300/80 bg-amber-50/80 px-2.5 py-1 text-xs font-bold text-amber-800 dark:border-amber-700/70 dark:bg-amber-950/60 dark:text-amber-300">
+                  <span>+{quest.exp} EXP</span>
+                </div>
+              </div>
+
+              <!-- Title & Summary -->
+              <h2 class="mt-3 text-lg font-semibold leading-snug text-gray-950 dark:text-white">
+                {quest.title[locale]}
+              </h2>
+              <p class="mt-2 text-xs leading-5 text-gray-600 sm:text-sm dark:text-gray-400">
+                {quest.summary[locale]}
+              </p>
+
+              <!-- Target Repo & Category -->
+              <div class="mt-3 flex flex-wrap items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
+                <span class="inline-flex items-center gap-1 rounded-md border border-gray-200 bg-gray-50 px-2 py-0.5 dark:border-gray-800 dark:bg-gray-900">
+                  <span class="font-medium text-gray-700 dark:text-gray-300">{QUEST_CATEGORIES[quest.category][locale]}</span>
+                </span>
+                <span class="mono inline-flex items-center gap-1 rounded-md border border-gray-200 bg-gray-50 px-2 py-0.5 dark:border-gray-800 dark:bg-gray-900">
+                  <span>{COPY.targetRepoLabel}:</span>
+                  <a
+                    href={`https://github.com/${quest.targetRepo}`}
+                    class="font-medium text-brand-600 hover:underline dark:text-brand-400"
+                  >
+                    {quest.targetRepo}
+                  </a>
+                </span>
+              </div>
+
+              <!-- Deliverables -->
+              <div class="mt-4 rounded-xl border border-gray-100 bg-gray-50/70 p-3 dark:border-gray-800/80 dark:bg-gray-900/50">
+                <div class="text-[11px] font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                  {COPY.deliverablesLabel}
+                </div>
+                <ul class="mt-1.5 space-y-1 text-xs text-gray-700 dark:text-gray-300">
+                  {quest.deliverables.map((d) => (
+                    <li class="flex items-start gap-1.5">
+                      <span class="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-500" />
+                      <span>{d[locale]}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            <!-- Card Footer: Loot Drops + References + Action Buttons -->
+            <div class="mt-4 border-t border-gray-100 pt-3.5 dark:border-gray-800/80">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <!-- Loot Drops -->
+                <div class="flex flex-wrap items-center gap-1.5">
+                  <span class="text-[11px] font-medium text-gray-400 dark:text-gray-500">{COPY.lootLabel}:</span>
+                  {quest.loot.map((drop) => {
+                    const mat = LOOT_MATERIALS[drop.item];
+                    return (
+                      <span
+                        class="inline-flex items-center gap-1 rounded-lg border border-gray-200 bg-white px-2 py-0.5 text-xs font-medium text-gray-800 shadow-2xs dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200"
+                        title={mat.description[locale]}
+                      >
+                        <LootIcon item={drop.item} class="h-4 w-4 shrink-0" />
+                        <span>{mat.name[locale]}</span>
+                        <span class="mono font-semibold text-brand-600 dark:text-brand-400">×{drop.count}</span>
+                      </span>
+                    );
+                  })}
+                </div>
+
+                <!-- Reference Links -->
+                <div class="flex flex-wrap items-center gap-2">
+                  {quest.references.map((ref) => (
+                    <a
+                      href={ref.url.startsWith("/") ? href(ref.url) : ref.url}
+                      class="mono text-xs font-medium text-brand-600 hover:underline dark:text-brand-400"
+                    >
+                      [{ref.label}]
+                    </a>
+                  ))}
+                </div>
+              </div>
+
+              <!-- Action Row -->
+              <div class="mt-3.5 flex flex-wrap items-center justify-between gap-2">
+                {quest.status === "open" ? (
+                  <div class="flex flex-wrap items-center gap-2">
+                    <a
+                      href={buildClaimIssueUrl(quest, locale)}
+                      class="inline-flex h-8 items-center gap-1.5 rounded-lg bg-brand-600 px-3 text-xs font-semibold text-white transition-colors hover:bg-brand-500"
+                    >
+                      <svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.2">
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                      </svg>
+                      <span>{COPY.claimBtn}</span>
+                    </a>
+                    <a
+                      href={`https://github.com/${quest.targetRepo}/pulls`}
+                      class="inline-flex h-8 items-center gap-1 rounded-lg border border-gray-200 bg-white px-2.5 text-xs font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800"
+                    >
+                      <span>{COPY.submitPrBtn}</span>
+                    </a>
+                  </div>
+                ) : (
+                  <div class="flex flex-wrap items-center justify-between w-full gap-2">
+                    <div class="flex items-center gap-2">
+                      {assigneeMember && (
+                        <img
+                          src={assigneeMember.avatar}
+                          alt={assigneeMember.name}
+                          class="h-6 w-6 rounded-full border border-gray-200 dark:border-gray-700"
+                          loading="lazy"
+                        />
+                      )}
+                      <span class="text-xs text-gray-600 dark:text-gray-300">
+                        {COPY.assigneeLabel}:{" "}
+                        <a
+                          href={`https://github.com/${quest.assignee}`}
+                          class="mono font-semibold text-gray-900 hover:underline dark:text-white"
+                        >
+                          @{quest.assignee}
+                        </a>
+                      </span>
+                      {quest.status === "in_review" && assigneeMember && assigneeMember.activeClaims >= 2 && (
+                        <span class="mono rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-medium text-amber-800 dark:bg-amber-950/80 dark:text-amber-300">
+                          {COPY.capFullHint}
+                        </span>
+                      )}
+                    </div>
+
+                    {quest.linkedPrUrl && (
+                      <a
+                        href={quest.linkedPrUrl}
+                        class="inline-flex h-8 items-center gap-1.5 rounded-lg border border-gray-200 bg-gray-50 px-3 text-xs font-medium text-gray-800 transition-colors hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 dark:hover:bg-gray-800"
+                      >
+                        <span>{COPY.viewPrBtn}</span>
+                        <svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M7 17L17 7M7 7h10v10" />
+                        </svg>
+                      </a>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+          </article>
+        );
+      })
+    }
+  </div>
+
+  <!-- Monthly $2,000 USD Reward Pool & Live EXP Leaderboard -->
+  <section id="rewards" class="mt-16 scroll-mt-20">
+    <div class="rounded-2xl border border-gray-200 bg-white p-6 sm:p-8 dark:border-gray-800 dark:bg-gray-950">
+      <div class="max-w-3xl">
+        <h2 class="text-2xl font-semibold tracking-tight text-gray-950 sm:text-3xl dark:text-white">
+          {COPY.rewardSectionTitle}
+        </h2>
+        <p class="mt-2 text-sm leading-6 text-gray-600 dark:text-gray-400">
+          {COPY.rewardSectionDesc}
+        </p>
+      </div>
+
+      <!-- 3 Budget Pools -->
+      <div class="mt-6 grid grid-cols-1 gap-4 md:grid-cols-3">
+        <div class="rounded-xl border border-brand-200/80 bg-brand-50/30 p-4 dark:border-brand-900/50 dark:bg-brand-950/20">
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-semibold text-gray-900 dark:text-white">{COPY.pool1Title}</span>
+            <span class="mono rounded-md bg-brand-600 px-2 py-0.5 text-xs font-bold text-white">{COPY.pool1Amount}</span>
+          </div>
+          <p class="mt-2 text-xs leading-5 text-gray-600 dark:text-gray-400">{COPY.pool1Desc}</p>
+        </div>
+
+        <div class="rounded-xl border border-purple-200/80 bg-purple-50/30 p-4 dark:border-purple-900/50 dark:bg-purple-950/20">
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-semibold text-gray-900 dark:text-white">{COPY.pool2Title}</span>
+            <span class="mono rounded-md bg-purple-600 px-2 py-0.5 text-xs font-bold text-white">{COPY.pool2Amount}</span>
+          </div>
+          <p class="mt-2 text-xs leading-5 text-gray-600 dark:text-gray-400">{COPY.pool2Desc}</p>
+        </div>
+
+        <div class="rounded-xl border border-emerald-200/80 bg-emerald-50/30 p-4 dark:border-emerald-900/50 dark:bg-emerald-950/20">
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-semibold text-gray-900 dark:text-white">{COPY.pool3Title}</span>
+            <span class="mono rounded-md bg-emerald-600 px-2 py-0.5 text-xs font-bold text-white">{COPY.pool3Amount}</span>
+          </div>
+          <p class="mt-2 text-xs leading-5 text-gray-600 dark:text-gray-400">{COPY.pool3Desc}</p>
+        </div>
+      </div>
+
+      <!-- Monthly Contributor EXP Leaderboard Table -->
+      <div class="mt-7 overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-800">
+        <table class="w-full text-left text-sm">
+          <thead class="border-b border-gray-200 bg-gray-50 text-xs font-semibold uppercase text-gray-600 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300">
+            <tr>
+              <th class="px-4 py-3">{COPY.thRank}</th>
+              <th class="px-4 py-3">{COPY.thContributor}</th>
+              <th class="px-4 py-3">{COPY.thQuests}</th>
+              <th class="px-4 py-3">{COPY.thLoot}</th>
+              <th class="px-4 py-3">{COPY.thExp}</th>
+              <th class="px-4 py-3">{COPY.thReward}</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200 dark:divide-gray-800">
+            {
+              leaderboardRows.map((row) => {
+                const m = row.member;
+                const advRank =
+                  [...ADVENTURER_RANKS].reverse().find((r) => m.completedExp >= r.minExp) ?? ADVENTURER_RANKS[0];
+                return (
+                  <tr class="hover:bg-gray-50/70 dark:hover:bg-gray-900/40">
+                    <td class="mono px-4 py-3.5 font-bold text-gray-900 dark:text-white">#{row.rank}</td>
+                    <td class="px-4 py-3.5">
+                      <div class="flex items-center gap-3">
+                        <img
+                          src={m.avatar}
+                          alt={m.name}
+                          class="h-9 w-9 rounded-full border border-gray-200 dark:border-gray-700"
+                          loading="lazy"
+                        />
+                        <div>
+                          <div class="flex flex-wrap items-center gap-2">
+                            <a
+                              href={m.github}
+                              class="font-semibold text-gray-950 hover:underline dark:text-white"
+                            >
+                              {locale === "zh" ? m.nameZh : m.name}
+                            </a>
+                            <span class="mono text-xs text-gray-500">@{m.handle}</span>
+                          </div>
+                          <div class="mt-0.5 flex flex-wrap items-center gap-1.5">
+                            <span class:list={["inline-flex rounded border px-1.5 py-0.2 text-[11px] font-medium", advRank.badgeColor]}>
+                              {advRank.title[locale]}
+                            </span>
+                            <span class="mono text-[11px] text-gray-500">
+                              Claims: {m.activeClaims}/{m.maxClaims}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="px-4 py-3.5">
+                      <div class="flex flex-wrap gap-1">
+                        {m.completedQuests.map((qid) => (
+                          <a
+                            href={`#${qid.toLowerCase()}`}
+                            class="mono rounded bg-emerald-50 px-1.5 py-0.5 text-xs font-medium text-emerald-700 hover:underline dark:bg-emerald-950/60 dark:text-emerald-300"
+                          >
+                            {qid}
+                          </a>
+                        ))}
+                        {m.activeQuests.map((qid) => (
+                          <a
+                            href={`#${qid.toLowerCase()}`}
+                            class="mono rounded bg-amber-50 px-1.5 py-0.5 text-xs font-medium text-amber-700 hover:underline dark:bg-amber-950/60 dark:text-amber-300"
+                          >
+                            {qid} (PR)
+                          </a>
+                        ))}
+                      </div>
+                    </td>
+                    <td class="px-4 py-3.5">
+                      <div class="flex flex-wrap items-center gap-1.5">
+                        {m.lootInventory.map((slot) => (
+                          <span
+                            class="inline-flex items-center gap-0.5 rounded border border-gray-200 bg-gray-50 px-1.5 py-0.5 text-xs dark:border-gray-700 dark:bg-gray-900"
+                            title={LOOT_MATERIALS[slot.item].name[locale]}
+                          >
+                            <LootIcon item={slot.item} class="h-3.5 w-3.5" />
+                            <span class="mono text-[11px] font-semibold">×{slot.count}</span>
+                          </span>
+                        ))}
+                      </div>
+                    </td>
+                    <td class="px-4 py-3.5">
+                      <div class="mono font-semibold text-gray-900 dark:text-white">
+                        {row.completedExp} EXP{" "}
+                        <span class="text-xs font-normal text-gray-500">({row.expSharePercent}%)</span>
+                      </div>
+                      {row.inReviewExp > 0 && (
+                        <div class="mono text-[11px] text-amber-600 dark:text-amber-400">
+                          +{row.inReviewExp} EXP in PR review
+                        </div>
+                      )}
+                    </td>
+                    <td class="px-4 py-3.5">
+                      <div class="mono text-sm font-bold text-emerald-600 dark:text-emerald-400">
+                        ~${row.totalEstimatedUsd} USD
+                      </div>
+                      <div class="mono text-[11px] text-gray-500">
+                        ${row.proportionalUsd} (EXP) + ${row.topBonusUsd} (Top) + ${row.committeeStipendUsd} (Committee)
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gamified Crafting Loot Codex & Ranks -->
+  <section id="loot-codex" class="mt-12 scroll-mt-20">
+    <div class="rounded-2xl border border-gray-200 bg-white p-6 sm:p-8 dark:border-gray-800 dark:bg-gray-950">
+      <h2 class="text-2xl font-semibold tracking-tight text-gray-950 dark:text-white">
+        {COPY.codexTitle}
+      </h2>
+      <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+        {COPY.codexDesc}
+      </p>
+
+      <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        {
+          (Object.keys(LOOT_MATERIALS) as LootId[]).map((id) => {
+            const mat = LOOT_MATERIALS[id];
+            return (
+              <div class="flex flex-col justify-between rounded-xl border border-gray-200 bg-gray-50/60 p-4 dark:border-gray-800 dark:bg-gray-900/50">
+                <div>
+                  <div class="flex items-center gap-3">
+                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-gray-200 bg-white shadow-2xs dark:border-gray-700 dark:bg-gray-950">
+                      <LootIcon item={id} class="h-9 w-9" />
+                    </div>
+                    <div>
+                      <div class="text-sm font-semibold text-gray-950 dark:text-white">{mat.name[locale]}</div>
+                      <div class="mono text-[11px] font-medium" style={`color: ${mat.color}`}>
+                        {mat.rarity[locale]}
+                      </div>
+                    </div>
+                  </div>
+                  <p class="mt-3 text-xs leading-5 text-gray-600 dark:text-gray-400">
+                    {mat.description[locale]}
+                  </p>
+                </div>
+                <div class="mt-3 border-t border-gray-200/70 pt-2 text-[11px] text-gray-500 dark:border-gray-800 dark:text-gray-400">
+                  {mat.sourceHint[locale]}
+                </div>
+              </div>
+            );
+          })
+        }
+      </div>
+
+      <!-- Adventurer Ranks -->
+      <h3 class="mt-8 text-base font-semibold text-gray-900 dark:text-white">
+        {COPY.ranksTitle}
+      </h3>
+      <div class="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-5">
+        {
+          ADVENTURER_RANKS.map((r) => (
+            <div class="rounded-xl border border-gray-200 p-3.5 dark:border-gray-800">
+              <div class="flex items-center justify-between gap-2">
+                <span class:list={["rounded border px-2 py-0.5 text-xs font-semibold", r.badgeColor]}>
+                  {r.title[locale]}
+                </span>
+                <span class="mono text-xs font-semibold text-gray-500">{r.minExp}+ EXP</span>
+              </div>
+              <p class="mt-2 text-xs leading-5 text-gray-600 dark:text-gray-400">{r.perks[locale]}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</div>
+
+<style>
+  .quest-status-btn,
+  .quest-cat-btn {
+    border: 1px solid var(--color-gray-200, #e5e7eb);
+    background: transparent;
+    color: var(--color-gray-600, #4b5563);
+  }
+  :global(.dark) .quest-status-btn,
+  :global(.dark) .quest-cat-btn {
+    border-color: #1f2937;
+    color: #9ca3af;
+  }
+  .quest-status-btn.is-active,
+  .quest-cat-btn.is-active {
+    background: #111827;
+    color: #ffffff;
+    border-color: #111827;
+  }
+  :global(.dark) .quest-status-btn.is-active,
+  :global(.dark) .quest-cat-btn.is-active {
+    background: #ffffff;
+    color: #030712;
+    border-color: #ffffff;
+  }
+</style>
+
+<script>
+  const filterContainer = document.querySelector("[data-quest-filters]");
+  if (filterContainer) {
+    let activeStatus = "all";
+    let activeCat = "all";
+
+    const statusBtns = filterContainer.querySelectorAll<HTMLButtonElement>("[data-filter-status]");
+    const catBtns = filterContainer.querySelectorAll<HTMLButtonElement>("[data-filter-cat]");
+    const cards = document.querySelectorAll<HTMLElement>("[data-quest-card]");
+
+    const updateCards = () => {
+      for (const card of cards) {
+        const st = card.dataset.status || "";
+        const cat = card.dataset.cat || "";
+        const matchStatus = activeStatus === "all" || st === activeStatus;
+        const matchCat = activeCat === "all" || cat === activeCat;
+        card.style.display = matchStatus && matchCat ? "" : "none";
+      }
+    };
+
+    statusBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        activeStatus = btn.dataset.filterStatus || "all";
+        statusBtns.forEach((b) => b.classList.toggle("is-active", b === btn));
+        updateCards();
+      });
+    });
+
+    catBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        activeCat = btn.dataset.filterCat || "all";
+        catBtns.forEach((b) => b.classList.toggle("is-active", b === btn));
+        updateCards();
+      });
+    });
+  }
+</script>

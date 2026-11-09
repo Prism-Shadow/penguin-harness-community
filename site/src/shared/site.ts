@@ -200,6 +200,9 @@ export function navLinks(locale: Locale) {
   const s = STRINGS[locale].nav;
   return [
     { id: "overview", label: s.overview, href: localePath(locale, "/") },
+    { id: "quests", label: s.quests, href: localePath(locale, "/quests/") },
+    { id: "forum", label: s.forum, href: localePath(locale, "/forum/") },
+    { id: "people", label: s.people, href: localePath(locale, "/people/") },
     { id: "roadmap", label: s.roadmap, href: localePath(locale, "/roadmap/") },
     { id: "workflow", label: s.workflow, href: localePath(locale, "/workflow/") },
     { id: "rfc", label: s.rfc, href: localePath(locale, "/rfcs/") },

@@ -21,6 +21,9 @@ export const STRINGS = {
     description: "Shared RSI Community — RSI Benchmark × Evaluation × Algorithm",
     nav: {
       overview: "Overview",
+      quests: "Quests & Bounties",
+      forum: "Tavern Forum",
+      people: "People & Committee",
       roadmap: "Roadmap",
       workflow: "Workflow",
       rfc: "RFCs",
@@ -68,6 +71,9 @@ export const STRINGS = {
     description: "Shared RSI Community — RSI Benchmark × Evaluation × Algorithm",
     nav: {
       overview: "概览",
+      quests: "任务悬赏",
+      forum: "社区酒馆",
+      people: "成员与委员会",
       roadmap: "路线图",
       workflow: "流程",
       rfc: "标准文件",

@@ -9,3 +9,4 @@
 | [RFC-0003](RFC-0003-plugin.md) | Plugin | Standard Plugin file structure | Draft |
 | [RFC-0004](RFC-0004-meeting.md) | Bi-weekly Meeting | Community bi-weekly meeting workflow | Draft |
 | [RFC-0005](RFC-0005-leaderboard.md) | Leaderboard | Standard Leaderboard chart configuration format | Draft |
+| [RFC-0006](RFC-0006-community.md) | Community & Rewards | Community quests, automated agent governance, and monthly reward protocol | Draft |

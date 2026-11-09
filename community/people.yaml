@@ -1,0 +1,160 @@
+# Shared RSI Community — Founding Members, Committee & Contributors Registry
+# Founding members: Yaowei Zheng, Leijun Zhou, Zhihao Liu, Xiang Qu.
+# Committee members are appointed by repository administrators from active community
+# members and top contributors. Each active committee seat carries a fixed monthly
+# stipend equivalent to $100 USD (tokens, compute vouchers, or server credits).
+
+version: 1
+stipend_per_seat_usd: 100
+
+founding_members:
+  - handle: "hiyouga"
+    name: "Yaowei Zheng"
+    name_zh: "郑耀威 (Yaowei Zheng)"
+    role: "Founding Lead · PenguinHarness & RSI Architecture"
+    role_zh: "社区发起人 · PenguinHarness 与自进化架构负责人"
+    github: "https://github.com/hiyouga"
+    avatar: "https://avatars.githubusercontent.com/u/16256802?v=4"
+    rank: "Lv.5 Recursive Archon"
+    rank_zh: "Lv.5 递归执政官"
+    exp: 1350
+    active_claims: 2
+
+  - handle: "Saigyouji-Yuyuko1000"
+    name: "Leijun Zhou"
+    name_zh: "周磊俊 (Leijun Zhou)"
+    role: "Founding Member · Benchmark & Leaderboard Lead"
+    role_zh: "创始核心成员 · 评测基准与排行榜负责人"
+    github: "https://github.com/Saigyouji-Yuyuko1000"
+    avatar: "https://avatars.githubusercontent.com/u/82754509?v=4"
+    rank: "Lv.4 RSI Alchemist"
+    rank_zh: "Lv.4 进化炼金师"
+    exp: 1300
+    active_claims: 0
+
+  - handle: "lzh368"
+    name: "Zhihao Liu"
+    name_zh: "刘志豪 (Zhihao Liu)"
+    role: "Founding Member · RSI Algorithms & Paper Reproduction"
+    role_zh: "创始核心成员 · RSI 自进化算法与论文复现负责人"
+    github: "https://github.com/lzh368"
+    avatar: "https://avatars.githubusercontent.com/u/174015635?v=4"
+    rank: "Lv.3 Harness Artisan"
+    rank_zh: "Lv.3 框架工匠"
+    exp: 500
+    active_claims: 0
+
+  - handle: "ArisaZz"
+    name: "Xiang Qu"
+    name_zh: "曲翔 (Xiang Qu)"
+    role: "Founding Member · Ecosystem Standards & Community Operations"
+    role_zh: "创始核心成员 · 社区协议标准与生态运营负责人"
+    github: "https://github.com/ArisaZz"
+    avatar: "https://avatars.githubusercontent.com/u/74355374?v=4"
+    rank: "Lv.3 Harness Artisan"
+    rank_zh: "Lv.3 框架工匠"
+    exp: 500
+    active_claims: 0
+
+committee_domains:
+  - id: "harness-infra"
+    title: "Harness & Runtime Architecture Committee"
+    title_zh: "框架与运行时基建委员会"
+    scope: "Core PenguinHarness runtime, Agent State, trace compaction, A2UI, and cross-framework adapters."
+    scope_zh: "负责 PenguinHarness 核心运行时、Agent State 规范、Trace 压缩交接、A2UI 及跨框架（LangGraph / Dify）适配任务发布与评审。"
+    seats:
+      - status: "filled"
+        handle: "hiyouga"
+        name: "Yaowei Zheng"
+        role: "Committee Chair"
+        role_zh: "委员会主委"
+        github: "https://github.com/hiyouga"
+        stipend_usd: 100
+      - status: "recruiting"
+        role: "Co-Chair (Cross-Framework & Runtime)"
+        role_zh: "联合委员（跨框架与运行时方向 · 正在招募）"
+        stipend_usd: 100
+
+  - id: "benchmark-leaderboard"
+    title: "Benchmark & Leaderboard Evaluation Committee"
+    title_zh: "评测基准与榜单委员会"
+    scope: "Standard Benchmarks (RFC-0001), Evaluation verification (RFC-0002), and Leaderboard curation (RFC-0005)."
+    scope_zh: "负责 Benchmark 准入校验（RFC-0001）、实验轨迹核验（RFC-0002）以及 Harness Comparison / GDPEVO Essential 榜单维护。"
+    seats:
+      - status: "filled"
+        handle: "Saigyouji-Yuyuko1000"
+        name: "Leijun Zhou"
+        role: "Committee Chair"
+        role_zh: "委员会主委"
+        github: "https://github.com/Saigyouji-Yuyuko1000"
+        stipend_usd: 100
+      - status: "recruiting"
+        role: "Co-Chair (Multi-Model & Reproducibility)"
+        role_zh: "联合委员（多模型进化评测与复现审计 · 正在招募）"
+        stipend_usd: 100
+
+  - id: "harness-evolution-rsi"
+    title: "Harness Self-Evolution & Generalization Committee"
+    title_zh: "Harness 自进化与泛化算法委员会"
+    scope: "Regularized harness evolution (RRSI), ACE, OPRO, anti-overfitting critics, token pruning, and OOD transfer across benchmarks."
+    scope_zh: "聚焦 Harness 自身演化与跨分布泛化（如 RRSI 正则化进化、ACE、OPRO、防基准过拟合 Critic 与 Pruner）的算法研究与复现。"
+    seats:
+      - status: "filled"
+        handle: "lzh368"
+        name: "Zhihao Liu"
+        role: "Committee Chair"
+        role_zh: "委员会主委"
+        github: "https://github.com/lzh368"
+        stipend_usd: 100
+      - status: "recruiting"
+        role: "Co-Chair (Regularized RSI & Generalization)"
+        role_zh: "联合委员（RRSI 正则化进化与泛化方向 · 正在招募）"
+        stipend_usd: 100
+
+  - id: "community-evangelism"
+    title: "Community Operations, Standards & Tutorials Committee"
+    title_zh: "社区标准、运营与趣味教程委员会"
+    scope: "Fun beginner RSI tutorials for the Penguin blog, bi-weekly paper reading club (RFC-0004), Discord/WeChat digest, and monthly EXP settlement."
+    scope_zh: "负责 Penguin 博客趣味入门教程策划、双周会论文精读主持（RFC-0004）、社群日报/论坛运营及每月末 2000 美元奖励池的核算公示。"
+    seats:
+      - status: "filled"
+        handle: "ArisaZz"
+        name: "Xiang Qu"
+        role: "Committee Chair"
+        role_zh: "委员会主委"
+        github: "https://github.com/ArisaZz"
+        stipend_usd: 100
+      - status: "recruiting"
+        role: "Co-Chair (Blog Tutorials & Community Growth)"
+        role_zh: "联合委员（官方博客教程与社区增长方向 · 正在招募）"
+        stipend_usd: 100
+
+  - id: "env-exploration-rsi"
+    title: "Environment Interaction & Exploration RSI Committee"
+    title_zh: "环境交互与自主探索 RSI 委员会"
+    scope: "Autonomous environment exploration (RSIAgent), causal world memory, OSWorld / GUI / Embodied RSI, and RSI Arena human feedback loops."
+    scope_zh: "聚焦环境探索型 RSI（如 RSIAgent 广度-深度探索、因果记忆构建）与 RSI Arena 人类偏好反馈自进化方向的论文复现、课题发布与评审。"
+    seats:
+      - status: "recruiting"
+        role: "Domain Chair (Environment Exploration & RSIAgent)"
+        role_zh: "领域主委（环境交互探索与 RSIAgent 方向 · 正在招募）"
+        stipend_usd: 100
+      - status: "recruiting"
+        role: "Co-Chair (Human-Feedback & RSI Arena)"
+        role_zh: "联合委员（人类反馈闭环与 RSI Arena 方向 · 正在招募）"
+        stipend_usd: 100
+
+  - id: "plugin-ontology"
+    title: "Plugin Ecosystem, Knowledge Base & Ontology Committee"
+    title_zh: "插件市场、知识库与本体（Ontology）委员会"
+    scope: "Plugin registry (RFC-0003), Self-Evolving Knowledge Base plugin, Ontology & Causal Action Graph plugin, and Workbench ecosystem."
+    scope_zh: "负责插件生态（RFC-0003）、自演化知识库插件、Ontology 本体建模插件与 Workbench 应用的架构设计、任务发布与安全审查。"
+    seats:
+      - status: "recruiting"
+        role: "Domain Chair (Knowledge Base & Ontology Engine)"
+        role_zh: "领域主委（知识库与 Ontology 本体引擎方向 · 正在招募）"
+        stipend_usd: 100
+      - status: "recruiting"
+        role: "Co-Chair (Plugin Security & Workbench Ecosystem)"
+        role_zh: "联合委员（插件审计与 Workbench 生态方向 · 正在招募）"
+        stipend_usd: 100
