@@ -1,24 +1,25 @@
-# Shared RSI Community — RSI Community Committee Registry
-# All members use the default avatar (/avatar-default.svg).
-# Committee is organized into three groups:
-# 1. Maintenance Group (维护小组)
-# 2. Proposal Group (提案小组)
-# 3. Review Group (审核小组)
+# Shared RSI Community — RSI Community Committee & Contributor Leaderboard Registry
+# 1. RSI Community Committee (¥1,000 RMB / month fixed incentive in Token credits / compute vouchers, apply via WeChat group):
+#    - Project Leadership (项目主导方)
+#    - Proposal Group (提案小组)
+#    - Review Group (审核小组)
+# 2. Contributor Leaderboard (¥10,000 RMB / month reward pool = ¥7,000 proportional by monthly EXP + ¥3,000 Top-5 bonus)
 
 version: 1
-stipend_per_seat_usd: 100
+committee_monthly_stipend_rmb: 1000
+contributor_monthly_pool_rmb: 10000
 
 committee_groups:
-  - id: "maintenance"
-    title: "Maintenance Group"
-    title_zh: "维护小组"
+  - id: "leadership"
+    title: "Project Leadership"
+    title_zh: "项目主导方"
     members:
       - name: "Yaowei Zheng"
         handle: "hiyouga"
         github: "https://github.com/hiyouga"
         avatar: "/avatar-default.svg"
-        direction: "Benchmark, RSI Algorithm"
-        direction_zh: "Benchmark 方向，RSI 算法方向"
+        tags: ["Benchmark", "Algorithm", "Harness"]
+        tags_zh: ["Benchmark", "算法", "Harness"]
 
   - id: "proposal"
     title: "Proposal Group"
@@ -28,14 +29,14 @@ committee_groups:
         handle: "ArisaZz"
         github: "https://github.com/ArisaZz"
         avatar: "/avatar-default.svg"
-        direction: "RSI Algorithm"
-        direction_zh: "RSI 算法方向"
+        tags: ["Algorithm"]
+        tags_zh: ["算法"]
       - name: "Zhihao Liu"
         handle: "lzh368"
         github: "https://github.com/lzh368"
         avatar: "/avatar-default.svg"
-        direction: "Benchmark"
-        direction_zh: "Benchmark 方向"
+        tags: ["Benchmark"]
+        tags_zh: ["Benchmark"]
 
   - id: "review"
     title: "Review Group"
@@ -45,11 +46,33 @@ committee_groups:
         handle: "Saigyouji-Yuyuko1000"
         github: "https://github.com/Saigyouji-Yuyuko1000"
         avatar: "/avatar-default.svg"
-        direction: "RSI Algorithm"
-        direction_zh: "RSI 算法方向"
+        tags: ["Algorithm"]
+        tags_zh: ["算法"]
       - name: "Zhihao Liu"
         handle: "lzh368"
         github: "https://github.com/lzh368"
         avatar: "/avatar-default.svg"
-        direction: "Benchmark"
-        direction_zh: "Benchmark 方向"
+        tags: ["Benchmark"]
+        tags_zh: ["Benchmark"]
+
+contributors:
+  - name: "Yaowei Zheng"
+    handle: "hiyouga"
+    github: "https://github.com/hiyouga"
+    monthly_exp: 150
+    total_exp: 350
+  - name: "Leijun Zhou"
+    handle: "Saigyouji-Yuyuko1000"
+    github: "https://github.com/Saigyouji-Yuyuko1000"
+    monthly_exp: 100
+    total_exp: 250
+  - name: "Zhihao Liu"
+    handle: "lzh368"
+    github: "https://github.com/lzh368"
+    monthly_exp: 50
+    total_exp: 150
+  - name: "Xiang Qu"
+    handle: "ArisaZz"
+    github: "https://github.com/ArisaZz"
+    monthly_exp: 50
+    total_exp: 150

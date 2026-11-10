@@ -25,6 +25,7 @@ export interface QuestReference {
 
 export interface QuestItem {
   id: string;
+  issueNumber: number;
   status: QuestStatus;
   domain: QuestDomainId;
   exp: number;
@@ -38,6 +39,7 @@ export interface QuestItem {
 export const QUESTS: QuestItem[] = [
   {
     id: "RSI-Q001",
+    issueNumber: 30,
     status: "open",
     domain: "benchmark",
     exp: 50,
@@ -54,10 +56,11 @@ export const QUESTS: QuestItem[] = [
       { label: "Paper (arXiv:2310.06770)", url: "https://arxiv.org/abs/2310.06770" },
       { label: "penguin-harness-benchmark", url: "https://github.com/Prism-Shadow/penguin-harness-benchmark" },
     ],
-    issueUrl: `${REPO_URL}/issues`,
+    issueUrl: "https://github.com/Prism-Shadow/penguin-harness-community/issues/30",
   },
   {
     id: "RSI-Q002",
+    issueNumber: 31,
     status: "open",
     domain: "benchmark",
     exp: 50,
@@ -73,10 +76,11 @@ export const QUESTS: QuestItem[] = [
       { label: "deeplethe/fde-gym", url: "https://github.com/deeplethe/fde-gym" },
       { label: "penguin-harness-benchmark", url: "https://github.com/Prism-Shadow/penguin-harness-benchmark" },
     ],
-    issueUrl: `${REPO_URL}/issues`,
+    issueUrl: "https://github.com/Prism-Shadow/penguin-harness-community/issues/31",
   },
   {
     id: "RSI-Q003",
+    issueNumber: 32,
     status: "open",
     domain: "evaluation",
     exp: 50,
@@ -93,10 +97,11 @@ export const QUESTS: QuestItem[] = [
       { label: "Harness Comparison Leaderboard", url: "https://penguin.ooo/leaderboards/harness-comparison" },
       { label: "penguin-harness-benchmark", url: "https://github.com/Prism-Shadow/penguin-harness-benchmark" },
     ],
-    issueUrl: `${REPO_URL}/issues`,
+    issueUrl: "https://github.com/Prism-Shadow/penguin-harness-community/issues/32",
   },
   {
     id: "RSI-Q004",
+    issueNumber: 33,
     status: "open",
     domain: "evaluation",
     exp: 50,
@@ -112,10 +117,11 @@ export const QUESTS: QuestItem[] = [
       { label: "GDPEVO Essential Leaderboard", url: "https://penguin.ooo/leaderboards/gdpevo-essential" },
       { label: "penguin-harness-benchmark", url: "https://github.com/Prism-Shadow/penguin-harness-benchmark" },
     ],
-    issueUrl: `${REPO_URL}/issues`,
+    issueUrl: "https://github.com/Prism-Shadow/penguin-harness-community/issues/33",
   },
   {
     id: "RSI-Q005",
+    issueNumber: 34,
     status: "open",
     domain: "rsi-algorithm",
     exp: 50,
@@ -131,10 +137,11 @@ export const QUESTS: QuestItem[] = [
       { label: "RSIAgent Paper (arXiv:2609.15364)", url: "https://arxiv.org/abs/2609.15364" },
       { label: "penguin-harness-plugins", url: "https://github.com/Prism-Shadow/penguin-harness-plugins" },
     ],
-    issueUrl: `${REPO_URL}/issues`,
+    issueUrl: "https://github.com/Prism-Shadow/penguin-harness-community/issues/34",
   },
   {
     id: "RSI-Q006",
+    issueNumber: 35,
     status: "open",
     domain: "rsi-algorithm",
     exp: 50,
@@ -151,10 +158,11 @@ export const QUESTS: QuestItem[] = [
       { label: "google-research/rrsi", url: "https://github.com/google-research/rrsi" },
       { label: "penguin-harness-plugins", url: "https://github.com/Prism-Shadow/penguin-harness-plugins" },
     ],
-    issueUrl: `${REPO_URL}/issues`,
+    issueUrl: "https://github.com/Prism-Shadow/penguin-harness-community/issues/35",
   },
   {
     id: "RSI-Q007",
+    issueNumber: 36,
     status: "open",
     domain: "penguin-harness",
     exp: 50,
@@ -170,10 +178,11 @@ export const QUESTS: QuestItem[] = [
       { label: "penguin-harness", url: "https://github.com/Prism-Shadow/penguin-harness" },
       { label: "penguin-harness-plugins", url: "https://github.com/Prism-Shadow/penguin-harness-plugins" },
     ],
-    issueUrl: `${REPO_URL}/issues`,
+    issueUrl: "https://github.com/Prism-Shadow/penguin-harness-community/issues/36",
   },
   {
     id: "RSI-Q008",
+    issueNumber: 37,
     status: "open",
     domain: "penguin-harness",
     exp: 50,
@@ -189,7 +198,7 @@ export const QUESTS: QuestItem[] = [
       { label: "penguin-harness", url: "https://github.com/Prism-Shadow/penguin-harness" },
       { label: "penguin-harness-plugins", url: "https://github.com/Prism-Shadow/penguin-harness-plugins" },
     ],
-    issueUrl: `${REPO_URL}/issues`,
+    issueUrl: "https://github.com/Prism-Shadow/penguin-harness-community/issues/37",
   },
 ];
 
@@ -197,7 +206,7 @@ export interface CommitteeGroupMember {
   name: string;
   handle: string;
   github: string;
-  direction: Text;
+  tags: Text[];
 }
 
 export interface CommitteeGroup {
@@ -208,14 +217,18 @@ export interface CommitteeGroup {
 
 export const COMMITTEE_GROUPS: CommitteeGroup[] = [
   {
-    id: "maintenance",
-    title: { zh: "维护小组", en: "Maintenance Group" },
+    id: "leadership",
+    title: { zh: "项目主导方", en: "Project Leadership" },
     members: [
       {
         name: "Yaowei Zheng",
         handle: "hiyouga",
         github: "https://github.com/hiyouga",
-        direction: { zh: "Benchmark 方向，RSI 算法方向", en: "Benchmark, RSI Algorithm" },
+        tags: [
+          { zh: "Benchmark", en: "Benchmark" },
+          { zh: "算法", en: "Algorithm" },
+          { zh: "Harness", en: "Harness" },
+        ],
       },
     ],
   },
@@ -227,13 +240,13 @@ export const COMMITTEE_GROUPS: CommitteeGroup[] = [
         name: "Xiang Qu",
         handle: "ArisaZz",
         github: "https://github.com/ArisaZz",
-        direction: { zh: "RSI 算法方向", en: "RSI Algorithm" },
+        tags: [{ zh: "算法", en: "Algorithm" }],
       },
       {
         name: "Zhihao Liu",
         handle: "lzh368",
         github: "https://github.com/lzh368",
-        direction: { zh: "Benchmark 方向", en: "Benchmark" },
+        tags: [{ zh: "Benchmark", en: "Benchmark" }],
       },
     ],
   },
@@ -245,23 +258,113 @@ export const COMMITTEE_GROUPS: CommitteeGroup[] = [
         name: "Leijun Zhou",
         handle: "Saigyouji-Yuyuko1000",
         github: "https://github.com/Saigyouji-Yuyuko1000",
-        direction: { zh: "RSI 算法方向", en: "RSI Algorithm" },
+        tags: [{ zh: "算法", en: "Algorithm" }],
       },
       {
         name: "Zhihao Liu",
         handle: "lzh368",
         github: "https://github.com/lzh368",
-        direction: { zh: "Benchmark 方向", en: "Benchmark" },
+        tags: [{ zh: "Benchmark", en: "Benchmark" }],
       },
     ],
   },
 ];
 
+export interface ContributorStats {
+  name: string;
+  handle: string;
+  github: string;
+  monthlyExp: number;
+  totalExp: number;
+}
+
+export const CONTRIBUTORS: ContributorStats[] = [
+  {
+    name: "Yaowei Zheng",
+    handle: "hiyouga",
+    github: "https://github.com/hiyouga",
+    monthlyExp: 150,
+    totalExp: 350,
+  },
+  {
+    name: "Leijun Zhou",
+    handle: "Saigyouji-Yuyuko1000",
+    github: "https://github.com/Saigyouji-Yuyuko1000",
+    monthlyExp: 100,
+    totalExp: 250,
+  },
+  {
+    name: "Zhihao Liu",
+    handle: "lzh368",
+    github: "https://github.com/lzh368",
+    monthlyExp: 50,
+    totalExp: 150,
+  },
+  {
+    name: "Xiang Qu",
+    handle: "ArisaZz",
+    github: "https://github.com/ArisaZz",
+    monthlyExp: 50,
+    totalExp: 150,
+  },
+];
+
+export interface RankedContributorRow {
+  rank: number;
+  name: string;
+  handle: string;
+  github: string;
+  exp: number;
+  sharePercent: number;
+  proportionalRmb: number;
+  topBonusRmb: number;
+  totalEstimatedRmb: number;
+}
+
+export function computeContributorRankings(): {
+  monthly: RankedContributorRow[];
+  allTime: { rank: number; name: string; handle: string; github: string; exp: number }[];
+} {
+  // Monthly Pool: ¥10,000 RMB total = ¥7,000 proportional by monthly EXP + ¥3,000 Top-5 bonus (1200 / 800 / 500 / 250 / 250)
+  const sortedMonthly = [...CONTRIBUTORS].sort((a, b) => b.monthlyExp - a.monthlyExp);
+  const totalMonthlyExp = sortedMonthly.reduce((acc, c) => acc + c.monthlyExp, 0) || 1;
+  const topBonusesRmb = [1200, 800, 500, 250, 250];
+
+  const monthly: RankedContributorRow[] = sortedMonthly.map((c, idx) => {
+    const share = c.monthlyExp / totalMonthlyExp;
+    const proportionalRmb = Math.round(7000 * share);
+    const topBonusRmb = c.monthlyExp > 0 ? (topBonusesRmb[idx] ?? 0) : 0;
+    return {
+      rank: idx + 1,
+      name: c.name,
+      handle: c.handle,
+      github: c.github,
+      exp: c.monthlyExp,
+      sharePercent: Math.round(share * 1000) / 10,
+      proportionalRmb,
+      topBonusRmb,
+      totalEstimatedRmb: proportionalRmb + topBonusRmb,
+    };
+  });
+
+  const allTime = [...CONTRIBUTORS]
+    .sort((a, b) => b.totalExp - a.totalExp)
+    .map((c, idx) => ({
+      rank: idx + 1,
+      name: c.name,
+      handle: c.handle,
+      github: c.github,
+      exp: c.totalExp,
+    }));
+
+  return { monthly, allTime };
+}
+
 export function buildProposeTaskIssueUrl(locale: Locale): string {
   const title = locale === "zh" ? "[Task] 任务标题" : "[Task] Task Title";
   const body =
     locale === "zh"
-      ? `### 领域 (Domain)\nBenchmark | Evaluation | RSI 算法 | PenguinHarness\n\n### 经验值 (EXP)\n50 EXP\n\n### 任务描述 (Description)\n请填写任务目标、验收标准以及原始论文或代码仓库链接（社区定时 Agent 会根据此 Issue 自动创建并同步任务）。\n\n### 相关链接 (References)\n- `
+      ? `### 领域 (Domain)\nBenchmark | Evaluation | RSI 算法 | PenguinHarness\n\n### 经验值 (EXP)\n50 EXP\n\n### 任务描述 (Description)\n请填写任务目标、验收标准以及原始论文或代码仓库链接（社区定时 Agent 会根据此 Issue 自动创建并同步任务）。\n\n### 原始论文与代码仓库 (References)\n- `
       : `### Domain\nBenchmark | Evaluation | RSI Algorithm | PenguinHarness\n\n### EXP\n50 EXP\n\n### Description\nDescribe the goal, acceptance criteria, and original paper or repository links (the scheduled community agent will automatically create and sync the task from this Issue).\n\n### References\n- `;
   return `${REPO_URL}/issues/new?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`;
 }

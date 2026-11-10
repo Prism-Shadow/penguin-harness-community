@@ -19,41 +19,31 @@ const COPY = {
   zh: {
     title: "任务板",
     propose: "发布任务 ↗",
-    colDomain: "领域",
     colOpen: "待认领",
     colInProgress: "进行中",
     colCompleted: "已完成",
     unclaimed: "待认领",
     details: "详情",
-    empty: "—",
-    modalDomain: "领域",
-    modalStatus: "进度",
-    modalAssignee: "当前认领人",
-    modalExp: "经验值",
-    modalDesc: "任务描述",
-    modalRefs: "相关论文与仓库",
-    modalClaimHint: "在该任务的 GitHub Issue 下方评论回复 /claim 即可认领：",
-    modalClaimBtn: "前往任务 Issue 回复认领 ↗",
+    empty: "暂无任务",
+    modalRefs: "原始论文与代码仓库",
+    modalClaimHint: "请直接在该任务的 GitHub Issue 下方评论回复 /claim 完成认领：",
+    modalClaimBtn: "打开任务 Issue (#",
+    modalClaimBtnSuffix: ") 回复认领 ↗",
     modalClose: "关闭",
   },
   en: {
     title: "Quests",
     propose: "Propose Task ↗",
-    colDomain: "Domain",
     colOpen: "Open",
     colInProgress: "In Progress",
     colCompleted: "Completed",
     unclaimed: "Unclaimed",
     details: "Details",
-    empty: "—",
-    modalDomain: "Domain",
-    modalStatus: "Status",
-    modalAssignee: "Assignee",
-    modalExp: "EXP",
-    modalDesc: "Description",
+    empty: "No tasks",
     modalRefs: "Original Papers & Repositories",
     modalClaimHint: "Reply /claim under this task's GitHub Issue to claim it:",
-    modalClaimBtn: "Open Task Issue to Claim ↗",
+    modalClaimBtn: "Open Task Issue (#",
+    modalClaimBtnSuffix: ") to Claim ↗",
     modalClose: "Close",
   },
 }[locale];
@@ -69,7 +59,7 @@ function tasksFor(domain: QuestDomainId, status: QuestStatus): QuestItem[] {
 }
 ---
 
-<div class="mx-auto w-full max-w-6xl px-6 py-12" data-quests-root>
+<div class="mx-auto w-full max-w-5xl px-6 py-12" data-quests-root>
   <header class="flex items-baseline justify-between gap-4 pb-8">
     <h1 class="text-3xl font-semibold tracking-tight text-gray-950 dark:text-white">
       {COPY.title}
@@ -85,73 +75,68 @@ function tasksFor(domain: QuestDomainId, status: QuestStatus): QuestItem[] {
     </a>
   </header>
 
-  <!-- 2D Kanban Matrix: Horizontal = Progress, Vertical = Domain -->
-  <div class="overflow-x-auto border-t border-gray-200 dark:border-gray-800">
-    <table class="w-full min-w-[760px] border-collapse text-left align-top">
-      <thead>
-        <tr class="border-b border-gray-200 text-xs font-medium text-gray-500 dark:border-gray-800 dark:text-gray-400">
-          <th class="w-40 py-3 pr-4 font-medium">{COPY.colDomain}</th>
-          {
-            STAGES.map((stage) => (
-              <th class="w-[calc((100%-10rem)/3)] px-3 py-3 font-medium">
-                <span>{stage.label}</span>
-              </th>
-            ))
-          }
-        </tr>
-      </thead>
-      <tbody class="divide-y divide-gray-200 dark:divide-gray-800">
-        {
-          QUEST_DOMAINS.map((domain) => (
-            <tr>
-              <th class="py-4 pr-4 align-top text-sm font-semibold text-gray-950 dark:text-gray-100">
-                {domain.label[locale]}
-              </th>
-              {STAGES.map((stage) => {
-                const items = tasksFor(domain.id, stage.key);
-                return (
-                  <td class="px-3 py-4 align-top">
-                    {items.length === 0 ? (
-                      <span class="text-xs text-gray-300 dark:text-gray-700">{COPY.empty}</span>
-                    ) : (
-                      <div class="space-y-2.5">
-                        {items.map((q) => (
-                          <button
-                            type="button"
-                            data-quest-open={q.id}
-                            class="group block w-full cursor-pointer rounded-lg border border-gray-200 bg-white p-3 text-left transition-colors hover:border-gray-400 dark:border-gray-800 dark:bg-gray-950 dark:hover:border-gray-600"
-                          >
-                            <div class="flex items-start justify-between gap-2">
-                              <span class="text-sm font-medium leading-snug text-gray-900 group-hover:text-brand-600 dark:text-gray-100 dark:group-hover:text-brand-400">
-                                {q.title[locale]}
-                              </span>
-                              <span class="mono shrink-0 text-xs text-gray-400 dark:text-gray-500">
-                                {q.exp} EXP
-                              </span>
-                            </div>
-                            <div class="mt-2 flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
-                              <span>
-                                {q.assignee ? `@${q.assignee}` : COPY.unclaimed}
-                              </span>
-                              <span class="text-brand-600 group-hover:underline dark:text-brand-400">
-                                {COPY.details} →
-                              </span>
-                            </div>
-                          </button>
-                        ))}
-                      </div>
-                    )}
-                  </td>
-                );
-              })}
-            </tr>
-          ))
-        }
-      </tbody>
-    </table>
+  <!-- Domain-Grouped Kanban: Domain as Section Header, Equal-Width 3 Columns for Progress -->
+  <div class="space-y-10">
+    {
+      QUEST_DOMAINS.map((domain) => (
+        <section class="border-t border-gray-200 pt-5 dark:border-gray-800">
+          <h2 class="mb-4 text-lg font-semibold tracking-tight text-gray-950 dark:text-white">
+            {domain.label[locale]}
+          </h2>
+
+          <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+            {STAGES.map((stage) => {
+              const items = tasksFor(domain.id, stage.key);
+              return (
+                <div class="flex min-w-0 flex-col rounded-xl border border-gray-200/80 bg-gray-50/50 p-3 dark:border-gray-800/80 dark:bg-gray-900/30">
+                  <div class="mb-2.5 flex items-center justify-between px-1 text-xs font-medium text-gray-500 dark:text-gray-400">
+                    <span>{stage.label}</span>
+                    <span class="mono">{items.length}</span>
+                  </div>
+
+                  {items.length === 0 ? (
+                    <div class="flex flex-1 items-center justify-center py-6 text-xs text-gray-400 dark:text-gray-600">
+                      {COPY.empty}
+                    </div>
+                  ) : (
+                    <div class="space-y-2.5">
+                      {items.map((q) => (
+                        <button
+                          type="button"
+                          data-quest-open={q.id}
+                          class="group block w-full cursor-pointer rounded-lg border border-gray-200 bg-white p-3.5 text-left shadow-2xs transition-colors hover:border-brand-500 dark:border-gray-800 dark:bg-gray-950 dark:hover:border-brand-500"
+                        >
+                          <div class="flex items-start justify-between gap-2.5">
+                            <span class="text-sm font-medium leading-snug text-gray-950 group-hover:text-brand-600 dark:text-gray-100 dark:group-hover:text-brand-400">
+                              {q.title[locale]}
+                            </span>
+                            <span class="mono shrink-0 rounded-md bg-brand-50 px-2 py-0.5 text-xs font-semibold text-brand-700 ring-1 ring-inset ring-brand-600/20 dark:bg-brand-950/80 dark:text-brand-300 dark:ring-brand-400/30">
+                              +{q.exp} EXP
+                            </span>
+                          </div>
+
+                          <div class="mt-2.5 flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+                            <span class="mono">
+                              #{q.issueNumber} · {q.assignee ? `@${q.assignee}` : COPY.unclaimed}
+                            </span>
+                            <span class="text-brand-600 group-hover:underline dark:text-brand-400">
+                              {COPY.details} →
+                            </span>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      ))
+    }
   </div>
 
-  <!-- Task Detail Modals (rendered per task, opened on click) -->
+  <!-- Task Detail Modals -->
   {
     QUESTS.map((q) => {
       const domainLabel = QUEST_DOMAINS.find((d) => d.id === q.domain)?.label[locale] ?? q.domain;
@@ -165,14 +150,14 @@ function tasksFor(domain: QuestDomainId, status: QuestStatus): QuestItem[] {
             <div class="flex items-start justify-between gap-3">
               <div>
                 <div class="mono text-xs text-gray-500 dark:text-gray-400">
-                  {domainLabel} · {stageLabel} · {q.exp} EXP
+                  {domainLabel} · {stageLabel} · Issue #{q.issueNumber}
                 </div>
                 <h2 class="mt-1 text-lg font-semibold tracking-tight text-gray-950 dark:text-white">
                   {q.title[locale]}
                 </h2>
               </div>
-              <span class="mono rounded bg-gray-100 px-2 py-0.5 text-xs text-gray-600 dark:bg-gray-800 dark:text-gray-300">
-                {q.assignee ? `@${q.assignee}` : COPY.unclaimed}
+              <span class="mono shrink-0 rounded-md bg-brand-50 px-2.5 py-1 text-xs font-semibold text-brand-700 ring-1 ring-inset ring-brand-600/20 dark:bg-brand-950/80 dark:text-brand-300 dark:ring-brand-400/30">
+                +{q.exp} EXP
               </span>
             </div>
 
@@ -222,7 +207,9 @@ function tasksFor(domain: QuestDomainId, status: QuestStatus): QuestItem[] {
                   data-direct-external
                   class="site-leave-open inline-flex h-9 items-center justify-center gap-1.5 px-4 text-sm font-semibold"
                 >
-                  <span>{COPY.modalClaimBtn}</span>
+                  <span>
+                    {COPY.modalClaimBtn}{q.issueNumber}{COPY.modalClaimBtnSuffix}
+                  </span>
                 </a>
               </div>
             </div>

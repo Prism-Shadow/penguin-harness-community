@@ -1,7 +1,6 @@
 # Shared RSI Community — Task Board Registry
-# Managed via GitHub Issues and automated by `rsi_community_steward`:
-# - Clicking "Propose Task" opens a `[Task]` Issue; the scheduled agent creates/syncs tasks from Issues.
-# - Contributors claim a task by replying `/claim` directly under the task's GitHub Issue.
+# Every task is created from a GitHub Issue first, and synced by `rsi_community_steward`:
+# - Contributors claim a task by replying `/claim` directly under that task's GitHub Issue.
 
 version: 1
 max_concurrent_claims_per_user: 2
@@ -9,6 +8,7 @@ default_exp: 50
 
 tasks:
   - id: "RSI-Q001"
+    issue_number: 30
     status: "open"
     domain: "Benchmark"
     exp: 50
@@ -21,10 +21,11 @@ tasks:
       - "https://github.com/SWE-bench/SWE-bench"
       - "https://arxiv.org/abs/2310.06770"
     assignee: null
-    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues"
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/30"
     linked_pr: null
 
   - id: "RSI-Q002"
+    issue_number: 31
     status: "open"
     domain: "Benchmark"
     exp: 50
@@ -36,10 +37,11 @@ tasks:
     references:
       - "https://github.com/deeplethe/fde-gym"
     assignee: null
-    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues"
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/31"
     linked_pr: null
 
   - id: "RSI-Q003"
+    issue_number: 32
     status: "open"
     domain: "Evaluation"
     exp: 50
@@ -52,10 +54,11 @@ tasks:
       - "https://github.com/openai/codex"
       - "https://penguin.ooo/leaderboards/harness-comparison"
     assignee: null
-    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues"
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/32"
     linked_pr: null
 
   - id: "RSI-Q004"
+    issue_number: 33
     status: "open"
     domain: "Evaluation"
     exp: 50
@@ -67,10 +70,11 @@ tasks:
     references:
       - "https://penguin.ooo/leaderboards/gdpevo-essential"
     assignee: null
-    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues"
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/33"
     linked_pr: null
 
   - id: "RSI-Q005"
+    issue_number: 34
     status: "open"
     domain: "RSI Algorithm"
     exp: 50
@@ -82,10 +86,11 @@ tasks:
     references:
       - "https://arxiv.org/abs/2609.15364"
     assignee: null
-    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues"
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/34"
     linked_pr: null
 
   - id: "RSI-Q006"
+    issue_number: 35
     status: "open"
     domain: "RSI Algorithm"
     exp: 50
@@ -98,10 +103,11 @@ tasks:
       - "https://arxiv.org/abs/2609.24972"
       - "https://github.com/google-research/rrsi"
     assignee: null
-    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues"
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/35"
     linked_pr: null
 
   - id: "RSI-Q007"
+    issue_number: 36
     status: "open"
     domain: "PenguinHarness"
     exp: 50
@@ -114,10 +120,11 @@ tasks:
       - "https://github.com/Prism-Shadow/penguin-harness"
       - "https://github.com/Prism-Shadow/penguin-harness-plugins"
     assignee: null
-    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues"
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/36"
     linked_pr: null
 
   - id: "RSI-Q008"
+    issue_number: 37
     status: "open"
     domain: "PenguinHarness"
     exp: 50
@@ -130,5 +137,5 @@ tasks:
       - "https://github.com/Prism-Shadow/penguin-harness"
       - "https://github.com/Prism-Shadow/penguin-harness-plugins"
     assignee: null
-    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues"
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/37"
     linked_pr: null
