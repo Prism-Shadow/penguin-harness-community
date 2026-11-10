@@ -1,0 +1,69 @@
+name: "Community Task"
+description: "Publish a new task to the Shared RSI Community Task Board (RSI Community Committee members only)."
+title: "[Task] "
+labels: ["task"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        > **Note**: Only **RSI Community Committee** members are authorized to publish tasks.
+        > English is the default language. Please fill in English and Chinese fields separately — if one language is left blank, the automated steward agent (`rsi_community_steward`) will automatically use the other language as a fallback.
+
+  - type: dropdown
+    id: domain
+    attributes:
+      label: "Domain"
+      description: "Select the task domain on the board."
+      options:
+        - "Benchmark"
+        - "Evaluation"
+        - "RSI Algorithm"
+        - "PenguinHarness"
+    validations:
+      required: true
+
+  - type: input
+    id: exp
+    attributes:
+      label: "EXP"
+      description: "Experience points awarded upon completion (1 EXP = ¥1 RMB base reward)."
+      value: "50"
+    validations:
+      required: true
+
+  - type: input
+    id: title_en
+    attributes:
+      label: "Title (English)"
+      description: "Task title in English (default language). If left blank, Title (Chinese) will be used."
+      placeholder: "e.g. Integrate SWE-bench"
+
+  - type: input
+    id: title_zh
+    attributes:
+      label: "Title (Chinese / 中文标题)"
+      description: "Task title in Chinese. If left blank, Title (English) will be used."
+      placeholder: "例如：集成 SWE-bench"
+
+  - type: textarea
+    id: description_en
+    attributes:
+      label: "Description (English)"
+      description: "Task description and acceptance criteria in English. If left blank, Description (Chinese) will be used."
+      placeholder: "Describe what needs to be built or evaluated and how it will be verified."
+
+  - type: textarea
+    id: description_zh
+    attributes:
+      label: "Description (Chinese / 中文描述)"
+      description: "Task description and acceptance criteria in Chinese. If left blank, Description (English) will be used."
+      placeholder: "请填写任务目标与验收标准。"
+
+  - type: textarea
+    id: references
+    attributes:
+      label: "Original Papers & Repository Links"
+      description: "One plain URL per line (no titles needed)."
+      placeholder: |
+        https://github.com/...
+        https://arxiv.org/abs/...

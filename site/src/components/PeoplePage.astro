@@ -14,47 +14,37 @@ const COPY = {
     title: "成员",
     committeeHeading: "RSI 社区委员会",
     committeeIntro:
-      "委员会成员享有每人每月 1,000 元固定激励（以 Token 额度、算力券形式发放）。方向涵盖 Benchmark、算法、Harness，并持续扩展医学、通信等垂直领域，欢迎在",
+      "委员会成员负责社区任务发布与实验评审，享有每人每月 1,000 元固定激励（以 Token 额度、算力券形式发放）。方向涵盖 Benchmark、算法、Harness，并持续扩展医学、通信等垂直领域，欢迎在",
     wechatBtn: "社区微信群",
     committeeIntroSuffix: "申请加入。",
     leaderboardHeading: "贡献榜",
-    poolTitle: "每月 10,000 元贡献榜激励分配方案（Token 额度 / 算力券）",
-    poolRule1Title: "1. 经验值按比例分配（7,000 元 / 月）",
-    poolRule1Desc:
-      "面向当月所有完成任务获得经验值（EXP）的成员，按「个人当月 EXP ÷ 全员当月总 EXP」比例分配 7,000 元额度。",
-    poolRule2Title: "2. 当月前五名额外奖励（3,000 元 / 月）",
-    poolRule2Desc:
-      "当月贡献榜排名前 5 的成员额外获得阶梯奖励：第 1 名 +1,200 元、第 2 名 +800 元、第 3 名 +500 元、第 4–5 名各 +250 元。",
+    leaderboardIntro:
+      "每月末按完成任务获得的经验值（EXP）发放 Token 额度与算力券（每月总额度上限 10,000 元）。每 1 EXP 直接兑换 1 元额度，当月前五名额外奖励 800 / 400 / 200 / 100 / 50 元。",
     tabMonthly: "当月贡献榜",
     tabAllTime: "总贡献榜",
     colRank: "排名",
     colMember: "成员",
     colExp: "经验值 (EXP)",
-    colShare: "当月占比",
-    colReward: "预计月度激励",
+    colReward: "当月激励",
+    empty: "暂无上榜记录",
   },
   en: {
     title: "People",
     committeeHeading: "RSI Community Committee",
     committeeIntro:
-      "Committee members receive a fixed ¥1,000 RMB / month incentive (issued in Token credits and compute vouchers). Tracks cover Benchmark, Algorithm, and Harness, expanding into Medicine, Telecom, and more — apply via the ",
+      "Committee members publish tasks and review submissions, receiving a fixed ¥1,000 RMB / month incentive (in Token credits and compute vouchers). Tracks cover Benchmark, Algorithm, and Harness, expanding into Medicine, Telecom, and more — apply via the ",
     wechatBtn: "WeChat Group",
     committeeIntroSuffix: ".",
     leaderboardHeading: "Contributor Leaderboard",
-    poolTitle: "Monthly ¥10,000 RMB Contributor Reward Pool (Token Credits & Compute Vouchers)",
-    poolRule1Title: "1. Proportional EXP Pool (¥7,000 / month)",
-    poolRule1Desc:
-      "Shared proportionally among all contributors who earn EXP during the month: ¥7,000 × (Your Monthly EXP ÷ Total Community Monthly EXP).",
-    poolRule2Title: "2. Monthly Top-5 Bonus (¥3,000 / month)",
-    poolRule2Desc:
-      "Extra bonus for the Top 5 on the monthly leaderboard: #1 +¥1,200, #2 +¥800, #3 +¥500, #4–5 +¥250 each.",
+    leaderboardIntro:
+      "Settled monthly in Token credits and compute vouchers (up to ¥10,000 RMB / month). Every 1 EXP converts 1:1 to ¥1 RMB, and the monthly Top 5 receive an extra ¥800 / ¥400 / ¥200 / ¥100 / ¥50 bonus.",
     tabMonthly: "Monthly Leaderboard",
     tabAllTime: "All-Time Leaderboard",
     colRank: "Rank",
     colMember: "Member",
     colExp: "EXP",
-    colShare: "Monthly Share",
-    colReward: "Est. Monthly Reward",
+    colReward: "Monthly Reward",
+    empty: "No entries yet",
   },
 }[locale];
 ---
@@ -106,7 +96,7 @@ const COPY = {
                   >
                     <div class="h-10 w-10 shrink-0 overflow-hidden rounded-full bg-gray-100 dark:bg-gray-900">
                       <img
-                        src="/avatar-default.svg"
+                        src={member.avatar ?? "/avatar-default.svg"}
                         alt={member.name}
                         loading="lazy"
                         width="40"
@@ -136,28 +126,14 @@ const COPY = {
     </div>
   </section>
 
-  <!-- Part 2: Contributor Leaderboard (Monthly & All-Time) + ¥10,000 Pool Rules -->
+  <!-- Part 2: Contributor Leaderboard (Monthly & All-Time) -->
   <section class="mt-16 border-t border-gray-200 pt-8 dark:border-gray-800">
     <h2 class="text-2xl font-medium text-gray-950 dark:text-white">
       {COPY.leaderboardHeading}
     </h2>
-
-    <!-- Clear ¥10,000 Allocation Breakdown -->
-    <div class="mt-4 rounded-xl border border-gray-200 bg-gray-50/60 p-4 dark:border-gray-800 dark:bg-gray-900/40">
-      <div class="text-sm font-semibold text-gray-950 dark:text-white">
-        {COPY.poolTitle}
-      </div>
-      <div class="mt-2.5 grid grid-cols-1 gap-3 text-xs leading-relaxed text-gray-600 sm:grid-cols-2 dark:text-gray-400">
-        <div>
-          <div class="font-medium text-gray-900 dark:text-gray-200">{COPY.poolRule1Title}</div>
-          <p class="mt-0.5">{COPY.poolRule1Desc}</p>
-        </div>
-        <div>
-          <div class="font-medium text-gray-900 dark:text-gray-200">{COPY.poolRule2Title}</div>
-          <p class="mt-0.5">{COPY.poolRule2Desc}</p>
-        </div>
-      </div>
-    </div>
+    <p class="mt-2 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+      {COPY.leaderboardIntro}
+    </p>
 
     <!-- Tabs: Monthly vs All-Time -->
     <nav class="mt-6 flex gap-6 border-b border-gray-200 dark:border-gray-800" data-rank-tabs>
@@ -185,40 +161,41 @@ const COPY = {
             <th class="w-12 py-2.5 pr-4 text-left font-normal">{COPY.colRank}</th>
             <th class="py-2.5 pr-4 text-left font-normal">{COPY.colMember}</th>
             <th class="py-2.5 pl-4 text-right font-normal">{COPY.colExp}</th>
-            <th class="py-2.5 pl-4 text-right font-normal">{COPY.colShare}</th>
             <th class="py-2.5 pl-4 text-right font-normal">{COPY.colReward}</th>
           </tr>
         </thead>
         <tbody>
           {
-            monthlyRows.map((row) => (
+            monthlyRows.length === 0 ? (
               <tr class="border-b border-gray-200 dark:border-gray-800">
-                <td class="mono py-3 pr-4 text-xs text-gray-400">#{row.rank}</td>
-                <td class="py-3 pr-4">
-                  <a
-                    href={row.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="font-medium text-gray-950 hover:underline dark:text-gray-100"
-                  >
-                    {row.name}
-                  </a>
-                  <span class="mono ml-1.5 text-xs text-gray-400">@{row.handle}</span>
-                </td>
-                <td class="mono py-3 pl-4 text-right font-semibold text-brand-700 dark:text-brand-400">
-                  {row.exp} EXP
-                </td>
-                <td class="mono py-3 pl-4 text-right text-xs text-gray-500 dark:text-gray-400">
-                  {row.sharePercent}%
-                </td>
-                <td class="mono py-3 pl-4 text-right text-gray-900 dark:text-gray-100">
-                  ¥{row.totalEstimatedRmb}
-                  <span class="ml-1 text-xs text-gray-400">
-                    (¥{row.proportionalRmb}+¥{row.topBonusRmb})
-                  </span>
+                <td colspan="4" class="py-8 text-center text-xs text-gray-400 dark:text-gray-500">
+                  {COPY.empty}
                 </td>
               </tr>
-            ))
+            ) : (
+              monthlyRows.map((row) => (
+                <tr class="border-b border-gray-200 dark:border-gray-800">
+                  <td class="mono py-3 pr-4 text-xs text-gray-400">#{row.rank}</td>
+                  <td class="py-3 pr-4">
+                    <a
+                      href={row.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="font-medium text-gray-950 hover:underline dark:text-gray-100"
+                    >
+                      {row.name}
+                    </a>
+                    <span class="mono ml-1.5 text-xs text-gray-400">@{row.handle}</span>
+                  </td>
+                  <td class="mono py-3 pl-4 text-right font-semibold text-brand-700 dark:text-brand-400">
+                    {row.exp} EXP
+                  </td>
+                  <td class="mono py-3 pl-4 text-right font-semibold text-gray-950 dark:text-gray-100">
+                    ¥{row.totalEstimatedRmb}
+                  </td>
+                </tr>
+              ))
+            )
           }
         </tbody>
       </table>
@@ -236,25 +213,33 @@ const COPY = {
         </thead>
         <tbody>
           {
-            allTimeRows.map((row) => (
+            allTimeRows.length === 0 ? (
               <tr class="border-b border-gray-200 dark:border-gray-800">
-                <td class="mono py-3 pr-4 text-xs text-gray-400">#{row.rank}</td>
-                <td class="py-3 pr-4">
-                  <a
-                    href={row.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="font-medium text-gray-950 hover:underline dark:text-gray-100"
-                  >
-                    {row.name}
-                  </a>
-                  <span class="mono ml-1.5 text-xs text-gray-400">@{row.handle}</span>
-                </td>
-                <td class="mono py-3 pl-4 text-right font-semibold text-brand-700 dark:text-brand-400">
-                  {row.exp} EXP
+                <td colspan="3" class="py-8 text-center text-xs text-gray-400 dark:text-gray-500">
+                  {COPY.empty}
                 </td>
               </tr>
-            ))
+            ) : (
+              allTimeRows.map((row) => (
+                <tr class="border-b border-gray-200 dark:border-gray-800">
+                  <td class="mono py-3 pr-4 text-xs text-gray-400">#{row.rank}</td>
+                  <td class="py-3 pr-4">
+                    <a
+                      href={row.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="font-medium text-gray-950 hover:underline dark:text-gray-100"
+                    >
+                      {row.name}
+                    </a>
+                    <span class="mono ml-1.5 text-xs text-gray-400">@{row.handle}</span>
+                  </td>
+                  <td class="mono py-3 pl-4 text-right font-semibold text-brand-700 dark:text-brand-400">
+                    {row.exp} EXP
+                  </td>
+                </tr>
+              ))
+            )
           }
         </tbody>
       </table>

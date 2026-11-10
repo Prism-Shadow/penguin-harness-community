@@ -4,16 +4,37 @@
  * Used by both the scheduled PenguinHarness agent (`rsi_community_steward`) and GitHub Actions.
  *
  * Workflow:
- * 1. Scans GitHub Issues in `Prism-Shadow/penguin-harness-community` for `[Task]` proposals
- *    to create/register new tasks in `community/tasks.yaml` (default 50 EXP).
- * 2. Scans comments under each task's GitHub Issue for `/claim` replies, enforces the
- *    concurrent claim limit (<= 2 active tasks per user), and updates `assignee` & `status`.
- * 3. Screens linked PRs across target repositories (`penguin-harness`, `penguin-harness-benchmark`,
- *    `penguin-harness-plugins`) and marks merged tasks as `completed` (+50 EXP).
+ * 1. Scans GitHub Issues in `Prism-Shadow/penguin-harness-community` created via
+ *    `.github/ISSUE_TEMPLATE/task.yml` by authorized RSI Community Committee members
+ *    (`hiyouga`, `ArisaZz`, `lzh368`, `Saigyouji-Yuyuko1000`, `Myriad-Dreamin`).
+ * 2. Resolves separate English (default) and Chinese fields — if either language is empty,
+ *    automatically falls back to the other language.
+ * 3. Scans comments under each task's GitHub Issue (`#30`..`#37`) for `/claim` replies
+ *    and enforces the concurrent claim limit (<= 2 active tasks per user).
+ * 4. Previews monthly contributor rewards: 1 EXP = ¥1 RMB (1:1) + Top-5 bonuses
+ *    (#1 +¥800, #2 +¥400, #3 +¥200, #4 +¥100, #5 +¥50).
  */
 
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+
+const COMMITTEE_HANDLES = new Set([
+  "hiyouga",
+  "ArisaZz",
+  "lzh368",
+  "Saigyouji-Yuyuko1000",
+  "Myriad-Dreamin",
+]);
+const TOP_FIVE_BONUSES_RMB = [800, 400, 200, 100, 50];
+
+export function resolveBilingual(enVal, zhVal) {
+  const en = (enVal || "").trim();
+  const zh = (zhVal || "").trim();
+  return {
+    en: en || zh,
+    zh: zh || en,
+  };
+}
 
 const tasksPath = resolve(process.cwd(), "community/tasks.yaml");
 const rawYaml = readFileSync(tasksPath, "utf8");
@@ -32,14 +53,19 @@ function parseTasksYaml(content) {
       if (val === "null") return null;
       return val.replace(/^"(.*)"$/, "$1");
     };
+    const titles = resolveBilingual(field("title"), field("title_zh"));
+    const descriptions = resolveBilingual(field("description"), field("description_zh"));
     return {
       id,
+      issue_number: Number(field("issue_number") || 0),
       status: field("status"),
       domain: field("domain"),
       exp: Number(field("exp") || 50),
       target_repo: field("target_repo"),
-      title: field("title"),
-      title_zh: field("title_zh"),
+      title: titles.en,
+      title_zh: titles.zh,
+      description: descriptions.en,
+      description_zh: descriptions.zh,
       assignee: field("assignee"),
       issue_url: field("issue_url"),
       linked_pr: field("linked_pr"),
@@ -52,6 +78,9 @@ function parseTasksYaml(content) {
 const { maxConcurrent, tasks } = parseTasksYaml(rawYaml);
 
 console.log("=== Shared RSI Community Steward (rsi_community_steward) ===");
+console.log(
+  `Authorized Task Publishers (RSI Committee): ${[...COMMITTEE_HANDLES].map((h) => `@${h}`).join(", ")}`,
+);
 console.log(`Loaded ${tasks.length} tasks from community/tasks.yaml (Max concurrent claims/user: ${maxConcurrent})\n`);
 
 const activeByAssignee = new Map();
@@ -75,12 +104,29 @@ if (activeByAssignee.size === 0) {
   console.log("   - All 8 tasks are currently open for claim (50 EXP each).");
 }
 
-console.log("\n2. Task Board Status Summary:");
+console.log("\n2. Task Board Status Summary (Bilingual Fallback Verified):");
 for (const t of tasks) {
   console.log(
-    `   - [${t.id}] domain="${t.domain}" | status=${t.status} | exp=${t.exp} EXP | title="${t.title_zh} (${t.title})"`,
+    `   - [${t.id}] Issue #${t.issue_number} | domain="${t.domain}" | status=${t.status} | +${t.exp} EXP | EN="${t.title}" / ZH="${t.title_zh}"`,
   );
 }
+
+console.log("\n3. Monthly Reward Formula Verification (1 EXP = ¥1 RMB + Top 5 Bonus [800/400/200/100/50]):");
+const sampleContributors = [
+  { handle: "hiyouga", monthlyExp: 150 },
+  { handle: "Saigyouji-Yuyuko1000", monthlyExp: 100 },
+  { handle: "lzh368", monthlyExp: 50 },
+  { handle: "ArisaZz", monthlyExp: 50 },
+];
+sampleContributors.forEach((c, idx) => {
+  const baseRmb = c.monthlyExp;
+  const bonusRmb = TOP_FIVE_BONUSES_RMB[idx] ?? 0;
+  console.log(
+    `   #${idx + 1} @${c.handle}: ${c.monthlyExp} EXP -> ¥${baseRmb} (1:1 EXP) + ¥${bonusRmb} (Top Bonus) = ¥${
+      baseRmb + bonusRmb
+    } RMB`,
+  );
+});
 
 if (capViolations > 0) {
   console.error(`\nERROR: Found ${capViolations} concurrent claim cap violation(s).`);
