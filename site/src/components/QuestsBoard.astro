@@ -3,10 +3,10 @@ import type { Locale } from "../shared/i18n";
 import {
   QUESTS,
   QUEST_DOMAINS,
-  buildClaimIssueUrl,
-  buildProposeTaskPrUrl,
-  type QuestDomain,
+  buildProposeTaskIssueUrl,
+  type QuestDomainId,
   type QuestItem,
+  type QuestStatus,
 } from "../shared/community";
 
 interface Props {
@@ -23,8 +23,18 @@ const COPY = {
     colOpen: "待认领",
     colInProgress: "进行中",
     colCompleted: "已完成",
-    unclaimed: "认领 ↗",
+    unclaimed: "待认领",
+    details: "详情",
     empty: "—",
+    modalDomain: "领域",
+    modalStatus: "进度",
+    modalAssignee: "当前认领人",
+    modalExp: "经验值",
+    modalDesc: "任务描述",
+    modalRefs: "相关论文与仓库",
+    modalClaimHint: "在该任务的 GitHub Issue 下方评论回复 /claim 即可认领：",
+    modalClaimBtn: "前往任务 Issue 回复认领 ↗",
+    modalClose: "关闭",
   },
   en: {
     title: "Quests",
@@ -33,35 +43,39 @@ const COPY = {
     colOpen: "Open",
     colInProgress: "In Progress",
     colCompleted: "Completed",
-    unclaimed: "Claim ↗",
+    unclaimed: "Unclaimed",
+    details: "Details",
     empty: "—",
+    modalDomain: "Domain",
+    modalStatus: "Status",
+    modalAssignee: "Assignee",
+    modalExp: "EXP",
+    modalDesc: "Description",
+    modalRefs: "Original Papers & Repositories",
+    modalClaimHint: "Reply /claim under this task's GitHub Issue to claim it:",
+    modalClaimBtn: "Open Task Issue to Claim ↗",
+    modalClose: "Close",
   },
 }[locale];
 
-type StageKey = "open" | "in_progress" | "completed";
-
-const STAGES: { key: StageKey; label: string; match: (q: QuestItem) => boolean }[] = [
-  { key: "open", label: COPY.colOpen, match: (q) => q.status === "open" },
-  {
-    key: "in_progress",
-    label: COPY.colInProgress,
-    match: (q) => q.status === "claimed" || q.status === "in_review",
-  },
-  { key: "completed", label: COPY.colCompleted, match: (q) => q.status === "completed" },
+const STAGES: { key: QuestStatus; label: string }[] = [
+  { key: "open", label: COPY.colOpen },
+  { key: "in_progress", label: COPY.colInProgress },
+  { key: "completed", label: COPY.colCompleted },
 ];
 
-function tasksFor(domain: QuestDomain, match: (q: QuestItem) => boolean): QuestItem[] {
-  return QUESTS.filter((q) => q.domain === domain && match(q));
+function tasksFor(domain: QuestDomainId, status: QuestStatus): QuestItem[] {
+  return QUESTS.filter((q) => q.domain === domain && q.status === status);
 }
 ---
 
-<div class="mx-auto w-full max-w-6xl px-6 py-12">
-  <header class=" flex items-baseline justify-between gap-4 pb-8">
+<div class="mx-auto w-full max-w-6xl px-6 py-12" data-quests-root>
+  <header class="flex items-baseline justify-between gap-4 pb-8">
     <h1 class="text-3xl font-semibold tracking-tight text-gray-950 dark:text-white">
       {COPY.title}
     </h1>
     <a
-      href={buildProposeTaskPrUrl()}
+      href={buildProposeTaskIssueUrl(locale)}
       target="_blank"
       rel="noopener noreferrer"
       data-direct-external
@@ -91,59 +105,40 @@ function tasksFor(domain: QuestDomain, match: (q: QuestItem) => boolean): QuestI
           QUEST_DOMAINS.map((domain) => (
             <tr>
               <th class="py-4 pr-4 align-top text-sm font-semibold text-gray-950 dark:text-gray-100">
-                {domain}
+                {domain.label[locale]}
               </th>
               {STAGES.map((stage) => {
-                const items = tasksFor(domain, stage.match);
+                const items = tasksFor(domain.id, stage.key);
                 return (
                   <td class="px-3 py-4 align-top">
                     {items.length === 0 ? (
                       <span class="text-xs text-gray-300 dark:text-gray-700">{COPY.empty}</span>
                     ) : (
                       <div class="space-y-2.5">
-                        {items.map((q) => {
-                          const targetUrl =
-                            q.status === "open"
-                              ? buildClaimIssueUrl(q, locale)
-                              : (q.linkedPrUrl ?? `https://github.com/${q.assignee}`);
-                          return (
-                            <div class="rounded-lg border border-gray-200 bg-white p-3 transition-colors hover:border-gray-300 dark:border-gray-800 dark:bg-gray-950 dark:hover:border-gray-700">
-                              <a
-                                href={targetUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                data-direct-external
-                                class="block text-sm font-medium leading-snug text-gray-900 hover:text-brand-600 dark:text-gray-100 dark:hover:text-brand-400"
-                              >
+                        {items.map((q) => (
+                          <button
+                            type="button"
+                            data-quest-open={q.id}
+                            class="group block w-full cursor-pointer rounded-lg border border-gray-200 bg-white p-3 text-left transition-colors hover:border-gray-400 dark:border-gray-800 dark:bg-gray-950 dark:hover:border-gray-600"
+                          >
+                            <div class="flex items-start justify-between gap-2">
+                              <span class="text-sm font-medium leading-snug text-gray-900 group-hover:text-brand-600 dark:text-gray-100 dark:group-hover:text-brand-400">
                                 {q.title[locale]}
-                              </a>
-                              <div class="mt-2 flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
-                                <span>{stage.label}</span>
-                                {q.assignee ? (
-                                  <a
-                                    href={`https://github.com/${q.assignee}`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    data-direct-external
-                                    class="mono text-gray-700 hover:underline dark:text-gray-300"
-                                  >
-                                    @{q.assignee}
-                                  </a>
-                                ) : (
-                                  <a
-                                    href={buildClaimIssueUrl(q, locale)}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    data-direct-external
-                                    class="font-medium text-brand-600 hover:underline dark:text-brand-400"
-                                  >
-                                    {COPY.unclaimed}
-                                  </a>
-                                )}
-                              </div>
+                              </span>
+                              <span class="mono shrink-0 text-xs text-gray-400 dark:text-gray-500">
+                                {q.exp} EXP
+                              </span>
                             </div>
-                          );
-                        })}
+                            <div class="mt-2 flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+                              <span>
+                                {q.assignee ? `@${q.assignee}` : COPY.unclaimed}
+                              </span>
+                              <span class="text-brand-600 group-hover:underline dark:text-brand-400">
+                                {COPY.details} →
+                              </span>
+                            </div>
+                          </button>
+                        ))}
                       </div>
                     )}
                   </td>
@@ -155,4 +150,113 @@ function tasksFor(domain: QuestDomain, match: (q: QuestItem) => boolean): QuestI
       </tbody>
     </table>
   </div>
+
+  <!-- Task Detail Modals (rendered per task, opened on click) -->
+  {
+    QUESTS.map((q) => {
+      const domainLabel = QUEST_DOMAINS.find((d) => d.id === q.domain)?.label[locale] ?? q.domain;
+      const stageLabel = STAGES.find((s) => s.key === q.status)?.label ?? q.status;
+      return (
+        <dialog
+          data-quest-dialog={q.id}
+          class="site-leave m-auto w-[calc(100%-2rem)] max-w-lg text-left"
+        >
+          <div class="site-leave-body">
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <div class="mono text-xs text-gray-500 dark:text-gray-400">
+                  {domainLabel} · {stageLabel} · {q.exp} EXP
+                </div>
+                <h2 class="mt-1 text-lg font-semibold tracking-tight text-gray-950 dark:text-white">
+                  {q.title[locale]}
+                </h2>
+              </div>
+              <span class="mono rounded bg-gray-100 px-2 py-0.5 text-xs text-gray-600 dark:bg-gray-800 dark:text-gray-300">
+                {q.assignee ? `@${q.assignee}` : COPY.unclaimed}
+              </span>
+            </div>
+
+            <p class="mt-3 text-sm leading-relaxed text-gray-600 dark:text-gray-300">
+              {q.description[locale]}
+            </p>
+
+            {q.references.length > 0 && (
+              <div class="mt-4">
+                <div class="text-xs font-medium text-gray-500 dark:text-gray-400">
+                  {COPY.modalRefs}
+                </div>
+                <ul class="mt-1.5 space-y-1 text-xs">
+                  {q.references.map((ref) => (
+                    <li>
+                      <a
+                        href={ref.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        data-direct-external
+                        class="mono text-brand-600 underline decoration-brand-300 underline-offset-2 hover:text-brand-500 dark:text-brand-400 dark:decoration-brand-700"
+                      >
+                        {ref.label} ({ref.url})
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            <div class="mt-5 border-t border-gray-200 pt-4 dark:border-gray-800">
+              <p class="text-xs text-gray-500 dark:text-gray-400">
+                {COPY.modalClaimHint}
+              </p>
+              <div class="mt-3 flex flex-wrap justify-end gap-2">
+                <button
+                  type="button"
+                  data-quest-close
+                  class="site-leave-cancel inline-flex h-9 items-center justify-center px-4 text-sm font-medium"
+                >
+                  {COPY.modalClose}
+                </button>
+                <a
+                  href={q.issueUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-direct-external
+                  class="site-leave-open inline-flex h-9 items-center justify-center gap-1.5 px-4 text-sm font-semibold"
+                >
+                  <span>{COPY.modalClaimBtn}</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </dialog>
+      );
+    })
+  }
 </div>
+
+<script>
+  const root = document.querySelector<HTMLElement>("[data-quests-root]");
+  if (root) {
+    root.querySelectorAll<HTMLButtonElement>("[data-quest-open]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = btn.dataset.questOpen;
+        const dialog = root.querySelector<HTMLDialogElement>(`[data-quest-dialog="${id}"]`);
+        if (dialog && !dialog.open) {
+          dialog.showModal();
+        }
+      });
+    });
+
+    root.querySelectorAll<HTMLDialogElement>("[data-quest-dialog]").forEach((dialog) => {
+      let pressedBackdrop = false;
+      dialog.querySelector<HTMLButtonElement>("[data-quest-close]")?.addEventListener("click", () => {
+        dialog.close();
+      });
+      dialog.addEventListener("pointerdown", (e) => {
+        pressedBackdrop = e.target === dialog;
+      });
+      dialog.addEventListener("click", (e) => {
+        if (e.target === dialog && pressedBackdrop) dialog.close();
+      });
+    });
+  }
+</script>

@@ -1,559 +1,134 @@
-# Shared RSI Community — Official Task & Bounty Registry
-# Publishers add new tasks via Pull Request to this file.
-# The Automated Community Agent (rsi_community_steward) syncs this file with:
-#   1. Tracking Issues in Prism-Shadow/penguin-harness-community
-#   2. Linked Issues & PR status in target repositories (penguin-harness, penguin-harness-benchmark, penguin-harness-plugins)
-#   3. Real-time status & Monthly Growth EXP leaderboard on the community website
+# Shared RSI Community — Task Board Registry
+# Managed via GitHub Issues and automated by `rsi_community_steward`:
+# - Clicking "Propose Task" opens a `[Task]` Issue; the scheduled agent creates/syncs tasks from Issues.
+# - Contributors claim a task by replying `/claim` directly under the task's GitHub Issue.
 
 version: 1
-policy:
-  max_concurrent_claims_per_user: 2
-  claim_stale_timeout_days: 14
-  monthly_budget_usd: 2000
-  budget_breakdown:
-    proportional_exp_pool_usd: 1100
-    top_leaderboard_bonus_usd: 500
-    committee_stipend_pool_usd: 400
-    committee_per_member_usd: 100
-  claim_command_template: "/claim {task_id}"
-  submit_command_template: "/submit {task_id} {pr_url}"
+max_concurrent_claims_per_user: 2
+default_exp: 50
 
 tasks:
   - id: "RSI-Q001"
     status: "open"
-    category: "paper-reproduction"
-    difficulty: "S"
-    exp: 800
-    loot:
-      - item: "evolution-core"
-        count: 2
-      - item: "trace-crystal"
-        count: 3
-    target_repo: "Prism-Shadow/penguin-harness-plugins"
-    related_repos:
-      - "Prism-Shadow/penguin-harness-benchmark"
-    title: "Reproduce RSIAgent: Autonomous Exploration for RSI in New Environments"
-    title_zh: "复现核心论文 RSIAgent：面向新环境的自主探索与递归自进化"
-    summary: "Implement RSIAgent (arXiv:2609.15364) as a reusable PenguinHarness RSI plugin with Curriculum, Actor, and Verifier agents using broad-then-deep exploration to build frozen causal memory."
-    summary_zh: "将环境交互 RSI 必读核心论文 RSIAgent (arXiv:2609.15364) 复现为 PenguinHarness 标准插件，协同 Curriculum、Actor 与 Verifier 智能体执行「先广度后深度」环境探索，构建可复用的因果记忆并在基准任务上验证。"
+    domain: "Benchmark"
+    exp: 50
+    target_repo: "Prism-Shadow/penguin-harness-benchmark"
+    title: "Integrate SWE-bench"
+    title_zh: "集成 SWE-bench"
+    description: "Integrate the SWE-bench software engineering benchmark into penguin-harness-benchmark with standardized container environments and grading scripts (per RFC-0001)."
+    description_zh: "将真实 GitHub 软件工程评测基准 SWE-bench 接入 penguin-harness-benchmark，封装标准化容器评测环境与自动评分脚本（遵循 RFC-0001 规范）。"
     references:
-      - label: "arXiv:2609.15364"
-        url: "https://arxiv.org/abs/2609.15364"
-    deliverables:
-      - "Plugin package in penguin-harness-plugins implementing broad-then-deep exploration & frozen causal memory"
-      - "Evaluation trajectories and before/after benchmark scores submitted to penguin-harness-benchmark"
+      - "https://github.com/SWE-bench/SWE-bench"
+      - "https://arxiv.org/abs/2310.06770"
     assignee: null
-    community_issue: null
-    target_issue: null
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues"
     linked_pr: null
-    updated_at: "2026-11-10"
 
   - id: "RSI-Q002"
     status: "open"
-    category: "paper-reproduction"
-    difficulty: "S"
-    exp: 800
-    loot:
-      - item: "evolution-core"
-        count: 2
-      - item: "harness-gear"
-        count: 2
-    target_repo: "Prism-Shadow/penguin-harness-plugins"
-    related_repos:
-      - "Prism-Shadow/penguin-harness-benchmark"
-    title: "Reproduce RRSI: Regularized Recursive Self-Improvement of Agent Harnesses"
-    title_zh: "复现核心论文 RRSI：防过拟合的正则化 Agent Harness 递归自进化"
-    summary: "Implement RRSI (arXiv:2609.24972) in PenguinHarness with temporally annealed proposer budgets, anti-overfitting critic, and cost/token pruner, verifying OOD generalization across benchmarks."
-    summary_zh: "将 Harness 演化泛化必读核心论文 RRSI (arXiv:2609.24972) 复现至 PenguinHarness，实现退火预算提议器（Proposer）、防基准过拟合审查器（Critic）与低效改动剪枝器（Pruner），在分布内与分布外（OOD）基准上验证泛化增益与 Token 缩减效果。"
+    domain: "Benchmark"
+    exp: 50
+    target_repo: "Prism-Shadow/penguin-harness-benchmark"
+    title: "Integrate FDE-gym"
+    title_zh: "集成 FDE-gym"
+    description: "Integrate FDE-gym into penguin-harness-benchmark as a standard reproducible benchmark suite and verifier following RFC-0001."
+    description_zh: "将前沿数据与工程评测环境 FDE-gym 集成至 penguin-harness-benchmark，按 RFC-0001 标准提供可复现的评测任务集与验证器。"
     references:
-      - label: "arXiv:2609.24972"
-        url: "https://arxiv.org/abs/2609.24972"
-      - label: "google-research/rrsi"
-        url: "https://github.com/google-research/rrsi"
-    deliverables:
-      - "RRSI skill/plugin package with Proposer + Critic + Pruner loop"
-      - "In-distribution and out-of-distribution (OOD) evaluation results in penguin-harness-benchmark"
+      - "https://github.com/deeplethe/fde-gym"
     assignee: null
-    community_issue: null
-    target_issue: null
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues"
     linked_pr: null
-    updated_at: "2026-11-10"
 
   - id: "RSI-Q003"
     status: "open"
-    category: "paper-reproduction"
-    difficulty: "S"
-    exp: 750
-    loot:
-      - item: "evolution-core"
-        count: 2
-      - item: "benchmark-astrolabe"
-        count: 2
-    target_repo: "Prism-Shadow/penguin-harness"
-    related_repos:
-      - "Prism-Shadow/penguin-harness-benchmark"
-    title: "RSI Arena: Multi-Round Recursive Self-Improvement with Blind Human Feedback"
-    title_zh: "复现 RSI Arena：引入人类盲测反馈的多轮递归自进化实验闭环"
-    summary: "Inspired by RSI Arena (13,000 GPU-hours, 20 benchmarks, 3,129 blind human votes across two rounds), build a blind side-by-side human preference feedback loop that agents absorb to self-evolve between rounds."
-    summary_zh: "参考 Bake AI 联合 HuggingFace、NVIDIA、Scale AI、Stanford、MIT 等高校完成的 RSI Arena 实验（13,000 GPU 小时、20 个基准、两轮 3,129 票人类盲测反馈，8/10 智能体在第二轮显著超越基线），在 PenguinHarness 中构建支持人类盲测对比与自然语言体验反馈回流的双轮自进化工作流。"
+    domain: "Evaluation"
+    exp: 50
+    target_repo: "Prism-Shadow/penguin-harness-benchmark"
+    title: "Codex Self-Evolution Comparison"
+    title_zh: "Codex 的自进化效果对比"
+    description: "Evaluate Codex before and after Recursive Self-Improvement (RSI) on standard benchmarks, submitting full execution traces to the cross-harness leaderboard."
+    description_zh: "在标准评测基准上对比 Codex 在接入自进化（RSI）前后的任务解决率与 Token 成本变化，提交完整实验轨迹并更新跨框架榜单。"
     references:
-      - label: "RSI Arena Leaderboard"
-        url: "https://penguin.ooo/leaderboards/harness-comparison"
-    deliverables:
-      - "Arena blind A/B comparison workbench or evaluation pipeline"
-      - "Two-round human-feedback RSI experiment report comparing static benchmark scores vs. human preference ratings"
+      - "https://github.com/openai/codex"
+      - "https://penguin.ooo/leaderboards/harness-comparison"
     assignee: null
-    community_issue: null
-    target_issue: null
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues"
     linked_pr: null
-    updated_at: "2026-11-10"
 
   - id: "RSI-Q004"
     status: "open"
-    category: "leaderboard-eval"
-    difficulty: "A"
-    exp: 600
-    loot:
-      - item: "trace-crystal"
-        count: 3
-      - item: "benchmark-astrolabe"
-        count: 2
+    domain: "Evaluation"
+    exp: 50
     target_repo: "Prism-Shadow/penguin-harness-benchmark"
-    related_repos: []
-    title: "Cross-Framework Self-Evolution Comparison (Phase II: Pre/Post RSI across Frameworks)"
-    title_zh: "PenguinHarness 以外不同框架的自进化效果横向对比评测（二期扩充）"
-    summary: "Following our Phase I cross-harness baseline (PenguinHarness, DSH, Pi, Codex on Sec A-E), evaluate before-and-after RSI self-evolution gains across external frameworks (OpenHands, Claude Code, SWE-agent, Aider)."
-    summary_zh: "在一期已完成 Sec A-E 跨框架评测（PenguinHarness、DSH、Pi、Codex）基础上，继续扩充 penguin.ooo/leaderboards/harness-comparison 榜单，对比更多外部框架在接入自进化算法前后的得分跃升与帕累托成本曲线。"
+    title: "GPT-6 Evolution Capability Experiment"
+    title_zh: "GPT-6 模型的进化能力实验"
+    description: "Measure GPT-6's multi-round self-evolution gains and generalization across standard RSI methods, contributing traces to the GDPEVO leaderboard."
+    description_zh: "评测 GPT-6 作为基座模型在多轮自进化（ACE / OPRO / Skill 演化）下的分数提升幅度与泛化表现，并将评测结果补充至 GDPEVO 榜单。"
     references:
-      - label: "Harness Comparison Leaderboard"
-        url: "https://penguin.ooo/leaderboards/harness-comparison"
-    deliverables:
-      - "Experiment folders under experiments/harness-comparison/<experiment-id>/ following RFC-0002 & RFC-0005"
-      - "Updated leaderboards/harness-comparison/leaderboard.yaml with pre- and post-evolution entries"
+      - "https://penguin.ooo/leaderboards/gdpevo-essential"
     assignee: null
-    community_issue: null
-    target_issue: null
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues"
     linked_pr: null
-    updated_at: "2026-11-10"
 
   - id: "RSI-Q005"
     status: "open"
-    category: "leaderboard-eval"
-    difficulty: "A"
-    exp: 550
-    loot:
-      - item: "trace-crystal"
-        count: 3
-      - item: "evolution-core"
-        count: 1
-    target_repo: "Prism-Shadow/penguin-harness-benchmark"
-    related_repos: []
-    title: "Multi-Model Self-Evolution Capability Matrix on GDPEVO Essential (Phase II)"
-    title_zh: "更多基座大模型的自进化能力矩阵对比（GDPEVO Essential 二期扩充）"
-    summary: "Following our Phase I DeepSeek Flash runs across 4 RSI methods, expand GDPEVO Essential across Kimi-K3, GLM-5.3, Qwen3, Claude, Gemini, and GPT to compare model-intrinsic evolution capability."
-    summary_zh: "在一期已完成 DeepSeek Flash 下的 4 种 RSI 算法对比实验基础上，围绕 penguin.ooo/leaderboards/gdpevo-essential 补充 Kimi-K3、GLM-5.3、Qwen3、Claude、Gemini、GPT 等更多基座模型在统一 RSI 算法下的进化幅度对比。"
+    domain: "RSI Algorithm"
+    exp: 50
+    target_repo: "Prism-Shadow/penguin-harness-plugins"
+    title: "Integrate RSIAgent Method"
+    title_zh: "集成 RSIAgent 方法"
+    description: "Implement and integrate RSIAgent (arXiv:2609.15364), coordinating Curriculum, Actor, and Verifier agents for broad-then-deep exploration and frozen causal memory."
+    description_zh: "复现并集成 RSIAgent（arXiv:2609.15364），通过 Curriculum、Actor 与 Verifier 智能体执行先广度后深度的环境探索，构建可复用的冻结因果记忆。"
     references:
-      - label: "GDPEVO Essential Leaderboard"
-        url: "https://penguin.ooo/leaderboards/gdpevo-essential"
-      - label: "GDPevo (arXiv:2608.03764)"
-        url: "https://arxiv.org/pdf/2608.03764"
-    deliverables:
-      - "Split sub-benchmark experiment directories under experiments/gdpevo-essential/ per RFC-0002"
-      - "Aggregated mean expressions in leaderboards/gdpevo-essential/leaderboard.yaml per RFC-0005"
+      - "https://arxiv.org/abs/2609.15364"
     assignee: null
-    community_issue: null
-    target_issue: null
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues"
     linked_pr: null
-    updated_at: "2026-11-10"
 
   - id: "RSI-Q006"
     status: "open"
-    category: "plugin-ecosystem"
-    difficulty: "A"
-    exp: 500
-    loot:
-      - item: "ontology-rune"
-        count: 2
-      - item: "harness-gear"
-        count: 1
+    domain: "RSI Algorithm"
+    exp: 50
     target_repo: "Prism-Shadow/penguin-harness-plugins"
-    related_repos:
-      - "Prism-Shadow/penguin-harness"
-    title: "PenguinHarness Self-Evolving Knowledge Base Plugin"
-    title_zh: "开发 PenguinHarness 知识库插件（支持文档检索、溯源引用与记忆自演化）"
-    summary: "Build a first-class Knowledge Base plugin for PenguinHarness supporting multi-format ingestion, hybrid search, strict inline citation ([1][2]), and trace-driven knowledge curation."
-    summary_zh: "为 PenguinHarness 构建官方知识库插件（发布至 penguin-harness-plugins），支持多格式文档切分、混合检索、行内严格溯源引用（[1][2]）以及在 Agent 执行轨迹中自动沉淀与修正领域知识条目。"
+    title: "Integrate RRSI Method"
+    title_zh: "集成 RRSI 方法"
+    description: "Implement and integrate Regularized RSI (RRSI, arXiv:2609.24972) with annealed proposer budget, anti-overfitting critic, and token pruner."
+    description_zh: "复现并集成正则化递归自进化方法 RRSI（arXiv:2609.24972），包含退火修改预算 Proposer、防基准过拟合 Critic 与 Token 剪枝器 Pruner。"
     references:
-      - label: "penguin-harness-plugins"
-        url: "https://github.com/Prism-Shadow/penguin-harness-plugins"
-    deliverables:
-      - "Installable plugin package conforming to RFC-0003 with Skill + Workbench UI"
-      - "Registry entry PR in Prism-Shadow/penguin-harness-plugins"
+      - "https://arxiv.org/abs/2609.24972"
+      - "https://github.com/google-research/rrsi"
     assignee: null
-    community_issue: null
-    target_issue: null
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues"
     linked_pr: null
-    updated_at: "2026-11-10"
 
   - id: "RSI-Q007"
     status: "open"
-    category: "plugin-ecosystem"
-    difficulty: "A"
-    exp: 550
-    loot:
-      - item: "ontology-rune"
-        count: 3
+    domain: "PenguinHarness"
+    exp: 50
     target_repo: "Prism-Shadow/penguin-harness-plugins"
-    related_repos:
-      - "Prism-Shadow/penguin-harness"
-    title: "PenguinHarness Ontology & Causal Action Graph Plugin"
-    title_zh: "开发 PenguinHarness 本体（Ontology）插件：实体关系与因果动作图谱演化"
-    summary: "Build an Ontology plugin for PenguinHarness that models typed domain objects, relations, and action preconditions/effects, and automatically refines the ontology from RSI failure traces."
-    summary_zh: "构建 PenguinHarness 本体（Ontology）插件，将复杂业务或科研环境抽象为强类型的实体（Objects）、关系（Links）与可执行动作契约（Action Types & Causal Rules），并支持从 RSI 失败轨迹中自动发现缺失约束与演化本体结构。"
+    title: "Develop Knowledge Base Plugin"
+    title_zh: "开发知识库插件"
+    description: "Develop a Knowledge Base plugin for PenguinHarness supporting document ingestion, hybrid retrieval, inline citations, and trace-driven knowledge accumulation."
+    description_zh: "为 PenguinHarness 开发知识库插件，支持多源文档切分入库、混合检索、行内引用标注以及从 Agent 轨迹中持续沉淀领域知识。"
     references:
-      - label: "penguin-harness-plugins"
-        url: "https://github.com/Prism-Shadow/penguin-harness-plugins"
-    deliverables:
-      - "Ontology plugin package with schema inspector workbench and causal rule curator skill"
-      - "Demo case showing ontology self-refinement on a structured decision/environment task"
+      - "https://github.com/Prism-Shadow/penguin-harness"
+      - "https://github.com/Prism-Shadow/penguin-harness-plugins"
     assignee: null
-    community_issue: null
-    target_issue: null
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues"
     linked_pr: null
-    updated_at: "2026-11-10"
 
   - id: "RSI-Q008"
     status: "open"
-    category: "cross-framework-rsi"
-    difficulty: "B"
-    exp: 450
-    loot:
-      - item: "harness-gear"
-        count: 2
-      - item: "trace-crystal"
-        count: 1
-    target_repo: "Prism-Shadow/penguin-harness-community"
-    related_repos:
-      - "Prism-Shadow/penguin-harness-benchmark"
-    title: "End-to-End Example: Optimize LangGraph Agents with PenguinHarness RSI"
-    title_zh: "跑通使用 PenguinHarness 的 RSI 自动优化 LangGraph 智能体的端到端示例"
-    summary: "Provide a complete runnable pipeline that wraps a LangGraph agent, evaluates it on a PenguinHarness Benchmark, and uses PenguinHarness RSI to evolve its graph prompts and routing logic."
-    summary_zh: "编写并跑通使用 PenguinHarness 的 RSI 工具链优化外部 LangGraph 多节点工作流的完整示例：将 LangGraph Agent 接入评测闭环，自动收集失败 Trace 并通过 Reflector/Curator 迭代其节点 Prompt 与状态路由逻辑，附带进化前后指标对比。"
+    domain: "PenguinHarness"
+    exp: 50
+    target_repo: "Prism-Shadow/penguin-harness-plugins"
+    title: "Develop Ontology Plugin"
+    title_zh: "开发本体插件"
+    description: "Develop an Ontology plugin for PenguinHarness providing typed entity-relation-action modeling and trace-driven ontology refinement."
+    description_zh: "为 PenguinHarness 开发本体（Ontology）插件，支持实体、关系与动作契约的结构化建模及基于执行轨迹的本体自动演化。"
     references:
-      - label: "RFC-0002 Evaluation"
-        url: "/rfcs/rfc-0002-evaluation/"
-    deliverables:
-      - "Runnable example repo/directory with LangGraph adapter + PenguinHarness RSI loop"
-      - "Logged before/after trace comparison and documentation guide"
+      - "https://github.com/Prism-Shadow/penguin-harness"
+      - "https://github.com/Prism-Shadow/penguin-harness-plugins"
     assignee: null
-    community_issue: null
-    target_issue: null
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues"
     linked_pr: null
-    updated_at: "2026-11-10"
-
-  - id: "RSI-Q009"
-    status: "open"
-    category: "cross-framework-rsi"
-    difficulty: "B"
-    exp: 450
-    loot:
-      - item: "harness-gear"
-        count: 2
-      - item: "trace-crystal"
-        count: 1
-    target_repo: "Prism-Shadow/penguin-harness-community"
-    related_repos:
-      - "Prism-Shadow/penguin-harness-benchmark"
-    title: "End-to-End Example: Optimize Dify Workflows with PenguinHarness RSI"
-    title_zh: "跑通使用 PenguinHarness 的 RSI 自动优化 Dify 工作流/应用的端到端示例"
-    summary: "Connect PenguinHarness RSI to Dify workflows (via DSL YAML & API) to automatically benchmark, diagnose failure traces, patch Dify node prompts, and verify score improvements."
-    summary_zh: "编写并跑通使用 PenguinHarness 的 RSI 优化 Dify 应用/工作流的完整案例：通过 Dify DSL YAML 与 API 桥接评测器，利用 PenguinHarness 自动分析错误原因、改写 Dify 节点提示词与分支条件，并输出可复现的准确率提升报告。"
-    references:
-      - label: "RFC-0002 Evaluation"
-        url: "/rfcs/rfc-0002-evaluation/"
-    deliverables:
-      - "Dify DSL bridge script + PenguinHarness RSI optimization example"
-      - "Step-by-step reproduction tutorial and evaluation metrics"
-    assignee: null
-    community_issue: null
-    target_issue: null
-    linked_pr: null
-    updated_at: "2026-11-10"
-
-  - id: "RSI-Q010"
-    status: "open"
-    category: "tutorial-blog"
-    difficulty: "B"
-    exp: 400
-    loot:
-      - item: "benchmark-astrolabe"
-        count: 2
-      - item: "trace-crystal"
-        count: 1
-    target_repo: "Prism-Shadow/penguin-harness-community"
-    related_repos:
-      - "Prism-Shadow/penguin-harness"
-    title: "Playful 15-Minute RSI Tutorial for the Penguin Homepage Blog"
-    title_zh: "打造好玩、直观、可验证自进化效果的入门教程（登上 Penguin 主页博客）"
-    summary: "Create a fun, visual, interactive beginner tutorial (e.g., evolving a game-playing or dungeon-solving agent from 40% to 85%+ win rate in 3 rounds) to be featured on penguin.ooo/blog."
-    summary_zh: "设计一篇兼具趣味性与可验证性的 PenguinHarness 自进化入门教程（例如让智能体在趣味策略博弈、解谜或闯关任务中从初始 40% 胜率经过 3 轮自进化飙升至 85%+，直观展示进化出的规则手册与技能），优胜作品将直接署名发布于 penguin.ooo 主页官方博客。"
-    references:
-      - label: "Penguin Homepage"
-        url: "https://penguin.ooo"
-    deliverables:
-      - "Self-contained mini-benchmark + starter agent + 3-round evolution walkthrough"
-      - "Bilingual blog post draft with visual score progression and trace diff highlights"
-    assignee: null
-    community_issue: null
-    target_issue: null
-    linked_pr: null
-    updated_at: "2026-11-10"
-
-  - id: "RSI-Q011"
-    status: "in_review"
-    category: "harness-core"
-    difficulty: "B"
-    exp: 350
-    loot:
-      - item: "harness-gear"
-        count: 2
-    target_repo: "Prism-Shadow/penguin-harness"
-    related_repos: []
-    title: "Agent Author Metadata & Author-Grouped Agents Directory"
-    title_zh: "支持 Agent 作者元数据标识与按作者分组展示页（penguin-harness#1508）"
-    summary: "Equip PenguinHarness Agents with author metadata across core, server, CLI, and web UI, grouping the Agents directory by author for community sharing."
-    summary_zh: "在 PenguinHarness 的 core、server、CLI 与 Web 界面中为 Agent 增加作者（author）元数据支持，并在 Agents 页面按作者分组聚合，便于社区创作者署名分享。"
-    references:
-      - label: "penguin-harness#1508"
-        url: "https://github.com/Prism-Shadow/penguin-harness/pull/1508"
-    deliverables:
-      - "Core & server schema support for agent author metadata"
-      - "Web UI author-grouped Agents view"
-    assignee: "hiyouga"
-    community_issue: "https://github.com/Prism-Shadow/penguin-harness-community/issues/11"
-    target_issue: "https://github.com/Prism-Shadow/penguin-harness/pull/1508"
-    linked_pr: "https://github.com/Prism-Shadow/penguin-harness/pull/1508"
-    updated_at: "2026-11-08"
-
-  - id: "RSI-Q012"
-    status: "in_review"
-    category: "harness-core"
-    difficulty: "A"
-    exp: 450
-    loot:
-      - item: "harness-gear"
-        count: 2
-      - item: "trace-crystal"
-        count: 1
-    target_repo: "Prism-Shadow/penguin-harness"
-    related_repos: []
-    title: "Context Compaction Hand-Off Files & Trace Query Continuity"
-    title_zh: "上下文压缩前自动写入交接文件并引导新上下文查询历史 Trace（penguin-harness#1491）"
-    summary: "Ensure context compaction writes structured hand-off artifacts before summarizing and teaches the compacted context how to query the full execution Trace."
-    summary_zh: "改进长程任务的上下文压缩（Compaction）机制：在生成摘要前自动持久化交接文件（hand-off files），并向新上下文注入历史 Trace 检索指令，保障长时自进化与复杂工程不丢关键细节。"
-    references:
-      - label: "penguin-harness#1491"
-        url: "https://github.com/Prism-Shadow/penguin-harness/pull/1491"
-    deliverables:
-      - "Pre-compaction hand-off file writer and Trace query instructions in core/server/web"
-    assignee: "hiyouga"
-    community_issue: "https://github.com/Prism-Shadow/penguin-harness-community/issues/12"
-    target_issue: "https://github.com/Prism-Shadow/penguin-harness/pull/1491"
-    linked_pr: "https://github.com/Prism-Shadow/penguin-harness/pull/1491"
-    updated_at: "2026-11-05"
-
-  - id: "RSI-Q013"
-    status: "completed"
-    category: "leaderboard-eval"
-    difficulty: "S"
-    exp: 700
-    loot:
-      - item: "evolution-core"
-        count: 2
-      - item: "trace-crystal"
-        count: 3
-    target_repo: "Prism-Shadow/penguin-harness-benchmark"
-    related_repos: []
-    title: "GDPEVO Essential 6-Domain Benchmark & Four RSI Methods Evaluation (Phase I)"
-    title_zh: "完成 GDPEVO Essential 六大领域基准与 4 种 RSI 算法对比评测（SkillAdam / SkillOpt / OpenSkill / Trace）"
-    summary: "Standardized the 6 independent GDPEVO Essential domain benchmarks and evaluated four RSI methods (SkillAdam, SkillOpt, OpenSkill, Trace) against a shared baseline on DeepSeek Flash."
-    summary_zh: "将 GDPEVO Essential 拆分为 6 个独立领域子基准（法院书记、承保审查、工程组合分析、财务控制、投资组合管理、服务工单），完成 SkillAdam、SkillOpt、OpenSkill、Trace 四种 RSI 算法与基线的完整实验评测并上线榜单。"
-    references:
-      - label: "penguin-harness-benchmark#16"
-        url: "https://github.com/Prism-Shadow/penguin-harness-benchmark/pull/16"
-      - label: "penguin-harness-benchmark#20"
-        url: "https://github.com/Prism-Shadow/penguin-harness-benchmark/pull/20"
-      - label: "GDPEVO Essential Leaderboard"
-        url: "https://penguin.ooo/leaderboards/gdpevo-essential"
-    deliverables:
-      - "30 split experiment folders across 6 GDPEVO domains & 5 methods (Merged)"
-      - "Published leaderboards/gdpevo-essential/leaderboard.yaml (Merged)"
-    assignee: "Saigyouji-Yuyuko1000"
-    community_issue: "https://github.com/Prism-Shadow/penguin-harness-community/issues/23"
-    target_issue: "https://github.com/Prism-Shadow/penguin-harness-benchmark/pull/20"
-    linked_pr: "https://github.com/Prism-Shadow/penguin-harness-benchmark/pull/20"
-    updated_at: "2026-11-03"
-
-  - id: "RSI-Q014"
-    status: "completed"
-    category: "leaderboard-eval"
-    difficulty: "A"
-    exp: 600
-    loot:
-      - item: "trace-crystal"
-        count: 3
-      - item: "benchmark-astrolabe"
-        count: 2
-    target_repo: "Prism-Shadow/penguin-harness-benchmark"
-    related_repos: []
-    title: "Cross-Harness Comparison on Sec A-E Benchmarks (PenguinHarness vs. DSH vs. Pi vs. Codex)"
-    title_zh: "完成 Sec A-E 跨框架首期评测实验与榜单发布（PenguinHarness / DSH / Pi / Codex）"
-    summary: "Migrated Sec A-E to the standard Benchmark format and evaluated PenguinHarness, DSH, Pi, and Codex across all five sections to launch the Agent Harness Comparison leaderboard."
-    summary_zh: "将 Sec A–E 五大评测集迁移为标准 Benchmark 格式，完成 PenguinHarness、DSH、Pi 与 Codex 四种框架在统一 DeepSeek Flash 模型下的全量实验对比与榜单发布。"
-    references:
-      - label: "penguin-harness-benchmark#21"
-        url: "https://github.com/Prism-Shadow/penguin-harness-benchmark/pull/21"
-      - label: "Harness Comparison Leaderboard"
-        url: "https://penguin.ooo/leaderboards/harness-comparison"
-    deliverables:
-      - "20 cross-harness experiment runs for Sec A-E & published harness-comparison leaderboard (Merged)"
-    assignee: "Saigyouji-Yuyuko1000"
-    community_issue: "https://github.com/Prism-Shadow/penguin-harness-community/issues/25"
-    target_issue: "https://github.com/Prism-Shadow/penguin-harness-benchmark/pull/21"
-    linked_pr: "https://github.com/Prism-Shadow/penguin-harness-benchmark/pull/21"
-    updated_at: "2026-11-03"
-
-  - id: "RSI-Q015"
-    status: "completed"
-    category: "harness-core"
-    difficulty: "A"
-    exp: 500
-    loot:
-      - item: "harness-gear"
-        count: 2
-      - item: "ontology-rune"
-        count: 1
-    target_repo: "Prism-Shadow/penguin-harness"
-    related_repos: []
-    title: "Publish Interface Generator penguin-gen-ifaces & Literal Module Contributions"
-    title_zh: "发布插件接口生成器 penguin-gen-ifaces 与模块静态声明校验（penguin-harness#1475）"
-    summary: "Publish penguin-gen-ifaces to generate plugin interface manifests (ifaces.json) and enforce static literal module contributions across all shipped plugins."
-    summary_zh: "将接口生成器独立发布为 penguin-gen-ifaces，规范插件模块声明（ifaces.json）并对非字面量贡献进行静态拦截，夯实插件市场与 Workbench 的底层契约。"
-    references:
-      - label: "penguin-harness#1475"
-        url: "https://github.com/Prism-Shadow/penguin-harness/pull/1475"
-    deliverables:
-      - "Published penguin-gen-ifaces CLI & literal contribution verifier (Merged)"
-    assignee: "hiyouga"
-    community_issue: "https://github.com/Prism-Shadow/penguin-harness-community/issues/13"
-    target_issue: "https://github.com/Prism-Shadow/penguin-harness/pull/1475"
-    linked_pr: "https://github.com/Prism-Shadow/penguin-harness/pull/1475"
-    updated_at: "2026-11-05"
-
-  - id: "RSI-Q016"
-    status: "completed"
-    category: "harness-core"
-    difficulty: "B"
-    exp: 400
-    loot:
-      - item: "harness-gear"
-        count: 2
-    target_repo: "Prism-Shadow/penguin-harness"
-    related_repos: []
-    title: "Extract Standalone @prismshadow/a2ui Rich Interactive Block Package"
-    title_zh: "抽离独立交互式富组件语法包 @prismshadow/a2ui（penguin-harness#1474）"
-    summary: "Decouple the A2UI grammar from core into a dedicated @prismshadow/a2ui package for rich interactive blocks (charts, choices, forms, gauges, procedures)."
-    summary_zh: "将 A2UI 交互式富组件语法从 core 抽离为独立包 @prismshadow/a2ui，支持选项卡、表单、步骤告警、仪表盘、图表等开箱即用的 Agent 交互渲染。"
-    references:
-      - label: "penguin-harness#1474"
-        url: "https://github.com/Prism-Shadow/penguin-harness/pull/1474"
-    deliverables:
-      - "@prismshadow/a2ui package extracted and wired across core and web (Merged)"
-    assignee: "hiyouga"
-    community_issue: "https://github.com/Prism-Shadow/penguin-harness-community/issues/14"
-    target_issue: "https://github.com/Prism-Shadow/penguin-harness/pull/1474"
-    linked_pr: "https://github.com/Prism-Shadow/penguin-harness/pull/1474"
-    updated_at: "2026-11-05"
-
-  - id: "RSI-Q017"
-    status: "completed"
-    category: "leaderboard-eval"
-    difficulty: "A"
-    exp: 450
-    loot:
-      - item: "benchmark-astrolabe"
-        count: 2
-      - item: "trace-crystal"
-        count: 1
-    target_repo: "Prism-Shadow/penguin-harness-benchmark"
-    related_repos: []
-    title: "Harbor Biomedical Repeated-Measure Benchmark Tasks under data/"
-    title_zh: "完成生物医学重复测量分析 Harbor Benchmark 标准任务集迁移（penguin-harness-benchmark#24）"
-    summary: "Standardize and run the biomedical repeated-measure analysis Cases as Harbor tasks under data/ in penguin-harness-benchmark."
-    summary_zh: "将生物医学重复测量分析评测集标准化为 Harbor 格式并归档于 penguin-harness-benchmark 的 data/ 目录下，完成端到端可复现评测验证。"
-    references:
-      - label: "penguin-harness-benchmark#24"
-        url: "https://github.com/Prism-Shadow/penguin-harness-benchmark/pull/24"
-    deliverables:
-      - "Standardized Harbor tasks under data/ in penguin-harness-benchmark (Merged)"
-    assignee: "hiyouga"
-    community_issue: "https://github.com/Prism-Shadow/penguin-harness-community/issues/15"
-    target_issue: "https://github.com/Prism-Shadow/penguin-harness-benchmark/pull/24"
-    linked_pr: "https://github.com/Prism-Shadow/penguin-harness-benchmark/pull/24"
-    updated_at: "2026-11-04"
-
-  - id: "RSI-Q018"
-    status: "completed"
-    category: "paper-reproduction"
-    difficulty: "A"
-    exp: 500
-    loot:
-      - item: "evolution-core"
-        count: 1
-      - item: "trace-crystal"
-        count: 2
-    target_repo: "Prism-Shadow/penguin-harness-benchmark"
-    related_repos:
-      - "Prism-Shadow/awesome-rsi"
-    title: "ACE & OPRO RSI Toolkit Calibration & Baseline Reproduction"
-    title_zh: "完成 ACE 与 OPRO 自进化算法工具包校准及基线复现实验"
-    summary: "Calibrated the sequential offline Reflector/Curator ACE loop and OPRO optimizer toolkit in PenguinHarness with reproducible traces and Awesome RSI taxonomy."
-    summary_zh: "完成 PenguinHarness 内置 ACE（Reflector/Curator 离线顺序自进化）与 OPRO 优化器工具包的基准校准实验，并梳理 Awesome RSI 论文演进脉络。"
-    references:
-      - label: "awesome-rsi"
-        url: "https://github.com/Prism-Shadow/awesome-rsi"
-    deliverables:
-      - "Calibrated ACE & OPRO RSI skills and reproducible benchmark traces (Completed)"
-    assignee: "lzh368"
-    community_issue: "https://github.com/Prism-Shadow/penguin-harness-community/issues/18"
-    target_issue: "https://github.com/Prism-Shadow/penguin-harness-benchmark/pull/4"
-    linked_pr: "https://github.com/Prism-Shadow/penguin-harness-benchmark/pull/4"
-    updated_at: "2026-11-02"
-
-  - id: "RSI-Q019"
-    status: "completed"
-    category: "leaderboard-eval"
-    difficulty: "A"
-    exp: 500
-    loot:
-      - item: "benchmark-astrolabe"
-        count: 2
-      - item: "ontology-rune"
-        count: 1
-    target_repo: "Prism-Shadow/penguin-harness-community"
-    related_repos:
-      - "Prism-Shadow/penguin-harness-benchmark"
-    title: "Standardize RFC-0001..0005 Protocols & Multi-View Leaderboard Engine"
-    title_zh: "完成 RFC-0001 至 RFC-0005 社区评测标准与三视图（Table / Pareto / Waffle）榜单规范设计"
-    summary: "Established the standardized Benchmark, Evaluation, Plugin, Bi-weekly Meeting, and Leaderboard expression specs driving Table, Pareto, and Waffle views."
-    summary_zh: "制定并落地 Benchmark、Evaluation、Plugin、双周会与 Leaderboard 表达式标准规范，支持单一配置文件驱动排名表、帕累托前沿与单题华夫图三视图。"
-    references:
-      - label: "RFC-0005 Leaderboard"
-        url: "/rfcs/rfc-0005-leaderboard/"
-    deliverables:
-      - "Merged RFC-0001 through RFC-0005 specifications and bilingual documentation (Completed)"
-    assignee: "ArisaZz"
-    community_issue: "https://github.com/Prism-Shadow/penguin-harness-community/issues/21"
-    target_issue: "https://github.com/Prism-Shadow/penguin-harness-community/pull/27"
-    linked_pr: "https://github.com/Prism-Shadow/penguin-harness-community/pull/27"
-    updated_at: "2026-11-03"
