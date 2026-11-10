@@ -14,8 +14,6 @@ interface Props {
 
 const { locale } = Astro.props;
 const href = (path: string) => localePath(locale, path);
-const otherLocale: Locale = locale === "zh" ? "en" : "zh";
-const switchHref = localePath(otherLocale, "/quests/");
 
 const openCount = QUESTS.filter((q) => q.status === "open").length;
 const reviewCount = QUESTS.filter((q) => q.status === "in_review" || q.status === "claimed").length;
@@ -26,7 +24,6 @@ const { rows: leaderboardRows } = computeMonthlyRewardLeaderboard();
 const COPY = {
   zh: {
     title: "任务板",
-    langSwitch: "English",
     subtitle: "通过 GitHub Issue 认领任务（每人同时上限 2 项），每月末按完成积分结算 $2,000 美元奖励池。",
     propose: "发布任务 ↗",
     tabAll: "全部",
@@ -35,7 +32,6 @@ const COPY = {
     tabCompleted: "已完成",
     claim: "认领 ↗",
     tasksHeading: "任务列表",
-    leaderboardHeading: "月度贡献榜",
     leaderboardNote: "月度激励池 $2,000 USD（$1,100 按积分比例分配 + $500 前五名奖励 + $400 委员会津贴）。",
     colMember: "member",
     colHandle: "github",
@@ -44,7 +40,6 @@ const COPY = {
   },
   en: {
     title: "Quests",
-    langSwitch: "中文",
     subtitle: "Claim tasks via GitHub Issues (up to 2 active claims per user). Settled monthly from a $2,000 USD reward pool.",
     propose: "Propose Task ↗",
     tabAll: "All",
@@ -53,7 +48,6 @@ const COPY = {
     tabCompleted: "Completed",
     claim: "Claim ↗",
     tasksHeading: "Tasks",
-    leaderboardHeading: "Leaderboard",
     leaderboardNote: "$2,000 USD monthly pool ($1,100 proportional + $500 Top-5 bonus + $400 committee stipend).",
     colMember: "member",
     colHandle: "github",
@@ -72,17 +66,10 @@ const COPY = {
       </h1>
       <div class="flex items-center gap-4 text-sm">
         <a
-          href={ buildProposeTaskPrUrl() }
+          href={buildProposeTaskPrUrl()}
           class="text-gray-500 transition-colors hover:text-gray-950 dark:text-gray-400 dark:hover:text-white"
         >
           {COPY.propose}
-        </a>
-        <a
-          href={switchHref}
-          data-lang-switch={otherLocale}
-          class="text-gray-500 transition-colors hover:text-gray-950 dark:text-gray-400 dark:hover:text-white"
-        >
-          {COPY.langSwitch}
         </a>
       </div>
     </div>
@@ -277,14 +264,6 @@ const COPY = {
           row.style.display = status === "all" || st === status ? "" : "none";
         });
       });
-    });
-  }
-
-  for (const link of document.querySelectorAll<HTMLAnchorElement>("[data-lang-switch]")) {
-    link.addEventListener("click", () => {
-      try {
-        localStorage.setItem("phc-site.lang", link.dataset.langSwitch!);
-      } catch {}
     });
   }
 </script>

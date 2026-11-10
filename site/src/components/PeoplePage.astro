@@ -1,147 +1,73 @@
 ---
-import { localePath, type Locale } from "../shared/i18n";
-import {
-  COMMITTEE_DOMAINS,
-  FOUNDING_MEMBERS,
-  buildCommitteeApplyUrl,
-} from "../shared/community";
+import type { Locale } from "../shared/i18n";
+import { COMMITTEE_GROUPS } from "../shared/community";
 
 interface Props {
   locale: Locale;
 }
 
 const { locale } = Astro.props;
-const otherLocale: Locale = locale === "zh" ? "en" : "zh";
-const switchHref = localePath(otherLocale, "/people/");
 
 const COPY = {
   zh: {
-    title: "成员",
-    langSwitch: "English",
-    leadership: "项目核心成员",
-    committee: "RSI 社区委员会",
-    committeeNote: "每位在任委员享有 $100 / 月固定津贴，空缺席位公开招募中。",
-    openSeat: "虚位以待 · 申请加入 ↗",
+    title: "RSI 社区委员会",
   },
   en: {
-    title: "People",
-    langSwitch: "中文",
-    leadership: "Project Leadership",
-    committee: "RSI Committee",
-    committeeNote: "Each committee seat carries a $100 / month stipend. Open seats are recruiting.",
-    openSeat: "Open Seat · Apply ↗",
+    title: "RSI Community Committee",
   },
 }[locale];
 ---
 
 <div class="mx-auto w-full max-w-3xl px-6 py-12">
   <header class="pb-10">
-    <div class="flex items-baseline justify-between gap-4">
-      <h1 class="text-4xl font-semibold tracking-tight text-gray-950 dark:text-white">
-        {COPY.title}
-      </h1>
-      <a
-        href={switchHref}
-        data-lang-switch={otherLocale}
-        class="text-sm text-gray-500 transition-colors hover:text-gray-950 dark:text-gray-400 dark:hover:text-white"
-      >
-        {COPY.langSwitch}
-      </a>
-    </div>
+    <h1 class="text-4xl font-semibold tracking-tight text-gray-950 dark:text-white">
+      {COPY.title}
+    </h1>
   </header>
 
-  <!-- Project Leadership (modeled directly on rsi-benchmark.com/people) -->
-  <section>
-    <div class="mb-6 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-t border-gray-200 pt-6 dark:border-gray-800">
-      <h2 class="text-2xl font-medium text-gray-950 dark:text-white">
-        {COPY.leadership}
-      </h2>
-    </div>
-
-    <ul class="sm:grid sm:grid-cols-4 sm:gap-x-6 sm:gap-y-8">
-      {
-        FOUNDING_MEMBERS.map((member) => (
-          <li class="border-t border-gray-200 first:border-t-0 sm:border-t-0 dark:border-gray-800">
-            <a
-              href={member.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="group flex items-center gap-4 py-3 sm:block sm:py-0"
-            >
-              <div class="aspect-square h-16 w-16 shrink-0 overflow-hidden rounded-[4px] bg-gray-100 sm:h-auto sm:w-full dark:bg-gray-900">
-                <img
-                  src={member.avatar}
-                  alt={member.name}
-                  loading="lazy"
-                  width="320"
-                  height="320"
-                  class="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-                />
-              </div>
-              <div class="sm:mt-3">
-                <p class="text-base text-gray-950 transition-colors group-hover:text-brand-600 dark:text-gray-100 dark:group-hover:text-brand-400">
-                  {member.name}
-                </p>
-              </div>
-            </a>
-          </li>
-        ))
-      }
-    </ul>
-  </section>
-
-  <!-- RSI Committee -->
-  <section class="mt-16">
-    <div class="mb-4 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-t border-gray-200 pt-6 dark:border-gray-800">
-      <h2 class="text-2xl font-medium text-gray-950 dark:text-white">
-        {COPY.committee}
-      </h2>
-      <p class="text-xs text-gray-500 dark:text-gray-400">
-        {COPY.committeeNote}
-      </p>
-    </div>
-
-    <div class="divide-y divide-gray-200 border-t border-gray-200 dark:divide-gray-800 dark:border-gray-800">
-      {
-        COMMITTEE_DOMAINS.map((domain) => (
-          <div class="flex flex-col justify-between gap-2 py-4 sm:flex-row sm:items-baseline">
-            <div class="text-sm font-medium text-gray-900 dark:text-gray-100">
-              {domain.title[locale]}
-            </div>
-            <div class="flex flex-wrap items-center gap-x-5 gap-y-1 text-sm">
-              {domain.seats.map((seat) =>
-                seat.status === "filled" ? (
-                  <a
-                    href={seat.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="text-gray-700 transition-colors hover:text-brand-600 dark:text-gray-300 dark:hover:text-brand-400"
-                  >
-                    {seat.name}
-                  </a>
-                ) : (
-                  <a
-                    href={buildCommitteeApplyUrl(domain, seat.role[locale], locale)}
-                    class="text-gray-400 transition-colors hover:text-brand-600 dark:text-gray-500 dark:hover:text-brand-400"
-                  >
-                    {COPY.openSeat}
-                  </a>
-                ),
-              )}
-            </div>
+  <div class="space-y-12">
+    {
+      COMMITTEE_GROUPS.map((group) => (
+        <section>
+          <div class="mb-5 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-t border-gray-200 pt-5 dark:border-gray-800">
+            <h2 class="text-xl font-medium text-gray-950 dark:text-white">
+              {group.title[locale]}
+            </h2>
           </div>
-        ))
-      }
-    </div>
-  </section>
-</div>
 
-<script>
-  for (const link of document.querySelectorAll<HTMLAnchorElement>("[data-lang-switch]")) {
-    link.addEventListener("click", () => {
-      try {
-        localStorage.setItem("phc-site.lang", link.dataset.langSwitch!);
-      } catch {}
-    });
-  }
-</script>
+          <ul class="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2 md:grid-cols-3">
+            {group.members.map((member) => (
+              <li>
+                <a
+                  href={member.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="group flex items-center gap-3 py-1"
+                >
+                  <div class="h-10 w-10 shrink-0 overflow-hidden rounded-full bg-gray-100 dark:bg-gray-900">
+                    <img
+                      src="/avatar-default.svg"
+                      alt={member.name}
+                      loading="lazy"
+                      width="40"
+                      height="40"
+                      class="h-full w-full object-cover"
+                    />
+                  </div>
+                  <div class="min-w-0">
+                    <p class="truncate text-sm font-medium text-gray-950 transition-colors group-hover:text-brand-600 dark:text-gray-100 dark:group-hover:text-brand-400">
+                      {member.name}
+                    </p>
+                    <p class="truncate text-xs text-gray-500 dark:text-gray-400">
+                      {member.direction[locale]}
+                    </p>
+                  </div>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    }
+  </div>
+</div>

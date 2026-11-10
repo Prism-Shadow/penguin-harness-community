@@ -442,310 +442,114 @@ export interface CommunityMember {
   name: string;
   avatar: string;
   github: string;
-  role: Text;
   completedExp: number;
   inReviewExp: number;
   activeClaims: number;
   maxClaims: number;
-  lootInventory: { item: LootId; count: number }[];
-  committeeTrack?: Text;
 }
 
 export const FOUNDING_MEMBERS: CommunityMember[] = [
   {
     handle: "hiyouga",
     name: "Yaowei Zheng",
-    avatar: "https://avatars.githubusercontent.com/u/16256802?v=4",
+    avatar: "/avatar-default.svg",
     github: "https://github.com/hiyouga",
-    role: {
-      zh: "PenguinHarness & RSI Architecture",
-      en: "PenguinHarness & RSI Architecture",
-    },
     completedExp: 1350,
     inReviewExp: 800,
     activeClaims: 2,
     maxClaims: 2,
-    lootInventory: [
-      { item: "harness-gear", count: 4 },
-      { item: "benchmark-astrolabe", count: 2 },
-      { item: "ontology-rune", count: 1 },
-    ],
-    committeeTrack: { zh: "框架与基建", en: "Harness & Infra" },
   },
   {
     handle: "Saigyouji-Yuyuko1000",
     name: "Leijun Zhou",
-    avatar: "https://avatars.githubusercontent.com/u/82754509?v=4",
+    avatar: "/avatar-default.svg",
     github: "https://github.com/Saigyouji-Yuyuko1000",
-    role: {
-      zh: "Benchmarks & Leaderboards",
-      en: "Benchmarks & Leaderboards",
-    },
     completedExp: 1300,
     inReviewExp: 0,
     activeClaims: 0,
     maxClaims: 2,
-    lootInventory: [
-      { item: "trace-crystal", count: 6 },
-      { item: "evolution-core", count: 2 },
-    ],
-    committeeTrack: { zh: "评测与榜单", en: "Benchmarks & Leaderboards" },
   },
   {
     handle: "lzh368",
     name: "Zhihao Liu",
-    avatar: "https://avatars.githubusercontent.com/u/174015635?v=4",
+    avatar: "/avatar-default.svg",
     github: "https://github.com/lzh368",
-    role: {
-      zh: "RSI Algorithms & Awesome RSI",
-      en: "RSI Algorithms & Awesome RSI",
-    },
     completedExp: 500,
     inReviewExp: 0,
     activeClaims: 0,
     maxClaims: 2,
-    lootInventory: [
-      { item: "evolution-core", count: 1 },
-      { item: "trace-crystal", count: 2 },
-    ],
-    committeeTrack: { zh: "自进化算法", en: "RSI Algorithms" },
   },
   {
     handle: "ArisaZz",
     name: "Xiang Qu",
-    avatar: "https://avatars.githubusercontent.com/u/74355374?v=4",
+    avatar: "/avatar-default.svg",
     github: "https://github.com/ArisaZz",
-    role: {
-      zh: "RFC Standards & Operations",
-      en: "RFC Standards & Operations",
-    },
     completedExp: 500,
     inReviewExp: 0,
     activeClaims: 0,
     maxClaims: 2,
-    lootInventory: [
-      { item: "benchmark-astrolabe", count: 2 },
-      { item: "ontology-rune", count: 1 },
-    ],
-    committeeTrack: { zh: "标准与社区运营", en: "Standards & Operations" },
   },
 ];
 
-export interface CommitteeSeat {
-  status: "filled" | "recruiting";
-  handle?: string;
-  name?: string;
-  github?: string;
-  role: Text;
-  stipendUsd: number;
-}
-
-export interface CommitteeDomain {
-  id: string;
-  title: Text;
-  scope: Text;
-  seats: CommitteeSeat[];
-}
-
-export const COMMITTEE_DOMAINS: CommitteeDomain[] = [
-  {
-    id: "harness-infra",
-    title: { zh: "框架与运行时基建", en: "Harness & Runtime" },
-    scope: { zh: "PenguinHarness 核心与 LangGraph / Dify 跨框架适配", en: "PenguinHarness core & LangGraph / Dify adapters" },
-    seats: [
-      { status: "filled", handle: "hiyouga", name: "Yaowei Zheng", github: "https://github.com/hiyouga", role: { zh: "Chair", en: "Chair" }, stipendUsd: 100 },
-      { status: "recruiting", role: { zh: "Co-Chair · 正在招募", en: "Co-Chair · Recruiting" }, stipendUsd: 100 },
-    ],
-  },
-  {
-    id: "benchmark-leaderboard",
-    title: { zh: "评测基准与榜单", en: "Benchmarks & Leaderboards" },
-    scope: { zh: "Benchmark 准入、实验轨迹核验与排行榜维护", en: "Benchmark curation, trace verification & leaderboards" },
-    seats: [
-      { status: "filled", handle: "Saigyouji-Yuyuko1000", name: "Leijun Zhou", github: "https://github.com/Saigyouji-Yuyuko1000", role: { zh: "Chair", en: "Chair" }, stipendUsd: 100 },
-      { status: "recruiting", role: { zh: "Co-Chair · 正在招募", en: "Co-Chair · Recruiting" }, stipendUsd: 100 },
-    ],
-  },
-  {
-    id: "harness-evolution-rsi",
-    title: { zh: "Harness 自进化与泛化", en: "Harness Evolution & Generalization" },
-    scope: { zh: "RRSI、ACE、OPRO 与跨分布（OOD）泛化算法复现", en: "RRSI, ACE, OPRO & OOD generalization algorithms" },
-    seats: [
-      { status: "filled", handle: "lzh368", name: "Zhihao Liu", github: "https://github.com/lzh368", role: { zh: "Chair", en: "Chair" }, stipendUsd: 100 },
-      { status: "recruiting", role: { zh: "Co-Chair · 正在招募", en: "Co-Chair · Recruiting" }, stipendUsd: 100 },
-    ],
-  },
-  {
-    id: "community-evangelism",
-    title: { zh: "社区标准、运营与教程", en: "Standards, Operations & Tutorials" },
-    scope: { zh: "RFC 标准、双周会组织、博客入门教程与月度激励结算", en: "RFC standards, bi-weekly meetings, blog tutorials & rewards" },
-    seats: [
-      { status: "filled", handle: "ArisaZz", name: "Xiang Qu", github: "https://github.com/ArisaZz", role: { zh: "Chair", en: "Chair" }, stipendUsd: 100 },
-      { status: "recruiting", role: { zh: "Co-Chair · 正在招募", en: "Co-Chair · Recruiting" }, stipendUsd: 100 },
-    ],
-  },
-  {
-    id: "env-exploration-rsi",
-    title: { zh: "环境交互与探索 RSI", en: "Environment Exploration & Human RSI" },
-    scope: { zh: "RSIAgent 环境探索、因果世界记忆与 RSI Arena 人类反馈闭环", en: "RSIAgent exploration, causal memory & RSI Arena human feedback" },
-    seats: [
-      { status: "recruiting", role: { zh: "Chair · 正在招募", en: "Chair · Recruiting" }, stipendUsd: 100 },
-      { status: "recruiting", role: { zh: "Co-Chair · 正在招募", en: "Co-Chair · Recruiting" }, stipendUsd: 100 },
-    ],
-  },
-  {
-    id: "plugin-ontology",
-    title: { zh: "知识库与本体插件", en: "Knowledge Base & Ontology Plugins" },
-    scope: { zh: "插件市场（RFC-0003）、自演化知识库与 Ontology 本体插件", en: "Plugin registry, Knowledge Base & Ontology plugins" },
-    seats: [
-      { status: "recruiting", role: { zh: "Chair · 正在招募", en: "Chair · Recruiting" }, stipendUsd: 100 },
-      { status: "recruiting", role: { zh: "Co-Chair · 正在招募", en: "Co-Chair · Recruiting" }, stipendUsd: 100 },
-    ],
-  },
-];
-
-export interface ForumThread {
-  id: string;
-  board: "paper" | "arena" | "bounty" | "plugin";
-  pinned?: boolean;
-  title: Text;
-  author: string;
+export interface CommitteeGroupMember {
+  name: string;
   handle: string;
-  createdAt: string;
-  replies: number;
-  linkedQuestId: string;
-  summary: Text;
-  body: Text[];
-  links?: { label: string; url: string }[];
+  github: string;
+  direction: Text;
 }
 
-export const FORUM_THREADS: ForumThread[] = [
+export interface CommitteeGroup {
+  id: string;
+  title: Text;
+  members: CommitteeGroupMember[];
+}
+
+export const COMMITTEE_GROUPS: CommitteeGroup[] = [
   {
-    id: "thread-rsiagent-rrsi",
-    board: "paper",
-    pinned: true,
-    title: {
-      zh: "必读双璧：环境探索 RSIAgent (2609.15364) 与 Harness 正则化演化 RRSI (2609.24972)",
-      en: "Essential Reading: RSIAgent (2609.15364) & RRSI (2609.24972)",
-    },
-    author: "Yaowei Zheng",
-    handle: "hiyouga",
-    createdAt: "2026-11-09",
-    replies: 28,
-    linkedQuestId: "RSI-Q001",
-    summary: {
-      zh: "如果做环境交互 RSI 或 Harness 演化泛化，这两篇是今年绕不开的核心论文：一个做广度-深度探索与冻结因果记忆，一个做防过拟合正则化。",
-      en: "Two complementary 2026 core papers: RSIAgent for environment exploration via frozen causal memory, and RRSI for regularized harness evolution.",
-    },
-    body: [
+    id: "maintenance",
+    title: { zh: "维护小组", en: "Maintenance Group" },
+    members: [
       {
-        zh: "RSIAgent (arXiv:2609.15364) 协同 Curriculum、Actor、Verifier 智能体执行「先广度后深度」环境探索，将动作-条件-结果因果关系固化为冻结记忆，无需微调参数即可让开源模型在 OSWorld-v2 等基准上超越闭源模型（对应任务 RSI-Q001）。",
-        en: "RSIAgent (arXiv:2609.15364) coordinates Curriculum, Actor, and Verifier agents using broad-then-deep exploration to build reusable frozen causal memory without updating model weights (Quest RSI-Q001).",
-      },
-      {
-        zh: "RRSI (arXiv:2609.24972) 通过退火修改预算（Proposer）、防基准特化审查器（Critic）和 Token 剪枝器（Pruner）抑制训练集过拟合，在 5 个分布外（OOD）基准上取得最高 +4.3 分泛化提升并减少 30% Token（对应任务 RSI-Q002）。",
-        en: "RRSI (arXiv:2609.24972) constrains harness evolution with an annealed proposer budget, a benchmark-overfitting critic, and a token pruner, gaining up to +4.3 pts on OOD benchmarks with 30% fewer policy tokens (Quest RSI-Q002).",
-      },
-    ],
-    links: [
-      { label: "RSIAgent (arXiv:2609.15364)", url: "https://arxiv.org/abs/2609.15364" },
-      { label: "RRSI (arXiv:2609.24972)", url: "https://arxiv.org/abs/2609.24972" },
-    ],
-  },
-  {
-    id: "thread-rsi-arena",
-    board: "arena",
-    pinned: true,
-    title: {
-      zh: "RSI Arena 启示：13,000 GPU 小时、20 个基准与 3,129 票人类盲测教会我们的事",
-      en: "Lessons from RSI Arena: 13,000 GPU-Hours, 20 Benchmarks & 3,129 Human Votes",
-    },
-    author: "Leijun Zhou",
-    handle: "Saigyouji-Yuyuko1000",
-    createdAt: "2026-11-09",
-    replies: 34,
-    linkedQuestId: "RSI-Q003",
-    summary: {
-      zh: "“The agents could do the engineering. People helped show them what needed fixing.” 首轮人类盲测反馈回流后，8/10 智能体在第二轮显著提升了人类偏好胜率。",
-      en: "\"The agents could do the engineering. People helped show them what needed fixing.\" After round-1 human feedback, 8 of 10 agents improved human ratings in round 2.",
-    },
-    body: [
-      {
-        zh: "Bake AI 联合 HuggingFace、NVIDIA、Scale AI、Stanford、MIT、UCLA、UCSB、NYU、UW 与 Notre Dame 给 10 个 Agent 分配相同基座与共享 64 卡集群：当把首轮人类盲测反馈交还给 Agent 自主决定如何改进后，8/10 在第二轮超越了基线，且这种真实体验提升并未单纯反映在静态指标上（对应任务 RSI-Q003）。",
-        en: "In RSI Arena (Bake AI with HuggingFace, NVIDIA, Scale AI, Stanford, MIT, UCLA, UCSB, NYU, UW, and Notre Dame), 10 agents shared a 64-GPU cluster. Feeding round-1 blind human feedback back to the agents enabled 8 of 10 to improve human preference ratings in round 2 — gains that static benchmarks alone did not capture (Quest RSI-Q003).",
+        name: "Yaowei Zheng",
+        handle: "hiyouga",
+        github: "https://github.com/hiyouga",
+        direction: { zh: "Benchmark 方向，RSI 算法方向", en: "Benchmark, RSI Algorithm" },
       },
     ],
   },
   {
-    id: "thread-leaderboards",
-    board: "arena",
-    title: {
-      zh: "跨框架自进化对比 (harness-comparison) 与多模型进化矩阵 (gdpevo-essential) 二期征集",
-      en: "Phase II Call: Cross-Harness RSI (harness-comparison) & Multi-Model Matrix (gdpevo-essential)",
-    },
-    author: "Leijun Zhou",
-    handle: "Saigyouji-Yuyuko1000",
-    createdAt: "2026-11-08",
-    replies: 19,
-    linkedQuestId: "RSI-Q004",
-    summary: {
-      zh: "首期 Sec A–E 与 GDPEVO 四算法对比已上线，欢迎认领 RSI-Q004 与 RSI-Q005 补充更多外部框架与基座模型。",
-      en: "Phase I is live on penguin.ooo; claim RSI-Q004 or RSI-Q005 to evaluate additional frameworks and models.",
-    },
-    body: [
+    id: "proposal",
+    title: { zh: "提案小组", en: "Proposal Group" },
+    members: [
       {
-        zh: "首期实验已合入 penguin-harness-benchmark（#20, #21）。二期重点评测 OpenHands、Claude Code、Codex CLI、SWE-agent 等框架的自进化前后收益，以及 Kimi-K3、GLM-5.3、Qwen3、Claude、Gemini、GPT 的进化潜力对比。",
-        en: "Phase I is merged in penguin-harness-benchmark (#20, #21). Phase II expands to OpenHands, Claude Code, Codex CLI, SWE-agent, and additional frontier models.",
+        name: "Xiang Qu",
+        handle: "ArisaZz",
+        github: "https://github.com/ArisaZz",
+        direction: { zh: "RSI 算法方向", en: "RSI Algorithm" },
       },
-    ],
-    links: [
-      { label: "harness-comparison", url: "https://penguin.ooo/leaderboards/harness-comparison" },
-      { label: "gdpevo-essential", url: "https://penguin.ooo/leaderboards/gdpevo-essential" },
-    ],
-  },
-  {
-    id: "thread-plugins-bridges",
-    board: "plugin",
-    title: {
-      zh: "知识库插件、本体插件，以及用 PenguinHarness RSI 优化 LangGraph / Dify 工作流",
-      en: "Knowledge Base, Ontology Plugin, and Optimizing LangGraph & Dify with RSI",
-    },
-    author: "Zhihao Liu",
-    handle: "lzh368",
-    createdAt: "2026-11-07",
-    replies: 15,
-    linkedQuestId: "RSI-Q008",
-    summary: {
-      zh: "围绕知识库（RSI-Q006）、Ontology（RSI-Q007）以及外部 LangGraph / Dify 工作流自动进化（RSI-Q008 / Q009）的接口设计。",
-      en: "Design notes for Knowledge Base (RSI-Q006), Ontology (RSI-Q007), and LangGraph / Dify RSI optimization (RSI-Q008 / Q009).",
-    },
-    body: [
       {
-        zh: "将外部 LangGraph 图或 Dify DSL YAML 包装为符合 RFC-0002 的评测器，即可复用 PenguinHarness 的 ACE / OPRO 优化器自动诊断失败轨迹并改写节点提示词。",
-        en: "By wrapping LangGraph graphs or Dify DSL workflows as RFC-0002 evaluators, PenguinHarness's ACE/OPRO optimizers can automatically diagnose failure traces and evolve node prompts.",
+        name: "Zhihao Liu",
+        handle: "lzh368",
+        github: "https://github.com/lzh368",
+        direction: { zh: "Benchmark 方向", en: "Benchmark" },
       },
     ],
   },
   {
-    id: "thread-tutorial",
-    board: "bounty",
-    title: {
-      zh: "15 分钟趣味自进化入门教程征集（入选直通 Penguin 主页博客）",
-      en: "Call for Playful 15-Minute RSI Beginner Tutorials (Featured on Penguin Blog)",
-    },
-    author: "Xiang Qu",
-    handle: "ArisaZz",
-    createdAt: "2026-11-06",
-    replies: 22,
-    linkedQuestId: "RSI-Q010",
-    summary: {
-      zh: "用好玩的小游戏或解谜任务直观展示 3 轮自进化前后的胜率跃升与规则 Diff，完成后署名发布于 penguin.ooo 博客。",
-      en: "Demonstrate 3-round self-evolution on a fun puzzle or game task; selected tutorials are published on penguin.ooo.",
-    },
-    body: [
+    id: "review",
+    title: { zh: "审核小组", en: "Review Group" },
+    members: [
       {
-        zh: "无需昂贵算力，重点在于任务有趣、进化出的 Playbook / Skill 直观可读、15 分钟内可复现（对应任务 RSI-Q010）。",
-        en: "Low compute cost, playful task design, and clear before/after playbook diffs reproducible in 15 minutes (Quest RSI-Q010).",
+        name: "Leijun Zhou",
+        handle: "Saigyouji-Yuyuko1000",
+        github: "https://github.com/Saigyouji-Yuyuko1000",
+        direction: { zh: "RSI 算法方向", en: "RSI Algorithm" },
+      },
+      {
+        name: "Zhihao Liu",
+        handle: "lzh368",
+        github: "https://github.com/lzh368",
+        direction: { zh: "Benchmark 方向", en: "Benchmark" },
       },
     ],
   },
@@ -760,21 +564,6 @@ export function buildClaimIssueUrl(quest: QuestItem, locale: Locale): string {
     locale === "zh"
       ? `/claim ${quest.id}\n\n- 任务：${quest.title.zh}\n- 目标仓库：\`${quest.targetRepo}\`\n- 奖励：\`+${quest.exp} EXP\`\n- 确认本人当前同时进行中的任务数 < 2（符合 RFC-0006 上限规定）。`
       : `/claim ${quest.id}\n\n- Quest: ${quest.title.en}\n- Target Repo: \`${quest.targetRepo}\`\n- Reward: \`+${quest.exp} EXP\`\n- Confirmed fewer than 2 active claimed tasks (per RFC-0006).`;
-  return `${REPO_URL}/issues/new?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`;
-}
-
-export function buildCommitteeApplyUrl(domain: CommitteeDomain, seatRole: string, locale: Locale): string {
-  const title =
-    locale === "zh"
-      ? `[Committee] 申请委员会：${domain.title.zh}`
-      : `[Committee] Apply for ${domain.title.en}`;
-  const body = `/apply-committee ${domain.id}\n\n- Track: ${domain.title[locale]} (${seatRole})\n- Stipend: $100 USD / month\n- GitHub: @\n- Relevant RSI / Open-Source Contributions:`;
-  return `${REPO_URL}/issues/new?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`;
-}
-
-export function buildNewThreadIssueUrl(locale: Locale): string {
-  const title = locale === "zh" ? `[Discussion] 填写讨论标题` : `[Discussion] Topic Title`;
-  const body = `/forum-post\n\n- Channel: \`#paper\` | \`#arena\` | \`#bounty\` | \`#plugin\`\n\n### Content\n`;
   return `${REPO_URL}/issues/new?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`;
 }
 
@@ -806,7 +595,7 @@ export function computeMonthlyRewardLeaderboard(): {
     const expShare = member.completedExp / totalCompletedExp;
     const proportionalUsd = Math.round(1100 * expShare);
     const topBonusUsd = topBonuses[idx] ?? 0;
-    const committeeStipendUsd = member.committeeTrack ? 100 : 0;
+    const committeeStipendUsd = 100;
     return {
       rank: idx + 1,
       member,

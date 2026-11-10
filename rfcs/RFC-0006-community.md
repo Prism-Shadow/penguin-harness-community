@@ -63,17 +63,10 @@ The community allocates a **$2,000 USD equivalent monthly reward budget**, settl
 | **2. Monthly Leaderboard Top Bonus** | **500 USD / month** | Awarded on top of the proportional share to the Top 5 contributors on the monthly EXP leaderboard: **Top 1: +200 USD**, **Top 2: +150 USD**, **Top 3: +100 USD**, **Top 4–5: +25 USD each**. |
 | **3. RSI Committee Fixed Stipend** | **400 USD / month** | Fixed monthly honorarium for active RSI Community Committee members at **100 USD equivalent per member per month**. |
 
-## 5. RSI Community Committee Charter & Open Recruitment
+## 5. RSI Community Committee Structure
 
-To curate high-impact quests, review experimental reproducibility, and Steward community operations, repository administrators appoint the **RSI Community Committee** from active community members and top contributors:
+To maintain community infrastructure, curate task proposals, and audit experimental reproducibility, repository administrators appoint the **RSI Community Committee**, with each member receiving a fixed **$100 USD equivalent monthly stipend**. The committee is organized into three groups (listed in `community/people.yaml` and showcased on `/people/`):
 
-- **Responsibilities**: Publish and scope domain quests, review cross-repo PRs and trace reproducibility, host bi-weekly paper reading sessions (RFC-0004), and mentor contributors in the community forum.
-- **Fixed Monthly Stipend**: Each active committee member receives a fixed **$100 USD equivalent reward every month** (in token credits, compute vouchers, or server resources) and remains eligible for quest rewards.
-- **Domain Tracks & Open Recruitment**: Committee seats are organized into six specialized tracks (listed in `community/people.yaml` and showcased on `/people/`):
-  1. **Harness & Runtime Architecture Committee**
-  2. **Benchmark & Leaderboard Evaluation Committee**
-  3. **Environment Interaction & Exploration RSI Committee**
-  4. **Harness Self-Evolution & Generalization Committee**
-  5. **Plugin Ecosystem, Knowledge Base & Ontology Committee**
-  6. **Community Operations, Tutorials & Bi-Weekly Meeting Committee**
-- **Open Seats ("Recruiting")**: Unfilled seats are displayed on `/people/` as **"Recruiting · $100/mo Stipend"** with a 1-click GitHub Issue application button to welcome qualified researchers and developers to apply.
+1. **Maintenance Group**: `Yaowei Zheng` (Benchmark, RSI Algorithm)
+2. **Proposal Group**: `Xiang Qu` (RSI Algorithm), `Zhihao Liu` (Benchmark)
+3. **Review Group**: `Leijun Zhou` (RSI Algorithm), `Zhihao Liu` (Benchmark)

@@ -63,17 +63,10 @@
 | **2. 月度榜单前茅额外大奖** | **500 USD / 月** | 在等比瓜分基础上，当月成长值排行榜前 5 名获得额外冲榜大奖：**Top 1：+200 USD**、**Top 2：+150 USD**、**Top 3：+100 USD**、**Top 4–5：各 +25 USD**。 |
 | **3. RSI 社区委员会固定津贴** | **400 USD / 月** | 面向在任的 RSI 社区委员会（Committee）成员发放固定运营津贴，标准为**每人每月 100 USD 等值奖励**。 |
 
-## 5. RSI 社区委员会（Committee）章程与招募
+## 5. RSI 社区委员会（Committee）组织架构
 
-为了保障任务发布质量、PR 审核效率与学术前沿性，社区从活跃社群成员与高贡献度开发者中筛选并由仓库管理员直接委派成立 **RSI 社区委员会（RSI Community Committee）**：
+为了保障社区基础设施维护、任务提案质量与实验可复现性审查效率，社区由仓库管理员委派成立 **RSI 社区委员会（RSI Community Committee）**，每位在任委员享有每月 **$100 美元等值**的固定激励（Token 额度、GPU 算力券或服务器资源）。委员会下设三个小组（详见 `community/people.yaml` 与网站 `/people/` 页面）：
 
-- **核心职责**：负责各自专业领域的月度任务规划与发布、关联 PR 与实验可复现性审查、双周会论文领读（RFC-0004）以及社区论坛答疑。
-- **固定激励**：每位在任委员享有每月 **$100 美元等值**的固定奖励（可选择 Token 额度、GPU 算力券或服务器资源），同时可继续参与高阶任务的认领与月度贡献池结算。
-- **专业领域划分与开放招募**：委员会按六大专业领域设置席位（详见 `community/people.yaml` 与网站 `/people/` 页面）：
-  1. **框架与运行时基建委员会（Harness & Runtime Architecture）**
-  2. **评测基准与榜单委员会（Benchmark & Leaderboard Evaluation）**
-  3. **环境交互与自主探索 RSI 委员会（Environment Interaction & Exploration RSI）**
-  4. **Harness 自进化与泛化算法委员会（Harness Self-Evolution & Generalization）**
-  5. **插件市场、知识库与本体委员会（Plugin Ecosystem, Knowledge Base & Ontology）**
-  6. **社区运营、趣味教程与双周会委员会（Community Operations & Tutorials）**
-- **虚位以待·公开报名**：所有当前空缺的委员席位均在网站 `/people/` 页面标注为 **「正在招募（Recruiting · $100/mo）」**，任何对 RSI 充满热情的研究者或工程师均可通过页面上的快捷报名按钮提交 GitHub Issue 申请加入。
+1. **维护小组（Maintenance Group）**：`Yaowei Zheng`（Benchmark 方向，RSI 算法方向）
+2. **提案小组（Proposal Group）**：`Xiang Qu`（RSI 算法方向）、`Zhihao Liu`（Benchmark 方向）
+3. **审核小组（Review Group）**：`Leijun Zhou`（RSI 算法方向）、`Zhihao Liu`（Benchmark 方向）
