@@ -258,7 +258,6 @@ const ogLocale = { en: "en_US", zh: "zh_CN" };
           try {
             const url = new URL(raw, location.href);
             if (url.protocol !== "http:" && url.protocol !== "https:") return true;
-            if (url.hostname === "github.com" && url.pathname.startsWith("/Prism-Shadow/")) return false;
             return url.hostname !== location.hostname;
           } catch {
             return false;

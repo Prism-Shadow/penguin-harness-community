@@ -68,7 +68,6 @@ function tasksFor(domain: QuestDomainId, status: QuestStatus): QuestItem[] {
       href={buildProposeTaskIssueUrl(locale)}
       target="_blank"
       rel="noopener noreferrer"
-      data-direct-external
       class="text-sm text-gray-500 transition-colors hover:text-gray-950 dark:text-gray-400 dark:hover:text-white"
     >
       {COPY.propose}
@@ -177,10 +176,9 @@ function tasksFor(domain: QuestDomainId, status: QuestStatus): QuestItem[] {
                         href={ref.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        data-direct-external
-                        class="mono text-brand-600 underline decoration-brand-300 underline-offset-2 hover:text-brand-500 dark:text-brand-400 dark:decoration-brand-700"
+                        class="mono break-all text-brand-600 underline decoration-brand-300 underline-offset-2 hover:text-brand-500 dark:text-brand-400 dark:decoration-brand-700"
                       >
-                        {ref.label} ({ref.url})
+                        {ref.url}
                       </a>
                     </li>
                   ))}
@@ -204,7 +202,6 @@ function tasksFor(domain: QuestDomainId, status: QuestStatus): QuestItem[] {
                   href={q.issueUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  data-direct-external
                   class="site-leave-open inline-flex h-9 items-center justify-center gap-1.5 px-4 text-sm font-semibold"
                 >
                   <span>
