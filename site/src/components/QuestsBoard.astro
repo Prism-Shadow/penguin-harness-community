@@ -62,6 +62,9 @@ function tasksFor(domain: QuestDomain, match: (q: QuestItem) => boolean): QuestI
     </h1>
     <a
       href={buildProposeTaskPrUrl()}
+      target="_blank"
+      rel="noopener noreferrer"
+      data-direct-external
       class="text-sm text-gray-500 transition-colors hover:text-gray-950 dark:text-gray-400 dark:hover:text-white"
     >
       {COPY.propose}
@@ -109,6 +112,7 @@ function tasksFor(domain: QuestDomain, match: (q: QuestItem) => boolean): QuestI
                                 href={targetUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
+                                data-direct-external
                                 class="block text-sm font-medium leading-snug text-gray-900 hover:text-brand-600 dark:text-gray-100 dark:hover:text-brand-400"
                               >
                                 {q.title[locale]}
@@ -120,6 +124,7 @@ function tasksFor(domain: QuestDomain, match: (q: QuestItem) => boolean): QuestI
                                     href={`https://github.com/${q.assignee}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
+                                    data-direct-external
                                     class="mono text-gray-700 hover:underline dark:text-gray-300"
                                   >
                                     @{q.assignee}
@@ -129,6 +134,7 @@ function tasksFor(domain: QuestDomain, match: (q: QuestItem) => boolean): QuestI
                                     href={buildClaimIssueUrl(q, locale)}
                                     target="_blank"
                                     rel="noopener noreferrer"
+                                    data-direct-external
                                     class="font-medium text-brand-600 hover:underline dark:text-brand-400"
                                   >
                                     {COPY.unclaimed}
