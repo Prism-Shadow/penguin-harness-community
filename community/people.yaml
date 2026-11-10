@@ -10,7 +10,6 @@ stipend_per_seat_usd: 100
 founding_members:
   - handle: "hiyouga"
     name: "Yaowei Zheng"
-    name_zh: "郑耀威 (Yaowei Zheng)"
     role: "Founding Lead · PenguinHarness & RSI Architecture"
     role_zh: "社区发起人 · PenguinHarness 与自进化架构负责人"
     github: "https://github.com/hiyouga"
@@ -22,7 +21,6 @@ founding_members:
 
   - handle: "Saigyouji-Yuyuko1000"
     name: "Leijun Zhou"
-    name_zh: "周磊俊 (Leijun Zhou)"
     role: "Founding Member · Benchmark & Leaderboard Lead"
     role_zh: "创始核心成员 · 评测基准与排行榜负责人"
     github: "https://github.com/Saigyouji-Yuyuko1000"
@@ -34,7 +32,6 @@ founding_members:
 
   - handle: "lzh368"
     name: "Zhihao Liu"
-    name_zh: "刘志豪 (Zhihao Liu)"
     role: "Founding Member · RSI Algorithms & Paper Reproduction"
     role_zh: "创始核心成员 · RSI 自进化算法与论文复现负责人"
     github: "https://github.com/lzh368"
@@ -46,7 +43,6 @@ founding_members:
 
   - handle: "ArisaZz"
     name: "Xiang Qu"
-    name_zh: "曲翔 (Xiang Qu)"
     role: "Founding Member · Ecosystem Standards & Community Operations"
     role_zh: "创始核心成员 · 社区协议标准与生态运营负责人"
     github: "https://github.com/ArisaZz"

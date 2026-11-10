@@ -1,11 +1,7 @@
 ---
 import { localePath, type Locale } from "../shared/i18n";
-import { DISCORD_URL, REPO_URL } from "../shared/site";
 import {
-  FORUM_BOARDS,
   FORUM_THREADS,
-  QUESTS,
-  buildClaimIssueUrl,
   buildNewThreadIssueUrl,
 } from "../shared/community";
 
@@ -15,337 +11,98 @@ interface Props {
 
 const { locale } = Astro.props;
 const href = (path: string) => localePath(locale, path);
-const questMap = new Map(QUESTS.map((q) => [q.id, q]));
+const otherLocale: Locale = locale === "zh" ? "en" : "zh";
+const switchHref = localePath(otherLocale, "/forum/");
 
 const COPY = {
   zh: {
-    badge: "RSI TAVERN & COMMUNITY FORUM · 社区酒馆与学术论坛",
-    title: "RSI 社区酒馆 · 论文精读、实验手记与协作广场",
-    subtitle:
-      "融合经典技术论坛（PHPBB / Discourse）的深度沉淀与 Discord 频道的实时碰撞。在这里精读 RSIAgent 与 RRSI 等年度核心论文、探讨 RSI Arena 13,000 GPU 小时人类反馈实验启示、组队攻关跨框架评测与趣味入门教程。",
-    newThreadBtn: "在酒馆发新帖 (GitHub Issue)",
-    discordBtn: "进入 Discord 实时频道",
-    wechatBtn: "加入微信交流群",
-    allBoards: "全部版块 (#all)",
-    pinnedLabel: "置顶精华",
-    hotLabel: "热议",
-    repliesLabel: "条讨论",
-    viewsLabel: "阅读",
-    linkedQuestLabel: "关联悬赏",
-    claimQuestBtn: "一键认领该任务",
-    readFullBtn: "展开全文与复现指南",
-    replyGithubBtn: "在 GitHub 参与跟帖讨论",
-    arenaSpotlightBadge: "FEATURED EXPERIMENT NOTE · RSI ARENA (13,000 GPU-HOURS)",
-    arenaSpotlightTitle: "为什么在 13,000 GPU 小时之后，人类的真实体验依然决定着 RSI 的方向？",
+    title: "讨论",
+    langSwitch: "English",
+    subtitle: "论文精读、实验手记与社区进展。",
+    newThread: "发起讨论 ↗",
+    by: "By ",
   },
   en: {
-    badge: "RSI TAVERN & COMMUNITY FORUM · ACADEMIC & HACKER PLAZA",
-    title: "RSI Community Tavern · Paper Guild, Field Notes & Forum",
-    subtitle:
-      "Combining the structured depth of classic technical forums with the energy of Discord channels. Discuss essential 2026 RSI papers (RSIAgent & RRSI), reflect on the 13,000 GPU-hour RSI Arena human-feedback experiment, and team up on quests.",
-    newThreadBtn: "Post New Thread (GitHub Issue)",
-    discordBtn: "Join Discord Channels",
-    wechatBtn: "Join WeChat Group",
-    allBoards: "All Channels (#all)",
-    pinnedLabel: "PINNED",
-    hotLabel: "HOT",
-    repliesLabel: "replies",
-    viewsLabel: "views",
-    linkedQuestLabel: "Linked Quest",
-    claimQuestBtn: "Quick Claim Quest",
-    readFullBtn: "Read Full Thread & Notes",
-    replyGithubBtn: "Reply on GitHub Issues",
-    arenaSpotlightBadge: "FEATURED EXPERIMENT NOTE · RSI ARENA (13,000 GPU-HOURS)",
-    arenaSpotlightTitle: "Why Human Experience Still Steers RSI After 13,000 GPU-Hours & 3,129 Blind Votes",
+    title: "Discussions",
+    langSwitch: "中文",
+    subtitle: "Paper notes, empirical findings, and community updates.",
+    newThread: "New Thread ↗",
+    by: "By ",
   },
 }[locale];
 ---
 
-<div class="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 lg:py-14">
-  <!-- Header -->
-  <div class="rounded-2xl border border-gray-200 bg-gradient-to-br from-white via-gray-50/70 to-purple-50/30 p-6 sm:p-8 dark:border-gray-800 dark:from-gray-950 dark:via-gray-900/60 dark:to-purple-950/20">
-    <div class="flex flex-wrap items-center justify-between gap-2">
-      <span class="mono inline-flex items-center gap-2 rounded-full border border-purple-200 bg-purple-50/80 px-3 py-1 text-xs font-medium text-purple-700 dark:border-purple-800/70 dark:bg-purple-950/60 dark:text-purple-300">
-        <span class="h-2 w-2 rounded-full bg-purple-500 animate-pulse"></span>
-        {COPY.badge}
-      </span>
-      <span class="mono text-xs text-gray-500 dark:text-gray-400">
-        PHP-Forum × Discord Hybrid Plaza
-      </span>
+<div class="mx-auto w-full max-w-3xl px-6 py-12">
+  <header class="pb-10">
+    <div class="flex items-baseline justify-between gap-4">
+      <h1 class="text-4xl font-semibold tracking-tight text-gray-950 dark:text-white">
+        {COPY.title}
+      </h1>
+      <div class="flex items-center gap-4 text-sm">
+        <a
+          href={buildNewThreadIssueUrl(locale)}
+          class="text-gray-500 transition-colors hover:text-gray-950 dark:text-gray-400 dark:hover:text-white"
+        >
+          {COPY.newThread}
+        </a>
+        <a
+          href={switchHref}
+          data-lang-switch={otherLocale}
+          class="text-gray-500 transition-colors hover:text-gray-950 dark:text-gray-400 dark:hover:text-white"
+        >
+          {COPY.langSwitch}
+        </a>
+      </div>
     </div>
-
-    <h1 class="mt-4 text-3xl font-semibold tracking-tight text-gray-950 sm:text-4xl dark:text-white">
-      {COPY.title}
-    </h1>
-    <p class="mt-3 max-w-4xl text-sm leading-6 text-gray-600 sm:text-base dark:text-gray-300">
+    <p class="mt-4 max-w-[62ch] text-sm leading-relaxed text-gray-500 dark:text-gray-400">
       {COPY.subtitle}
     </p>
+  </header>
 
-    <div class="mt-6 flex flex-wrap gap-3">
-      <a
-        href={buildNewThreadIssueUrl(locale)}
-        class="inline-flex h-10 items-center gap-2 rounded-lg bg-black px-4 text-sm font-medium text-white transition-colors hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200"
-      >
-        <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M12 5v14M5 12h14"></path>
-        </svg>
-        <span>{COPY.newThreadBtn}</span>
-      </a>
-      <a
-        href={DISCORD_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-        data-direct-external
-        class="inline-flex h-10 items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 text-sm font-medium text-gray-800 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 dark:hover:bg-gray-800"
-      >
-        <span>{COPY.discordBtn}</span>
-      </a>
-      <button
-        type="button"
-        data-wechat-trigger
-        class="inline-flex h-10 items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 text-sm font-medium text-gray-800 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 dark:hover:bg-gray-800"
-      >
-        <span>{COPY.wechatBtn}</span>
-      </button>
-    </div>
-  </div>
+  <div class="border-t border-gray-200 dark:border-gray-800">
+    {
+      FORUM_THREADS.map((thread) => {
+        const primaryUrl = thread.links?.[0]?.url ?? href(`/quests/#${thread.linkedQuestId.toLowerCase()}`);
+        return (
+          <div class="border-b border-gray-200 py-6 dark:border-gray-800">
+            <div class="flex items-baseline justify-between gap-4 text-xs text-gray-400 dark:text-gray-500">
+              <span class="mono">#{thread.board}</span>
+              <span class="mono">{thread.createdAt}</span>
+            </div>
 
-  <!-- Featured RSI Arena 13,000 GPU-Hours Quote Spotlight -->
-  <div class="mt-8 rounded-2xl border border-gray-200 bg-gray-950 p-6 text-gray-100 shadow-sm sm:p-8 dark:border-gray-800">
-    <div class="mono text-xs font-semibold uppercase tracking-wider text-brand-400">
-      {COPY.arenaSpotlightBadge}
-    </div>
-    <h2 class="mt-2 text-xl font-semibold text-white sm:text-2xl">
-      {COPY.arenaSpotlightTitle}
-    </h2>
-    <blockquote class="mt-4 border-l-2 border-brand-400 pl-4 text-xs leading-6 text-gray-300 sm:text-sm">
-      <p>
-        “We spent about <strong>13,000 GPU-hours on RSI Arena</strong>, tested the models on <strong>20 benchmarks</strong>, and collected <strong>3,129 human votes across two rounds</strong>. What stayed with me was how much we learned once people tried the models.
-      </p>
-      <p class="mt-2">
-        At Bake AI, we worked with researchers from <strong>@huggingface, @NVIDIAAI, @scale_AI, @Stanford, @MIT, @UCLA, @ucsantabarbara, @nyuniversity, @UW, and @NotreDame</strong>. We gave 10 AI agents the same base model and a shared 64-GPU cluster. They picked the data, wrote the code, and trained their own assistants. People at @COLM_conf and online compared the answers without knowing which model wrote them.
-      </p>
-      <p class="mt-2">
-        We gave the first round’s feedback back to the agents and let them decide what to change. After another training round, <strong>eight of ten improved their human ratings relative to NVIDIA Instruct. Those gains did not track benchmark improvements.</strong>
-      </p>
-      <p class="mt-2 text-white font-medium">
-        The agents could do the engineering. People helped show them what needed fixing. That’s what this experiment taught us about RSI. AI can take on more of its own development, but our experience with it still matters. If these systems keep getting better, they should help us work better, live better, and spend more time on what we care about. Otherwise, what is all that compute for?”
-      </p>
-      <footer class="mono mt-2 text-xs text-brand-300">
-        — 📄 RSI Arena: Towards Recursive Self-Improvement with Human Feedback (Featured Quest: RSI-Q003)
-      </footer>
-    </blockquote>
-  </div>
-
-  <!-- Forum Layout: Channels Sidebar + Thread List -->
-  <div class="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[260px_minmax(0,1fr)]" data-forum-root>
-    <!-- Channels Sidebar -->
-    <aside class="space-y-2">
-      <button
-        type="button"
-        data-board-btn="all"
-        class="forum-board-btn is-active flex w-full flex-col rounded-xl border p-3 text-left transition-colors"
-      >
-        <span class="mono text-xs font-bold">{COPY.allBoards}</span>
-        <span class="mt-0.5 text-[11px] opacity-80">
-          {locale === "zh" ? "浏览所有论文精读、实验手记与悬赏讨论" : "View all paper notes, empirical findings & quest threads"}
-        </span>
-      </button>
-
-      {
-        (Object.keys(FORUM_BOARDS) as (keyof typeof FORUM_BOARDS)[]).map((boardKey) => {
-          const b = FORUM_BOARDS[boardKey];
-          return (
-            <button
-              type="button"
-              data-board-btn={boardKey}
-              class="forum-board-btn flex w-full flex-col rounded-xl border p-3 text-left transition-colors"
-            >
-              <div class="flex items-center justify-between">
-                <span class="text-xs font-semibold">{b.title[locale]}</span>
-                <span class="mono text-[11px] text-brand-600 dark:text-brand-400">{b.channel}</span>
-              </div>
-              <span class="mt-1 text-[11px] leading-4 opacity-75">{b.desc[locale]}</span>
-            </button>
-          );
-        })
-      }
-    </aside>
-
-    <!-- Thread Cards -->
-    <div class="space-y-4">
-      {
-        FORUM_THREADS.map((thread, idx) => {
-          const linkedQuest = thread.linkedQuestId ? questMap.get(thread.linkedQuestId) : undefined;
-          const boardInfo = FORUM_BOARDS[thread.board];
-          return (
-            <article
-              data-thread-card
-              data-board={thread.board}
-              class="rounded-2xl border border-gray-200 bg-white p-5 shadow-2xs transition-colors dark:border-gray-800 dark:bg-gray-950"
-            >
-              <!-- Thread Meta Header -->
-              <div class="flex flex-wrap items-center justify-between gap-2">
-                <div class="flex flex-wrap items-center gap-2">
-                  {thread.pinned && (
-                    <span class="mono rounded bg-brand-600 px-2 py-0.5 text-[11px] font-bold text-white">
-                      {COPY.pinnedLabel}
-                    </span>
-                  )}
-                  {thread.hot && (
-                    <span class="mono rounded bg-rose-500/15 px-2 py-0.5 text-[11px] font-semibold text-rose-600 dark:text-rose-400">
-                      {COPY.hotLabel}
-                    </span>
-                  )}
-                  <span class="mono rounded border border-gray-200 bg-gray-50 px-2 py-0.5 text-[11px] font-medium text-gray-700 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300">
-                    {boardInfo.channel}
-                  </span>
-                  <span class="rounded-full bg-purple-50 px-2.5 py-0.5 text-[11px] font-medium text-purple-700 dark:bg-purple-950/60 dark:text-purple-300">
-                    {thread.tag[locale]}
-                  </span>
-                </div>
-
-                <div class="mono flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
-                  <span>{thread.views} {COPY.viewsLabel}</span>
-                  <span>·</span>
-                  <span>{thread.replies} {COPY.repliesLabel}</span>
-                  <span>·</span>
-                  <span>{thread.createdAt}</span>
-                </div>
-              </div>
-
-              <!-- Title -->
-              <h2 class="mt-3 text-lg font-semibold leading-snug text-gray-950 dark:text-white">
+            <a href={primaryUrl} class="group block">
+              <h2 class="mt-2 text-lg font-medium text-gray-950 transition-colors group-hover:text-brand-600 dark:text-gray-100 dark:group-hover:text-brand-400">
                 {thread.title[locale]}
               </h2>
-
-              <!-- Author Row -->
-              <div class="mt-2.5 flex flex-wrap items-center justify-between gap-2">
-                <div class="flex items-center gap-2.5">
-                  <img
-                    src={thread.author.avatar}
-                    alt={thread.author.name}
-                    class="h-7 w-7 rounded-full border border-gray-200 dark:border-gray-700"
-                    loading="lazy"
-                  />
-                  <a
-                    href={`https://github.com/${thread.author.handle}`}
-                    class="text-xs font-semibold text-gray-900 hover:underline dark:text-white"
-                  >
-                    {thread.author.name} (@{thread.author.handle})
-                  </a>
-                  <span class="rounded border border-amber-300/80 bg-amber-50 px-2 py-0.5 text-[11px] font-medium text-amber-800 dark:border-amber-800 dark:bg-amber-950/60 dark:text-amber-300">
-                    {thread.author.badge[locale]}
-                  </span>
-                </div>
-
-                {linkedQuest && (
-                  <div class="flex flex-wrap items-center gap-2">
-                    <a
-                      href={href(`/quests/#${linkedQuest.id.toLowerCase()}`)}
-                      class="mono inline-flex items-center gap-1 rounded-md border border-brand-200 bg-brand-50/70 px-2.5 py-1 text-xs font-semibold text-brand-700 hover:bg-brand-100 dark:border-brand-800 dark:bg-brand-950/60 dark:text-brand-300"
-                    >
-                      <span>{COPY.linkedQuestLabel}: {linkedQuest.id} (+{linkedQuest.exp} EXP)</span>
-                    </a>
-                    {linkedQuest.status === "open" && (
-                      <a
-                        href={buildClaimIssueUrl(linkedQuest, locale)}
-                        class="inline-flex items-center rounded-md bg-brand-600 px-2.5 py-1 text-xs font-semibold text-white hover:bg-brand-500"
-                      >
-                        {COPY.claimQuestBtn}
-                      </a>
-                    )}
-                  </div>
-                )}
-              </div>
-
-              <!-- Excerpt -->
-              <p class="mt-3 text-xs leading-6 text-gray-600 sm:text-sm dark:text-gray-300">
-                {thread.excerpt[locale]}
+              <p class="mt-1.5 max-w-[62ch] text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+                {thread.summary[locale]}
               </p>
+            </a>
 
-              <!-- Expandable Full Post Content -->
-              <details class="mt-3.5 rounded-xl border border-gray-200/80 bg-gray-50/70 p-4 dark:border-gray-800 dark:bg-gray-900/50" open={idx < 2}>
-                <summary class="cursor-pointer select-none text-xs font-semibold text-brand-600 hover:underline dark:text-brand-400">
-                  {COPY.readFullBtn}
-                </summary>
-                <div class="mt-3 space-y-2.5 text-xs leading-6 text-gray-700 sm:text-sm dark:text-gray-300">
-                  {thread.bodyParagraphs.map((p) => (
-                    <p>{p[locale]}</p>
-                  ))}
-                  {thread.highlights && (
-                    <div class="mt-3 rounded-lg border border-brand-200 bg-brand-50/60 p-3 text-xs font-medium text-brand-900 dark:border-brand-800/70 dark:bg-brand-950/40 dark:text-brand-200">
-                      {thread.highlights.map((h) => (
-                        <div>{h[locale]}</div>
-                      ))}
-                    </div>
-                  )}
-                  <div class="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-gray-200/70 pt-3 dark:border-gray-800">
-                    <div class="flex flex-wrap gap-2">
-                      {thread.externalLinks?.map((link) => (
-                        <a
-                          href={link.url}
-                          class="mono text-xs font-semibold text-brand-600 hover:underline dark:text-brand-400"
-                        >
-                          [{link.label}]
-                        </a>
-                      ))}
-                    </div>
-                    <a
-                      href={`${REPO_URL}/issues`}
-                      class="inline-flex items-center gap-1 text-xs font-medium text-gray-600 hover:text-gray-950 dark:text-gray-400 dark:hover:text-white"
-                    >
-                      <span>{COPY.replyGithubBtn} →</span>
-                    </a>
-                  </div>
-                </div>
-              </details>
-            </article>
-          );
-        })
-      }
-    </div>
+            <p class="mt-2 text-xs text-gray-400 dark:text-gray-500">
+              {COPY.by}
+              <a
+                href={`https://github.com/${thread.handle}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-gray-600 hover:underline dark:text-gray-300"
+              >
+                {thread.author}
+              </a>
+            </p>
+          </div>
+        );
+      })
+    }
   </div>
 </div>
 
-<style>
-  .forum-board-btn {
-    border-color: var(--color-gray-200, #e5e7eb);
-    background: #ffffff;
-    color: #374151;
-  }
-  :global(.dark) .forum-board-btn {
-    border-color: #1f2937;
-    background: #030712;
-    color: #d1d5db;
-  }
-  .forum-board-btn.is-active {
-    border-color: #2563eb;
-    background: #eff6ff;
-    color: #1e3a8a;
-  }
-  :global(.dark) .forum-board-btn.is-active {
-    border-color: #3b82f6;
-    background: rgba(30, 58, 138, 0.25);
-    color: #eff6ff;
-  }
-</style>
-
 <script>
-  const forumRoot = document.querySelector("[data-forum-root]");
-  if (forumRoot) {
-    const boardBtns = forumRoot.querySelectorAll<HTMLButtonElement>("[data-board-btn]");
-    const threadCards = forumRoot.querySelectorAll<HTMLElement>("[data-thread-card]");
-
-    boardBtns.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const selected = btn.dataset.boardBtn || "all";
-        boardBtns.forEach((b) => b.classList.toggle("is-active", b === btn));
-        threadCards.forEach((card) => {
-          const b = card.dataset.board || "";
-          card.style.display = selected === "all" || b === selected ? "" : "none";
-        });
-      });
+  for (const link of document.querySelectorAll<HTMLAnchorElement>("[data-lang-switch]")) {
+    link.addEventListener("click", () => {
+      try {
+        localStorage.setItem("phc-site.lang", link.dataset.langSwitch!);
+      } catch {}
     });
   }
 </script>
