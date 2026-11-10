@@ -59,6 +59,7 @@ export const ADVENTURER_RANKS: AdventurerRank[] = [
 ];
 
 export type QuestStatus = "open" | "claimed" | "in_review" | "completed";
+export type QuestDomain = "Benchmark" | "Evaluation" | "Plugin" | "PenguinHarness";
 export type QuestCategory =
   | "paper-reproduction"
   | "leaderboard-eval"
@@ -67,9 +68,17 @@ export type QuestCategory =
   | "tutorial-blog"
   | "harness-core";
 
+export const QUEST_DOMAINS: QuestDomain[] = [
+  "Benchmark",
+  "Evaluation",
+  "Plugin",
+  "PenguinHarness",
+];
+
 export interface QuestItem {
   id: string;
   status: QuestStatus;
+  domain: QuestDomain;
   category: QuestCategory;
   exp: number;
   loot: LootId;
@@ -94,6 +103,7 @@ export const QUESTS: QuestItem[] = [
   {
     id: "RSI-Q001",
     status: "open",
+    domain: "Plugin",
     category: "paper-reproduction",
     exp: 800,
     loot: "evolution-core",
@@ -111,6 +121,7 @@ export const QUESTS: QuestItem[] = [
   {
     id: "RSI-Q002",
     status: "open",
+    domain: "Plugin",
     category: "paper-reproduction",
     exp: 800,
     loot: "evolution-core",
@@ -131,6 +142,7 @@ export const QUESTS: QuestItem[] = [
   {
     id: "RSI-Q003",
     status: "open",
+    domain: "PenguinHarness",
     category: "paper-reproduction",
     exp: 750,
     loot: "evolution-core",
@@ -148,6 +160,7 @@ export const QUESTS: QuestItem[] = [
   {
     id: "RSI-Q004",
     status: "open",
+    domain: "Evaluation",
     category: "leaderboard-eval",
     exp: 600,
     loot: "trace-crystal",
@@ -165,6 +178,7 @@ export const QUESTS: QuestItem[] = [
   {
     id: "RSI-Q005",
     status: "open",
+    domain: "Evaluation",
     category: "leaderboard-eval",
     exp: 550,
     loot: "trace-crystal",
@@ -182,6 +196,7 @@ export const QUESTS: QuestItem[] = [
   {
     id: "RSI-Q006",
     status: "open",
+    domain: "Plugin",
     category: "plugin-ecosystem",
     exp: 500,
     loot: "ontology-rune",
@@ -199,6 +214,7 @@ export const QUESTS: QuestItem[] = [
   {
     id: "RSI-Q007",
     status: "open",
+    domain: "Plugin",
     category: "plugin-ecosystem",
     exp: 550,
     loot: "ontology-rune",
@@ -216,6 +232,7 @@ export const QUESTS: QuestItem[] = [
   {
     id: "RSI-Q008",
     status: "open",
+    domain: "Evaluation",
     category: "cross-framework-rsi",
     exp: 450,
     loot: "harness-gear",
@@ -233,6 +250,7 @@ export const QUESTS: QuestItem[] = [
   {
     id: "RSI-Q009",
     status: "open",
+    domain: "Evaluation",
     category: "cross-framework-rsi",
     exp: 450,
     loot: "harness-gear",
@@ -250,6 +268,7 @@ export const QUESTS: QuestItem[] = [
   {
     id: "RSI-Q010",
     status: "open",
+    domain: "Benchmark",
     category: "tutorial-blog",
     exp: 400,
     loot: "benchmark-astrolabe",
@@ -267,6 +286,7 @@ export const QUESTS: QuestItem[] = [
   {
     id: "RSI-Q011",
     status: "in_review",
+    domain: "PenguinHarness",
     category: "harness-core",
     exp: 350,
     loot: "harness-gear",
@@ -286,6 +306,7 @@ export const QUESTS: QuestItem[] = [
   {
     id: "RSI-Q012",
     status: "in_review",
+    domain: "PenguinHarness",
     category: "harness-core",
     exp: 450,
     loot: "harness-gear",
@@ -305,6 +326,7 @@ export const QUESTS: QuestItem[] = [
   {
     id: "RSI-Q013",
     status: "completed",
+    domain: "Evaluation",
     category: "leaderboard-eval",
     exp: 700,
     loot: "evolution-core",
@@ -324,6 +346,7 @@ export const QUESTS: QuestItem[] = [
   {
     id: "RSI-Q014",
     status: "completed",
+    domain: "Evaluation",
     category: "leaderboard-eval",
     exp: 600,
     loot: "trace-crystal",
@@ -343,6 +366,7 @@ export const QUESTS: QuestItem[] = [
   {
     id: "RSI-Q015",
     status: "completed",
+    domain: "PenguinHarness",
     category: "harness-core",
     exp: 500,
     loot: "harness-gear",
@@ -362,6 +386,7 @@ export const QUESTS: QuestItem[] = [
   {
     id: "RSI-Q016",
     status: "completed",
+    domain: "PenguinHarness",
     category: "harness-core",
     exp: 400,
     loot: "harness-gear",
@@ -381,6 +406,7 @@ export const QUESTS: QuestItem[] = [
   {
     id: "RSI-Q017",
     status: "completed",
+    domain: "Benchmark",
     category: "leaderboard-eval",
     exp: 450,
     loot: "benchmark-astrolabe",
@@ -400,6 +426,7 @@ export const QUESTS: QuestItem[] = [
   {
     id: "RSI-Q018",
     status: "completed",
+    domain: "Plugin",
     category: "paper-reproduction",
     exp: 500,
     loot: "evolution-core",
@@ -419,6 +446,7 @@ export const QUESTS: QuestItem[] = [
   {
     id: "RSI-Q019",
     status: "completed",
+    domain: "Benchmark",
     category: "leaderboard-eval",
     exp: 500,
     loot: "benchmark-astrolabe",

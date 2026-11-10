@@ -1,11 +1,12 @@
 ---
-import { localePath, type Locale } from "../shared/i18n";
+import type { Locale } from "../shared/i18n";
 import {
   QUESTS,
-  QUEST_CATEGORIES,
+  QUEST_DOMAINS,
   buildClaimIssueUrl,
   buildProposeTaskPrUrl,
-  computeMonthlyRewardLeaderboard,
+  type QuestDomain,
+  type QuestItem,
 } from "../shared/community";
 
 interface Props {
@@ -13,257 +14,139 @@ interface Props {
 }
 
 const { locale } = Astro.props;
-const href = (path: string) => localePath(locale, path);
-
-const openCount = QUESTS.filter((q) => q.status === "open").length;
-const reviewCount = QUESTS.filter((q) => q.status === "in_review" || q.status === "claimed").length;
-const completedCount = QUESTS.filter((q) => q.status === "completed").length;
-
-const { rows: leaderboardRows } = computeMonthlyRewardLeaderboard();
 
 const COPY = {
   zh: {
     title: "任务板",
-    subtitle: "通过 GitHub Issue 认领任务（每人同时上限 2 项），每月末按完成积分结算 $2,000 美元奖励池。",
     propose: "发布任务 ↗",
-    tabAll: "全部",
-    tabOpen: "待认领",
-    tabReview: "进行中",
-    tabCompleted: "已完成",
-    claim: "认领 ↗",
-    tasksHeading: "任务列表",
-    leaderboardNote: "月度激励池 $2,000 USD（$1,100 按积分比例分配 + $500 前五名奖励 + $400 委员会津贴）。",
-    colMember: "member",
-    colHandle: "github",
-    colExp: "exp",
-    colReward: "est. reward",
+    colDomain: "领域",
+    colOpen: "待认领",
+    colInProgress: "进行中",
+    colCompleted: "已完成",
+    unclaimed: "认领 ↗",
+    empty: "—",
   },
   en: {
     title: "Quests",
-    subtitle: "Claim tasks via GitHub Issues (up to 2 active claims per user). Settled monthly from a $2,000 USD reward pool.",
     propose: "Propose Task ↗",
-    tabAll: "All",
-    tabOpen: "Open",
-    tabReview: "In Progress",
-    tabCompleted: "Completed",
-    claim: "Claim ↗",
-    tasksHeading: "Tasks",
-    leaderboardNote: "$2,000 USD monthly pool ($1,100 proportional + $500 Top-5 bonus + $400 committee stipend).",
-    colMember: "member",
-    colHandle: "github",
-    colExp: "exp",
-    colReward: "est. reward",
+    colDomain: "Domain",
+    colOpen: "Open",
+    colInProgress: "In Progress",
+    colCompleted: "Completed",
+    unclaimed: "Claim ↗",
+    empty: "—",
   },
 }[locale];
+
+type StageKey = "open" | "in_progress" | "completed";
+
+const STAGES: { key: StageKey; label: string; match: (q: QuestItem) => boolean }[] = [
+  { key: "open", label: COPY.colOpen, match: (q) => q.status === "open" },
+  {
+    key: "in_progress",
+    label: COPY.colInProgress,
+    match: (q) => q.status === "claimed" || q.status === "in_review",
+  },
+  { key: "completed", label: COPY.colCompleted, match: (q) => q.status === "completed" },
+];
+
+function tasksFor(domain: QuestDomain, match: (q: QuestItem) => boolean): QuestItem[] {
+  return QUESTS.filter((q) => q.domain === domain && match(q));
+}
 ---
 
-<div class="mx-auto w-full max-w-3xl px-6 py-12">
-  <!-- Header -->
-  <header class="pb-10">
-    <div class="flex items-baseline justify-between gap-4">
-      <h1 class="text-4xl font-semibold tracking-tight text-gray-950 dark:text-white">
-        {COPY.title}
-      </h1>
-      <div class="flex items-center gap-4 text-sm">
-        <a
-          href={buildProposeTaskPrUrl()}
-          class="text-gray-500 transition-colors hover:text-gray-950 dark:text-gray-400 dark:hover:text-white"
-        >
-          {COPY.propose}
-        </a>
-      </div>
-    </div>
-    <p class="mt-4 max-w-[62ch] text-sm leading-relaxed text-gray-500 dark:text-gray-400">
-      {COPY.subtitle}
-    </p>
+<div class="mx-auto w-full max-w-6xl px-6 py-12">
+  <header class=" flex items-baseline justify-between gap-4 pb-8">
+    <h1 class="text-3xl font-semibold tracking-tight text-gray-950 dark:text-white">
+      {COPY.title}
+    </h1>
+    <a
+      href={buildProposeTaskPrUrl()}
+      class="text-sm text-gray-500 transition-colors hover:text-gray-950 dark:text-gray-400 dark:hover:text-white"
+    >
+      {COPY.propose}
+    </a>
   </header>
 
-  <!-- Minimal Leaderboard Table (modeled on rsi-benchmark.com/tasks) -->
-  <section class="mb-14">
-    <p class="mb-3 max-w-[62ch] text-xs text-gray-500 dark:text-gray-400">
-      {COPY.leaderboardNote}
-    </p>
-    <div class="overflow-x-auto">
-      <table class="w-full border-collapse text-sm">
-        <thead>
-          <tr class="border-b border-gray-200 text-xs text-gray-400 dark:border-gray-800 dark:text-gray-500">
-            <th class="w-6 py-2 pr-4 text-right font-normal"></th>
-            <th class="py-2 pr-4 text-left font-normal">{COPY.colMember}</th>
-            <th class="py-2 pr-4 text-left font-normal">{COPY.colHandle}</th>
-            <th class="py-2 pl-4 text-right font-normal">{COPY.colExp}</th>
-            <th class="py-2 pl-4 text-right font-normal">{COPY.colReward}</th>
-          </tr>
-        </thead>
-        <tbody>
+  <!-- 2D Kanban Matrix: Horizontal = Progress, Vertical = Domain -->
+  <div class="overflow-x-auto border-t border-gray-200 dark:border-gray-800">
+    <table class="w-full min-w-[760px] border-collapse text-left align-top">
+      <thead>
+        <tr class="border-b border-gray-200 text-xs font-medium text-gray-500 dark:border-gray-800 dark:text-gray-400">
+          <th class="w-40 py-3 pr-4 font-medium">{COPY.colDomain}</th>
           {
-            leaderboardRows.map((row) => (
-              <tr class="border-b border-gray-200 dark:border-gray-800">
-                <td class="mono w-6 py-2.5 pr-4 text-right text-xs text-gray-400">
-                  {row.rank}
-                </td>
-                <td class="py-2.5 pr-4 text-gray-950 dark:text-gray-100">
-                  <a href={row.member.github} target="_blank" rel="noopener noreferrer" class="hover:underline">
-                    {row.member.name}
-                  </a>
-                </td>
-                <td class="mono py-2.5 pr-4 text-xs text-gray-500 dark:text-gray-400">
-                  @{row.member.handle}
-                </td>
-                <td class="mono py-2.5 pl-4 text-right text-gray-950 dark:text-gray-100">
-                  {row.completedExp}
-                </td>
-                <td class="mono py-2.5 pl-4 text-right text-gray-500 dark:text-gray-400">
-                  ${row.totalEstimatedUsd}
-                </td>
-              </tr>
+            STAGES.map((stage) => (
+              <th class="w-[calc((100%-10rem)/3)] px-3 py-3 font-medium">
+                <span>{stage.label}</span>
+              </th>
             ))
           }
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- Tasks Section (modeled on rsi-benchmark.com/tasks) -->
-  <section>
-    <div class="mb-2 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-t border-gray-200 pt-6 dark:border-gray-800">
-      <h2 class="text-2xl font-medium text-gray-950 dark:text-white">
-        {COPY.tasksHeading}
-      </h2>
-      <span class="mono text-sm text-gray-400">{QUESTS.length}</span>
-    </div>
-
-    <!-- Underline Filter Nav -->
-    <nav class="flex flex-wrap gap-x-6 border-b border-gray-200 dark:border-gray-800" data-quest-tabs>
-      <button
-        type="button"
-        data-status-tab="all"
-        class="quest-tab is-active -mb-px border-b-2 py-3 text-sm transition-colors"
-      >
-        {COPY.tabAll} <span class="ml-1 text-gray-400">{QUESTS.length}</span>
-      </button>
-      <button
-        type="button"
-        data-status-tab="open"
-        class="quest-tab -mb-px border-b-2 py-3 text-sm transition-colors"
-      >
-        {COPY.tabOpen} <span class="ml-1 text-gray-400">{openCount}</span>
-      </button>
-      <button
-        type="button"
-        data-status-tab="in_review"
-        class="quest-tab -mb-px border-b-2 py-3 text-sm transition-colors"
-      >
-        {COPY.tabReview} <span class="ml-1 text-gray-400">{reviewCount}</span>
-      </button>
-      <button
-        type="button"
-        data-status-tab="completed"
-        class="quest-tab -mb-px border-b-2 py-3 text-sm transition-colors"
-      >
-        {COPY.tabCompleted} <span class="ml-1 text-gray-400">{completedCount}</span>
-      </button>
-    </nav>
-
-    <!-- Hairline Task Rows -->
-    <div>
-      {
-        QUESTS.map((q) => (
-          <div
-            id={q.id.toLowerCase()}
-            data-quest-row
-            data-status={q.status}
-            class="border-b border-gray-200 py-5 dark:border-gray-800"
-          >
-            <div class="flex items-baseline justify-between gap-4 text-xs text-gray-500 dark:text-gray-400">
-              <span>
-                {QUEST_CATEGORIES[q.category][locale]} · <span class="mono">+{q.exp} EXP</span>
-              </span>
-
-              {q.status === "open" ? (
-                <a
-                  href={buildClaimIssueUrl(q, locale)}
-                  class="font-medium text-gray-900 underline decoration-gray-300 underline-offset-2 hover:text-brand-600 dark:text-gray-100 dark:decoration-gray-700"
-                >
-                  {COPY.claim}
-                </a>
-              ) : (
-                <span class="mono">
-                  @{q.assignee}
-                  {q.linkedPrUrl && (
-                    <a
-                      href={q.linkedPrUrl}
-                      class="ml-1.5 underline decoration-gray-300 underline-offset-2 hover:text-gray-900 dark:decoration-gray-700 dark:hover:text-white"
-                    >
-                      {q.status === "completed" ? "Merged" : "PR"}
-                    </a>
-                  )}
-                </span>
-              )}
-            </div>
-
-            <h3 class="mt-2 text-lg font-medium text-gray-950 dark:text-gray-100">
-              {q.title[locale]}
-            </h3>
-
-            <p class="mt-1 max-w-[62ch] text-sm leading-relaxed text-gray-600 dark:text-gray-400">
-              {q.summary[locale]}
-            </p>
-
-            {q.references.length > 0 && (
-              <div class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-400">
-                {q.references.map((r) => (
-                  <a
-                    href={r.url.startsWith("/") ? href(r.url) : r.url}
-                    class="underline decoration-gray-200 underline-offset-2 hover:text-gray-700 dark:decoration-gray-800 dark:hover:text-gray-200"
-                  >
-                    {r.label}
-                  </a>
-                ))}
-              </div>
-            )}
-          </div>
-        ))
-      }
-    </div>
-  </section>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200 dark:divide-gray-800">
+        {
+          QUEST_DOMAINS.map((domain) => (
+            <tr>
+              <th class="py-4 pr-4 align-top text-sm font-semibold text-gray-950 dark:text-gray-100">
+                {domain}
+              </th>
+              {STAGES.map((stage) => {
+                const items = tasksFor(domain, stage.match);
+                return (
+                  <td class="px-3 py-4 align-top">
+                    {items.length === 0 ? (
+                      <span class="text-xs text-gray-300 dark:text-gray-700">{COPY.empty}</span>
+                    ) : (
+                      <div class="space-y-2.5">
+                        {items.map((q) => {
+                          const targetUrl =
+                            q.status === "open"
+                              ? buildClaimIssueUrl(q, locale)
+                              : (q.linkedPrUrl ?? `https://github.com/${q.assignee}`);
+                          return (
+                            <div class="rounded-lg border border-gray-200 bg-white p-3 transition-colors hover:border-gray-300 dark:border-gray-800 dark:bg-gray-950 dark:hover:border-gray-700">
+                              <a
+                                href={targetUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="block text-sm font-medium leading-snug text-gray-900 hover:text-brand-600 dark:text-gray-100 dark:hover:text-brand-400"
+                              >
+                                {q.title[locale]}
+                              </a>
+                              <div class="mt-2 flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+                                <span>{stage.label}</span>
+                                {q.assignee ? (
+                                  <a
+                                    href={`https://github.com/${q.assignee}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="mono text-gray-700 hover:underline dark:text-gray-300"
+                                  >
+                                    @{q.assignee}
+                                  </a>
+                                ) : (
+                                  <a
+                                    href={buildClaimIssueUrl(q, locale)}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="font-medium text-brand-600 hover:underline dark:text-brand-400"
+                                  >
+                                    {COPY.unclaimed}
+                                  </a>
+                                )}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </td>
+                );
+              })}
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
 </div>
-
-<style>
-  .quest-tab {
-    border-color: transparent;
-    color: #6b7280;
-  }
-  .quest-tab:hover {
-    color: #111827;
-  }
-  :global(.dark) .quest-tab:hover {
-    color: #f9fafb;
-  }
-  .quest-tab.is-active {
-    border-color: #111827;
-    color: #111827;
-  }
-  :global(.dark) .quest-tab.is-active {
-    border-color: #f9fafb;
-    color: #f9fafb;
-  }
-</style>
-
-<script>
-  const tabsRoot = document.querySelector<HTMLElement>("[data-quest-tabs]");
-  if (tabsRoot) {
-    const buttons = tabsRoot.querySelectorAll<HTMLButtonElement>("[data-status-tab]");
-    const rows = document.querySelectorAll<HTMLElement>("[data-quest-row]");
-
-    buttons.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const status = btn.dataset.statusTab || "all";
-        buttons.forEach((b) => b.classList.toggle("is-active", b === btn));
-        rows.forEach((row) => {
-          const st = row.dataset.status || "";
-          row.style.display = status === "all" || st === status ? "" : "none";
-        });
-      });
-    });
-  }
-</script>
