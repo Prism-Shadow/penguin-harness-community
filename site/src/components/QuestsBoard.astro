@@ -122,7 +122,7 @@ function tasksFor(domain: QuestDomainId, status: QuestStatus): QuestItem[] {
               );
               return (
                 <div
-                  class="flex min-h-[168px] flex-col rounded-xl border border-gray-200 bg-gray-50/60 p-3 dark:border-gray-800 dark:bg-gray-900/40"
+                  class="flex min-h-[168px] min-w-0 flex-col rounded-xl border border-gray-200 bg-gray-50/60 p-3 dark:border-gray-800 dark:bg-gray-900/40"
                   data-quest-col
                   data-page="1"
                   data-total-pages={totalPages}
@@ -143,14 +143,14 @@ function tasksFor(domain: QuestDomainId, status: QuestStatus): QuestItem[] {
                     </div>
                   ) : (
                     <>
-                      <div class="grid flex-1 content-start">
+                      <div class="grid min-w-0 flex-1 grid-cols-[minmax(0,1fr)] content-start">
                         {pages.map((pageItems, pageIdx) => {
                           const pageNumber = pageIdx + 1;
                           return (
                             <div
                               data-quest-page={pageNumber}
                               inert={pageNumber > 1 ? true : undefined}
-                              class={`col-start-1 row-start-1 space-y-1.5 ${
+                              class={`col-start-1 row-start-1 min-w-0 space-y-1.5 ${
                                 pageNumber > 1
                                   ? "invisible pointer-events-none select-none"
                                   : ""
@@ -160,10 +160,10 @@ function tasksFor(domain: QuestDomainId, status: QuestStatus): QuestItem[] {
                                 <button
                                   type="button"
                                   data-quest-open={q.id}
-                                  class="group block w-full cursor-pointer rounded-lg border border-gray-200 bg-white px-3 py-2 text-left shadow-2xs transition-colors hover:border-brand-500 dark:border-gray-800 dark:bg-gray-950 dark:hover:border-brand-500"
+                                  class="group block w-full max-w-full min-w-0 cursor-pointer overflow-hidden rounded-lg border border-gray-200 bg-white px-3 py-2 text-left shadow-2xs transition-colors hover:border-brand-500 dark:border-gray-800 dark:bg-gray-950 dark:hover:border-brand-500"
                                 >
-                                  <div class="flex items-center justify-between gap-2">
-                                    <span class="truncate text-xs font-medium text-gray-950 group-hover:text-brand-600 dark:text-gray-100 dark:group-hover:text-brand-400">
+                                  <div class="flex min-w-0 items-center justify-between gap-2">
+                                    <span class="min-w-0 flex-1 truncate text-xs font-medium text-gray-950 group-hover:text-brand-600 dark:text-gray-100 dark:group-hover:text-brand-400">
                                       {resolveText(q.title, locale)}
                                     </span>
                                     <span class="mono shrink-0 rounded bg-brand-50 px-1.5 py-0.5 text-[11px] font-semibold leading-none text-brand-700 ring-1 ring-inset ring-brand-600/20 dark:bg-brand-950/80 dark:text-brand-300 dark:ring-brand-400/30">
@@ -171,8 +171,8 @@ function tasksFor(domain: QuestDomainId, status: QuestStatus): QuestItem[] {
                                     </span>
                                   </div>
 
-                                  <div class="mt-1 flex items-center justify-between gap-2 text-[11px] leading-tight text-gray-500 dark:text-gray-400">
-                                    <span class="mono truncate">
+                                  <div class="mt-1 flex min-w-0 items-center justify-between gap-2 text-[11px] leading-tight text-gray-500 dark:text-gray-400">
+                                    <span class="mono min-w-0 flex-1 truncate">
                                       #{q.issueNumber}
                                       {q.prNumber ? ` · PR #${q.prNumber}` : ""} ·{" "}
                                       {q.assignee ? `@${q.assignee}` : COPY.unclaimed}
