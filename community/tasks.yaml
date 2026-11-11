@@ -381,7 +381,7 @@ tasks:
   - id: "RSI-Q021"
     issue_number: 56
     published_at: "2026-11-11T14:30:00Z"
-    status: "open"
+    status: "in_progress"
     domain: "Benchmark"
     exp: 50
     target_repository: "https://github.com/Prism-Shadow/penguin-harness-benchmark"
@@ -393,7 +393,7 @@ tasks:
     references:
       - "https://tbench.ai"
       - "https://github.com/harbor-framework/terminal-bench"
-    assignee: null
+    assignee: "fanggejiaba"
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/56"
     linked_pr: null
 
@@ -417,7 +417,7 @@ tasks:
   - id: "RSI-Q023"
     issue_number: 58
     published_at: "2026-11-11T14:32:00Z"
-    status: "open"
+    status: "in_progress"
     domain: "RSI Algorithm"
     exp: 100
     target_repository: "https://github.com/Prism-Shadow/penguin-harness-plugins"
@@ -430,6 +430,6 @@ tasks:
       - "https://arxiv.org/abs/2603.28052"
       - "https://yoonholee.com/meta-harness/"
       - "https://github.com/stanford-iris-lab/meta-harness"
-    assignee: null
+    assignee: "fanggejiaba"
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/58"
     linked_pr: null
