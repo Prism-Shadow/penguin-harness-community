@@ -1,23 +1,28 @@
 #!/usr/bin/env node
 /**
  * Shared RSI Community — Automated Task & Issue Steward Script
- * Used by both the scheduled PenguinHarness agent (`rsi_community_steward`) and GitHub Actions.
  *
- * Workflow:
- * 1. Scans GitHub Issues in `Prism-Shadow/penguin-harness-community` created via
- *    `.github/ISSUE_TEMPLATE/task.yml` by authorized RSI Community Committee members
- *    (`hiyouga`, `ArisaZz`, `lzh368`, `Saigyouji-Yuyuko1000`, `Myriad-Dreamin`).
- * 2. Resolves separate English (default) and Chinese fields — if either language is empty,
- *    automatically falls back to the other language.
- * 3. Scans comments under each task's GitHub Issue (`#30`..`#37`) for `/claim` replies
- *    and enforces the concurrent claim limit (<= 2 active tasks per user).
- * 4. Previews monthly contributor rewards: 1 EXP = ¥1 RMB (1:1) + Top-5 bonuses
- *    (#1 +¥800, #2 +¥400, #3 +¥200, #4 +¥100, #5 +¥50).
+ * Modes:
+ * 1. `node scripts/community-agent-sync.mjs`
+ *    Local & CI audit mode: validates `community/tasks.yaml`, concurrent claim limits,
+ *    bilingual fallback, and monthly leaderboard settlement.
+ * 2. `node scripts/community-agent-sync.mjs --sync --out <dir>`
+ *    Live GitHub sync mode (used by `.github/workflows/community-task-agent.yml`, modeled
+ *    after `Prism-Shadow/model-message-stream-protocol/.github/workflows/status.yml`):
+ *    - Scans GitHub Issues labeled `task` in `Prism-Shadow/penguin-harness-community`
+ *      authored by authorized RSI Community Committee members (`COMMITTEE_HANDLES`),
+ *      plus comments (`/claim`, `/unclaim`, `/complete`) and linked target-repo PRs.
+ *    - Enforces <= 2 concurrent `in_progress` claims per user and the 30-day completion
+ *      grace period; updates the GitHub Issue body (`### Status`, `### Assignee`,
+ *      `### Pull Request`) when a transition occurs.
+ *    - Writes `quests.json` and `tasks.yaml` into `--out <dir>` (published to the
+ *      `quests-data` branch, which triggers `pages.yml` to rebuild GitHub Pages).
  */
 
-import { readFileSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 
+const REPO = process.env.GITHUB_REPOSITORY || "Prism-Shadow/penguin-harness-community";
 const COMMITTEE_HANDLES = new Set([
   "hiyouga",
   "ArisaZz",
@@ -25,8 +30,10 @@ const COMMITTEE_HANDLES = new Set([
   "rank-Yu",
   "Saigyouji-Yuyuko1000",
   "Myriad-Dreamin",
+  "yu-yang-li",
 ]);
 const TOP_FIVE_BONUSES_RMB = [800, 400, 200, 100, 50];
+const GRACE_PERIOD_MS = 30 * 24 * 60 * 60 * 1000;
 
 export function resolveBilingual(enVal, zhVal) {
   const clean = (v) => {
@@ -47,7 +54,7 @@ export function resolveBilingual(enVal, zhVal) {
  */
 export function parseTaskIssueBody(body, authorHandle) {
   if (authorHandle && !COMMITTEE_HANDLES.has(authorHandle)) {
-    return null; // Self-published issues by non-committee users are not recognized
+    return null;
   }
   const sections = {};
   const parts = String(body || "").split(/^###\s+(.+)$/gm);
@@ -59,6 +66,8 @@ export function parseTaskIssueBody(body, authorHandle) {
     sections["Description (English)"],
     sections["Description (Chinese)"],
   );
+  if (!titles.en && !titles.zh) return null;
+
   const references = (sections["Original Papers & Repository Links"] || "")
     .split(/\r?\n/)
     .map((line) => line.trim())
@@ -70,6 +79,7 @@ export function parseTaskIssueBody(body, authorHandle) {
   const assignee = assigneeRaw && assigneeRaw !== "_No response_" ? assigneeRaw : null;
   const prRaw = (sections["Pull Request"] || "").trim();
   const linkedPr = prRaw && prRaw !== "_No response_" ? prRaw : null;
+  const prMatch = linkedPr ? linkedPr.match(/\/pull\/(\d+)/) : null;
   return {
     domain: sections["Domain"] || "Benchmark",
     status: sections["Status"] || "open",
@@ -78,6 +88,7 @@ export function parseTaskIssueBody(body, authorHandle) {
       sections["Target Repository"] || "https://github.com/Prism-Shadow/penguin-harness-benchmark",
     assignee,
     linked_pr: linkedPr,
+    pr_number: prMatch ? Number(prMatch[1]) : null,
     related_issue: relatedIssue,
     title: titles.en,
     title_zh: titles.zh,
@@ -87,8 +98,61 @@ export function parseTaskIssueBody(body, authorHandle) {
   };
 }
 
-const tasksPath = resolve(process.cwd(), "community/tasks.yaml");
-const rawYaml = readFileSync(tasksPath, "utf8");
+export function formatTaskIssueBody(task) {
+  const refs =
+    Array.isArray(task.references) && task.references.length > 0
+      ? task.references.join("\n")
+      : "_No response_";
+  return [
+    "### Domain",
+    "",
+    task.domain || "Benchmark",
+    "",
+    "### Status",
+    "",
+    task.status || "open",
+    "",
+    "### EXP",
+    "",
+    String(task.exp ?? 50),
+    "",
+    "### Target Repository",
+    "",
+    task.target_repository || "https://github.com/Prism-Shadow/penguin-harness-benchmark",
+    "",
+    "### Assignee",
+    "",
+    task.assignee ? `@${task.assignee.replace(/^@/, "")}` : "_No response_",
+    "",
+    "### Pull Request",
+    "",
+    task.linked_pr || "_No response_",
+    "",
+    "### Related Issue",
+    "",
+    task.related_issue || "_No response_",
+    "",
+    "### Title (English)",
+    "",
+    task.title || "_No response_",
+    "",
+    "### Title (Chinese)",
+    "",
+    task.title_zh || "_No response_",
+    "",
+    "### Description (English)",
+    "",
+    task.description || "_No response_",
+    "",
+    "### Description (Chinese)",
+    "",
+    task.description_zh || "_No response_",
+    "",
+    "### Original Papers & Repository Links",
+    "",
+    refs,
+  ].join("\n");
+}
 
 function parseTasksYaml(content) {
   const maxConcurrentMatch = content.match(/max_concurrent_claims_per_user:\s*(\d+)/);
@@ -102,8 +166,12 @@ function parseTasksYaml(content) {
       if (!m) return null;
       const val = m[1].trim();
       if (val === "null") return null;
-      return val.replace(/^"(.*)"$/, "$1");
+      return val.replace(/^"(.*)"$/, "$1").replace(/\\"/g, '"');
     };
+    const refsMatch = block.match(/^    references:\s*\n((?:      -\s*[^\n]+\n?)*)/m);
+    const references = refsMatch
+      ? Array.from(refsMatch[1].matchAll(/^\s*-\s*"([^"]+)"/gm), (m) => m[1])
+      : [];
     const titles = resolveBilingual(field("title"), field("title_zh"));
     const descriptions = resolveBilingual(field("description"), field("description_zh"));
     return {
@@ -120,6 +188,7 @@ function parseTasksYaml(content) {
       title_zh: titles.zh,
       description: descriptions.en,
       description_zh: descriptions.zh,
+      references,
       assignee: field("assignee"),
       issue_url: field("issue_url"),
       linked_pr: field("linked_pr"),
@@ -129,13 +198,275 @@ function parseTasksYaml(content) {
   return { maxConcurrent, tasks };
 }
 
-const { maxConcurrent, tasks } = parseTasksYaml(rawYaml);
+function serializeTasksYaml(tasks, maxConcurrent = 2) {
+  const esc = (s) => String(s ?? "").replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+  const lines = [
+    "# Shared RSI Community — Task Board Registry",
+    "# Every task is created from a GitHub Issue by an RSI Community Committee member first,",
+    "# and synced by `rsi_community_steward` (per RFC-0006):",
+    "# - Contributors claim a task by replying `/claim` directly under that task's GitHub Issue.",
+    "",
+    "version: 1",
+    `max_concurrent_claims_per_user: ${maxConcurrent}`,
+    "claim_grace_period_days: 30",
+    "default_exp: 50",
+    "",
+    "target_repositories:",
+    '  - "https://github.com/Prism-Shadow/penguin-harness"',
+    '  - "https://github.com/Prism-Shadow/penguin-harness-community"',
+    '  - "https://github.com/Prism-Shadow/penguin-harness-benchmark"',
+    '  - "https://github.com/Prism-Shadow/penguin-harness-plugins"',
+    "",
+    "tasks:",
+  ];
+
+  for (const t of tasks) {
+    lines.push(`  - id: "${esc(t.id)}"`);
+    lines.push(`    issue_number: ${t.issue_number}`);
+    if (t.pr_number) {
+      lines.push(`    pr_number: ${t.pr_number}`);
+    }
+    lines.push(`    published_at: "${esc(t.published_at)}"`);
+    lines.push(`    status: "${esc(t.status)}"`);
+    lines.push(`    domain: "${esc(t.domain)}"`);
+    lines.push(`    exp: ${t.exp}`);
+    lines.push(`    target_repository: "${esc(t.target_repository)}"`);
+    lines.push(`    related_issue: ${t.related_issue ? `"${esc(t.related_issue)}"` : "null"}`);
+    lines.push(`    title: "${esc(t.title)}"`);
+    lines.push(`    title_zh: "${esc(t.title_zh)}"`);
+    lines.push(`    description: "${esc(t.description)}"`);
+    lines.push(`    description_zh: "${esc(t.description_zh)}"`);
+    if (Array.isArray(t.references) && t.references.length > 0) {
+      lines.push("    references:");
+      for (const r of t.references) {
+        lines.push(`      - "${esc(r)}"`);
+      }
+    } else {
+      lines.push("    references: []");
+    }
+    lines.push(`    assignee: ${t.assignee ? `"${esc(t.assignee)}"` : "null"}`);
+    lines.push(`    issue_url: "${esc(t.issue_url)}"`);
+    lines.push(`    linked_pr: ${t.linked_pr ? `"${esc(t.linked_pr)}"` : "null"}`);
+    lines.push("");
+  }
+
+  return lines.join("\n").trimEnd() + "\n";
+}
+
+async function ghFetch(path, options = {}) {
+  const token = process.env.GH_TOKEN || process.env.GITHUB_TOKEN || "";
+  const headers = {
+    Accept: "application/vnd.github+json",
+    "User-Agent": "rsi-community-steward",
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    ...(options.headers || {}),
+  };
+  const url = path.startsWith("http") ? path : `https://api.github.com/${path.replace(/^\//, "")}`;
+  const res = await fetch(url, { ...options, headers });
+  if (!res.ok) {
+    throw new Error(`GitHub API ${res.status} for ${url}: ${await res.text()}`);
+  }
+  return res.json();
+}
+
+async function syncFromGitHubIssues(baseTasks, maxConcurrent) {
+  const byIssueNum = new Map(baseTasks.map((t) => [t.issue_number, { ...t }]));
+  const issues = await ghFetch(`repos/${REPO}/issues?labels=task&state=all&per_page=100`);
+
+  // Sort ascending by issue number to assign deterministic IDs to any newly published committee task issues
+  const sortedIssues = [...issues]
+    .filter((it) => !it.pull_request)
+    .sort((a, b) => a.number - b.number);
+
+  let maxIdNum = baseTasks.reduce((acc, t) => {
+    const m = String(t.id).match(/RSI-Q(\d+)/);
+    return m ? Math.max(acc, Number(m[1])) : acc;
+  }, 0);
+
+  for (const issue of sortedIssues) {
+    const author = issue.user?.login;
+    const parsed = parseTaskIssueBody(issue.body, author);
+    if (!parsed) continue;
+
+    const existing = byIssueNum.get(issue.number);
+    const id =
+      existing?.id ?? `RSI-Q${String(++maxIdNum).padStart(3, "0")}`;
+
+    const comments =
+      issue.comments > 0
+        ? await ghFetch(`repos/${REPO}/issues/${issue.number}/comments?per_page=100`)
+        : [];
+
+    const hasClaimDirective = comments.some((c) =>
+      /^\/(claim|unclaim|complete)\b/m.test(String(c.body || "").trim()),
+    );
+
+    let status = hasClaimDirective && parsed.status !== "completed" ? "open" : parsed.status;
+    let assignee = hasClaimDirective && parsed.status !== "completed" ? null : parsed.assignee;
+    let linkedPr = parsed.linked_pr;
+    let prNumber = parsed.pr_number;
+    let publishedAt = existing?.published_at || issue.created_at;
+    let claimedAt = existing?.status === "in_progress" ? existing.published_at : issue.updated_at;
+
+    for (const c of comments) {
+      const body = String(c.body || "").trim();
+      const commenter = c.user?.login;
+      if (!commenter) continue;
+
+      const completeMatch = body.match(
+        /^\/complete(?:\s+@?([A-Za-z0-9-]+))?(?:\s+(https:\/\/github\.com\/[^\s)]+\/pull\/(\d+)))?/m,
+      );
+      if (completeMatch && COMMITTEE_HANDLES.has(commenter)) {
+        status = "completed";
+        assignee = completeMatch[1] || assignee;
+        if (completeMatch[2]) {
+          linkedPr = completeMatch[2];
+          prNumber = Number(completeMatch[3]);
+        }
+        continue;
+      }
+
+      if (/^\/unclaim\b/m.test(body)) {
+        if (commenter === assignee || COMMITTEE_HANDLES.has(commenter)) {
+          status = "open";
+          assignee = null;
+          linkedPr = null;
+          prNumber = null;
+        }
+        continue;
+      }
+
+      const claimMatch = body.match(
+        /^\/claim(?:\s+@?([A-Za-z0-9-]+))?(?:\s+(https:\/\/github\.com\/[^\s)]+\/pull\/(\d+)))?/m,
+      );
+      if (claimMatch && status !== "completed") {
+        const isCommitteeOverride = Boolean(claimMatch[1] && COMMITTEE_HANDLES.has(commenter));
+        const targetUser = isCommitteeOverride ? claimMatch[1] : commenter;
+        if (!assignee || assignee === targetUser || isCommitteeOverride) {
+          status = "in_progress";
+          assignee = targetUser;
+          claimedAt = c.created_at || claimedAt;
+          if (claimMatch[2]) {
+            linkedPr = claimMatch[2];
+            prNumber = Number(claimMatch[3]);
+          }
+        }
+      }
+    }
+
+    // Check 30-day completion grace period for in_progress tasks without a merged PR
+    if (status === "in_progress" && claimedAt) {
+      const elapsed = Date.now() - new Date(claimedAt).getTime();
+      if (elapsed > GRACE_PERIOD_MS && !linkedPr) {
+        status = "open";
+        assignee = null;
+      }
+    }
+
+    // If a linked PR exists, check whether it has been merged in the target repo
+    if (linkedPr) {
+      const prUrlMatch = linkedPr.match(
+        /^https:\/\/github\.com\/([^/]+\/[^/]+)\/pull\/(\d+)/,
+      );
+      if (prUrlMatch) {
+        try {
+          const prData = await ghFetch(`repos/${prUrlMatch[1]}/pulls/${prUrlMatch[2]}`);
+          if (prData.merged_at) {
+            publishedAt = prData.merged_at;
+          }
+        } catch {
+          // Keep existing timestamp if cross-repo PR lookup fails
+        }
+      }
+    }
+
+    const updatedTask = {
+      id,
+      issue_number: issue.number,
+      pr_number: prNumber,
+      published_at: publishedAt,
+      status,
+      domain: parsed.domain,
+      exp: parsed.exp,
+      target_repository: parsed.target_repository,
+      related_issue: parsed.related_issue,
+      title: parsed.title,
+      title_zh: parsed.title_zh,
+      description: parsed.description,
+      description_zh: parsed.description_zh,
+      references: parsed.references,
+      assignee,
+      issue_url: `https://github.com/${REPO}/issues/${issue.number}`,
+      linked_pr: linkedPr,
+    };
+
+    // If issue body on GitHub is out of sync with resolved status/assignee/linked_pr, update it when token is present
+    if (
+      (process.env.GH_TOKEN || process.env.GITHUB_TOKEN) &&
+      (parsed.status !== status ||
+        parsed.assignee !== assignee ||
+        parsed.linked_pr !== linkedPr)
+    ) {
+      try {
+        await ghFetch(`repos/${REPO}/issues/${issue.number}`, {
+          method: "PATCH",
+          body: JSON.stringify({
+            body: formatTaskIssueBody(updatedTask),
+            ...(status === "completed" && issue.state !== "closed"
+              ? { state: "closed", state_reason: "completed" }
+              : {}),
+          }),
+        });
+      } catch (err) {
+        console.warn(`Warning: could not patch issue #${issue.number}: ${err.message}`);
+      }
+    }
+
+    byIssueNum.set(issue.number, updatedTask);
+  }
+
+  // Enforce <= maxConcurrent in_progress tasks per user
+  const activeCount = new Map();
+  const finalTasks = [];
+  for (const t of byIssueNum.values()) {
+    if (t.status === "in_progress" && t.assignee) {
+      const c = activeCount.get(t.assignee) ?? 0;
+      if (c >= maxConcurrent) {
+        t.status = "open";
+        t.assignee = null;
+        t.linked_pr = null;
+        t.pr_number = null;
+      } else {
+        activeCount.set(t.assignee, c + 1);
+      }
+    }
+    finalTasks.push(t);
+  }
+
+  return finalTasks;
+}
+
+const args = process.argv.slice(2);
+const doSync = args.includes("--sync");
+const outIdx = args.indexOf("--out");
+const outDir = outIdx >= 0 ? args[outIdx + 1] : null;
+
+const tasksPath = resolve(process.cwd(), "community/tasks.yaml");
+const rawYaml = readFileSync(tasksPath, "utf8");
+const parsedYaml = parseTasksYaml(rawYaml);
+const maxConcurrent = parsedYaml.maxConcurrent;
+let tasks = parsedYaml.tasks;
+
+if (doSync) {
+  console.log(`Syncing tasks from GitHub Issues in ${REPO}...`);
+  tasks = await syncFromGitHubIssues(tasks, maxConcurrent);
+}
 
 console.log("=== Shared RSI Community Steward (rsi_community_steward) ===");
 console.log(
   `Authorized Task Publishers (RSI Committee): ${[...COMMITTEE_HANDLES].map((h) => `@${h}`).join(", ")}`,
 );
-console.log(`Loaded ${tasks.length} tasks from community/tasks.yaml (Max concurrent claims/user: ${maxConcurrent})\n`);
+console.log(`Loaded ${tasks.length} tasks (Max concurrent claims/user: ${maxConcurrent})\n`);
 
 const activeByAssignee = new Map();
 for (const t of tasks) {
@@ -155,7 +486,7 @@ for (const [user, activeIds] of activeByAssignee.entries()) {
   console.log(`   - @${user}: ${activeIds.length}/${maxConcurrent} active tasks [${activeIds.join(", ")}]`);
 }
 if (activeByAssignee.size === 0) {
-  console.log("   - 0 in_progress tasks; all open tasks are available for claim (50 EXP each).");
+  console.log("   - 0 in_progress tasks; all open tasks are available for claim.");
 }
 
 console.log("\n2. Task Board Status Summary (Bilingual Fallback Verified):");
@@ -187,6 +518,26 @@ settledContributors.forEach((c, idx) => {
     } RMB`,
   );
 });
+
+if (outDir) {
+  const targetDir = resolve(process.cwd(), outDir);
+  mkdirSync(targetDir, { recursive: true });
+  const openSourceContributors = Array.from(
+    new Set(tasks.map((t) => t.assignee).filter(Boolean)),
+  );
+  const payload = {
+    version: 1,
+    max_concurrent_claims_per_user: maxConcurrent,
+    claim_grace_period_days: 30,
+    reward_payout_day_of_month: 5,
+    tasks,
+    leaderboard: settledContributors,
+    open_source_contributors: openSourceContributors,
+  };
+  writeFileSync(resolve(targetDir, "quests.json"), JSON.stringify(payload, null, 2) + "\n", "utf8");
+  writeFileSync(resolve(targetDir, "tasks.yaml"), serializeTasksYaml(tasks, maxConcurrent), "utf8");
+  console.log(`\nWrote synced data files to ${targetDir}/quests.json and ${targetDir}/tasks.yaml`);
+}
 
 if (capViolations > 0) {
   console.error(`\nERROR: Found ${capViolations} concurrent claim cap violation(s).`);

@@ -37,6 +37,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # the quests board and contributor leaderboard are built with the synced quests-data branch
+      - name: Check out the quests data
+        run: |
+          if git ls-remote --exit-code --heads origin quests-data; then
+            git fetch --depth=1 origin quests-data
+            git worktree add --detach quests-data FETCH_HEAD
+            echo "COMMUNITY_DATA_DIR=$GITHUB_WORKSPACE/quests-data" >> "$GITHUB_ENV"
+          else
+            # exit code 2 means the branch does not exist; anything else is a failure to look
+            test "$?" -eq 2
+          fi
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
