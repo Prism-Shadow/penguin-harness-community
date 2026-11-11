@@ -24,14 +24,14 @@ The committee is organized into three groups:
 | **Review Group** | `Leijun Zhou` ([@Saigyouji-Yuyuko1000](https://github.com/Saigyouji-Yuyuko1000)), `Zhihao Liu` ([@lzh368](https://github.com/lzh368)), `Yangxi Xiang` ([@Myriad-Dreamin](https://github.com/Myriad-Dreamin)) | `Algorithm` (Leijun Zhou), `Benchmark` (Zhihao Liu), `Harness` (Yangxi Xiang) | Review Benchmark, Evaluation, Algorithm Plugin, and Harness PRs for reproducibility and merge completion |
 
 - **Expanding Domain Tracks**: Beyond `Benchmark`, `Algorithm`, and `Harness`, the committee continues to expand into vertical domains such as `Medicine` and `Telecom`.
-- **Fixed Committee Incentive**: Each committee member receives a fixed **¥1,000 RMB / month** incentive (issued in equivalent LLM Token credits and compute vouchers).
+- **Fixed Committee Incentive**: Each committee member receives a fixed **¥1,000 RMB / month** incentive (issued in equivalent LLM Token credits and compute vouchers, distributed on the **5th of each month** for the previous calendar month).
 - **How to Apply**: Researchers and engineers interested in joining the RSI Community Committee may apply via the **community WeChat group**.
 
 ## 2. Contributor Leaderboard
 
 The `/people/` page displays two leaderboards sorted in descending order by Experience Points (EXP):
 
-1. **Monthly Leaderboard**: Tracks EXP earned within the current calendar month from completing official tasks recognized under [RFC-0006](RFC-0006-quests.md). It serves as the sole basis for monthly reward settlement and resets at the beginning of each new month.
+1. **Monthly Leaderboard**: Tracks EXP earned within the current calendar month from completing official tasks recognized under [RFC-0006](RFC-0006-quests.md). It serves as the sole basis for monthly reward settlement; it resets at the start of each new calendar month, and rewards for the previous calendar month are distributed on the **5th of each month**.
 2. **All-Time Leaderboard**: Permanently accumulates each contributor's total historical EXP and completed task count.
 3. **Tie-Breaking Rule (Earliest to Reach Score Wins)**: When two or more contributors are tied on EXP, they are ordered by **the timestamp at which they reached that EXP total (i.e., the merge timestamp of their latest completed task PR) in ascending order (earliest first)**. The contributor who reached the score earlier ranks higher and receives the corresponding Top-5 rank bonus.
 
@@ -39,7 +39,7 @@ The `/people/` page displays two leaderboards sorted in descending order by Expe
 
 ## 3. Monthly Contributor Reward Settlement Rules
 
-In addition to fixed committee stipends, the community maintains a monthly contributor reward pool with a **maximum monthly cap of ¥10,000 RMB** (issued in equivalent LLM Token credits and compute vouchers), settled at the end of each calendar month based on the **Monthly Leaderboard**:
+In addition to fixed committee stipends, the community maintains a monthly contributor reward pool with a **maximum monthly cap of ¥10,000 RMB** (issued in equivalent LLM Token credits and compute vouchers), settled and distributed on the **5th of each month** for the previous calendar month based on the **Monthly Leaderboard**:
 
 | Reward Component | Rate / Bonus | Formula & Explanation |
 | --- | --- | --- |

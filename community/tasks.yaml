@@ -5,6 +5,7 @@
 
 version: 1
 max_concurrent_claims_per_user: 2
+claim_grace_period_days: 30
 default_exp: 50
 
 target_repositories:

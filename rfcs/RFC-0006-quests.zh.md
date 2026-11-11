@@ -131,7 +131,7 @@ https://arxiv.org/abs/2310.06770
 
 1. **认领并进入「进行中（`in_progress`）」**：
    - 贡献者在对应官方任务 Issue 下方评论回复 `/claim`（若已创建 PR，可附带 PR 链接：`/claim @<handle> <pr-url>`）。
-   - **防占坑并发上限**：每位 GitHub 用户同一时间最多只能持有 **2 项**处于 `in_progress` 状态的任务；若已有 2 项进行中任务，新的 `/claim` 请求不予生效。认领后连续 14 天无实质进展或主动回复 `/unclaim` 时，任务自动释放回 `open`。
+   - **防占坑并发上限与认领完成宽限期**：每位 GitHub 用户同一时间最多只能持有 **2 项**处于 `in_progress` 状态的任务；若已有 2 项进行中任务，新的 `/claim` 请求不予生效。任务的认领完成宽限期为 **1 个月（30 天）**——认领后超过 1 个月未完成（无实质进展）或主动回复 `/unclaim` 时，任务将自动释放回 `open`。
    - 校验通过后，定时 Agent（`rsi_community_steward`）将 Issue 正文中的 `### Status` 更新为 `in_progress`、`### Assignee` 更新为 `@<handle>`（若附带 PR 链接则同步更新 `### Pull Request`）。
 2. **完成验收并进入「已完成（`completed`）」**：
    - 贡献者向 `### Target Repository` 指定的目标仓库提交 Pull Request 并经委员会审核小组验收合入后，在任务 Issue 下方记录标准完成指令评论：

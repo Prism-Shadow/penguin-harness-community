@@ -8,6 +8,7 @@
 version: 1
 committee_monthly_stipend_rmb: 1000
 contributor_monthly_pool_rmb: 10000
+reward_payout_day_of_month: 5
 
 committee_groups:
   - id: "leadership"
