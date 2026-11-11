@@ -44,16 +44,18 @@ export interface QuestReference {
 
 export interface QuestItem {
   id: string;
-  issueNumber: number;
+  issueNumber?: number;
+  prNumber?: number;
   status: QuestStatus;
   domain: QuestDomainId;
   exp: number;
   targetRepository: TargetRepositoryUrl;
   relatedIssue?: string;
+  linkedPr?: string;
   title: { en?: string; zh?: string };
   description: { en?: string; zh?: string };
   references: QuestReference[];
-  issueUrl: string;
+  issueUrl?: string;
   assignee?: string;
 }
 
@@ -91,13 +93,74 @@ export const QUESTS: QuestItem[] = [
       zh: "集成 FDE-gym",
     },
     description: {
-      en: "Integrate FDE-gym into penguin-harness-benchmark as a standard reproducible benchmark suite and verifier following RFC-0001.",
-      zh: "将前沿数据与工程评测环境 FDE-gym 集成至 penguin-harness-benchmark，按 RFC-0001 标准提供可复现的评测任务集与验证器。",
+      en: "Integrate FDE-Gym (arXiv:2610.22350 — 95 end-to-end Forward-Deployed Engineer customer delivery tasks across 20 scenarios and 18 sectors evaluating ambiguous requirement clarification, unstated constraint discovery, and live system delivery) into penguin-harness-benchmark following RFC-0001.",
+      zh: "将前沿驻场工程师（Forward-Deployed Engineer）真实客户交付基准 FDE-Gym（涵盖 18 个行业、20 个客户场景的 95 个端到端交付任务，评测 Agent 在拟真生产系统中澄清模糊需求、发掘隐式约束并完成系统交付的能力）集成至 penguin-harness-benchmark（遵循 RFC-0001 规范）。",
     },
     references: [
+      { url: "https://arxiv.org/abs/2610.22350" },
+      { url: "https://fde-gym.com" },
       { url: "https://github.com/deeplethe/fde-gym" },
     ],
     issueUrl: "https://github.com/Prism-Shadow/penguin-harness-community/issues/31",
+  },
+  {
+    id: "RSI-Q009",
+    prNumber: 3,
+    status: "completed",
+    domain: "benchmark",
+    exp: 50,
+    targetRepository: "https://github.com/Prism-Shadow/penguin-harness-benchmark",
+    linkedPr: "https://github.com/Prism-Shadow/penguin-harness-benchmark/pull/3",
+    assignee: "hiyouga",
+    title: {
+      en: "Build 50 Multi-Domain Benchmark Tasks",
+      zh: "构建 50 个多领域基准任务",
+    },
+    description: {
+      en: "Build 50 standardized benchmark tasks across five domains (PenguinHarness Benchmark Sec A–E) with unified package manifests and grading rubrics (per RFC-0001).",
+      zh: "构建涵盖 Sec A–E 五大领域的 50 个标准化基准评测任务包（penguinharness-benchmark-sec-a..e），提供统一配置清单与评分细则（遵循 RFC-0001 规范）。",
+    },
+    references: [],
+  },
+  {
+    id: "RSI-Q010",
+    prNumber: 5,
+    status: "completed",
+    domain: "benchmark",
+    exp: 50,
+    targetRepository: "https://github.com/Prism-Shadow/penguin-harness-benchmark",
+    linkedPr: "https://github.com/Prism-Shadow/penguin-harness-benchmark/pull/5",
+    assignee: "rank-Yu",
+    title: {
+      en: "Integrate 60-Task GDPevo Essential Dataset",
+      zh: "集成 60 道 GDPevo essential 数据集",
+    },
+    description: {
+      en: "Integrate the 60-task GDPevo Essential dataset (30 continuous task-group training tasks and 30 independent test tasks across 6 business scenarios) into penguin-harness-benchmark (per RFC-0001).",
+      zh: "将 GDPevo Essential 六大业务场景共 60 道评测任务（30 道连续训练任务与 30 道独立测试任务）集成至 penguin-harness-benchmark（遵循 RFC-0001 规范）。",
+    },
+    references: [
+      { url: "https://arxiv.org/abs/2608.03764" },
+    ],
+  },
+  {
+    id: "RSI-Q011",
+    prNumber: 15,
+    status: "completed",
+    domain: "benchmark",
+    exp: 50,
+    targetRepository: "https://github.com/Prism-Shadow/penguin-harness-benchmark",
+    linkedPr: "https://github.com/Prism-Shadow/penguin-harness-benchmark/pull/15",
+    assignee: "Hoyant-Su",
+    title: {
+      en: "Build Biomedical Repeated-Measure Analysis Benchmark Tasks",
+      zh: "构建生物医学重复测量分析基准任务",
+    },
+    description: {
+      en: "Build biomedical repeated-measure prediction benchmark tasks evaluating patient-level holdout validation, acoustic feature predictive uplift, and conditional uncertainty intervals (per RFC-0001).",
+      zh: "构建基于帕金森病语音重复测量数据的生物医学预测基准任务包，评测跨患者留出验证、声学特征增量预测价值与条件不确定性区间估计（遵循 RFC-0001 规范）。",
+    },
+    references: [],
   },
   {
     id: "RSI-Q003",
@@ -111,12 +174,12 @@ export const QUESTS: QuestItem[] = [
       zh: "Codex 的自进化效果对比",
     },
     description: {
-      en: "Evaluate Codex before and after Recursive Self-Improvement (RSI) on standard benchmarks, submitting full execution traces to the cross-harness leaderboard.",
-      zh: "在标准评测基准上对比 Codex 在接入自进化（RSI）前后的任务解决率与 Token 成本变化，提交完整实验轨迹并更新跨框架榜单。",
+      en: "Evaluate Codex before and after Recursive Self-Improvement (RSI) across the six GDPEVO Essential scenarios, submitting full execution traces to the GDPEVO Essential leaderboard (per RFC-0002).",
+      zh: "在 GDPEVO Essential 六大评测场景上对比 Codex 在接入自进化（RSI）前后的任务解决率与 Token 成本变化，提交完整实验轨迹并补充至 GDPEVO Essential 榜单（遵循 RFC-0002 规范）。",
     },
     references: [
+      { url: "https://penguin.ooo/leaderboards/gdpevo-essential" },
       { url: "https://github.com/openai/codex" },
-      { url: "https://penguin.ooo/leaderboards/harness-comparison" },
     ],
     issueUrl: "https://github.com/Prism-Shadow/penguin-harness-community/issues/32",
   },
@@ -141,6 +204,48 @@ export const QUESTS: QuestItem[] = [
     issueUrl: "https://github.com/Prism-Shadow/penguin-harness-community/issues/33",
   },
   {
+    id: "RSI-Q012",
+    prNumber: 16,
+    status: "completed",
+    domain: "evaluation",
+    exp: 50,
+    targetRepository: "https://github.com/Prism-Shadow/penguin-harness-benchmark",
+    linkedPr: "https://github.com/Prism-Shadow/penguin-harness-benchmark/pull/16",
+    assignee: "Saigyouji-Yuyuko1000",
+    title: {
+      en: "Compare DeepSeek v4.1 Evolution Across RSI Methods on GDPevo",
+      zh: "在 GDPevo 上对比 Deepseek v4.1 在不同算法的进化表现",
+    },
+    description: {
+      en: "Evaluate DeepSeek v4.1 across four RSI methods (SkillAdam, SkillOpt, TRACE, OpenSkill) and a shared baseline on all six GDPevo Essential scenarios with three test repetitions (per RFC-0002).",
+      zh: "在 GDPevo Essential 六大场景上评测 DeepSeek v4.1 在 SkillAdam、SkillOpt、TRACE、OpenSkill 四种自进化算法与基线下的训练与三次重复测试表现（遵循 RFC-0002 规范）。",
+    },
+    references: [
+      { url: "https://penguin.ooo/leaderboards/gdpevo-essential" },
+    ],
+  },
+  {
+    id: "RSI-Q013",
+    prNumber: 21,
+    status: "completed",
+    domain: "evaluation",
+    exp: 50,
+    targetRepository: "https://github.com/Prism-Shadow/penguin-harness-benchmark",
+    linkedPr: "https://github.com/Prism-Shadow/penguin-harness-benchmark/pull/21",
+    assignee: "Saigyouji-Yuyuko1000",
+    title: {
+      en: "Compare Cross-Harness Capabilities with DeepSeek v4.1",
+      zh: "用 DeepSeek v4.1 对比不同 harness 能力",
+    },
+    description: {
+      en: "Benchmark DeepSeek Harness, PenguinHarness, Pi, and Codex using DeepSeek v4.1 across Sec A–E benchmarks (600 scored test runs) and publish the cross-harness leaderboard (per RFC-0002 & RFC-0005).",
+      zh: "使用 DeepSeek v4.1 在 Sec A–E 五大基准（共 600 次测试采样）上系统对比 DeepSeek Harness、PenguinHarness、Pi 与 Codex 四种框架的任务得分与成本（遵循 RFC-0002 与 RFC-0005 规范）。",
+    },
+    references: [
+      { url: "https://penguin.ooo/leaderboards/harness-comparison" },
+    ],
+  },
+  {
     id: "RSI-Q005",
     issueNumber: 34,
     status: "open",
@@ -157,6 +262,8 @@ export const QUESTS: QuestItem[] = [
     },
     references: [
       { url: "https://arxiv.org/abs/2609.15364" },
+      { url: "https://aetherlabsai.github.io/RSIAgent/" },
+      { url: "https://github.com/AetherLabsAI/RSIAgent" },
     ],
     issueUrl: "https://github.com/Prism-Shadow/penguin-harness-community/issues/34",
   },
@@ -216,6 +323,25 @@ export const QUESTS: QuestItem[] = [
     },
     references: [],
     issueUrl: "https://github.com/Prism-Shadow/penguin-harness-community/issues/37",
+  },
+  {
+    id: "RSI-Q014",
+    prNumber: 1491,
+    status: "completed",
+    domain: "penguin-harness",
+    exp: 50,
+    targetRepository: "https://github.com/Prism-Shadow/penguin-harness",
+    linkedPr: "https://github.com/Prism-Shadow/penguin-harness/pull/1491",
+    assignee: "hiyouga",
+    title: {
+      en: "Optimize PenguinHarness Context Compaction Algorithm",
+      zh: "优化 PenguinHarness 的压缩算法",
+    },
+    description: {
+      en: "Optimize PenguinHarness context compaction to write structured hand-off files before summarization and guide the next context on line-by-line Trace querying.",
+      zh: "优化 PenguinHarness 上下文压缩（Compaction）机制，支持在生成摘要前通过多轮工具调用将长篇计划、结论与草稿写入 handoff 文件，并附带 Trace 行级检索指引。",
+    },
+    references: [],
   },
 ];
 

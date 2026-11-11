@@ -100,7 +100,8 @@ function parseTasksYaml(content) {
     const descriptions = resolveBilingual(field("description"), field("description_zh"));
     return {
       id,
-      issue_number: Number(field("issue_number") || 0),
+      issue_number: field("issue_number") ? Number(field("issue_number")) : null,
+      pr_number: field("pr_number") ? Number(field("pr_number")) : null,
       status: field("status"),
       domain: field("domain"),
       exp: Number(field("exp") || 50),
@@ -145,13 +146,14 @@ for (const [user, activeIds] of activeByAssignee.entries()) {
   console.log(`   - @${user}: ${activeIds.length}/${maxConcurrent} active tasks [${activeIds.join(", ")}]`);
 }
 if (activeByAssignee.size === 0) {
-  console.log("   - All 8 tasks are currently open for claim (50 EXP each).");
+  console.log("   - 0 in_progress tasks; all open tasks are available for claim (50 EXP each).");
 }
 
 console.log("\n2. Task Board Status Summary (Bilingual Fallback Verified):");
 for (const t of tasks) {
+  const refTag = t.issue_number ? `Issue #${t.issue_number}` : `PR #${t.pr_number}`;
   console.log(
-    `   - [${t.id}] Issue #${t.issue_number} | domain="${t.domain}" | status=${t.status} | +${t.exp} EXP | EN="${t.title}" / ZH="${t.title_zh}"`,
+    `   - [${t.id}] ${refTag} | domain="${t.domain}" | status=${t.status} | +${t.exp} EXP | EN="${t.title}" / ZH="${t.title_zh}"`,
   );
 }
 

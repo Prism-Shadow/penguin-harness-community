@@ -27,11 +27,15 @@ const COPY = {
     details: "详情",
     empty: "暂无任务",
     modalTargetRepo: "目标仓库",
+    modalLinkedPr: "提交 PR",
     modalRelatedIssue: "关联 Issue",
     modalRefs: "原始论文与代码仓库",
     modalClaimHint: "请直接在该任务的 GitHub Issue 下方评论回复 /claim 完成认领：",
     modalClaimBtn: "打开任务 Issue (#",
     modalClaimBtnSuffix: ") 回复认领 ↗",
+    modalCompletedHint: "该任务已完成并通过审核合入：",
+    modalPrBtn: "查看提交 PR (#",
+    modalPrBtnSuffix: ") ↗",
     modalClose: "关闭",
   },
   en: {
@@ -44,11 +48,15 @@ const COPY = {
     details: "Details",
     empty: "No tasks",
     modalTargetRepo: "Target Repository",
+    modalLinkedPr: "Pull Request",
     modalRelatedIssue: "Related Issue",
     modalRefs: "Original Papers & Repositories",
     modalClaimHint: "Reply /claim under this task's GitHub Issue to claim it:",
     modalClaimBtn: "Open Task Issue (#",
     modalClaimBtnSuffix: ") to Claim ↗",
+    modalCompletedHint: "This task has been completed and merged:",
+    modalPrBtn: "View Pull Request (#",
+    modalPrBtnSuffix: ") ↗",
     modalClose: "Close",
   },
 }[locale];
@@ -121,7 +129,7 @@ function tasksFor(domain: QuestDomainId, status: QuestStatus): QuestItem[] {
 
                           <div class="mt-2.5 flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
                             <span class="mono">
-                              #{q.issueNumber} · {q.assignee ? `@${q.assignee}` : COPY.unclaimed}
+                              {q.issueNumber ? `#${q.issueNumber}` : `PR #${q.prNumber}`} · {q.assignee ? `@${q.assignee}` : COPY.unclaimed}
                             </span>
                             <span class="text-brand-600 group-hover:underline dark:text-brand-400">
                               {COPY.details} →
@@ -154,7 +162,7 @@ function tasksFor(domain: QuestDomainId, status: QuestStatus): QuestItem[] {
             <div class="flex items-start justify-between gap-3">
               <div>
                 <div class="mono text-xs text-gray-500 dark:text-gray-400">
-                  {domainLabel} · {stageLabel} · Issue #{q.issueNumber}
+                  {domainLabel} · {stageLabel} · {q.issueNumber ? `Issue #${q.issueNumber}` : `PR #${q.prNumber}`}{q.assignee ? ` · @${q.assignee}` : ""}
                 </div>
                 <h2 class="mt-1 text-lg font-semibold tracking-tight text-gray-950 dark:text-white">
                   {resolveText(q.title, locale)}
@@ -184,6 +192,24 @@ function tasksFor(domain: QuestDomainId, status: QuestStatus): QuestItem[] {
                 </a>
               </div>
             </div>
+
+            {q.linkedPr && (
+              <div class="mt-3">
+                <div class="text-xs font-medium text-gray-500 dark:text-gray-400">
+                  {COPY.modalLinkedPr}
+                </div>
+                <div class="mt-1 text-xs">
+                  <a
+                    href={q.linkedPr}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="mono break-all text-brand-600 underline decoration-brand-300 underline-offset-2 hover:text-brand-500 dark:text-brand-400 dark:decoration-brand-700"
+                  >
+                    {q.linkedPr}
+                  </a>
+                </div>
+              </div>
+            )}
 
             {q.relatedIssue && (
               <div class="mt-3">
@@ -227,7 +253,7 @@ function tasksFor(domain: QuestDomainId, status: QuestStatus): QuestItem[] {
 
             <div class="mt-5 border-t border-gray-200 pt-4 dark:border-gray-800">
               <p class="text-xs text-gray-500 dark:text-gray-400">
-                {COPY.modalClaimHint}
+                {q.status === "completed" ? COPY.modalCompletedHint : COPY.modalClaimHint}
               </p>
               <div class="mt-3 flex flex-wrap justify-end gap-2">
                 <button
@@ -237,16 +263,29 @@ function tasksFor(domain: QuestDomainId, status: QuestStatus): QuestItem[] {
                 >
                   {COPY.modalClose}
                 </button>
-                <a
-                  href={q.issueUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="site-leave-open inline-flex h-9 items-center justify-center gap-1.5 px-4 text-sm font-semibold"
-                >
-                  <span>
-                    {COPY.modalClaimBtn}{q.issueNumber}{COPY.modalClaimBtnSuffix}
-                  </span>
-                </a>
+                {q.status === "completed" && q.linkedPr ? (
+                  <a
+                    href={q.linkedPr}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="site-leave-open inline-flex h-9 items-center justify-center gap-1.5 px-4 text-sm font-semibold"
+                  >
+                    <span>
+                      {COPY.modalPrBtn}{q.prNumber}{COPY.modalPrBtnSuffix}
+                    </span>
+                  </a>
+                ) : (
+                  <a
+                    href={q.issueUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="site-leave-open inline-flex h-9 items-center justify-center gap-1.5 px-4 text-sm font-semibold"
+                  >
+                    <span>
+                      {COPY.modalClaimBtn}{q.issueNumber}{COPY.modalClaimBtnSuffix}
+                    </span>
+                  </a>
+                )}
               </div>
             </div>
           </div>
