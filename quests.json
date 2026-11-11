@@ -436,7 +436,7 @@
       "issue_number": 57,
       "pr_number": null,
       "published_at": "2026-11-11T14:31:00Z",
-      "status": "open",
+      "status": "in_progress",
       "domain": "Benchmark",
       "exp": 50,
       "target_repository": "https://github.com/Prism-Shadow/penguin-harness-benchmark",
@@ -446,7 +446,7 @@
       "description": "Design and build a standardized benchmark evaluating AI collaboration quality across multi-agent and human-agent workflows, measuring handoff clarity, communication signal-to-noise ratio, context alignment efficiency, and net collaborative uplift over single-agent baselines (per RFC-0001).",
       "description_zh": "围绕“多智能体协同与人机协作”真实场景，设计并构建一套评测 AI 协作质量的标准化 Benchmark，量化评估任务交接清晰度、频道沟通信噪比、上下文对齐效率以及协作相对于单 Agent 的净增益（遵循 RFC-0001 规范）。",
       "references": [],
-      "assignee": null,
+      "assignee": "smith-source",
       "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/57",
       "linked_pr": null
     },
@@ -515,6 +515,7 @@
     "zeng-yirong",
     "ACAne0320",
     "Myriad-Dreamin",
-    "fanggejiaba"
+    "fanggejiaba",
+    "smith-source"
   ]
 }
