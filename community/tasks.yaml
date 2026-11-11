@@ -25,8 +25,8 @@ tasks:
     related_issue: null
     title: "Integrate SWE-bench"
     title_zh: "集成 SWE-bench"
-    description: "Integrate the SWE-bench software engineering benchmark into penguin-harness-benchmark with standardized container environments and grading scripts (per RFC-0001)."
-    description_zh: "将真实 GitHub 软件工程评测基准 SWE-bench 接入 penguin-harness-benchmark，封装标准化容器评测环境与自动评分脚本（遵循 RFC-0001 规范）。"
+    description: "Integrate the SWE-bench software engineering benchmark into `penguin-harness-benchmark` with standardized container environments and grading scripts (per RFC-0001)."
+    description_zh: "将真实 GitHub 软件工程评测基准 SWE-bench 接入 `penguin-harness-benchmark`，封装标准化容器评测环境与自动评分脚本（遵循 RFC-0001 规范）。"
     references:
       - "https://github.com/SWE-bench/SWE-bench"
       - "https://arxiv.org/abs/2310.06770"
@@ -44,8 +44,8 @@ tasks:
     related_issue: null
     title: "Integrate FDE-gym"
     title_zh: "集成 FDE-gym"
-    description: "Integrate FDE-Gym (arXiv:2610.22350 — 95 end-to-end Forward-Deployed Engineer customer delivery tasks across 20 scenarios and 18 sectors evaluating ambiguous requirement clarification, unstated constraint discovery, and live system delivery) into penguin-harness-benchmark following RFC-0001."
-    description_zh: "将前沿驻场工程师（Forward-Deployed Engineer）真实客户交付基准 FDE-Gym（涵盖 18 个行业、20 个客户场景的 95 个端到端交付任务，评测 Agent 在拟真生产系统中澄清模糊需求、发掘隐式约束并完成系统交付的能力）集成至 penguin-harness-benchmark（遵循 RFC-0001 规范）。"
+    description: "Integrate FDE-Gym (arXiv:2610.22350 — 95 end-to-end Forward-Deployed Engineer customer delivery tasks across 20 scenarios and 18 sectors evaluating ambiguous requirement clarification, unstated constraint discovery, and live system delivery) into `penguin-harness-benchmark` following RFC-0001."
+    description_zh: "将前沿驻场工程师（Forward-Deployed Engineer）真实客户交付基准 FDE-Gym（涵盖 18 个行业、20 个客户场景的 95 个端到端交付任务，评测 Agent 在拟真生产系统中澄清模糊需求、发掘隐式约束并完成系统交付的能力）集成至 `penguin-harness-benchmark`（遵循 RFC-0001 规范）。"
     references:
       - "https://arxiv.org/abs/2610.22350"
       - "https://fde-gym.com"
@@ -83,8 +83,8 @@ tasks:
     related_issue: null
     title: "Integrate 60-Task GDPevo Essential Dataset"
     title_zh: "集成 60 道 GDPevo essential 数据集"
-    description: "Integrate the 60-task GDPevo Essential dataset (30 continuous task-group training tasks and 30 independent test tasks across 6 business scenarios) into penguin-harness-benchmark (per RFC-0001)."
-    description_zh: "将 GDPevo Essential 六大业务场景共 60 道评测任务（30 道连续训练任务与 30 道独立测试任务）集成至 penguin-harness-benchmark（遵循 RFC-0001 规范）。"
+    description: "Integrate the 60-task GDPevo Essential dataset (30 continuous task-group training tasks and 30 independent test tasks across 6 business scenarios) into `penguin-harness-benchmark` (per RFC-0001)."
+    description_zh: "将 GDPevo Essential 六大业务场景共 60 道评测任务（30 道连续训练任务与 30 道独立测试任务）集成至 `penguin-harness-benchmark`（遵循 RFC-0001 规范）。"
     references:
       - "https://arxiv.org/abs/2608.03764"
     assignee: "rank-Yu"
@@ -112,7 +112,7 @@ tasks:
   - id: "RSI-Q003"
     issue_number: 32
     published_at: "2026-11-10T10:10:00Z"
-    status: "open"
+    status: "in_progress"
     domain: "Evaluation"
     exp: 50
     target_repository: "https://github.com/Prism-Shadow/penguin-harness-benchmark"
@@ -124,7 +124,7 @@ tasks:
     references:
       - "https://penguin.ooo/leaderboards/gdpevo-essential"
       - "https://github.com/openai/codex"
-    assignee: null
+    assignee: "Peiyuan-Wang"
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/32"
     linked_pr: null
 
@@ -207,7 +207,7 @@ tasks:
   - id: "RSI-Q006"
     issue_number: 35
     published_at: "2026-11-10T10:25:00Z"
-    status: "open"
+    status: "in_progress"
     domain: "RSI Algorithm"
     exp: 100
     target_repository: "https://github.com/Prism-Shadow/penguin-harness-plugins"
@@ -219,14 +219,14 @@ tasks:
     references:
       - "https://arxiv.org/abs/2609.24972"
       - "https://github.com/google-research/rrsi"
-    assignee: null
+    assignee: "yenanjing"
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/35"
     linked_pr: null
 
   - id: "RSI-Q007"
     issue_number: 36
     published_at: "2026-11-10T10:30:00Z"
-    status: "open"
+    status: "in_progress"
     domain: "PenguinHarness"
     exp: 50
     target_repository: "https://github.com/Prism-Shadow/penguin-harness-plugins"
@@ -236,14 +236,14 @@ tasks:
     description: "Develop a Knowledge Base plugin for PenguinHarness supporting document ingestion, hybrid retrieval, inline citations, and trace-driven knowledge accumulation (per RFC-0003)."
     description_zh: "为 PenguinHarness 开发知识库插件，支持多源文档切分入库、混合检索、行内引用标注以及从 Agent 轨迹中持续沉淀领域知识（遵循 RFC-0003 规范）。"
     references: []
-    assignee: null
+    assignee: "Huaer02"
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/36"
     linked_pr: null
 
   - id: "RSI-Q008"
     issue_number: 37
     published_at: "2026-11-10T10:35:00Z"
-    status: "open"
+    status: "in_progress"
     domain: "PenguinHarness"
     exp: 50
     target_repository: "https://github.com/Prism-Shadow/penguin-harness-plugins"
@@ -253,7 +253,7 @@ tasks:
     description: "Develop an Ontology plugin for PenguinHarness providing typed entity-relation-action modeling and trace-driven ontology refinement (per RFC-0003)."
     description_zh: "为 PenguinHarness 开发本体（Ontology）插件，支持实体、关系与动作契约的结构化建模及基于执行轨迹的本体自动演化（遵循 RFC-0003 规范）。"
     references: []
-    assignee: null
+    assignee: "EonHao"
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/37"
     linked_pr: null
 
@@ -278,7 +278,7 @@ tasks:
   - id: "RSI-Q015"
     issue_number: 45
     published_at: "2026-11-11T12:00:00Z"
-    status: "open"
+    status: "in_progress"
     domain: "PenguinHarness"
     exp: 50
     target_repository: "https://github.com/Prism-Shadow/penguin-harness"
@@ -288,7 +288,7 @@ tasks:
     description: "Build an engaging, high-playability self-evolution case study on PenguinHarness with a fully reproducible environment, pre- and post-evolution execution traces, and step-by-step reproduction instructions."
     description_zh: "基于 PenguinHarness 构建一个可玩性高、直观有趣的自进化案例实验（如游戏博弈、交互式挑战或复杂任务演化），要求提供完整可复现的环境配置、进化前后对比轨迹与复现说明。"
     references: []
-    assignee: null
+    assignee: "zeng-yirong"
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/45"
     linked_pr: null
 
@@ -376,4 +376,60 @@ tasks:
     references: []
     assignee: null
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/54"
+    linked_pr: null
+
+  - id: "RSI-Q021"
+    issue_number: 56
+    published_at: "2026-11-11T14:30:00Z"
+    status: "in_progress"
+    domain: "Benchmark"
+    exp: 50
+    target_repository: "https://github.com/Prism-Shadow/penguin-harness-benchmark"
+    related_issue: null
+    title: "Integrate Terminal-Bench 2.0"
+    title_zh: "集成 Terminal-Bench 2.0"
+    description: "Integrate Terminal-Bench 2.0 into penguin-harness-benchmark with standardized container sandboxes and automated verification scripts to evaluate agent performance on complex real-world terminal engineering, debugging, and operations tasks (per RFC-0001)."
+    description_zh: "将面向复杂真实终端环境的智能体评测基准 Terminal-Bench 2.0 接入 penguin-harness-benchmark，封装标准化容器沙箱与自动验证脚本，评测 Agent 在命令行系统工程、编译调试与运维任务上的端到端能力（遵循 RFC-0001 规范）。"
+    references:
+      - "https://tbench.ai"
+      - "https://github.com/harbor-framework/terminal-bench"
+    assignee: "fanggejiaba"
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/56"
+    linked_pr: null
+
+  - id: "RSI-Q022"
+    issue_number: 57
+    published_at: "2026-11-11T14:31:00Z"
+    status: "open"
+    domain: "Benchmark"
+    exp: 50
+    target_repository: "https://github.com/Prism-Shadow/penguin-harness-benchmark"
+    related_issue: null
+    title: "Build an AI Collaboration Quality Benchmark"
+    title_zh: "构建 AI 协作质量评测基准"
+    description: "Design and build a standardized benchmark evaluating AI collaboration quality across multi-agent and human-agent workflows, measuring handoff clarity, communication signal-to-noise ratio, context alignment efficiency, and net collaborative uplift over single-agent baselines (per RFC-0001)."
+    description_zh: "围绕“多智能体协同与人机协作”真实场景，设计并构建一套评测 AI 协作质量的标准化 Benchmark，量化评估任务交接清晰度、频道沟通信噪比、上下文对齐效率以及协作相对于单 Agent 的净增益（遵循 RFC-0001 规范）。"
+    references: []
+    assignee: null
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/57"
+    linked_pr: null
+
+  - id: "RSI-Q023"
+    issue_number: 58
+    published_at: "2026-11-11T14:32:00Z"
+    status: "in_progress"
+    domain: "RSI Algorithm"
+    exp: 100
+    target_repository: "https://github.com/Prism-Shadow/penguin-harness-plugins"
+    related_issue: null
+    title: "Integrate Meta-Harness Method"
+    title_zh: "集成 Meta-Harness 方法"
+    description: "Implement and integrate Meta-Harness (arXiv:2603.28052) for end-to-end optimization of model harnesses, using an agentic proposer that inspects prior candidate source code, scores, and execution traces via a filesystem to automatically discover superior context management and retrieval harnesses (per RFC-0003)."
+    description_zh: "复现并集成端到端模型外骨骼优化方法 Meta-Harness（arXiv:2603.28052），通过可访问全部历史候选代码、得分与执行轨迹的文件系统 Proposer 智能体，自动搜索并演化更优的上下文存储、检索与呈现 Harness 代码（遵循 RFC-0003 规范）。"
+    references:
+      - "https://arxiv.org/abs/2603.28052"
+      - "https://yoonholee.com/meta-harness/"
+      - "https://github.com/stanford-iris-lab/meta-harness"
+    assignee: "fanggejiaba"
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/58"
     linked_pr: null

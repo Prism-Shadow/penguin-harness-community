@@ -1,35 +1,77 @@
-name: Community Task Steward Agent
+name: Quests Data
 
 on:
-  issue_comment:
-    types: [created]
-  push:
-    branches: [main]
-    paths:
-      - "community/tasks.yaml"
-      - "community/people.yaml"
   schedule:
     - cron: "0 */6 * * *"
+  issues:
+    types: [opened, edited, closed, reopened, labeled]
+  issue_comment:
+    types: [created, edited]
   workflow_dispatch:
 
 permissions:
   contents: write
   issues: write
-  pull-requests: write
+  # to start pages.yml, which rebuilds the site with the new quests data
+  actions: write
+
+concurrency:
+  group: quests-data
+  cancel-in-progress: false
 
 jobs:
-  steward-sync:
+  sync:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Check out the quests data
+        id: data
+        run: |
+          if git ls-remote --exit-code --heads origin quests-data; then
+            git fetch --depth=1 origin quests-data
+            git worktree add --detach data FETCH_HEAD
+          else
+            # exit code 2 means the branch does not exist; anything else is a failure to look
+            status=$?
+            test "$status" -eq 2
+            git worktree add --detach data
+            git -C data checkout --orphan quests-data
+            git -C data rm -rfq .
+          fi
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: "22"
 
-      - name: Audit concurrent claim caps & cross-repo PR statuses
+      - name: Sync quests & leaderboard data from GitHub Issues
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: node scripts/community-agent-sync.mjs
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/community-agent-sync.mjs --sync --out data
+
+      - name: Publish the quests data
+        id: publish
+        if: always() && steps.data.outcome == 'success'
+        working-directory: data
+        run: |
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No quests data changes to publish."
+            exit 0
+          fi
+          git -c user.name="github-actions[bot]" \
+            -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -qm "quests: $(date -u +%F) run $GITHUB_RUN_ID"
+          git push origin HEAD:refs/heads/quests-data
+          echo "pushed=true" >> "$GITHUB_OUTPUT"
+
+      # the site bakes the data in at build; a push made with the workflow token starts no
+      # workflow, a dispatch does
+      - name: Rebuild the site with the new quests data
+        if: always() && steps.publish.outputs.pushed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run pages.yml --ref main

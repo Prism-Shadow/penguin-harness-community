@@ -44,6 +44,12 @@ committee_groups:
         avatar: "/avatar-default.svg"
         tags: ["Harness"]
         tags_zh: ["Harness"]
+      - name: "Yuyang Li"
+        handle: "yu-yang-li"
+        github: "https://github.com/yu-yang-li"
+        avatar: "/people/yuyang-li.jpg"
+        tags: ["AI4S"]
+        tags_zh: ["AI4S"]
 
   - id: "review"
     title: "Review Group"
@@ -67,6 +73,12 @@ committee_groups:
         avatar: "/avatar-default.svg"
         tags: ["Harness"]
         tags_zh: ["Harness"]
+      - name: "Yuyang Li"
+        handle: "yu-yang-li"
+        github: "https://github.com/yu-yang-li"
+        avatar: "/people/yuyang-li.jpg"
+        tags: ["AI4S"]
+        tags_zh: ["AI4S"]
 
 contributors:
   - name: "Leijun Zhou"
