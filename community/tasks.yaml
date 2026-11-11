@@ -119,8 +119,8 @@ tasks:
     related_issue: null
     title: "Codex Self-Evolution Comparison"
     title_zh: "Codex 的自进化效果对比"
-    description: "Evaluate Codex before and after Recursive Self-Improvement (RSI) across the six GDPEVO Essential scenarios, submitting full execution traces to the GDPEVO Essential leaderboard (per RFC-0002)."
-    description_zh: "在 GDPEVO Essential 六大评测场景上对比 Codex 在接入自进化（RSI）前后的任务解决率与 Token 成本变化，提交完整实验轨迹并补充至 GDPEVO Essential 榜单（遵循 RFC-0002 规范）。"
+    description: "Using DeepSeek-V4.1-Flash-1017 as the base model, evaluate Codex before and after Recursive Self-Improvement (RSI) across the six GDPEVO Essential scenarios, submitting full execution traces to the GDPEVO Essential leaderboard (per RFC-0002)."
+    description_zh: "以 DeepSeek-V4.1-Flash-1017 为基座模型，在 GDPEVO Essential 六大评测场景上对比 Codex 在接入自进化（RSI）前后的任务解决率与 Token 成本变化，提交完整实验轨迹并补充至 GDPEVO Essential 榜单（遵循 RFC-0002 规范）。"
     references:
       - "https://penguin.ooo/leaderboards/gdpevo-essential"
       - "https://github.com/openai/codex"
@@ -138,8 +138,8 @@ tasks:
     related_issue: null
     title: "GPT-6 Evolution Capability Experiment"
     title_zh: "GPT-6 模型的进化能力实验"
-    description: "Measure GPT-6 multi-round self-evolution gains and generalization across standard RSI methods, contributing traces to the GDPEVO leaderboard (per RFC-0002)."
-    description_zh: "评测 GPT-6 作为基座模型在多轮自进化（ACE / OPRO / Skill 演化）下的分数提升幅度与泛化表现，并将评测结果补充至 GDPEVO 榜单（遵循 RFC-0002 规范）。"
+    description: "On PenguinHarness, measure GPT-6 multi-round self-evolution gains and generalization across standard RSI methods on the six GDPEVO Essential scenarios, contributing traces to the GDPEVO Essential leaderboard (per RFC-0002)."
+    description_zh: "基于 PenguinHarness 评测 GPT-6 作为基座模型在多轮自进化（ACE / OPRO / Skill 演化）下的分数提升幅度与泛化表现，并将评测结果补充至 GDPEVO Essential 榜单（遵循 RFC-0002 规范）。"
     references:
       - "https://penguin.ooo/leaderboards/gdpevo-essential"
     assignee: null

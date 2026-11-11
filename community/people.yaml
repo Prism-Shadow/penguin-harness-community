@@ -52,7 +52,7 @@ committee_groups:
       - name: "Leijun Zhou"
         handle: "Saigyouji-Yuyuko1000"
         github: "https://github.com/Saigyouji-Yuyuko1000"
-        avatar: "/avatar-default.svg"
+        avatar: "/people/leijun-zhou.jpg"
         tags: ["Algorithm"]
         tags_zh: ["算法"]
       - name: "Zhihao Liu"

@@ -188,8 +188,8 @@ export const QUESTS: QuestItem[] = [
       zh: "Codex 的自进化效果对比",
     },
     description: {
-      en: "Evaluate Codex before and after Recursive Self-Improvement (RSI) across the six GDPEVO Essential scenarios, submitting full execution traces to the GDPEVO Essential leaderboard (per RFC-0002).",
-      zh: "在 GDPEVO Essential 六大评测场景上对比 Codex 在接入自进化（RSI）前后的任务解决率与 Token 成本变化，提交完整实验轨迹并补充至 GDPEVO Essential 榜单（遵循 RFC-0002 规范）。",
+      en: "Using DeepSeek-V4.1-Flash-1017 as the base model, evaluate Codex before and after Recursive Self-Improvement (RSI) across the six GDPEVO Essential scenarios, submitting full execution traces to the GDPEVO Essential leaderboard (per RFC-0002).",
+      zh: "以 DeepSeek-V4.1-Flash-1017 为基座模型，在 GDPEVO Essential 六大评测场景上对比 Codex 在接入自进化（RSI）前后的任务解决率与 Token 成本变化，提交完整实验轨迹并补充至 GDPEVO Essential 榜单（遵循 RFC-0002 规范）。",
     },
     references: [
       { url: "https://penguin.ooo/leaderboards/gdpevo-essential" },
@@ -210,8 +210,8 @@ export const QUESTS: QuestItem[] = [
       zh: "GPT-6 模型的进化能力实验",
     },
     description: {
-      en: "Measure GPT-6's multi-round self-evolution gains and generalization across standard RSI methods, contributing traces to the GDPEVO leaderboard.",
-      zh: "评测 GPT-6 作为基座模型在多轮自进化（ACE / OPRO / Skill 演化）下的分数提升幅度与泛化表现，并将评测结果补充至 GDPEVO 榜单。",
+      en: "On PenguinHarness, measure GPT-6's multi-round self-evolution gains and generalization across standard RSI methods on the six GDPEVO Essential scenarios, contributing traces to the GDPEVO Essential leaderboard (per RFC-0002).",
+      zh: "基于 PenguinHarness 评测 GPT-6 作为基座模型在多轮自进化（ACE / OPRO / Skill 演化）下的分数提升幅度与泛化表现，并将评测结果补充至 GDPEVO Essential 榜单（遵循 RFC-0002 规范）。",
     },
     references: [
       { url: "https://penguin.ooo/leaderboards/gdpevo-essential" },
@@ -466,6 +466,7 @@ export const COMMITTEE_GROUPS: CommitteeGroup[] = [
         name: "Leijun Zhou",
         handle: "Saigyouji-Yuyuko1000",
         github: "https://github.com/Saigyouji-Yuyuko1000",
+        avatar: "/people/leijun-zhou.jpg",
         tags: [{ en: "Algorithm", zh: "算法" }],
       },
       {
