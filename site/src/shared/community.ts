@@ -29,6 +29,15 @@ export const QUEST_DOMAINS: QuestDomainInfo[] = [
   { id: "penguin-harness", label: { en: "PenguinHarness", zh: "PenguinHarness" } },
 ];
 
+export const TARGET_REPOSITORIES = [
+  "https://github.com/Prism-Shadow/penguin-harness",
+  "https://github.com/Prism-Shadow/penguin-harness-community",
+  "https://github.com/Prism-Shadow/penguin-harness-benchmark",
+  "https://github.com/Prism-Shadow/penguin-harness-plugins",
+] as const;
+
+export type TargetRepositoryUrl = (typeof TARGET_REPOSITORIES)[number];
+
 export interface QuestReference {
   url: string;
 }
@@ -39,6 +48,8 @@ export interface QuestItem {
   status: QuestStatus;
   domain: QuestDomainId;
   exp: number;
+  targetRepository: TargetRepositoryUrl;
+  relatedIssue?: string;
   title: { en?: string; zh?: string };
   description: { en?: string; zh?: string };
   references: QuestReference[];
@@ -53,6 +64,7 @@ export const QUESTS: QuestItem[] = [
     status: "open",
     domain: "benchmark",
     exp: 50,
+    targetRepository: "https://github.com/Prism-Shadow/penguin-harness-benchmark",
     title: {
       en: "Integrate SWE-bench",
       zh: "集成 SWE-bench",
@@ -64,7 +76,6 @@ export const QUESTS: QuestItem[] = [
     references: [
       { url: "https://github.com/SWE-bench/SWE-bench" },
       { url: "https://arxiv.org/abs/2310.06770" },
-      { url: "https://github.com/Prism-Shadow/penguin-harness-benchmark" },
     ],
     issueUrl: "https://github.com/Prism-Shadow/penguin-harness-community/issues/30",
   },
@@ -74,6 +85,7 @@ export const QUESTS: QuestItem[] = [
     status: "open",
     domain: "benchmark",
     exp: 50,
+    targetRepository: "https://github.com/Prism-Shadow/penguin-harness-benchmark",
     title: {
       en: "Integrate FDE-gym",
       zh: "集成 FDE-gym",
@@ -84,7 +96,6 @@ export const QUESTS: QuestItem[] = [
     },
     references: [
       { url: "https://github.com/deeplethe/fde-gym" },
-      { url: "https://github.com/Prism-Shadow/penguin-harness-benchmark" },
     ],
     issueUrl: "https://github.com/Prism-Shadow/penguin-harness-community/issues/31",
   },
@@ -94,6 +105,7 @@ export const QUESTS: QuestItem[] = [
     status: "open",
     domain: "evaluation",
     exp: 50,
+    targetRepository: "https://github.com/Prism-Shadow/penguin-harness-benchmark",
     title: {
       en: "Codex Self-Evolution Comparison",
       zh: "Codex 的自进化效果对比",
@@ -105,7 +117,6 @@ export const QUESTS: QuestItem[] = [
     references: [
       { url: "https://github.com/openai/codex" },
       { url: "https://penguin.ooo/leaderboards/harness-comparison" },
-      { url: "https://github.com/Prism-Shadow/penguin-harness-benchmark" },
     ],
     issueUrl: "https://github.com/Prism-Shadow/penguin-harness-community/issues/32",
   },
@@ -115,6 +126,7 @@ export const QUESTS: QuestItem[] = [
     status: "open",
     domain: "evaluation",
     exp: 50,
+    targetRepository: "https://github.com/Prism-Shadow/penguin-harness-benchmark",
     title: {
       en: "GPT-6 Evolution Capability Experiment",
       zh: "GPT-6 模型的进化能力实验",
@@ -125,7 +137,6 @@ export const QUESTS: QuestItem[] = [
     },
     references: [
       { url: "https://penguin.ooo/leaderboards/gdpevo-essential" },
-      { url: "https://github.com/Prism-Shadow/penguin-harness-benchmark" },
     ],
     issueUrl: "https://github.com/Prism-Shadow/penguin-harness-community/issues/33",
   },
@@ -135,6 +146,7 @@ export const QUESTS: QuestItem[] = [
     status: "open",
     domain: "rsi-algorithm",
     exp: 50,
+    targetRepository: "https://github.com/Prism-Shadow/penguin-harness-plugins",
     title: {
       en: "Integrate RSIAgent Method",
       zh: "集成 RSIAgent 方法",
@@ -145,7 +157,6 @@ export const QUESTS: QuestItem[] = [
     },
     references: [
       { url: "https://arxiv.org/abs/2609.15364" },
-      { url: "https://github.com/Prism-Shadow/penguin-harness-plugins" },
     ],
     issueUrl: "https://github.com/Prism-Shadow/penguin-harness-community/issues/34",
   },
@@ -155,6 +166,7 @@ export const QUESTS: QuestItem[] = [
     status: "open",
     domain: "rsi-algorithm",
     exp: 50,
+    targetRepository: "https://github.com/Prism-Shadow/penguin-harness-plugins",
     title: {
       en: "Integrate RRSI Method",
       zh: "集成 RRSI 方法",
@@ -166,7 +178,6 @@ export const QUESTS: QuestItem[] = [
     references: [
       { url: "https://arxiv.org/abs/2609.24972" },
       { url: "https://github.com/google-research/rrsi" },
-      { url: "https://github.com/Prism-Shadow/penguin-harness-plugins" },
     ],
     issueUrl: "https://github.com/Prism-Shadow/penguin-harness-community/issues/35",
   },
@@ -176,6 +187,7 @@ export const QUESTS: QuestItem[] = [
     status: "open",
     domain: "penguin-harness",
     exp: 50,
+    targetRepository: "https://github.com/Prism-Shadow/penguin-harness-plugins",
     title: {
       en: "Develop Knowledge Base Plugin",
       zh: "开发知识库插件",
@@ -184,10 +196,7 @@ export const QUESTS: QuestItem[] = [
       en: "Develop a Knowledge Base plugin for PenguinHarness supporting document ingestion, hybrid retrieval, inline citations, and trace-driven knowledge accumulation.",
       zh: "为 PenguinHarness 开发知识库插件，支持多源文档切分入库、混合检索、行内引用标注以及从 Agent 轨迹中持续沉淀领域知识。",
     },
-    references: [
-      { url: "https://github.com/Prism-Shadow/penguin-harness" },
-      { url: "https://github.com/Prism-Shadow/penguin-harness-plugins" },
-    ],
+    references: [],
     issueUrl: "https://github.com/Prism-Shadow/penguin-harness-community/issues/36",
   },
   {
@@ -196,6 +205,7 @@ export const QUESTS: QuestItem[] = [
     status: "open",
     domain: "penguin-harness",
     exp: 50,
+    targetRepository: "https://github.com/Prism-Shadow/penguin-harness-plugins",
     title: {
       en: "Develop Ontology Plugin",
       zh: "开发本体插件",
@@ -204,10 +214,7 @@ export const QUESTS: QuestItem[] = [
       en: "Develop an Ontology plugin for PenguinHarness providing typed entity-relation-action modeling and trace-driven ontology refinement.",
       zh: "为 PenguinHarness 开发本体（Ontology）插件，支持实体、关系与动作契约的结构化建模及基于执行轨迹的本体自动演化。",
     },
-    references: [
-      { url: "https://github.com/Prism-Shadow/penguin-harness" },
-      { url: "https://github.com/Prism-Shadow/penguin-harness-plugins" },
-    ],
+    references: [],
     issueUrl: "https://github.com/Prism-Shadow/penguin-harness-community/issues/37",
   },
 ];

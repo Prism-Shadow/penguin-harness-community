@@ -26,7 +26,7 @@
   3. `RSI Algorithm`（中文展示为 `RSI 算法`）：自进化核心论文方法复现与集成（遵循 [RFC-0003](RFC-0003-plugin.zh.md)，如集成 RSIAgent 方法 [#34](https://github.com/Prism-Shadow/penguin-harness-community/issues/34)、集成 RRSI 方法 [#35](https://github.com/Prism-Shadow/penguin-harness-community/issues/35)）。
   4. `PenguinHarness`：框架核心与插件生态开发（遵循 [RFC-0003](RFC-0003-plugin.zh.md)，如开发知识库插件 [#36](https://github.com/Prism-Shadow/penguin-harness-community/issues/36)、开发本体插件 [#37](https://github.com/Prism-Shadow/penguin-harness-community/issues/37)）。
 - **三阶段等宽进度列**：`待认领（open）` $\rightarrow$ `进行中（in_progress）` $\rightarrow$ `已完成（completed）`。
-- **卡片与详情弹窗**：每项标准任务设为 **50 EXP**。看板卡片仅展示任务标题、经验值徽章（`+50 EXP`）与认领状态；点击卡片弹出详情窗口，展示完整任务描述与原始论文/代码仓库纯链接列表。
+- **卡片与详情弹窗**：每项标准任务设为 **50 EXP**。看板卡片仅展示任务标题、经验值徽章（`+50 EXP`）与认领状态；点击卡片弹出详情窗口，展示完整任务描述、目标仓库、关联 Issue 以及原始论文/代码仓库纯链接列表。
 
 ## 3. 标准任务 GitHub Issue 格式规范
 
@@ -42,7 +42,7 @@
 
 ### 3.2 Issue 正文结构（与 `.github/ISSUE_TEMPLATE/task.yml` 一致）
 
-GitHub Issue Forms 会将表单字段渲染为固定的 7 个三级标题（`###`）段落：
+GitHub Issue Forms 会将表单字段渲染为固定的 9 个三级标题（`###`）段落：
 
 ```markdown
 ### Domain
@@ -52,6 +52,14 @@ Benchmark
 ### EXP
 
 50
+
+### Target Repository
+
+https://github.com/Prism-Shadow/penguin-harness-benchmark
+
+### Related Issue
+
+_No response_
 
 ### Title (English)
 
@@ -73,7 +81,6 @@ Integrate the SWE-bench software engineering benchmark into `penguin-harness-ben
 
 https://github.com/SWE-bench/SWE-bench
 https://arxiv.org/abs/2310.06770
-https://github.com/Prism-Shadow/penguin-harness-benchmark
 ```
 
 ### 3.3 字段解析与单语自动回退规则
@@ -82,14 +89,16 @@ https://github.com/Prism-Shadow/penguin-harness-benchmark
 | --- | --- | --- |
 | `### Domain` | 必填 | 取值必须为 `Benchmark`、`Evaluation`、`RSI Algorithm`、`PenguinHarness` 之一。 |
 | `### EXP` | 必填 | 正整数（默认 `50`），代表任务验收合入后授予的经验值。 |
+| `### Target Repository` | 必填 | 最终提交 PR 的目标仓库 URL，取值必须为以下四个官方仓库之一：<br>1. `https://github.com/Prism-Shadow/penguin-harness`<br>2. `https://github.com/Prism-Shadow/penguin-harness-community`<br>3. `https://github.com/Prism-Shadow/penguin-harness-benchmark`<br>4. `https://github.com/Prism-Shadow/penguin-harness-plugins` |
+| `### Related Issue` | 选填 | 关联的外部或目标仓库 GitHub Issue 纯链接（无关联时为 `_No response_`）。 |
 | `### Title (English)` | 二选一必填 | 英文标题（默认语言）。若留空（或为 `_No response_`），自动回退使用 `### Title (Chinese)`。 |
 | `### Title (Chinese)` | 二选一必填 | 中文标题。若留空（或为 `_No response_`），自动回退使用 `### Title (English)`。 |
 | `### Description (English)` | 二选一必填 | 英文任务目标与验收标准。若留空（或为 `_No response_`），自动回退使用 `### Description (Chinese)`。 |
 | `### Description (Chinese)` | 二选一必填 | 中文任务目标与验收标准。若留空（或为 `_No response_`），自动回退使用 `### Description (English)`。 |
-| `### Original Papers & Repository Links` | 选填 | 每行一个纯 URL（以 `http://` 或 `https://` 开头，不写额外标题），用于前端详情弹窗直接展示。 |
+| `### Original Papers & Repository Links` | 选填 | 外部参考原始论文或上游代码仓库链接，每行一个纯 URL（以 `http://` 或 `https://` 开头，不写额外标题）。 |
 
 ## 4. 任务认领、并发上限与验收流程
 
 1. **评论认领（`/claim`）**：贡献者在对应官方任务 Issue 下方评论回复 `/claim` 即可申请认领。定时 Agent（`rsi_community_steward`）校验通过后，将该任务状态更新为 `进行中（in_progress）` 并绑定认领人 GitHub 账号。
-2. **并发认领上限（防占坑机制）**：每位 GitHub 用户同一时间最多只能持有 **2 项**处于 `进行中（in_progress）` 状态的任务；若已有 2 项进行中任务，新的 `/claim` 请求不予生效。认领后连续 14 天无实质进展或主動回复 `/unclaim` 时，任务将释放回 `待认领（open）`。
-3. **PR 验收与 EXP 记入**：贡献者完成开发或实验后，向目标仓库提交 Pull Request 并关联任务 Issue（如 `Closes Prism-Shadow/penguin-harness-community#30`）。经委员会审核小组验收合入后，任务流转为 `已完成（completed）`，对应 EXP 计入该贡献者的当月贡献榜与总贡献榜（激励结算规则详见 [RFC-0007 成员与激励](RFC-0007-people.zh.md)）。
+2. **并发认领上限（防占坑机制）**：每位 GitHub 用户同一时间最多只能持有 **2 项**处于 `进行中（in_progress）` 状态的任务；若已有 2 项进行中任务，新的 `/claim` 请求不予生效。认领后连续 14 天无实质进展或主动回复 `/unclaim` 时，任务将释放回 `待认领（open）`。
+3. **PR 验收与 EXP 记入**：贡献者完成开发或实验后，向 `### Target Repository` 指定的目标仓库提交 Pull Request 并关联任务 Issue（如 `Closes Prism-Shadow/penguin-harness-community#30`）。经委员会审核小组验收合入后，任务流转为 `已完成（completed）`，对应 EXP 计入该贡献者的当月贡献榜与总贡献榜（激励结算规则详见 [RFC-0007 成员与激励](RFC-0007-people.zh.md)）。

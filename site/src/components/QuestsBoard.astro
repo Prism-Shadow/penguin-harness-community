@@ -26,6 +26,8 @@ const COPY = {
     unclaimed: "待认领",
     details: "详情",
     empty: "暂无任务",
+    modalTargetRepo: "目标仓库",
+    modalRelatedIssue: "关联 Issue",
     modalRefs: "原始论文与代码仓库",
     modalClaimHint: "请直接在该任务的 GitHub Issue 下方评论回复 /claim 完成认领：",
     modalClaimBtn: "打开任务 Issue (#",
@@ -41,6 +43,8 @@ const COPY = {
     unclaimed: "Unclaimed",
     details: "Details",
     empty: "No tasks",
+    modalTargetRepo: "Target Repository",
+    modalRelatedIssue: "Related Issue",
     modalRefs: "Original Papers & Repositories",
     modalClaimHint: "Reply /claim under this task's GitHub Issue to claim it:",
     modalClaimBtn: "Open Task Issue (#",
@@ -165,8 +169,42 @@ function tasksFor(domain: QuestDomainId, status: QuestStatus): QuestItem[] {
               {resolveText(q.description, locale)}
             </p>
 
+            <div class="mt-4">
+              <div class="text-xs font-medium text-gray-500 dark:text-gray-400">
+                {COPY.modalTargetRepo}
+              </div>
+              <div class="mt-1 text-xs">
+                <a
+                  href={q.targetRepository}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="mono break-all text-brand-600 underline decoration-brand-300 underline-offset-2 hover:text-brand-500 dark:text-brand-400 dark:decoration-brand-700"
+                >
+                  {q.targetRepository}
+                </a>
+              </div>
+            </div>
+
+            {q.relatedIssue && (
+              <div class="mt-3">
+                <div class="text-xs font-medium text-gray-500 dark:text-gray-400">
+                  {COPY.modalRelatedIssue}
+                </div>
+                <div class="mt-1 text-xs">
+                  <a
+                    href={q.relatedIssue}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="mono break-all text-brand-600 underline decoration-brand-300 underline-offset-2 hover:text-brand-500 dark:text-brand-400 dark:decoration-brand-700"
+                  >
+                    {q.relatedIssue}
+                  </a>
+                </div>
+              </div>
+            )}
+
             {q.references.length > 0 && (
-              <div class="mt-4">
+              <div class="mt-3">
                 <div class="text-xs font-medium text-gray-500 dark:text-gray-400">
                   {COPY.modalRefs}
                 </div>

@@ -31,6 +31,26 @@ body:
     validations:
       required: true
 
+  - type: dropdown
+    id: target_repository
+    attributes:
+      label: "Target Repository"
+      description: "Select the target repository where the Pull Request should be submitted."
+      options:
+        - "https://github.com/Prism-Shadow/penguin-harness"
+        - "https://github.com/Prism-Shadow/penguin-harness-community"
+        - "https://github.com/Prism-Shadow/penguin-harness-benchmark"
+        - "https://github.com/Prism-Shadow/penguin-harness-plugins"
+    validations:
+      required: true
+
+  - type: input
+    id: related_issue
+    attributes:
+      label: "Related Issue"
+      description: "Optional related GitHub Issue link (plain URL)."
+      placeholder: "https://github.com/Prism-Shadow/penguin-harness/issues/..."
+
   - type: input
     id: title_en
     attributes:
@@ -63,7 +83,7 @@ body:
     id: references
     attributes:
       label: "Original Papers & Repository Links"
-      description: "One plain URL per line (no link titles needed)."
+      description: "External reference papers or upstream repository links — one plain URL per line (no link titles needed)."
       placeholder: |
         https://github.com/...
         https://arxiv.org/abs/...

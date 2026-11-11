@@ -62,9 +62,15 @@ export function parseTaskIssueBody(body, authorHandle) {
     .split(/\r?\n/)
     .map((line) => line.trim())
     .filter((line) => /^https?:\/\//i.test(line));
+  const relatedIssueRaw = (sections["Related Issue"] || "").trim();
+  const relatedIssue =
+    relatedIssueRaw && relatedIssueRaw !== "_No response_" ? relatedIssueRaw : null;
   return {
     domain: sections["Domain"] || "Benchmark",
     exp: Number(sections["EXP"] || 50),
+    target_repository:
+      sections["Target Repository"] || "https://github.com/Prism-Shadow/penguin-harness-benchmark",
+    related_issue: relatedIssue,
     title: titles.en,
     title_zh: titles.zh,
     description: descriptions.en,
@@ -98,7 +104,8 @@ function parseTasksYaml(content) {
       status: field("status"),
       domain: field("domain"),
       exp: Number(field("exp") || 50),
-      target_repo: field("target_repo"),
+      target_repository: field("target_repository"),
+      related_issue: field("related_issue"),
       title: titles.en,
       title_zh: titles.zh,
       description: descriptions.en,
