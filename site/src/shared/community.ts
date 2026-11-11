@@ -1,3 +1,4 @@
+import peopleYamlRaw from "../../../community/people.yaml?raw";
 import type { Locale } from "./i18n";
 
 type Text = Record<Locale, string>;
@@ -587,12 +588,23 @@ export function computeContributorRankings(): {
   return { monthly, allTime };
 }
 
+function parseOpenSourceContributorsFromYaml(raw: string): string[] {
+  const sectionMatch = raw.match(/(?:^|\n)open_source_contributors:\s*\n((?:\s*-\s*[^\n]+\n?)*)/);
+  if (!sectionMatch) return [];
+  return Array.from(sectionMatch[1].matchAll(/^\s*-\s*["']?([^"'\s#]+)["']?/gm), (m) => m[1]);
+}
+
 /**
- * Open-source contributors who have appeared on the community Task Board (`QUESTS`).
+ * Open-source contributors synced directly from `community/people.yaml`
+ * (falling back to unique assignees on the Task Board).
  */
-export const OPEN_SOURCE_CONTRIBUTORS: string[] = Array.from(
-  new Set(QUESTS.map((q) => q.assignee).filter((a): a is string => Boolean(a))),
-);
+export const OPEN_SOURCE_CONTRIBUTORS: string[] = (() => {
+  const fromYaml = parseOpenSourceContributorsFromYaml(peopleYamlRaw);
+  if (fromYaml.length > 0) return fromYaml;
+  return Array.from(
+    new Set(QUESTS.map((q) => q.assignee).filter((a): a is string => Boolean(a))),
+  );
+})();
 
 /**
  * Opens the standardized `.github/ISSUE_TEMPLATE/task.yml` form (committee members only).
