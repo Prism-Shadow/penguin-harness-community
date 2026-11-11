@@ -73,18 +73,22 @@ contributors:
     github: "https://github.com/Saigyouji-Yuyuko1000"
     monthly_exp: 100
     total_exp: 100
-  - name: "Haoyang Su"
-    handle: "Hoyant-Su"
-    github: "https://github.com/Hoyant-Su"
-    monthly_exp: 50
-    total_exp: 50
-  - name: "Yanke Yu"
-    handle: "rank-Yu"
-    github: "https://github.com/rank-Yu"
-    monthly_exp: 50
-    total_exp: 50
+    reached_at: "2026-11-03T08:28:27Z"
   - name: "Yaowei Zheng"
     handle: "hiyouga"
     github: "https://github.com/hiyouga"
     monthly_exp: 50
     total_exp: 50
+    reached_at: "2026-10-10T17:57:44Z"
+  - name: "Yanke Yu"
+    handle: "rank-Yu"
+    github: "https://github.com/rank-Yu"
+    monthly_exp: 50
+    total_exp: 50
+    reached_at: "2026-10-19T10:56:52Z"
+  - name: "Haoyang Su"
+    handle: "Hoyant-Su"
+    github: "https://github.com/Hoyant-Su"
+    monthly_exp: 50
+    total_exp: 50
+    reached_at: "2026-11-04T08:17:44Z"

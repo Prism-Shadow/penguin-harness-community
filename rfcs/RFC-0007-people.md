@@ -33,6 +33,7 @@ The `/people/` page displays two leaderboards sorted in descending order by Expe
 
 1. **Monthly Leaderboard**: Tracks EXP earned within the current calendar month from completing official tasks recognized under [RFC-0006](RFC-0006-quests.md). It serves as the sole basis for monthly reward settlement and resets at the beginning of each new month.
 2. **All-Time Leaderboard**: Permanently accumulates each contributor's total historical EXP and completed task count.
+3. **Tie-Breaking Rule (Earliest to Reach Score Wins)**: When two or more contributors are tied on EXP, they are ordered by **the timestamp at which they reached that EXP total (i.e., the merge timestamp of their latest completed task PR) in ascending order (earliest first)**. The contributor who reached the score earlier ranks higher and receives the corresponding Top-5 rank bonus.
 
 > **Note**: Only official tasks published by RSI Community Committee members award EXP upon PR merge; self-published issues opened by non-committee users are not recognized and do not count toward the leaderboard.
 

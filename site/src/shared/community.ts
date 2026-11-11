@@ -487,6 +487,7 @@ export interface ContributorStats {
   github: string;
   monthlyExp: number;
   totalExp: number;
+  reachedAt: string;
 }
 
 const CONTRIBUTOR_NAME_BY_HANDLE: Record<string, string> = {
@@ -501,12 +502,11 @@ const CONTRIBUTOR_NAME_BY_HANDLE: Record<string, string> = {
 
 /**
  * Automatically settles EXP from all `completed` quests in `QUESTS`.
+ * Tie-breaking rule (per RFC-0007): When two contributors have the same EXP,
+ * whoever reached that EXP score earlier (earliest PR merge timestamp `reachedAt`) ranks higher.
  */
 export function buildContributorsFromQuests(): ContributorStats[] {
-  const byHandle = new Map<
-    string,
-    { name: string; handle: string; github: string; monthlyExp: number; totalExp: number; latestAt: string }
-  >();
+  const byHandle = new Map<string, ContributorStats>();
 
   for (const q of QUESTS) {
     if (q.status !== "completed" || !q.assignee) continue;
@@ -517,25 +517,19 @@ export function buildContributorsFromQuests(): ContributorStats[] {
       github: `https://github.com/${handle}`,
       monthlyExp: 0,
       totalExp: 0,
-      latestAt: q.publishedAt,
+      reachedAt: q.publishedAt,
     };
     existing.monthlyExp += q.exp;
     existing.totalExp += q.exp;
-    if (q.publishedAt > existing.latestAt) {
-      existing.latestAt = q.publishedAt;
+    if (q.publishedAt > existing.reachedAt) {
+      existing.reachedAt = q.publishedAt;
     }
     byHandle.set(handle, existing);
   }
 
-  return [...byHandle.values()]
-    .sort((a, b) => b.totalExp - a.totalExp || b.latestAt.localeCompare(a.latestAt))
-    .map(({ name, handle, github, monthlyExp, totalExp }) => ({
-      name,
-      handle,
-      github,
-      monthlyExp,
-      totalExp,
-    }));
+  return [...byHandle.values()].sort(
+    (a, b) => b.totalExp - a.totalExp || a.reachedAt.localeCompare(b.reachedAt),
+  );
 }
 
 export const CONTRIBUTORS: ContributorStats[] = buildContributorsFromQuests();
@@ -560,7 +554,10 @@ export function computeContributorRankings(): {
   // Monthly Reward Rule (up to ¥10,000 RMB monthly budget):
   // 1. 1:1 EXP-to-RMB conversion (1 EXP = ¥1 RMB)
   // 2. Top-5 bonus: #1 +¥800, #2 +¥400, #3 +¥200, #4 +¥100, #5 +¥50
-  const sortedMonthly = [...CONTRIBUTORS].sort((a, b) => b.monthlyExp - a.monthlyExp);
+  // 3. Tie-breaking: earliest to reach the EXP score (`reachedAt` ascending) ranks higher
+  const sortedMonthly = [...CONTRIBUTORS].sort(
+    (a, b) => b.monthlyExp - a.monthlyExp || a.reachedAt.localeCompare(b.reachedAt),
+  );
 
   const monthly: RankedContributorRow[] = sortedMonthly.map((c, idx) => {
     const expRmb = c.monthlyExp;
@@ -578,7 +575,7 @@ export function computeContributorRankings(): {
   });
 
   const allTime = [...CONTRIBUTORS]
-    .sort((a, b) => b.totalExp - a.totalExp)
+    .sort((a, b) => b.totalExp - a.totalExp || a.reachedAt.localeCompare(b.reachedAt))
     .map((c, idx) => ({
       rank: idx + 1,
       name: c.name,

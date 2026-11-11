@@ -110,6 +110,7 @@ function parseTasksYaml(content) {
       id,
       issue_number: field("issue_number") ? Number(field("issue_number")) : null,
       pr_number: field("pr_number") ? Number(field("pr_number")) : null,
+      published_at: field("published_at") || "",
       status: field("status"),
       domain: field("domain"),
       exp: Number(field("exp") || 50),
@@ -165,20 +166,23 @@ for (const t of tasks) {
   );
 }
 
-console.log("\n3. Settled Monthly Leaderboard from Completed Tasks (1 EXP = ¥1 RMB + Top 5 Bonus [800/400/200/100/50]):");
-const expByUser = new Map();
+console.log("\n3. Settled Monthly Leaderboard from Completed Tasks (1 EXP = ¥1 RMB + Top 5 Bonus [800/400/200/100/50], Tie-Breaker: Earliest Reached):");
+const statsByUser = new Map();
 for (const t of tasks) {
   if (t.status !== "completed" || !t.assignee) continue;
-  expByUser.set(t.assignee, (expByUser.get(t.assignee) ?? 0) + t.exp);
+  const cur = statsByUser.get(t.assignee) ?? { monthlyExp: 0, reachedAt: t.published_at };
+  cur.monthlyExp += t.exp;
+  if (t.published_at > cur.reachedAt) cur.reachedAt = t.published_at;
+  statsByUser.set(t.assignee, cur);
 }
-const settledContributors = [...expByUser.entries()]
-  .map(([handle, monthlyExp]) => ({ handle, monthlyExp }))
-  .sort((a, b) => b.monthlyExp - a.monthlyExp);
+const settledContributors = [...statsByUser.entries()]
+  .map(([handle, { monthlyExp, reachedAt }]) => ({ handle, monthlyExp, reachedAt }))
+  .sort((a, b) => b.monthlyExp - a.monthlyExp || a.reachedAt.localeCompare(b.reachedAt));
 settledContributors.forEach((c, idx) => {
   const baseRmb = c.monthlyExp;
   const bonusRmb = TOP_FIVE_BONUSES_RMB[idx] ?? 0;
   console.log(
-    `   #${idx + 1} @${c.handle}: ${c.monthlyExp} EXP -> ¥${baseRmb} (1:1 EXP) + ¥${bonusRmb} (Top Bonus) = ¥${
+    `   #${idx + 1} @${c.handle} (reached ${c.reachedAt}): ${c.monthlyExp} EXP -> ¥${baseRmb} (1:1 EXP) + ¥${bonusRmb} (Top Bonus) = ¥${
       baseRmb + bonusRmb
     } RMB`,
   );
