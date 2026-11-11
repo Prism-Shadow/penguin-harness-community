@@ -152,20 +152,22 @@ if (activeByAssignee.size === 0) {
 
 console.log("\n2. Task Board Status Summary (Bilingual Fallback Verified):");
 for (const t of tasks) {
-  const refTag = t.issue_number ? `Issue #${t.issue_number}` : `PR #${t.pr_number}`;
+  const refTag = `Issue #${t.issue_number}${t.pr_number ? ` / PR #${t.pr_number}` : ""}`;
   console.log(
     `   - [${t.id}] ${refTag} | domain="${t.domain}" | status=${t.status} | +${t.exp} EXP | EN="${t.title}" / ZH="${t.title_zh}"`,
   );
 }
 
-console.log("\n3. Monthly Reward Formula Verification (1 EXP = ¥1 RMB + Top 5 Bonus [800/400/200/100/50]):");
-const sampleContributors = [
-  { handle: "hiyouga", monthlyExp: 150 },
-  { handle: "Saigyouji-Yuyuko1000", monthlyExp: 100 },
-  { handle: "lzh368", monthlyExp: 50 },
-  { handle: "ArisaZz", monthlyExp: 50 },
-];
-sampleContributors.forEach((c, idx) => {
+console.log("\n3. Settled Monthly Leaderboard from Completed Tasks (1 EXP = ¥1 RMB + Top 5 Bonus [800/400/200/100/50]):");
+const expByUser = new Map();
+for (const t of tasks) {
+  if (t.status !== "completed" || !t.assignee) continue;
+  expByUser.set(t.assignee, (expByUser.get(t.assignee) ?? 0) + t.exp);
+}
+const settledContributors = [...expByUser.entries()]
+  .map(([handle, monthlyExp]) => ({ handle, monthlyExp }))
+  .sort((a, b) => b.monthlyExp - a.monthlyExp);
+settledContributors.forEach((c, idx) => {
   const baseRmb = c.monthlyExp;
   const bonusRmb = TOP_FIVE_BONUSES_RMB[idx] ?? 0;
   console.log(

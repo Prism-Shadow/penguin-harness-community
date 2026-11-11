@@ -16,6 +16,7 @@ target_repositories:
 tasks:
   - id: "RSI-Q001"
     issue_number: 30
+    published_at: "2026-11-10T10:00:00Z"
     status: "open"
     domain: "Benchmark"
     exp: 50
@@ -34,6 +35,7 @@ tasks:
 
   - id: "RSI-Q002"
     issue_number: 31
+    published_at: "2026-11-10T10:05:00Z"
     status: "open"
     domain: "Benchmark"
     exp: 50
@@ -52,8 +54,9 @@ tasks:
     linked_pr: null
 
   - id: "RSI-Q009"
-    issue_number: null
+    issue_number: 39
     pr_number: 3
+    published_at: "2026-10-10T17:57:44Z"
     status: "completed"
     domain: "Benchmark"
     exp: 50
@@ -65,12 +68,13 @@ tasks:
     description_zh: "构建涵盖 Sec A–E 五大领域的 50 个标准化基准评测任务包（penguinharness-benchmark-sec-a..e），提供统一配置清单与评分细则（遵循 RFC-0001 规范）。"
     references: []
     assignee: "hiyouga"
-    issue_url: null
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/39"
     linked_pr: "https://github.com/Prism-Shadow/penguin-harness-benchmark/pull/3"
 
   - id: "RSI-Q010"
-    issue_number: null
+    issue_number: 40
     pr_number: 5
+    published_at: "2026-10-19T10:56:52Z"
     status: "completed"
     domain: "Benchmark"
     exp: 50
@@ -83,12 +87,13 @@ tasks:
     references:
       - "https://arxiv.org/abs/2608.03764"
     assignee: "rank-Yu"
-    issue_url: null
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/40"
     linked_pr: "https://github.com/Prism-Shadow/penguin-harness-benchmark/pull/5"
 
   - id: "RSI-Q011"
-    issue_number: null
+    issue_number: 41
     pr_number: 15
+    published_at: "2026-11-04T08:17:44Z"
     status: "completed"
     domain: "Benchmark"
     exp: 50
@@ -100,11 +105,12 @@ tasks:
     description_zh: "构建基于帕金森病语音重复测量数据的生物医学预测基准任务包，评测跨患者留出验证、声学特征增量预测价值与条件不确定性区间估计（遵循 RFC-0001 规范）。"
     references: []
     assignee: "Hoyant-Su"
-    issue_url: null
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/41"
     linked_pr: "https://github.com/Prism-Shadow/penguin-harness-benchmark/pull/15"
 
   - id: "RSI-Q003"
     issue_number: 32
+    published_at: "2026-11-10T10:10:00Z"
     status: "open"
     domain: "Evaluation"
     exp: 50
@@ -123,6 +129,7 @@ tasks:
 
   - id: "RSI-Q004"
     issue_number: 33
+    published_at: "2026-11-10T10:15:00Z"
     status: "open"
     domain: "Evaluation"
     exp: 50
@@ -139,8 +146,9 @@ tasks:
     linked_pr: null
 
   - id: "RSI-Q012"
-    issue_number: null
+    issue_number: 42
     pr_number: 16
+    published_at: "2026-11-02T07:25:23Z"
     status: "completed"
     domain: "Evaluation"
     exp: 50
@@ -153,12 +161,13 @@ tasks:
     references:
       - "https://penguin.ooo/leaderboards/gdpevo-essential"
     assignee: "Saigyouji-Yuyuko1000"
-    issue_url: null
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/42"
     linked_pr: "https://github.com/Prism-Shadow/penguin-harness-benchmark/pull/16"
 
   - id: "RSI-Q013"
-    issue_number: null
+    issue_number: 43
     pr_number: 21
+    published_at: "2026-11-03T08:28:27Z"
     status: "completed"
     domain: "Evaluation"
     exp: 50
@@ -171,11 +180,12 @@ tasks:
     references:
       - "https://penguin.ooo/leaderboards/harness-comparison"
     assignee: "Saigyouji-Yuyuko1000"
-    issue_url: null
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/43"
     linked_pr: "https://github.com/Prism-Shadow/penguin-harness-benchmark/pull/21"
 
   - id: "RSI-Q005"
     issue_number: 34
+    published_at: "2026-11-10T10:20:00Z"
     status: "open"
     domain: "RSI Algorithm"
     exp: 50
@@ -195,6 +205,7 @@ tasks:
 
   - id: "RSI-Q006"
     issue_number: 35
+    published_at: "2026-11-10T10:25:00Z"
     status: "open"
     domain: "RSI Algorithm"
     exp: 50
@@ -213,6 +224,7 @@ tasks:
 
   - id: "RSI-Q007"
     issue_number: 36
+    published_at: "2026-11-10T10:30:00Z"
     status: "open"
     domain: "PenguinHarness"
     exp: 50
@@ -229,6 +241,7 @@ tasks:
 
   - id: "RSI-Q008"
     issue_number: 37
+    published_at: "2026-11-10T10:35:00Z"
     status: "open"
     domain: "PenguinHarness"
     exp: 50
@@ -244,9 +257,10 @@ tasks:
     linked_pr: null
 
   - id: "RSI-Q014"
-    issue_number: null
+    issue_number: 44
     pr_number: 1491
-    status: "completed"
+    published_at: "2026-11-10T12:00:00Z"
+    status: "in_progress"
     domain: "PenguinHarness"
     exp: 50
     target_repository: "https://github.com/Prism-Shadow/penguin-harness"
@@ -257,5 +271,22 @@ tasks:
     description_zh: "优化 PenguinHarness 上下文压缩（Compaction）机制，支持在生成摘要前通过多轮工具调用将长篇计划、结论与草稿写入 handoff 文件，并附带 Trace 行级检索指引。"
     references: []
     assignee: "hiyouga"
-    issue_url: null
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/44"
     linked_pr: "https://github.com/Prism-Shadow/penguin-harness/pull/1491"
+
+  - id: "RSI-Q015"
+    issue_number: 45
+    published_at: "2026-11-11T12:00:00Z"
+    status: "open"
+    domain: "PenguinHarness"
+    exp: 50
+    target_repository: "https://github.com/Prism-Shadow/penguin-harness"
+    related_issue: null
+    title: "Build a High-Playability Reproducible Self-Evolution Case Study"
+    title_zh: "构建一个可玩性高的自进化案例实验"
+    description: "Build an engaging, high-playability self-evolution case study on PenguinHarness with a fully reproducible environment, pre- and post-evolution execution traces, and step-by-step reproduction instructions."
+    description_zh: "基于 PenguinHarness 构建一个可玩性高、直观有趣的自进化案例实验（如游戏博弈、交互式挑战或复杂任务演化），要求提供完整可复现的环境配置、进化前后对比轨迹与复现说明。"
+    references: []
+    assignee: null
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/45"
+    linked_pr: null

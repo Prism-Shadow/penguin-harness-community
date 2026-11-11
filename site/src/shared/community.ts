@@ -1,28 +1,27 @@
 import type { Locale } from "./i18n";
-import { REPO_URL } from "./site";
 
-type Text = { en: string; zh: string };
-
-/**
- * Resolves a localized string with automatic fallback to the other language
- * if either `en` or `zh` is empty, defaulting to English first.
- */
-export function resolveText(text: { en?: string; zh?: string }, locale: Locale): string {
-  const primary = text[locale]?.trim();
-  if (primary) return primary;
-  const fallback = (locale === "en" ? text.zh : text.en)?.trim();
-  return fallback || "";
-}
+type Text = Record<Locale, string>;
 
 export type QuestStatus = "open" | "in_progress" | "completed";
 export type QuestDomainId = "benchmark" | "evaluation" | "rsi-algorithm" | "penguin-harness";
 
-export interface QuestDomainInfo {
+/**
+ * Helper for bilingual fields where English is the default language.
+ * If the requested locale's string is empty, falls back to the other language.
+ */
+export function resolveText(value: { en?: string; zh?: string } | string, locale: Locale): string {
+  if (typeof value === "string") return value;
+  const primary = locale === "zh" ? value.zh : value.en;
+  const fallback = locale === "zh" ? value.en : value.zh;
+  return (primary && primary.trim()) || (fallback && fallback.trim()) || "";
+}
+
+export interface QuestDomainMeta {
   id: QuestDomainId;
   label: Text;
 }
 
-export const QUEST_DOMAINS: QuestDomainInfo[] = [
+export const QUEST_DOMAINS: QuestDomainMeta[] = [
   { id: "benchmark", label: { en: "Benchmark", zh: "Benchmark" } },
   { id: "evaluation", label: { en: "Evaluation", zh: "Evaluation" } },
   { id: "rsi-algorithm", label: { en: "RSI Algorithm", zh: "RSI 算法" } },
@@ -44,8 +43,9 @@ export interface QuestReference {
 
 export interface QuestItem {
   id: string;
-  issueNumber?: number;
+  issueNumber: number;
   prNumber?: number;
+  publishedAt: string;
   status: QuestStatus;
   domain: QuestDomainId;
   exp: number;
@@ -55,7 +55,7 @@ export interface QuestItem {
   title: { en?: string; zh?: string };
   description: { en?: string; zh?: string };
   references: QuestReference[];
-  issueUrl?: string;
+  issueUrl: string;
   assignee?: string;
 }
 
@@ -63,6 +63,7 @@ export const QUESTS: QuestItem[] = [
   {
     id: "RSI-Q001",
     issueNumber: 30,
+    publishedAt: "2026-11-10T10:00:00Z",
     status: "open",
     domain: "benchmark",
     exp: 50,
@@ -84,6 +85,7 @@ export const QUESTS: QuestItem[] = [
   {
     id: "RSI-Q002",
     issueNumber: 31,
+    publishedAt: "2026-11-10T10:05:00Z",
     status: "open",
     domain: "benchmark",
     exp: 50,
@@ -105,7 +107,9 @@ export const QUESTS: QuestItem[] = [
   },
   {
     id: "RSI-Q009",
+    issueNumber: 39,
     prNumber: 3,
+    publishedAt: "2026-10-10T17:57:44Z",
     status: "completed",
     domain: "benchmark",
     exp: 50,
@@ -121,10 +125,13 @@ export const QUESTS: QuestItem[] = [
       zh: "构建涵盖 Sec A–E 五大领域的 50 个标准化基准评测任务包（penguinharness-benchmark-sec-a..e），提供统一配置清单与评分细则（遵循 RFC-0001 规范）。",
     },
     references: [],
+    issueUrl: "https://github.com/Prism-Shadow/penguin-harness-community/issues/39",
   },
   {
     id: "RSI-Q010",
+    issueNumber: 40,
     prNumber: 5,
+    publishedAt: "2026-10-19T10:56:52Z",
     status: "completed",
     domain: "benchmark",
     exp: 50,
@@ -142,10 +149,13 @@ export const QUESTS: QuestItem[] = [
     references: [
       { url: "https://arxiv.org/abs/2608.03764" },
     ],
+    issueUrl: "https://github.com/Prism-Shadow/penguin-harness-community/issues/40",
   },
   {
     id: "RSI-Q011",
+    issueNumber: 41,
     prNumber: 15,
+    publishedAt: "2026-11-04T08:17:44Z",
     status: "completed",
     domain: "benchmark",
     exp: 50,
@@ -161,10 +171,12 @@ export const QUESTS: QuestItem[] = [
       zh: "构建基于帕金森病语音重复测量数据的生物医学预测基准任务包，评测跨患者留出验证、声学特征增量预测价值与条件不确定性区间估计（遵循 RFC-0001 规范）。",
     },
     references: [],
+    issueUrl: "https://github.com/Prism-Shadow/penguin-harness-community/issues/41",
   },
   {
     id: "RSI-Q003",
     issueNumber: 32,
+    publishedAt: "2026-11-10T10:10:00Z",
     status: "open",
     domain: "evaluation",
     exp: 50,
@@ -186,6 +198,7 @@ export const QUESTS: QuestItem[] = [
   {
     id: "RSI-Q004",
     issueNumber: 33,
+    publishedAt: "2026-11-10T10:15:00Z",
     status: "open",
     domain: "evaluation",
     exp: 50,
@@ -205,7 +218,9 @@ export const QUESTS: QuestItem[] = [
   },
   {
     id: "RSI-Q012",
+    issueNumber: 42,
     prNumber: 16,
+    publishedAt: "2026-11-02T07:25:23Z",
     status: "completed",
     domain: "evaluation",
     exp: 50,
@@ -223,10 +238,13 @@ export const QUESTS: QuestItem[] = [
     references: [
       { url: "https://penguin.ooo/leaderboards/gdpevo-essential" },
     ],
+    issueUrl: "https://github.com/Prism-Shadow/penguin-harness-community/issues/42",
   },
   {
     id: "RSI-Q013",
+    issueNumber: 43,
     prNumber: 21,
+    publishedAt: "2026-11-03T08:28:27Z",
     status: "completed",
     domain: "evaluation",
     exp: 50,
@@ -244,10 +262,12 @@ export const QUESTS: QuestItem[] = [
     references: [
       { url: "https://penguin.ooo/leaderboards/harness-comparison" },
     ],
+    issueUrl: "https://github.com/Prism-Shadow/penguin-harness-community/issues/43",
   },
   {
     id: "RSI-Q005",
     issueNumber: 34,
+    publishedAt: "2026-11-10T10:20:00Z",
     status: "open",
     domain: "rsi-algorithm",
     exp: 50,
@@ -270,6 +290,7 @@ export const QUESTS: QuestItem[] = [
   {
     id: "RSI-Q006",
     issueNumber: 35,
+    publishedAt: "2026-11-10T10:25:00Z",
     status: "open",
     domain: "rsi-algorithm",
     exp: 50,
@@ -291,6 +312,7 @@ export const QUESTS: QuestItem[] = [
   {
     id: "RSI-Q007",
     issueNumber: 36,
+    publishedAt: "2026-11-10T10:30:00Z",
     status: "open",
     domain: "penguin-harness",
     exp: 50,
@@ -309,6 +331,7 @@ export const QUESTS: QuestItem[] = [
   {
     id: "RSI-Q008",
     issueNumber: 37,
+    publishedAt: "2026-11-10T10:35:00Z",
     status: "open",
     domain: "penguin-harness",
     exp: 50,
@@ -326,8 +349,10 @@ export const QUESTS: QuestItem[] = [
   },
   {
     id: "RSI-Q014",
+    issueNumber: 44,
     prNumber: 1491,
-    status: "completed",
+    publishedAt: "2026-11-10T12:00:00Z",
+    status: "in_progress",
     domain: "penguin-harness",
     exp: 50,
     targetRepository: "https://github.com/Prism-Shadow/penguin-harness",
@@ -342,6 +367,26 @@ export const QUESTS: QuestItem[] = [
       zh: "优化 PenguinHarness 上下文压缩（Compaction）机制，支持在生成摘要前通过多轮工具调用将长篇计划、结论与草稿写入 handoff 文件，并附带 Trace 行级检索指引。",
     },
     references: [],
+    issueUrl: "https://github.com/Prism-Shadow/penguin-harness-community/issues/44",
+  },
+  {
+    id: "RSI-Q015",
+    issueNumber: 45,
+    publishedAt: "2026-11-11T12:00:00Z",
+    status: "open",
+    domain: "penguin-harness",
+    exp: 50,
+    targetRepository: "https://github.com/Prism-Shadow/penguin-harness",
+    title: {
+      en: "Build a High-Playability Reproducible Self-Evolution Case Study",
+      zh: "构建一个可玩性高的自进化案例实验",
+    },
+    description: {
+      en: "Build an engaging, high-playability self-evolution case study on PenguinHarness with a fully reproducible environment, pre- and post-evolution execution traces, and step-by-step reproduction instructions.",
+      zh: "基于 PenguinHarness 构建一个可玩性高、直观有趣的自进化案例实验（如游戏博弈、交互式挑战或复杂任务演化），要求提供完整可复现的环境配置、进化前后对比轨迹与复现说明。",
+    },
+    references: [],
+    issueUrl: "https://github.com/Prism-Shadow/penguin-harness-community/issues/45",
   },
 ];
 
@@ -444,7 +489,56 @@ export interface ContributorStats {
   totalExp: number;
 }
 
-export const CONTRIBUTORS: ContributorStats[] = [];
+const CONTRIBUTOR_NAME_BY_HANDLE: Record<string, string> = {
+  "Saigyouji-Yuyuko1000": "Leijun Zhou",
+  "Hoyant-Su": "Haoyang Su",
+  "rank-Yu": "Yanke Yu",
+  hiyouga: "Yaowei Zheng",
+  ArisaZz: "Xiang Qu",
+  lzh368: "Zhihao Liu",
+  "Myriad-Dreamin": "Yangxi Xiang",
+};
+
+/**
+ * Automatically settles EXP from all `completed` quests in `QUESTS`.
+ */
+export function buildContributorsFromQuests(): ContributorStats[] {
+  const byHandle = new Map<
+    string,
+    { name: string; handle: string; github: string; monthlyExp: number; totalExp: number; latestAt: string }
+  >();
+
+  for (const q of QUESTS) {
+    if (q.status !== "completed" || !q.assignee) continue;
+    const handle = q.assignee;
+    const existing = byHandle.get(handle) ?? {
+      name: CONTRIBUTOR_NAME_BY_HANDLE[handle] ?? handle,
+      handle,
+      github: `https://github.com/${handle}`,
+      monthlyExp: 0,
+      totalExp: 0,
+      latestAt: q.publishedAt,
+    };
+    existing.monthlyExp += q.exp;
+    existing.totalExp += q.exp;
+    if (q.publishedAt > existing.latestAt) {
+      existing.latestAt = q.publishedAt;
+    }
+    byHandle.set(handle, existing);
+  }
+
+  return [...byHandle.values()]
+    .sort((a, b) => b.totalExp - a.totalExp || b.latestAt.localeCompare(a.latestAt))
+    .map(({ name, handle, github, monthlyExp, totalExp }) => ({
+      name,
+      handle,
+      github,
+      monthlyExp,
+      totalExp,
+    }));
+}
+
+export const CONTRIBUTORS: ContributorStats[] = buildContributorsFromQuests();
 
 export const TOP_FIVE_BONUSES_RMB = [800, 400, 200, 100, 50] as const;
 
@@ -497,9 +591,8 @@ export function computeContributorRankings(): {
 }
 
 /**
- * Direct link to the GitHub Issue Form template (`.github/ISSUE_TEMPLATE/task.yml`).
- * Default language is English with separate English and Chinese fields.
+ * Opens the standardized `.github/ISSUE_TEMPLATE/task.yml` form (committee members only).
  */
 export function buildProposeTaskIssueUrl(): string {
-  return `${REPO_URL}/issues/new?template=task.yml`;
+  return "https://github.com/Prism-Shadow/penguin-harness-community/issues/new?template=task.yml";
 }

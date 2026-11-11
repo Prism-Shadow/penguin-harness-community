@@ -67,4 +67,24 @@ committee_groups:
         tags: ["Harness"]
         tags_zh: ["Harness"]
 
-contributors: []
+contributors:
+  - name: "Leijun Zhou"
+    handle: "Saigyouji-Yuyuko1000"
+    github: "https://github.com/Saigyouji-Yuyuko1000"
+    monthly_exp: 100
+    total_exp: 100
+  - name: "Haoyang Su"
+    handle: "Hoyant-Su"
+    github: "https://github.com/Hoyant-Su"
+    monthly_exp: 50
+    total_exp: 50
+  - name: "Yanke Yu"
+    handle: "rank-Yu"
+    github: "https://github.com/rank-Yu"
+    monthly_exp: 50
+    total_exp: 50
+  - name: "Yaowei Zheng"
+    handle: "hiyouga"
+    github: "https://github.com/hiyouga"
+    monthly_exp: 50
+    total_exp: 50
