@@ -201,7 +201,7 @@ export const QUESTS: QuestItem[] = [
     publishedAt: "2026-11-10T10:15:00Z",
     status: "open",
     domain: "evaluation",
-    exp: 50,
+    exp: 100,
     targetRepository: "https://github.com/Prism-Shadow/penguin-harness-benchmark",
     title: {
       en: "GPT-6 Evolution Capability Experiment",
@@ -586,6 +586,45 @@ export function computeContributorRankings(): {
 
   return { monthly, allTime };
 }
+
+/**
+ * Open-source contributors across Prism-Shadow/penguin-harness,
+ * penguin-harness-community, penguin-harness-benchmark, and penguin-harness-plugins.
+ */
+export const OPEN_SOURCE_CONTRIBUTORS: string[] = [
+  "hiyouga",
+  "Myriad-Dreamin",
+  "Saigyouji-Yuyuko1000",
+  "ArisaZz",
+  "lzh368",
+  "rank-Yu",
+  "Hoyant-Su",
+  "laodouuu",
+  "Plastic-time",
+  "zhangnju",
+  "wuExin",
+  "WhatGhost",
+  "moyi-dong",
+  "zzzbitz",
+  "paskaa",
+  "Youhai020616",
+  "glmn",
+  "Nhckdvrl",
+  "greatleo31",
+  "ACAne0320",
+  "XJ19980708",
+  "ericperfect",
+  "pheeno",
+  "DerekHJH",
+  "March-77",
+  "heydryft",
+  "Ufodar",
+  "felladrin",
+  "ZenAlexa",
+  "binyangzhu000-sudo",
+  "rapidSpace",
+  "LeON-Nie-code",
+];
 
 /**
  * Opens the standardized `.github/ISSUE_TEMPLATE/task.yml` form (committee members only).

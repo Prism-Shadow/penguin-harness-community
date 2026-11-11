@@ -132,7 +132,7 @@ tasks:
     published_at: "2026-11-10T10:15:00Z"
     status: "open"
     domain: "Evaluation"
-    exp: 50
+    exp: 100
     target_repository: "https://github.com/Prism-Shadow/penguin-harness-benchmark"
     related_issue: null
     title: "GPT-6 Evolution Capability Experiment"

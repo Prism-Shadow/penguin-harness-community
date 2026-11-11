@@ -1,6 +1,10 @@
 ---
 import type { Locale } from "../shared/i18n";
-import { COMMITTEE_GROUPS, computeContributorRankings } from "../shared/community";
+import {
+  COMMITTEE_GROUPS,
+  OPEN_SOURCE_CONTRIBUTORS,
+  computeContributorRankings,
+} from "../shared/community";
 
 interface Props {
   locale: Locale;
@@ -8,6 +12,11 @@ interface Props {
 
 const { locale } = Astro.props;
 const { monthly: monthlyRows, allTime: allTimeRows } = computeContributorRankings();
+
+const WALL_ROWS: string[][] = [[], [], []];
+OPEN_SOURCE_CONTRIBUTORS.forEach((handle, idx) => {
+  WALL_ROWS[idx % 3].push(handle);
+});
 
 const COPY = {
   zh: {
@@ -27,6 +36,8 @@ const COPY = {
     colExp: "经验值 (EXP)",
     colReward: "当月激励",
     empty: "暂无上榜记录",
+    ossWallHeading: "开源贡献名单",
+    ossWallIntro: "感谢所有为 PenguinHarness 社区生态提交代码、基准与评测的开源贡献者。",
   },
   en: {
     title: "People",
@@ -45,6 +56,9 @@ const COPY = {
     colExp: "EXP",
     colReward: "Monthly Reward",
     empty: "No entries yet",
+    ossWallHeading: "Open-Source Contributors",
+    ossWallIntro:
+      "Thanks to everyone who has contributed code, benchmarks, and evaluations across the PenguinHarness ecosystem.",
   },
 }[locale];
 ---
@@ -245,6 +259,50 @@ const COPY = {
       </table>
     </div>
   </section>
+
+  <!-- Part 3: Open-Source Contributors Name Wall -->
+  <section class="mt-16 border-t border-gray-200 pt-8 dark:border-gray-800">
+    <h2 class="text-2xl font-medium text-gray-950 dark:text-white">
+      {COPY.ossWallHeading}
+    </h2>
+    <p class="mt-2 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+      {COPY.ossWallIntro}
+    </p>
+
+    <div class="oss-wall mt-6 space-y-2.5 overflow-hidden py-1">
+      {
+        WALL_ROWS.map((rowHandles, rowIdx) => (
+          <div class="oss-wall-row overflow-hidden">
+            <div
+              class={`oss-wall-track ${
+                rowIdx % 2 === 1 ? "oss-wall-track-reverse" : ""
+              }`}
+              style={`--wall-duration: ${28 + rowIdx * 4}s;`}
+            >
+              {[0, 1].map((dup) => (
+                <div
+                  class="oss-wall-group flex shrink-0 items-center gap-2.5 pr-2.5"
+                  aria-hidden={dup === 1 ? "true" : undefined}
+                >
+                  {rowHandles.map((handle) => (
+                    <a
+                      href={`https://github.com/${handle}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      tabindex={dup === 1 ? -1 : undefined}
+                      class="mono inline-flex items-center rounded-full border border-gray-200 bg-gray-50/80 px-3 py-1 text-xs font-medium text-gray-700 shadow-2xs transition-all hover:-translate-y-0.5 hover:border-brand-500 hover:bg-white hover:text-brand-600 dark:border-gray-800 dark:bg-gray-900/70 dark:text-gray-300 dark:hover:border-brand-400 dark:hover:bg-gray-900 dark:hover:text-brand-400"
+                    >
+                      @{handle}
+                    </a>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </section>
 </div>
 
 <style>
@@ -265,6 +323,66 @@ const COPY = {
   :global(.dark) .rank-tab.is-active {
     border-color: #f9fafb;
     color: #f9fafb;
+  }
+
+  .oss-wall {
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      #000 8%,
+      #000 92%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      #000 8%,
+      #000 92%,
+      transparent 100%
+    );
+  }
+
+  .oss-wall-track {
+    display: flex;
+    width: max-content;
+    animation: oss-wall-scroll-left var(--wall-duration, 30s) linear infinite;
+  }
+
+  .oss-wall-track-reverse {
+    animation-name: oss-wall-scroll-right;
+  }
+
+  .oss-wall-row:hover .oss-wall-track {
+    animation-play-state: paused;
+  }
+
+  @keyframes oss-wall-scroll-left {
+    0% {
+      transform: translate3d(0, 0, 0);
+    }
+    100% {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+
+  @keyframes oss-wall-scroll-right {
+    0% {
+      transform: translate3d(-50%, 0, 0);
+    }
+    100% {
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .oss-wall-track {
+      animation: none;
+      flex-wrap: wrap;
+      width: 100%;
+    }
+    .oss-wall-group[aria-hidden="true"] {
+      display: none;
+    }
   }
 </style>
 

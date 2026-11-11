@@ -38,7 +38,8 @@ const COPY = {
     modalClaimBtn: "打开任务 Issue (#",
     modalClaimBtnSuffix: ") 回复认领 ↗",
     modalInProgressHint: "该任务正在进行中，可查看任务 Issue 或关联 PR：",
-    modalCompletedHint: "该任务已完成并通过审核合入（+50 EXP 已结算）：",
+    modalCompletedHintPrefix: "该任务已完成并通过审核合入（+",
+    modalCompletedHintSuffix: " EXP 已结算）：",
     modalPrBtn: "查看提交 PR (#",
     modalPrBtnSuffix: ") ↗",
     modalClose: "关闭",
@@ -63,7 +64,8 @@ const COPY = {
     modalClaimBtn: "Open Task Issue (#",
     modalClaimBtnSuffix: ") to Claim ↗",
     modalInProgressHint: "This task is currently in progress:",
-    modalCompletedHint: "This task has been completed and merged (+50 EXP settled):",
+    modalCompletedHintPrefix: "This task has been completed and merged (+",
+    modalCompletedHintSuffix: " EXP settled):",
     modalPrBtn: "View Pull Request (#",
     modalPrBtnSuffix: ") ↗",
     modalClose: "Close",
@@ -329,7 +331,7 @@ function tasksFor(domain: QuestDomainId, status: QuestStatus): QuestItem[] {
             <div class="mt-5 border-t border-gray-200 pt-4 dark:border-gray-800">
               <p class="text-xs text-gray-500 dark:text-gray-400">
                 {q.status === "completed"
-                  ? COPY.modalCompletedHint
+                  ? `${COPY.modalCompletedHintPrefix}${q.exp}${COPY.modalCompletedHintSuffix}`
                   : q.status === "in_progress"
                     ? COPY.modalInProgressHint
                     : COPY.modalClaimHint}
