@@ -395,7 +395,7 @@
       "issue_number": 54,
       "pr_number": null,
       "published_at": "2026-11-11T13:18:00Z",
-      "status": "in_progress",
+      "status": "open",
       "domain": "PenguinHarness",
       "exp": 100,
       "target_repository": "https://github.com/Prism-Shadow/penguin-harness",
@@ -405,7 +405,7 @@
       "description": "Addressing enterprise production compliance and security scenarios — where organizations require an agent's behavior, prompts, skills, and memory to be strictly frozen after deployment (\"no post-deployment evolution\") — analyze PenguinHarness security surfaces and design an enforceable read-only evolution lock and privilege isolation mechanism.",
       "description_zh": "面向企业生产环境合规与安全管控场景——企业希望在完成自进化训练并将 Agent 正式部署上线后，锁定其行为边界、禁止线上运行期间继续自主修改提示词、技能或记忆（即“部署后不再进化”），系统分析 PenguinHarness 的安全风险面并设计可落地的只读锁定与权限隔离方案。",
       "references": [],
-      "assignee": "hiyouga",
+      "assignee": null,
       "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/54",
       "linked_pr": null
     },
