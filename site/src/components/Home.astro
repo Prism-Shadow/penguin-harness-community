@@ -12,15 +12,19 @@ const href = (path: string) => localePath(locale, path);
 const COPY = {
   zh: {
     ctaRoadmap: "路线图",
+    ctaQuests: "任务板",
     ctaProcess: "流程",
     ctaRfcs: "标准文件",
+    ctaPeople: "成员",
     wechat: "微信群",
     discord: "Discord",
   },
   en: {
     ctaRoadmap: "Roadmap",
+    ctaQuests: "Quests",
     ctaProcess: "Workflow",
     ctaRfcs: "RFCs",
+    ctaPeople: "People",
     wechat: "WeChat",
     discord: "Discord",
   },
@@ -66,6 +70,18 @@ const COPY = {
           class="inline-flex h-11 items-center gap-2 rounded-lg border border-gray-200 bg-white px-5 text-[15px] font-medium text-gray-900 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-100 dark:hover:bg-gray-900"
         >
           {COPY.ctaRfcs}
+        </a>
+        <a
+          href={href("/quests/")}
+          class="inline-flex h-11 items-center gap-2 rounded-lg border border-gray-200 bg-white px-5 text-[15px] font-medium text-gray-900 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-100 dark:hover:bg-gray-900"
+        >
+          {COPY.ctaQuests}
+        </a>
+        <a
+          href={href("/people/")}
+          class="inline-flex h-11 items-center gap-2 rounded-lg border border-gray-200 bg-white px-5 text-[15px] font-medium text-gray-900 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-100 dark:hover:bg-gray-900"
+        >
+          {COPY.ctaPeople}
         </a>
       </div>
 
@@ -253,21 +269,17 @@ const COPY = {
     }
 
     const nodes: NodeDef[] = [
-      // Layer 0: Benchmark (x=70)
       { id: "l0_0", layer: 0, x: 70, y: 78 },
       { id: "l0_1", layer: 0, x: 70, y: 150 },
       { id: "l0_2", layer: 0, x: 70, y: 222 },
-      // Layer 1: Harness (x=210)
       { id: "l1_0", layer: 1, x: 210, y: 62 },
       { id: "l1_1", layer: 1, x: 210, y: 120 },
       { id: "l1_2", layer: 1, x: 210, y: 180 },
       { id: "l1_3", layer: 1, x: 210, y: 238 },
-      // Layer 2: RSI Algorithm (x=350)
       { id: "l2_0", layer: 2, x: 350, y: 62 },
       { id: "l2_1", layer: 2, x: 350, y: 120 },
       { id: "l2_2", layer: 2, x: 350, y: 180 },
       { id: "l2_3", layer: 2, x: 350, y: 238 },
-      // Layer 3: Evaluation (x=490)
       { id: "l3_0", layer: 3, x: 490, y: 95 },
       { id: "l3_1", layer: 3, x: 490, y: 205 },
     ];
@@ -278,13 +290,12 @@ const COPY = {
       id: string;
       from: NodeDef;
       to: NodeDef;
-      weights: [number, number, number, number]; // Gen 1..4 weights (0 = pruned, 1 = weak, 2 = strong, 3 = evolved core)
+      weights: [number, number, number, number];
       el?: SVGLineElement;
     }
 
     const edgeDefs: EdgeDef[] = [];
     const pairs: [string, string, [number, number, number, number]][] = [
-      // L0 -> L1
       ["l0_0", "l1_0", [2, 2, 3, 3]],
       ["l0_0", "l1_1", [1, 2, 2, 3]],
       ["l0_0", "l1_2", [1, 0, 0, 0]],
@@ -295,7 +306,6 @@ const COPY = {
       ["l0_2", "l1_1", [1, 0, 0, 0]],
       ["l0_2", "l1_2", [1, 2, 2, 3]],
       ["l0_2", "l1_3", [2, 2, 3, 3]],
-      // L1 -> L2
       ["l1_0", "l2_0", [2, 3, 3, 3]],
       ["l1_0", "l2_1", [1, 2, 3, 3]],
       ["l1_0", "l2_2", [1, 0, 0, 0]],
@@ -307,7 +317,6 @@ const COPY = {
       ["l1_2", "l2_3", [1, 2, 2, 2]],
       ["l1_3", "l2_2", [1, 0, 1, 2]],
       ["l1_3", "l2_3", [2, 2, 3, 3]],
-      // L2 -> L3
       ["l2_0", "l3_0", [2, 3, 3, 3]],
       ["l2_0", "l3_1", [1, 0, 0, 0]],
       ["l2_1", "l3_0", [2, 3, 3, 3]],
@@ -445,17 +454,12 @@ const COPY = {
         feedbackArc1.classList.remove("is-evolving");
         feedbackArc2.classList.remove("is-evolving");
 
-        // Pulse L0 nodes & send L0->L1
         nodes.filter((n) => n.layer === 0).forEach((n) => pulseNode(n.id));
         spawnEdgeParticles(0, genIndex);
 
-        // L1->L2
         setTimeout(() => spawnEdgeParticles(1, genIndex), 420);
-
-        // L2->L3
         setTimeout(() => spawnEdgeParticles(2, genIndex), 840);
 
-        // Recursive Self-Evolution feedback phase
         setTimeout(() => {
           phaseLabel.textContent = "SELF-EVOLVE ↻";
           feedbackArc1.classList.add("is-evolving");

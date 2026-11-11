@@ -203,5 +203,7 @@ export function navLinks(locale: Locale) {
     { id: "roadmap", label: s.roadmap, href: localePath(locale, "/roadmap/") },
     { id: "workflow", label: s.workflow, href: localePath(locale, "/workflow/") },
     { id: "rfc", label: s.rfc, href: localePath(locale, "/rfcs/") },
+    { id: "quests", label: s.quests, href: localePath(locale, "/quests/") },
+    { id: "people", label: s.people, href: localePath(locale, "/people/") },
   ];
 }

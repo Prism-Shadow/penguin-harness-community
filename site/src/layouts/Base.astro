@@ -251,6 +251,10 @@ const ogLocale = { en: "en_US", zh: "zh_CN" };
         let activeTrigger: HTMLElement | null = null;
         let pressedBackdrop = false;
 
+        const isWhitelistedExternalHref = (href: string): boolean => {
+          return /^https:\/\/github\.com\/Prism-Shadow\/penguin-harness(?:[-/?#]|$)/i.test(href);
+        };
+
         const isExternalAnchor = (a: HTMLAnchorElement): boolean => {
           if (leaveDialog.contains(a) || a.hasAttribute("data-direct-external")) return false;
           const raw = a.getAttribute("href");
@@ -273,7 +277,12 @@ const ogLocale = { en: "en_US", zh: "zh_CN" };
 
         const openLeaveModal = (href: string, trigger: HTMLElement) => {
           activeTrigger = trigger;
-          leaveHref.textContent = href;
+          try {
+            const u = new URL(href);
+            leaveHref.textContent = `${u.origin}${decodeURIComponent(u.pathname)}`;
+          } catch {
+            leaveHref.textContent = href;
+          }
           leaveOpen.href = href;
           if (!leaveDialog.open) {
             leaveDialog.showModal();
@@ -285,6 +294,7 @@ const ogLocale = { en: "en_US", zh: "zh_CN" };
           const target = event.target instanceof Element ? event.target.closest("a[href]") : null;
           if (!(target instanceof HTMLAnchorElement)) return;
           if (!isExternalAnchor(target)) return;
+          if (isWhitelistedExternalHref(target.href)) return;
           event.preventDefault();
           openLeaveModal(target.href, target);
         };

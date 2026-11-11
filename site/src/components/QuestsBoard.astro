@@ -1,0 +1,435 @@
+---
+import type { Locale } from "../shared/i18n";
+import {
+  QUESTS,
+  QUEST_DOMAINS,
+  buildProposeTaskIssueUrl,
+  resolveText,
+  type QuestDomainId,
+  type QuestItem,
+  type QuestStatus,
+} from "../shared/community";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const PAGE_SIZE = 5;
+
+const COPY = {
+  zh: {
+    title: "任务板",
+    propose: "发布任务（仅限委员会成员）↗",
+    colOpen: "待认领",
+    colInProgress: "进行中",
+    colCompleted: "已完成",
+    unclaimed: "待认领",
+    details: "详情",
+    empty: "暂无任务",
+    pagePrev: "‹ 上一页",
+    pageNext: "下一页 ›",
+    modalTargetRepo: "目标仓库",
+    modalTaskIssue: "任务 Issue",
+    modalLinkedPr: "提交 PR",
+    modalRelatedIssue: "关联 Issue",
+    modalRefs: "原始论文与代码仓库",
+    modalClaimHint: "请直接在该任务的 GitHub Issue 下方评论回复 /claim 完成认领：",
+    modalClaimBtn: "打开任务 Issue (#",
+    modalClaimBtnSuffix: ") 回复认领 ↗",
+    modalInProgressHint: "该任务正在进行中，可查看任务 Issue 或关联 PR：",
+    modalCompletedHint: "该任务已完成并通过审核合入（+50 EXP 已结算）：",
+    modalPrBtn: "查看提交 PR (#",
+    modalPrBtnSuffix: ") ↗",
+    modalClose: "关闭",
+  },
+  en: {
+    title: "Quests",
+    propose: "Propose Task (Committee Only) ↗",
+    colOpen: "Open",
+    colInProgress: "In Progress",
+    colCompleted: "Completed",
+    unclaimed: "Unclaimed",
+    details: "Details",
+    empty: "No tasks",
+    pagePrev: "‹ Prev",
+    pageNext: "Next ›",
+    modalTargetRepo: "Target Repository",
+    modalTaskIssue: "Task Issue",
+    modalLinkedPr: "Pull Request",
+    modalRelatedIssue: "Related Issue",
+    modalRefs: "Original Papers & Repositories",
+    modalClaimHint: "Reply /claim under this task's GitHub Issue to claim it:",
+    modalClaimBtn: "Open Task Issue (#",
+    modalClaimBtnSuffix: ") to Claim ↗",
+    modalInProgressHint: "This task is currently in progress:",
+    modalCompletedHint: "This task has been completed and merged (+50 EXP settled):",
+    modalPrBtn: "View Pull Request (#",
+    modalPrBtnSuffix: ") ↗",
+    modalClose: "Close",
+  },
+}[locale];
+
+const STAGES: { key: QuestStatus; label: string }[] = [
+  { key: "open", label: COPY.colOpen },
+  { key: "in_progress", label: COPY.colInProgress },
+  { key: "completed", label: COPY.colCompleted },
+];
+
+/**
+ * Returns tasks for a domain & status sorted by time descending (newest first).
+ */
+function tasksFor(domain: QuestDomainId, status: QuestStatus): QuestItem[] {
+  return QUESTS.filter((q) => q.domain === domain && q.status === status).sort(
+    (a, b) => b.publishedAt.localeCompare(a.publishedAt) || b.issueNumber - a.issueNumber,
+  );
+}
+---
+
+<div class="mx-auto w-full max-w-6xl px-6 py-12" data-quests-root>
+  <!-- Header -->
+  <header class="flex flex-wrap items-center justify-between gap-4 pb-8">
+    <h1 class="text-4xl font-semibold tracking-tight text-gray-950 dark:text-white">
+      {COPY.title}
+    </h1>
+    <a
+      href={buildProposeTaskIssueUrl()}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="inline-flex h-9 items-center rounded-md border border-gray-200 bg-white px-3 text-xs font-medium text-gray-900 shadow-2xs transition-colors hover:bg-gray-50 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100 dark:hover:bg-gray-800"
+    >
+      {COPY.propose}
+    </a>
+  </header>
+
+  <!-- Domain Sections -->
+  <div class="space-y-12">
+    {
+      QUEST_DOMAINS.map((domain) => (
+        <section>
+          <div class="mb-4 flex items-center justify-between border-b border-gray-200 pb-2.5 dark:border-gray-800">
+            <h2 class="text-xl font-semibold tracking-tight text-gray-950 dark:text-white">
+              {domain.label[locale]}
+            </h2>
+          </div>
+
+          <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+            {STAGES.map((stage) => {
+              const items = tasksFor(domain.id, stage.key);
+              const totalPages = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
+              const pages = Array.from({ length: totalPages }, (_, i) =>
+                items.slice(i * PAGE_SIZE, (i + 1) * PAGE_SIZE),
+              );
+              return (
+                <div
+                  class="flex min-h-[168px] min-w-0 flex-col rounded-xl border border-gray-200 bg-gray-50/60 p-3 dark:border-gray-800 dark:bg-gray-900/40"
+                  data-quest-col
+                  data-page="1"
+                  data-total-pages={totalPages}
+                  data-page-size={PAGE_SIZE}
+                >
+                  <div class="mb-2.5 flex items-center justify-between px-1">
+                    <span class="text-xs font-medium text-gray-600 dark:text-gray-400">
+                      {stage.label}
+                    </span>
+                    <span class="mono rounded-full bg-gray-200/80 px-2 py-0.5 text-[11px] font-medium text-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                      {items.length}
+                    </span>
+                  </div>
+
+                  {items.length === 0 ? (
+                    <div class="flex flex-1 items-center justify-center py-6 text-xs text-gray-400 dark:text-gray-600">
+                      {COPY.empty}
+                    </div>
+                  ) : (
+                    <>
+                      <div class="grid min-w-0 flex-1 grid-cols-[minmax(0,1fr)] content-start">
+                        {pages.map((pageItems, pageIdx) => {
+                          const pageNumber = pageIdx + 1;
+                          return (
+                            <div
+                              data-quest-page={pageNumber}
+                              inert={pageNumber > 1 ? true : undefined}
+                              class={`col-start-1 row-start-1 min-w-0 space-y-1.5 ${
+                                pageNumber > 1
+                                  ? "invisible pointer-events-none select-none"
+                                  : ""
+                              }`}
+                            >
+                              {pageItems.map((q) => (
+                                <button
+                                  type="button"
+                                  data-quest-open={q.id}
+                                  class="group block w-full max-w-full min-w-0 cursor-pointer overflow-hidden rounded-lg border border-gray-200 bg-white px-3 py-2 text-left shadow-2xs transition-colors hover:border-brand-500 dark:border-gray-800 dark:bg-gray-950 dark:hover:border-brand-500"
+                                >
+                                  <div class="flex min-w-0 items-center justify-between gap-2">
+                                    <span class="min-w-0 flex-1 truncate text-xs font-medium text-gray-950 group-hover:text-brand-600 dark:text-gray-100 dark:group-hover:text-brand-400">
+                                      {resolveText(q.title, locale)}
+                                    </span>
+                                    <span class="mono shrink-0 rounded bg-brand-50 px-1.5 py-0.5 text-[11px] font-semibold leading-none text-brand-700 ring-1 ring-inset ring-brand-600/20 dark:bg-brand-950/80 dark:text-brand-300 dark:ring-brand-400/30">
+                                      +{q.exp} EXP
+                                    </span>
+                                  </div>
+
+                                  <div class="mt-1 flex min-w-0 items-center justify-between gap-2 text-[11px] leading-tight text-gray-500 dark:text-gray-400">
+                                    <span class="mono min-w-0 flex-1 truncate">
+                                      #{q.issueNumber}
+                                      {q.prNumber ? ` · PR #${q.prNumber}` : ""} ·{" "}
+                                      {q.assignee ? `@${q.assignee}` : COPY.unclaimed}
+                                    </span>
+                                    <span class="shrink-0 text-brand-600 group-hover:underline dark:text-brand-400">
+                                      {COPY.details} →
+                                    </span>
+                                  </div>
+                                </button>
+                              ))}
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      {totalPages > 1 && (
+                        <div class="mt-2.5 flex items-center justify-between border-t border-gray-200/80 pt-2 px-1 text-[11px] text-gray-500 dark:border-gray-800/80 dark:text-gray-400">
+                          <button
+                            type="button"
+                            data-page-prev
+                            disabled
+                            class="cursor-pointer rounded px-1.5 py-0.5 font-medium transition-colors hover:bg-gray-200/70 hover:text-gray-900 disabled:cursor-not-allowed disabled:opacity-40 dark:hover:bg-gray-800 dark:hover:text-gray-100"
+                          >
+                            {COPY.pagePrev}
+                          </button>
+                          <span class="mono" data-page-indicator>
+                            1 / {totalPages}
+                          </span>
+                          <button
+                            type="button"
+                            data-page-next
+                            class="cursor-pointer rounded px-1.5 py-0.5 font-medium transition-colors hover:bg-gray-200/70 hover:text-gray-900 disabled:cursor-not-allowed disabled:opacity-40 dark:hover:bg-gray-800 dark:hover:text-gray-100"
+                          >
+                            {COPY.pageNext}
+                          </button>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      ))
+    }
+  </div>
+
+  <!-- Task Detail Modals -->
+  {
+    QUESTS.map((q) => (
+      <dialog
+        data-quest-dialog={q.id}
+        class="site-leave m-auto w-[calc(100%-2rem)] max-w-lg text-left"
+      >
+        <div class="site-leave-body">
+          <div class="flex items-start justify-between gap-3">
+            <h2 class="text-lg font-semibold tracking-tight text-gray-950 dark:text-white">
+              {resolveText(q.title, locale)}
+            </h2>
+            <div class="flex shrink-0 items-center gap-1.5">
+              <a
+                href={q.issueUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="mono rounded-md border border-gray-200 bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 transition-colors hover:border-brand-400 hover:text-brand-600 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300 dark:hover:border-brand-500 dark:hover:text-brand-400"
+              >
+                Issue #{q.issueNumber} ↗
+              </a>
+              <span class="mono rounded-md bg-brand-50 px-2.5 py-1 text-xs font-semibold text-brand-700 ring-1 ring-inset ring-brand-600/20 dark:bg-brand-950/80 dark:text-brand-300 dark:ring-brand-400/30">
+                +{q.exp} EXP
+              </span>
+            </div>
+          </div>
+
+            <p class="mt-3 text-sm leading-relaxed text-gray-600 dark:text-gray-300">
+              {resolveText(q.description, locale)}
+            </p>
+
+            <div class="mt-4">
+              <div class="text-xs font-medium text-gray-500 dark:text-gray-400">
+                {COPY.modalTargetRepo}
+              </div>
+              <div class="mt-1 text-xs">
+                <a
+                  href={q.targetRepository}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="mono break-all text-brand-600 underline decoration-brand-300 underline-offset-2 hover:text-brand-500 dark:text-brand-400 dark:decoration-brand-700"
+                >
+                  {q.targetRepository}
+                </a>
+              </div>
+            </div>
+
+            {q.linkedPr && (
+              <div class="mt-3">
+                <div class="text-xs font-medium text-gray-500 dark:text-gray-400">
+                  {COPY.modalLinkedPr}
+                </div>
+                <div class="mt-1 text-xs">
+                  <a
+                    href={q.linkedPr}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="mono break-all text-brand-600 underline decoration-brand-300 underline-offset-2 hover:text-brand-500 dark:text-brand-400 dark:decoration-brand-700"
+                  >
+                    {q.linkedPr}
+                  </a>
+                </div>
+              </div>
+            )}
+
+            {q.relatedIssue && (
+              <div class="mt-3">
+                <div class="text-xs font-medium text-gray-500 dark:text-gray-400">
+                  {COPY.modalRelatedIssue}
+                </div>
+                <div class="mt-1 text-xs">
+                  <a
+                    href={q.relatedIssue}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="mono break-all text-brand-600 underline decoration-brand-300 underline-offset-2 hover:text-brand-500 dark:text-brand-400 dark:decoration-brand-700"
+                  >
+                    {q.relatedIssue}
+                  </a>
+                </div>
+              </div>
+            )}
+
+            {q.references.length > 0 && (
+              <div class="mt-3">
+                <div class="text-xs font-medium text-gray-500 dark:text-gray-400">
+                  {COPY.modalRefs}
+                </div>
+                <ul class="mt-1.5 space-y-1 text-xs">
+                  {q.references.map((ref) => (
+                    <li>
+                      <a
+                        href={ref.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="mono break-all text-brand-600 underline decoration-brand-300 underline-offset-2 hover:text-brand-500 dark:text-brand-400 dark:decoration-brand-700"
+                      >
+                        {ref.url}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            <div class="mt-5 border-t border-gray-200 pt-4 dark:border-gray-800">
+              <p class="text-xs text-gray-500 dark:text-gray-400">
+                {q.status === "completed"
+                  ? COPY.modalCompletedHint
+                  : q.status === "in_progress"
+                    ? COPY.modalInProgressHint
+                    : COPY.modalClaimHint}
+              </p>
+              <div class="mt-3 flex flex-wrap justify-end gap-2">
+                <button
+                  type="button"
+                  data-quest-close
+                  class="site-leave-cancel inline-flex h-9 items-center justify-center px-4 text-sm font-medium"
+                >
+                  {COPY.modalClose}
+                </button>
+                {q.linkedPr ? (
+                  <a
+                    href={q.linkedPr}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="site-leave-open inline-flex h-9 items-center justify-center gap-1.5 px-4 text-sm font-semibold"
+                  >
+                    <span>
+                      {COPY.modalPrBtn}{q.prNumber}{COPY.modalPrBtnSuffix}
+                    </span>
+                  </a>
+                ) : (
+                  <a
+                    href={q.issueUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="site-leave-open inline-flex h-9 items-center justify-center gap-1.5 px-4 text-sm font-semibold"
+                  >
+                    <span>
+                      {COPY.modalClaimBtn}{q.issueNumber}{COPY.modalClaimBtnSuffix}
+                    </span>
+                  </a>
+                )}
+              </div>
+            </div>
+          </div>
+        </dialog>
+    ))
+  }
+</div>
+
+<script>
+  const root = document.querySelector<HTMLElement>("[data-quests-root]");
+  if (root) {
+    root.querySelectorAll<HTMLButtonElement>("[data-quest-open]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = btn.dataset.questOpen;
+        const dialog = root.querySelector<HTMLDialogElement>(`[data-quest-dialog="${id}"]`);
+        if (dialog && !dialog.open) {
+          dialog.showModal();
+        }
+      });
+    });
+
+    root.querySelectorAll<HTMLDialogElement>("[data-quest-dialog]").forEach((dialog) => {
+      let pressedBackdrop = false;
+      dialog.querySelector<HTMLButtonElement>("[data-quest-close]")?.addEventListener("click", () => {
+        dialog.close();
+      });
+      dialog.addEventListener("pointerdown", (e) => {
+        pressedBackdrop = e.target === dialog;
+      });
+      dialog.addEventListener("click", (e) => {
+        if (e.target === dialog && pressedBackdrop) dialog.close();
+      });
+    });
+
+    root.querySelectorAll<HTMLElement>("[data-quest-col]").forEach((col) => {
+      const totalPages = Number(col.dataset.totalPages || "1");
+      if (totalPages <= 1) return;
+
+      const prevBtn = col.querySelector<HTMLButtonElement>("[data-page-prev]");
+      const nextBtn = col.querySelector<HTMLButtonElement>("[data-page-next]");
+      const indicator = col.querySelector<HTMLElement>("[data-page-indicator]");
+      const pagePanels = col.querySelectorAll<HTMLElement>("[data-quest-page]");
+
+      const setPage = (nextPage: number) => {
+        const page = Math.max(1, Math.min(totalPages, nextPage));
+        col.dataset.page = String(page);
+        pagePanels.forEach((panel) => {
+          const panelPage = Number(panel.dataset.questPage || "1");
+          const isHidden = panelPage !== page;
+          panel.classList.toggle("invisible", isHidden);
+          panel.classList.toggle("pointer-events-none", isHidden);
+          panel.classList.toggle("select-none", isHidden);
+          panel.toggleAttribute("inert", isHidden);
+        });
+        if (indicator) indicator.textContent = `${page} / ${totalPages}`;
+        if (prevBtn) prevBtn.disabled = page <= 1;
+        if (nextBtn) nextBtn.disabled = page >= totalPages;
+      };
+
+      prevBtn?.addEventListener("click", () => {
+        setPage(Number(col.dataset.page || "1") - 1);
+      });
+      nextBtn?.addEventListener("click", () => {
+        setPage(Number(col.dataset.page || "1") + 1);
+      });
+    });
+  }
+</script>

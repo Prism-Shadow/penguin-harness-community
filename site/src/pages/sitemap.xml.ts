@@ -3,7 +3,7 @@ import { LOCALES, localePath } from "../shared/i18n";
 import { ALL_PAGES, docPath } from "../shared/site";
 
 // every page in both languages, each naming its counterpart, for search engines
-const PATHS = ["/", ...ALL_PAGES.map(docPath)];
+const PATHS = ["/", "/quests/", "/forum/", "/people/", ...ALL_PAGES.map(docPath)];
 
 export const GET: APIRoute = ({ site }) => {
   const url = (locale: "en" | "zh", path: string) => new URL(localePath(locale, path), site).href;

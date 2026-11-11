@@ -1,0 +1,284 @@
+---
+import type { Locale } from "../shared/i18n";
+import { COMMITTEE_GROUPS, computeContributorRankings } from "../shared/community";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const { monthly: monthlyRows, allTime: allTimeRows } = computeContributorRankings();
+
+const COPY = {
+  zh: {
+    title: "成员",
+    committeeHeading: "RSI 社区委员会",
+    committeeIntro:
+      "委员会成员负责社区任务发布与实验评审，享有每人每月 1,000 元固定激励（以 Token 额度、算力券形式发放）。方向涵盖 Benchmark、算法、Harness，并持续扩展医学、通信等垂直领域，欢迎在",
+    wechatBtn: "社区微信群",
+    committeeIntroSuffix: "申请加入。",
+    leaderboardHeading: "贡献榜",
+    leaderboardIntro:
+      "每月末按完成任务获得的经验值（EXP）发放 Token 额度与算力券。每 1 EXP 直接兑换 1 元额度，当月前五名额外奖励 800 / 400 / 200 / 100 / 50 元。",
+    tabMonthly: "当月贡献榜",
+    tabAllTime: "总贡献榜",
+    colRank: "排名",
+    colMember: "成员",
+    colExp: "经验值 (EXP)",
+    colReward: "当月激励",
+    empty: "暂无上榜记录",
+  },
+  en: {
+    title: "People",
+    committeeHeading: "RSI Community Committee",
+    committeeIntro:
+      "Committee members publish tasks and review submissions, receiving a fixed ¥1,000 RMB / month incentive (in Token credits and compute vouchers). Tracks cover Benchmark, Algorithm, and Harness, expanding into Medicine, Telecom, and more — apply via the ",
+    wechatBtn: "WeChat Group",
+    committeeIntroSuffix: ".",
+    leaderboardHeading: "Contributor Leaderboard",
+    leaderboardIntro:
+      "Settled monthly in Token credits and compute vouchers. Every 1 EXP converts 1:1 to ¥1 RMB, and the monthly Top 5 receive an extra ¥800 / ¥400 / ¥200 / ¥100 / ¥50 bonus.",
+    tabMonthly: "Monthly Leaderboard",
+    tabAllTime: "All-Time Leaderboard",
+    colRank: "Rank",
+    colMember: "Member",
+    colExp: "EXP",
+    colReward: "Monthly Reward",
+    empty: "No entries yet",
+  },
+}[locale];
+---
+
+<div class="mx-auto w-full max-w-3xl px-6 py-12" data-people-root>
+  <header class="pb-8">
+    <h1 class="text-4xl font-semibold tracking-tight text-gray-950 dark:text-white">
+      {COPY.title}
+    </h1>
+  </header>
+
+  <!-- Part 1: RSI Community Committee -->
+  <section>
+    <div class="border-t border-gray-200 pt-6 dark:border-gray-800">
+      <h2 class="text-2xl font-medium text-gray-950 dark:text-white">
+        {COPY.committeeHeading}
+      </h2>
+      <p class="mt-2 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+        {COPY.committeeIntro}
+        <button
+          type="button"
+          data-wechat-trigger
+          class="cursor-pointer font-medium text-brand-600 underline decoration-brand-300 underline-offset-2 hover:text-brand-500 dark:text-brand-400 dark:decoration-brand-700"
+        >
+          {COPY.wechatBtn}
+        </button>
+        {COPY.committeeIntroSuffix}
+      </p>
+    </div>
+
+    <div class="mt-8 space-y-10">
+      {
+        COMMITTEE_GROUPS.map((group) => (
+          <div>
+            <div class="mb-4 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-t border-gray-200/80 pt-4 dark:border-gray-800/80">
+              <h3 class="text-lg font-medium text-gray-950 dark:text-white">
+                {group.title[locale]}
+              </h3>
+            </div>
+
+            <ul class="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2 md:grid-cols-3">
+              {group.members.map((member) => (
+                <li>
+                  <a
+                    href={member.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="group flex items-center gap-3 py-1"
+                  >
+                    <div class="h-10 w-10 shrink-0 overflow-hidden rounded-full bg-gray-100 dark:bg-gray-900">
+                      <img
+                        src={member.avatar ?? "/avatar-default.svg"}
+                        alt={member.name}
+                        loading="lazy"
+                        width="40"
+                        height="40"
+                        class="h-full w-full object-cover"
+                      />
+                    </div>
+                    <div class="min-w-0">
+                      <p class="truncate text-sm font-medium text-gray-950 transition-colors group-hover:text-brand-600 dark:text-gray-100 dark:group-hover:text-brand-400">
+                        {member.name}
+                      </p>
+                      <div class="mt-1 flex flex-wrap gap-1">
+                        {member.tags.map((t) => (
+                          <span class="rounded bg-gray-100 px-1.5 py-0.5 text-[11px] font-medium text-gray-600 dark:bg-gray-800 dark:text-gray-300">
+                            {t[locale]}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- Part 2: Contributor Leaderboard (Monthly & All-Time) -->
+  <section class="mt-16 border-t border-gray-200 pt-8 dark:border-gray-800">
+    <h2 class="text-2xl font-medium text-gray-950 dark:text-white">
+      {COPY.leaderboardHeading}
+    </h2>
+    <p class="mt-2 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+      {COPY.leaderboardIntro}
+    </p>
+
+    <!-- Tabs: Monthly vs All-Time -->
+    <nav class="mt-6 flex gap-6 border-b border-gray-200 dark:border-gray-800" data-rank-tabs>
+      <button
+        type="button"
+        data-rank-tab="monthly"
+        class="rank-tab is-active -mb-px cursor-pointer border-b-2 py-2.5 text-sm font-medium transition-colors"
+      >
+        {COPY.tabMonthly}
+      </button>
+      <button
+        type="button"
+        data-rank-tab="alltime"
+        class="rank-tab -mb-px cursor-pointer border-b-2 py-2.5 text-sm font-medium transition-colors"
+      >
+        {COPY.tabAllTime}
+      </button>
+    </nav>
+
+    <!-- Monthly Table -->
+    <div data-rank-panel="monthly" class="mt-2 overflow-x-auto">
+      <table class="w-full border-collapse text-sm">
+        <thead>
+          <tr class="border-b border-gray-200 text-xs text-gray-400 dark:border-gray-800 dark:text-gray-500">
+            <th class="w-12 py-2.5 pr-4 text-left font-normal">{COPY.colRank}</th>
+            <th class="py-2.5 pr-4 text-left font-normal">{COPY.colMember}</th>
+            <th class="py-2.5 pl-4 text-right font-normal">{COPY.colExp}</th>
+            <th class="py-2.5 pl-4 text-right font-normal">{COPY.colReward}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            monthlyRows.length === 0 ? (
+              <tr class="border-b border-gray-200 dark:border-gray-800">
+                <td colspan="4" class="py-8 text-center text-xs text-gray-400 dark:text-gray-500">
+                  {COPY.empty}
+                </td>
+              </tr>
+            ) : (
+              monthlyRows.map((row) => (
+                <tr class="border-b border-gray-200 dark:border-gray-800">
+                  <td class="mono py-3 pr-4 text-xs text-gray-400">#{row.rank}</td>
+                  <td class="py-3 pr-4">
+                    <a
+                      href={row.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="font-medium text-gray-950 hover:underline dark:text-gray-100"
+                    >
+                      {row.name}
+                    </a>
+                    <span class="mono ml-1.5 text-xs text-gray-400">@{row.handle}</span>
+                  </td>
+                  <td class="mono py-3 pl-4 text-right font-semibold text-brand-700 dark:text-brand-400">
+                    {row.exp} EXP
+                  </td>
+                  <td class="mono py-3 pl-4 text-right font-semibold text-gray-950 dark:text-gray-100">
+                    ¥{row.totalEstimatedRmb}
+                  </td>
+                </tr>
+              ))
+            )
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- All-Time Table -->
+    <div data-rank-panel="alltime" class="mt-2 hidden overflow-x-auto">
+      <table class="w-full border-collapse text-sm">
+        <thead>
+          <tr class="border-b border-gray-200 text-xs text-gray-400 dark:border-gray-800 dark:text-gray-500">
+            <th class="w-12 py-2.5 pr-4 text-left font-normal">{COPY.colRank}</th>
+            <th class="py-2.5 pr-4 text-left font-normal">{COPY.colMember}</th>
+            <th class="py-2.5 pl-4 text-right font-normal">{COPY.colExp}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            allTimeRows.length === 0 ? (
+              <tr class="border-b border-gray-200 dark:border-gray-800">
+                <td colspan="3" class="py-8 text-center text-xs text-gray-400 dark:text-gray-500">
+                  {COPY.empty}
+                </td>
+              </tr>
+            ) : (
+              allTimeRows.map((row) => (
+                <tr class="border-b border-gray-200 dark:border-gray-800">
+                  <td class="mono py-3 pr-4 text-xs text-gray-400">#{row.rank}</td>
+                  <td class="py-3 pr-4">
+                    <a
+                      href={row.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="font-medium text-gray-950 hover:underline dark:text-gray-100"
+                    >
+                      {row.name}
+                    </a>
+                    <span class="mono ml-1.5 text-xs text-gray-400">@{row.handle}</span>
+                  </td>
+                  <td class="mono py-3 pl-4 text-right font-semibold text-brand-700 dark:text-brand-400">
+                    {row.exp} EXP
+                  </td>
+                </tr>
+              ))
+            )
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+<style>
+  .rank-tab {
+    border-color: transparent;
+    color: #6b7280;
+  }
+  .rank-tab:hover {
+    color: #111827;
+  }
+  :global(.dark) .rank-tab:hover {
+    color: #f9fafb;
+  }
+  .rank-tab.is-active {
+    border-color: #111827;
+    color: #111827;
+  }
+  :global(.dark) .rank-tab.is-active {
+    border-color: #f9fafb;
+    color: #f9fafb;
+  }
+</style>
+
+<script>
+  const root = document.querySelector<HTMLElement>("[data-people-root]");
+  if (root) {
+    const tabs = root.querySelectorAll<HTMLButtonElement>("[data-rank-tab]");
+    const panels = root.querySelectorAll<HTMLElement>("[data-rank-panel]");
+    tabs.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const target = btn.dataset.rankTab;
+        tabs.forEach((b) => b.classList.toggle("is-active", b === btn));
+        panels.forEach((p) => p.classList.toggle("hidden", p.dataset.rankPanel !== target));
+      });
+    });
+  }
+</script>

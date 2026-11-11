@@ -1,0 +1,116 @@
+name: "Community Task"
+description: "Publish a new task to the Shared RSI Community Task Board (only tasks published by RSI Community Committee members are recognized)."
+title: "[Task] "
+labels: ["task"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        > **Notice**: Only tasks published by **RSI Community Committee** members are recognized by the community and eligible for EXP and monthly rewards (self-published issues by non-committee users are not recognized; see RFC-0006).
+        > English is the default language. Please fill in English and Chinese fields separately — if one language is left blank, the automated steward agent (`rsi_community_steward`) will automatically fall back to the other language.
+
+  - type: dropdown
+    id: domain
+    attributes:
+      label: "Domain"
+      description: "Select the task domain on the board."
+      options:
+        - "Benchmark"
+        - "Evaluation"
+        - "RSI Algorithm"
+        - "PenguinHarness"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: status
+    attributes:
+      label: "Status"
+      description: "Current stage of the task (`open` = Unclaimed, `in_progress` = In Progress, `completed` = Completed)."
+      options:
+        - "open"
+        - "in_progress"
+        - "completed"
+      default: 0
+    validations:
+      required: true
+
+  - type: input
+    id: exp
+    attributes:
+      label: "EXP"
+      description: "Experience points awarded upon completion (1 EXP = ¥1 RMB base reward)."
+      value: "50"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: target_repository
+    attributes:
+      label: "Target Repository"
+      description: "Select the target repository where the Pull Request should be submitted."
+      options:
+        - "https://github.com/Prism-Shadow/penguin-harness"
+        - "https://github.com/Prism-Shadow/penguin-harness-community"
+        - "https://github.com/Prism-Shadow/penguin-harness-benchmark"
+        - "https://github.com/Prism-Shadow/penguin-harness-plugins"
+    validations:
+      required: true
+
+  - type: input
+    id: assignee
+    attributes:
+      label: "Assignee"
+      description: "GitHub handle of the contributor (required for `in_progress` and `completed` tasks, e.g. `@hiyouga`; leave blank for `open` tasks)."
+      placeholder: "@username"
+
+  - type: input
+    id: pull_request
+    attributes:
+      label: "Pull Request"
+      description: "Target repository Pull Request plain URL (required for `completed` tasks, optional for `in_progress` tasks)."
+      placeholder: "https://github.com/Prism-Shadow/penguin-harness-benchmark/pull/..."
+
+  - type: input
+    id: related_issue
+    attributes:
+      label: "Related Issue"
+      description: "Optional related GitHub Issue link (plain URL)."
+      placeholder: "https://github.com/Prism-Shadow/penguin-harness/issues/..."
+
+  - type: input
+    id: title_en
+    attributes:
+      label: "Title (English)"
+      description: "Task title in English (default language). If left blank, Title (Chinese) will be used."
+      placeholder: "e.g. Integrate SWE-bench"
+
+  - type: input
+    id: title_zh
+    attributes:
+      label: "Title (Chinese)"
+      description: "Task title in Chinese (中文标题). If left blank, Title (English) will be used."
+      placeholder: "例如：集成 SWE-bench"
+
+  - type: textarea
+    id: description_en
+    attributes:
+      label: "Description (English)"
+      description: "Task description and acceptance criteria in English. If left blank, Description (Chinese) will be used."
+      placeholder: "Describe what needs to be built or evaluated and how it will be verified."
+
+  - type: textarea
+    id: description_zh
+    attributes:
+      label: "Description (Chinese)"
+      description: "Task description and acceptance criteria in Chinese (中文描述). If left blank, Description (English) will be used."
+      placeholder: "请填写任务目标与验收标准。"
+
+  - type: textarea
+    id: references
+    attributes:
+      label: "Original Papers & Repository Links"
+      description: "External reference papers or upstream repository links — one plain URL per line (no link titles needed)."
+      placeholder: |
+        https://github.com/...
+        https://arxiv.org/abs/...

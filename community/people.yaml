@@ -1,0 +1,94 @@
+# Shared RSI Community — RSI Community Committee & Contributor Leaderboard Registry
+# 1. RSI Community Committee (¥1,000 RMB / month fixed incentive in Token credits / compute vouchers, apply via WeChat group):
+#    - Project Leadership (项目主导方)
+#    - Proposal Group (提案小组)
+#    - Review Group (审核小组)
+# 2. Contributor Leaderboard (up to ¥10,000 RMB / month: 1 EXP = ¥1 RMB + Top-5 bonus [800, 400, 200, 100, 50])
+
+version: 1
+committee_monthly_stipend_rmb: 1000
+contributor_monthly_pool_rmb: 10000
+
+committee_groups:
+  - id: "leadership"
+    title: "Project Leadership"
+    title_zh: "项目主导方"
+    members:
+      - name: "Yaowei Zheng"
+        handle: "hiyouga"
+        github: "https://github.com/hiyouga"
+        avatar: "/people/yaowei-zheng.jpg"
+        tags: ["Benchmark", "Algorithm", "Harness"]
+        tags_zh: ["Benchmark", "算法", "Harness"]
+
+  - id: "proposal"
+    title: "Proposal Group"
+    title_zh: "提案小组"
+    members:
+      - name: "Xiang Qu"
+        handle: "ArisaZz"
+        github: "https://github.com/ArisaZz"
+        avatar: "/avatar-default.svg"
+        tags: ["Algorithm"]
+        tags_zh: ["算法"]
+      - name: "Zhihao Liu"
+        handle: "lzh368"
+        github: "https://github.com/lzh368"
+        avatar: "/avatar-default.svg"
+        tags: ["Benchmark"]
+        tags_zh: ["Benchmark"]
+      - name: "Yanke Yu"
+        handle: "rank-Yu"
+        github: "https://github.com/rank-Yu"
+        avatar: "/avatar-default.svg"
+        tags: ["Harness"]
+        tags_zh: ["Harness"]
+
+  - id: "review"
+    title: "Review Group"
+    title_zh: "审核小组"
+    members:
+      - name: "Leijun Zhou"
+        handle: "Saigyouji-Yuyuko1000"
+        github: "https://github.com/Saigyouji-Yuyuko1000"
+        avatar: "/avatar-default.svg"
+        tags: ["Algorithm"]
+        tags_zh: ["算法"]
+      - name: "Zhihao Liu"
+        handle: "lzh368"
+        github: "https://github.com/lzh368"
+        avatar: "/avatar-default.svg"
+        tags: ["Benchmark"]
+        tags_zh: ["Benchmark"]
+      - name: "Yangxi Xiang"
+        handle: "Myriad-Dreamin"
+        github: "https://github.com/Myriad-Dreamin"
+        avatar: "/avatar-default.svg"
+        tags: ["Harness"]
+        tags_zh: ["Harness"]
+
+contributors:
+  - name: "Leijun Zhou"
+    handle: "Saigyouji-Yuyuko1000"
+    github: "https://github.com/Saigyouji-Yuyuko1000"
+    monthly_exp: 100
+    total_exp: 100
+    reached_at: "2026-11-03T08:28:27Z"
+  - name: "Yaowei Zheng"
+    handle: "hiyouga"
+    github: "https://github.com/hiyouga"
+    monthly_exp: 50
+    total_exp: 50
+    reached_at: "2026-10-10T17:57:44Z"
+  - name: "Yanke Yu"
+    handle: "rank-Yu"
+    github: "https://github.com/rank-Yu"
+    monthly_exp: 50
+    total_exp: 50
+    reached_at: "2026-10-19T10:56:52Z"
+  - name: "Haoyang Su"
+    handle: "Hoyant-Su"
+    github: "https://github.com/Hoyant-Su"
+    monthly_exp: 50
+    total_exp: 50
+    reached_at: "2026-11-04T08:17:44Z"
