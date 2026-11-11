@@ -66,11 +66,18 @@ export function parseTaskIssueBody(body, authorHandle) {
   const relatedIssueRaw = (sections["Related Issue"] || "").trim();
   const relatedIssue =
     relatedIssueRaw && relatedIssueRaw !== "_No response_" ? relatedIssueRaw : null;
+  const assigneeRaw = (sections["Assignee"] || "").trim().replace(/^@/, "");
+  const assignee = assigneeRaw && assigneeRaw !== "_No response_" ? assigneeRaw : null;
+  const prRaw = (sections["Pull Request"] || "").trim();
+  const linkedPr = prRaw && prRaw !== "_No response_" ? prRaw : null;
   return {
     domain: sections["Domain"] || "Benchmark",
+    status: sections["Status"] || "open",
     exp: Number(sections["EXP"] || 50),
     target_repository:
       sections["Target Repository"] || "https://github.com/Prism-Shadow/penguin-harness-benchmark",
+    assignee,
+    linked_pr: linkedPr,
     related_issue: relatedIssue,
     title: titles.en,
     title_zh: titles.zh,

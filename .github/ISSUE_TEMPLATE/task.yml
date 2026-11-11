@@ -22,6 +22,19 @@ body:
     validations:
       required: true
 
+  - type: dropdown
+    id: status
+    attributes:
+      label: "Status"
+      description: "Current stage of the task (`open` = Unclaimed, `in_progress` = In Progress, `completed` = Completed)."
+      options:
+        - "open"
+        - "in_progress"
+        - "completed"
+      default: 0
+    validations:
+      required: true
+
   - type: input
     id: exp
     attributes:
@@ -43,6 +56,20 @@ body:
         - "https://github.com/Prism-Shadow/penguin-harness-plugins"
     validations:
       required: true
+
+  - type: input
+    id: assignee
+    attributes:
+      label: "Assignee"
+      description: "GitHub handle of the contributor (required for `in_progress` and `completed` tasks, e.g. `@hiyouga`; leave blank for `open` tasks)."
+      placeholder: "@username"
+
+  - type: input
+    id: pull_request
+    attributes:
+      label: "Pull Request"
+      description: "Target repository Pull Request plain URL (required for `completed` tasks, optional for `in_progress` tasks)."
+      placeholder: "https://github.com/Prism-Shadow/penguin-harness-benchmark/pull/..."
 
   - type: input
     id: related_issue
