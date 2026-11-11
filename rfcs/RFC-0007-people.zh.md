@@ -20,7 +20,7 @@
 | 小组 | 当前成员 | 负责方向（词条） | 核心职责 |
 | --- | --- | --- | --- |
 | **项目主导方（Project Leadership）** | `Yaowei Zheng`（[@hiyouga](https://github.com/hiyouga)） | `Benchmark`、`算法`、`Harness` | 统筹社区路线图、标准规范制定与基础设施建设 |
-| **提案小组（Proposal Group）** | `Xiang Qu`（[@ArisaZz](https://github.com/ArisaZz)）、`Zhihao Liu`（[@lzh368](https://github.com/lzh368)） | `算法`（Xiang Qu）、`Benchmark`（Zhihao Liu） | 调研前沿论文与基准需求，按 [RFC-0006](RFC-0006-quests.zh.md) 标准模板发布官方社区任务 |
+| **提案小组（Proposal Group）** | `Xiang Qu`（[@ArisaZz](https://github.com/ArisaZz)）、`Zhihao Liu`（[@lzh368](https://github.com/lzh368)）、`Yanke Yu`（[@rank-Yu](https://github.com/rank-Yu)） | `算法`（Xiang Qu）、`Benchmark`（Zhihao Liu）、`Harness`（Yanke Yu） | 调研前沿论文与基准需求，按 [RFC-0006](RFC-0006-quests.zh.md) 标准模板发布官方社区任务 |
 | **审核小组（Review Group）** | `Leijun Zhou`（[@Saigyouji-Yuyuko1000](https://github.com/Saigyouji-Yuyuko1000)）、`Zhihao Liu`（[@lzh368](https://github.com/lzh368)）、`Yangxi Xiang`（[@Myriad-Dreamin](https://github.com/Myriad-Dreamin)） | `算法`（Leijun Zhou）、`Benchmark`（Zhihao Liu）、`Harness`（Yangxi Xiang） | 审核贡献者提交的 Benchmark、Evaluation、算法插件与框架 PR，确认可复现性并合入结算 |
 
 - **领域词条扩展**：除现有的 `Benchmark`、`算法`、`Harness` 方向外，委员会后续将持续引入 `医学`、`通信` 等更多垂直领域方向。

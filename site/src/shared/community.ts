@@ -363,6 +363,7 @@ export const COMMITTEE_HANDLES = [
   "hiyouga",
   "ArisaZz",
   "lzh368",
+  "rank-Yu",
   "Saigyouji-Yuyuko1000",
   "Myriad-Dreamin",
 ] as const;
@@ -400,6 +401,12 @@ export const COMMITTEE_GROUPS: CommitteeGroup[] = [
         handle: "lzh368",
         github: "https://github.com/lzh368",
         tags: [{ en: "Benchmark", zh: "Benchmark" }],
+      },
+      {
+        name: "Yanke Yu",
+        handle: "rank-Yu",
+        github: "https://github.com/rank-Yu",
+        tags: [{ en: "Harness", zh: "Harness" }],
       },
     ],
   },

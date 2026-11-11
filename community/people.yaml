@@ -37,6 +37,12 @@ committee_groups:
         avatar: "/avatar-default.svg"
         tags: ["Benchmark"]
         tags_zh: ["Benchmark"]
+      - name: "Yanke Yu"
+        handle: "rank-Yu"
+        github: "https://github.com/rank-Yu"
+        avatar: "/avatar-default.svg"
+        tags: ["Harness"]
+        tags_zh: ["Harness"]
 
   - id: "review"
     title: "Review Group"

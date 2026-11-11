@@ -20,7 +20,7 @@ The committee is organized into three groups:
 | Group | Current Members | Domain Tracks | Core Responsibilities |
 | --- | --- | --- | --- |
 | **Project Leadership** | `Yaowei Zheng` ([@hiyouga](https://github.com/hiyouga)) | `Benchmark`, `Algorithm`, `Harness` | Overall roadmap, RFC standards, and core infrastructure |
-| **Proposal Group** | `Xiang Qu` ([@ArisaZz](https://github.com/ArisaZz)), `Zhihao Liu` ([@lzh368](https://github.com/lzh368)) | `Algorithm` (Xiang Qu), `Benchmark` (Zhihao Liu) | Curate frontier papers and benchmark needs; publish official tasks via the [RFC-0006](RFC-0006-quests.md) template |
+| **Proposal Group** | `Xiang Qu` ([@ArisaZz](https://github.com/ArisaZz)), `Zhihao Liu` ([@lzh368](https://github.com/lzh368)), `Yanke Yu` ([@rank-Yu](https://github.com/rank-Yu)) | `Algorithm` (Xiang Qu), `Benchmark` (Zhihao Liu), `Harness` (Yanke Yu) | Curate frontier papers and benchmark needs; publish official tasks via the [RFC-0006](RFC-0006-quests.md) template |
 | **Review Group** | `Leijun Zhou` ([@Saigyouji-Yuyuko1000](https://github.com/Saigyouji-Yuyuko1000)), `Zhihao Liu` ([@lzh368](https://github.com/lzh368)), `Yangxi Xiang` ([@Myriad-Dreamin](https://github.com/Myriad-Dreamin)) | `Algorithm` (Leijun Zhou), `Benchmark` (Zhihao Liu), `Harness` (Yangxi Xiang) | Review Benchmark, Evaluation, Algorithm Plugin, and Harness PRs for reproducibility and merge completion |
 
 - **Expanding Domain Tracks**: Beyond `Benchmark`, `Algorithm`, and `Harness`, the committee continues to expand into vertical domains such as `Medicine` and `Telecom`.

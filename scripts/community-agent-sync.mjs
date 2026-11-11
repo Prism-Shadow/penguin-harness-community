@@ -22,6 +22,7 @@ const COMMITTEE_HANDLES = new Set([
   "hiyouga",
   "ArisaZz",
   "lzh368",
+  "rank-Yu",
   "Saigyouji-Yuyuko1000",
   "Myriad-Dreamin",
 ]);
