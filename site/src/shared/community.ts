@@ -588,43 +588,11 @@ export function computeContributorRankings(): {
 }
 
 /**
- * Open-source contributors across Prism-Shadow/penguin-harness,
- * penguin-harness-community, penguin-harness-benchmark, and penguin-harness-plugins.
+ * Open-source contributors who have appeared on the community Task Board (`QUESTS`).
  */
-export const OPEN_SOURCE_CONTRIBUTORS: string[] = [
-  "hiyouga",
-  "Myriad-Dreamin",
-  "Saigyouji-Yuyuko1000",
-  "ArisaZz",
-  "lzh368",
-  "rank-Yu",
-  "Hoyant-Su",
-  "laodouuu",
-  "Plastic-time",
-  "zhangnju",
-  "wuExin",
-  "WhatGhost",
-  "moyi-dong",
-  "zzzbitz",
-  "paskaa",
-  "Youhai020616",
-  "glmn",
-  "Nhckdvrl",
-  "greatleo31",
-  "ACAne0320",
-  "XJ19980708",
-  "ericperfect",
-  "pheeno",
-  "DerekHJH",
-  "March-77",
-  "heydryft",
-  "Ufodar",
-  "felladrin",
-  "ZenAlexa",
-  "binyangzhu000-sudo",
-  "rapidSpace",
-  "LeON-Nie-code",
-];
+export const OPEN_SOURCE_CONTRIBUTORS: string[] = Array.from(
+  new Set(QUESTS.map((q) => q.assignee).filter((a): a is string => Boolean(a))),
+);
 
 /**
  * Opens the standardized `.github/ISSUE_TEMPLATE/task.yml` form (committee members only).

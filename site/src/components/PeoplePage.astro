@@ -13,10 +13,9 @@ interface Props {
 const { locale } = Astro.props;
 const { monthly: monthlyRows, allTime: allTimeRows } = computeContributorRankings();
 
-const WALL_ROWS: string[][] = [[], [], []];
-OPEN_SOURCE_CONTRIBUTORS.forEach((handle, idx) => {
-  WALL_ROWS[idx % 3].push(handle);
-});
+// Repeat handles enough times per half-track so the marquee is always wider than the container
+const REPEAT_FACTOR = Math.max(1, Math.ceil(12 / Math.max(1, OPEN_SOURCE_CONTRIBUTORS.length)));
+const WALL_HANDLES: string[] = Array.from({ length: REPEAT_FACTOR }, () => OPEN_SOURCE_CONTRIBUTORS).flat();
 
 const COPY = {
   zh: {
@@ -269,38 +268,29 @@ const COPY = {
       {COPY.ossWallIntro}
     </p>
 
-    <div class="oss-wall mt-6 space-y-2.5 overflow-hidden py-1">
-      {
-        WALL_ROWS.map((rowHandles, rowIdx) => (
-          <div class="oss-wall-row overflow-hidden">
+    <div class="oss-wall mt-6 overflow-hidden py-1">
+      <div class="oss-wall-row overflow-hidden">
+        <div class="oss-wall-track" style="--wall-duration: 24s;">
+          {[0, 1].map((dup) => (
             <div
-              class={`oss-wall-track ${
-                rowIdx % 2 === 1 ? "oss-wall-track-reverse" : ""
-              }`}
-              style={`--wall-duration: ${28 + rowIdx * 4}s;`}
+              class="oss-wall-group flex shrink-0 items-center gap-2.5 pr-2.5"
+              aria-hidden={dup === 1 ? "true" : undefined}
             >
-              {[0, 1].map((dup) => (
-                <div
-                  class="oss-wall-group flex shrink-0 items-center gap-2.5 pr-2.5"
-                  aria-hidden={dup === 1 ? "true" : undefined}
+              {WALL_HANDLES.map((handle) => (
+                <a
+                  href={`https://github.com/${handle}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  tabindex={dup === 1 ? -1 : undefined}
+                  class="mono inline-flex items-center rounded-full border border-gray-200 bg-gray-50/80 px-3 py-1 text-xs font-medium text-gray-700 shadow-2xs transition-all hover:-translate-y-0.5 hover:border-brand-500 hover:bg-white hover:text-brand-600 dark:border-gray-800 dark:bg-gray-900/70 dark:text-gray-300 dark:hover:border-brand-400 dark:hover:bg-gray-900 dark:hover:text-brand-400"
                 >
-                  {rowHandles.map((handle) => (
-                    <a
-                      href={`https://github.com/${handle}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      tabindex={dup === 1 ? -1 : undefined}
-                      class="mono inline-flex items-center rounded-full border border-gray-200 bg-gray-50/80 px-3 py-1 text-xs font-medium text-gray-700 shadow-2xs transition-all hover:-translate-y-0.5 hover:border-brand-500 hover:bg-white hover:text-brand-600 dark:border-gray-800 dark:bg-gray-900/70 dark:text-gray-300 dark:hover:border-brand-400 dark:hover:bg-gray-900 dark:hover:text-brand-400"
-                    >
-                      @{handle}
-                    </a>
-                  ))}
-                </div>
+                  @{handle}
+                </a>
               ))}
             </div>
-          </div>
-        ))
-      }
+          ))}
+        </div>
+      </div>
     </div>
   </section>
 </div>
