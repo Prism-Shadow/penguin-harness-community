@@ -189,7 +189,7 @@ tasks:
     published_at: "2026-11-10T10:20:00Z"
     status: "in_progress"
     domain: "RSI Algorithm"
-    exp: 50
+    exp: 100
     target_repository: "https://github.com/Prism-Shadow/penguin-harness-plugins"
     related_issue: null
     title: "Integrate RSIAgent Method"
@@ -209,7 +209,7 @@ tasks:
     published_at: "2026-11-10T10:25:00Z"
     status: "open"
     domain: "RSI Algorithm"
-    exp: 50
+    exp: 100
     target_repository: "https://github.com/Prism-Shadow/penguin-harness-plugins"
     related_issue: null
     title: "Integrate RRSI Method"
@@ -290,4 +290,90 @@ tasks:
     references: []
     assignee: null
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/45"
+    linked_pr: null
+
+  - id: "RSI-Q016"
+    issue_number: 50
+    pr_number: 1434
+    published_at: "2026-11-04T08:04:12Z"
+    status: "completed"
+    domain: "PenguinHarness"
+    exp: 50
+    target_repository: "https://github.com/Prism-Shadow/penguin-harness"
+    related_issue: "https://github.com/Prism-Shadow/penguin-harness/issues/1394"
+    title: "Keep Company Mode Channel Messages Concise"
+    title_zh: "精简公司模式频道消息与沟通规范"
+    description: "Refine the company-employee and company-ceo channel message prompts and handbook rules in the agent-company plugin so proposals and reports lead with the decision in at most five short lines, eliminating unaddressed status posts and self-mentions."
+    description_zh: "优化 agent-company 插件中公司员工（company-employee）与 CEO（company-ceo）的频道消息写作提示词与手册规范，使提案与汇报首行先行给出结论、控制在五短行以内，消除无指向状态刷屏与自我 @ 提及。"
+    references: []
+    assignee: "ACAne0320"
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/50"
+    linked_pr: "https://github.com/Prism-Shadow/penguin-harness/pull/1434"
+
+  - id: "RSI-Q017"
+    issue_number: 51
+    published_at: "2026-11-11T13:15:00Z"
+    status: "open"
+    domain: "PenguinHarness"
+    exp: 150
+    target_repository: "https://github.com/Prism-Shadow/penguin-harness"
+    related_issue: null
+    title: "Build and Verify an End-to-End Company Mode Case Study"
+    title_zh: "跑通一个公司模式的案例并实际验证"
+    description: "Starting from a complex real-world scenario — such as having an Agent Company autonomously set up and operate a cloud service business — run and verify PenguinHarness Company Mode end-to-end across CEO strategic planning, role hiring, multi-employee ticket collaboration, and service delivery, producing a validated, reproducible case study."
+    description_zh: "从真实复杂业务场景出发——例如“让一家 Agent 公司自动筹建并运营一家云服务公司”，完整跑通 PenguinHarness 公司模式（Agent Company）从 CEO 战略拆解、岗位招募、多员工工单协同到最终产品与服务交付的全流程，在实际运行中验证其可行性并沉淀可复现的案例配置。"
+    references: []
+    assignee: null
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/51"
+    linked_pr: null
+
+  - id: "RSI-Q018"
+    issue_number: 52
+    published_at: "2026-11-11T13:16:00Z"
+    status: "in_progress"
+    domain: "PenguinHarness"
+    exp: 200
+    target_repository: "https://github.com/Prism-Shadow/penguin-harness"
+    related_issue: null
+    title: "Explore Personal Agent Applications"
+    title_zh: "探索 Personal Agent 应用"
+    description: "Focusing on long-term personal assistant scenarios, strengthen PenguinHarness memory mechanisms and contextual understanding to evolve the agent from a passive responder into a proactive AI assistant that anticipates needs, initiates reminders, and drives tasks forward based on user habits and history."
+    description_zh: "围绕个人长期日常助理场景，重点强化 PenguinHarness 的长短期记忆机制与上下文理解，使 Agent 从“被动等待指令”升级为能够结合用户习惯、日程与历史上下文主动提醒、主动规划并推进任务的“主动式 AI 助手”。"
+    references: []
+    assignee: "Myriad-Dreamin"
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/52"
+    linked_pr: null
+
+  - id: "RSI-Q019"
+    issue_number: 53
+    published_at: "2026-11-11T13:17:00Z"
+    status: "open"
+    domain: "Benchmark"
+    exp: 50
+    target_repository: "https://github.com/Prism-Shadow/penguin-harness-benchmark"
+    related_issue: null
+    title: "Design an Agent Team Benchmark for Real Revenue-Generating Companies"
+    title_zh: "针对 Agent Team 设计一套商业营收 Benchmark"
+    description: "Targeting the scenario where an Agent Team autonomously launches and operates a business, design a benchmark that evaluates end-to-end commercial viability (market demand fulfillment, product delivery, token/compute cost accounting, and net profit settlement) to verify whether an agent team can build a genuinely profitable company (per RFC-0001)."
+    description_zh: "面向“Agent 团队自主开办并运营一家公司”的真实商业场景，设计一套评测 Agent Team 商业闭环能力的 Benchmark（包含市场需求响应、产品交付、算力与人力成本核算及净收益结算），验证 Agent 团队是否能够运营出真正实现正向盈利的公司（遵循 RFC-0001 规范）。"
+    references: []
+    assignee: null
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/53"
+    linked_pr: null
+
+  - id: "RSI-Q020"
+    issue_number: 54
+    published_at: "2026-11-11T13:18:00Z"
+    status: "open"
+    domain: "PenguinHarness"
+    exp: 100
+    target_repository: "https://github.com/Prism-Shadow/penguin-harness"
+    related_issue: null
+    title: "Analyze PenguinHarness Security & Enterprise Post-Deployment Evolution Freeze"
+    title_zh: "分析 PenguinHarness 安全问题与企业部署进化锁定机制"
+    description: "Addressing enterprise production compliance and security scenarios — where organizations require an agent's behavior, prompts, skills, and memory to be strictly frozen after deployment (\"no post-deployment evolution\") — analyze PenguinHarness security surfaces and design an enforceable read-only evolution lock and privilege isolation mechanism."
+    description_zh: "面向企业生产环境合规与安全管控场景——企业希望在完成自进化训练并将 Agent 正式部署上线后，锁定其行为边界、禁止线上运行期间继续自主修改提示词、技能或记忆（即“部署后不再进化”），系统分析 PenguinHarness 的安全风险面并设计可落地的只读锁定与权限隔离方案。"
+    references: []
+    assignee: null
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/54"
     linked_pr: null
