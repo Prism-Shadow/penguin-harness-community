@@ -87,6 +87,12 @@ contributors:
     monthly_exp: 50
     total_exp: 50
     reached_at: "2026-10-19T10:56:52Z"
+  - name: "ACAne0320"
+    handle: "ACAne0320"
+    github: "https://github.com/ACAne0320"
+    monthly_exp: 50
+    total_exp: 50
+    reached_at: "2026-11-04T08:04:12Z"
   - name: "Haoyang Su"
     handle: "Hoyant-Su"
     github: "https://github.com/Hoyant-Su"
@@ -98,4 +104,8 @@ open_source_contributors:
   - "Saigyouji-Yuyuko1000"
   - "hiyouga"
   - "rank-Yu"
+  - "ACAne0320"
   - "Hoyant-Su"
+  - "Myriad-Dreamin"
+  - "ussumer"
+  - "KeBbboy"
