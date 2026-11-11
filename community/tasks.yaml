@@ -119,8 +119,8 @@ tasks:
     related_issue: null
     title: "Codex Self-Evolution Comparison"
     title_zh: "Codex 的自进化效果对比"
-    description: "Using DeepSeek v4.1 as the base model, evaluate Codex before and after Recursive Self-Improvement (RSI) across the six GDPEVO Essential scenarios, submitting full execution traces to the GDPEVO Essential leaderboard (per RFC-0002)."
-    description_zh: "以 DeepSeek v4.1 为基座模型，在 GDPEVO Essential 六大评测场景上对比 Codex 在接入自进化（RSI）前后的任务解决率与 Token 成本变化，提交完整实验轨迹并补充至 GDPEVO Essential 榜单（遵循 RFC-0002 规范）。"
+    description: "Using DeepSeek-V4.1-Flash-1017 as the base model, evaluate Codex before and after Recursive Self-Improvement (RSI) across the six GDPEVO Essential scenarios, submitting full execution traces to the GDPEVO Essential leaderboard (per RFC-0002)."
+    description_zh: "以 DeepSeek-V4.1-Flash-1017 为基座模型，在 GDPEVO Essential 六大评测场景上对比 Codex 在接入自进化（RSI）前后的任务解决率与 Token 成本变化，提交完整实验轨迹并补充至 GDPEVO Essential 榜单（遵循 RFC-0002 规范）。"
     references:
       - "https://penguin.ooo/leaderboards/gdpevo-essential"
       - "https://github.com/openai/codex"

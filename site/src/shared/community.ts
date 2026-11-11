@@ -187,8 +187,8 @@ export const QUESTS: QuestItem[] = [
       zh: "Codex 的自进化效果对比",
     },
     description: {
-      en: "Using DeepSeek v4.1 as the base model, evaluate Codex before and after Recursive Self-Improvement (RSI) across the six GDPEVO Essential scenarios, submitting full execution traces to the GDPEVO Essential leaderboard (per RFC-0002).",
-      zh: "以 DeepSeek v4.1 为基座模型，在 GDPEVO Essential 六大评测场景上对比 Codex 在接入自进化（RSI）前后的任务解决率与 Token 成本变化，提交完整实验轨迹并补充至 GDPEVO Essential 榜单（遵循 RFC-0002 规范）。",
+      en: "Using DeepSeek-V4.1-Flash-1017 as the base model, evaluate Codex before and after Recursive Self-Improvement (RSI) across the six GDPEVO Essential scenarios, submitting full execution traces to the GDPEVO Essential leaderboard (per RFC-0002).",
+      zh: "以 DeepSeek-V4.1-Flash-1017 为基座模型，在 GDPEVO Essential 六大评测场景上对比 Codex 在接入自进化（RSI）前后的任务解决率与 Token 成本变化，提交完整实验轨迹并补充至 GDPEVO Essential 榜单（遵循 RFC-0002 规范）。",
     },
     references: [
       { url: "https://penguin.ooo/leaderboards/gdpevo-essential" },
