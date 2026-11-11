@@ -18,7 +18,7 @@ tasks:
   - id: "RSI-Q001"
     issue_number: 30
     published_at: "2026-11-10T10:00:00Z"
-    status: "open"
+    status: "in_progress"
     domain: "Benchmark"
     exp: 50
     target_repository: "https://github.com/Prism-Shadow/penguin-harness-benchmark"
@@ -30,7 +30,7 @@ tasks:
     references:
       - "https://github.com/SWE-bench/SWE-bench"
       - "https://arxiv.org/abs/2310.06770"
-    assignee: null
+    assignee: "ussumer"
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/30"
     linked_pr: null
 
@@ -187,7 +187,7 @@ tasks:
   - id: "RSI-Q005"
     issue_number: 34
     published_at: "2026-11-10T10:20:00Z"
-    status: "open"
+    status: "in_progress"
     domain: "RSI Algorithm"
     exp: 50
     target_repository: "https://github.com/Prism-Shadow/penguin-harness-plugins"
@@ -200,7 +200,7 @@ tasks:
       - "https://arxiv.org/abs/2609.15364"
       - "https://aetherlabsai.github.io/RSIAgent/"
       - "https://github.com/AetherLabsAI/RSIAgent"
-    assignee: null
+    assignee: "KeBbboy"
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/34"
     linked_pr: null
 
