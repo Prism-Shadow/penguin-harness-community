@@ -1,6 +1,10 @@
 ---
 import type { Locale } from "../shared/i18n";
-import { COMMITTEE_GROUPS, computeContributorRankings } from "../shared/community";
+import {
+  COMMITTEE_GROUPS,
+  OPEN_SOURCE_CONTRIBUTORS,
+  computeContributorRankings,
+} from "../shared/community";
 
 interface Props {
   locale: Locale;
@@ -8,6 +12,15 @@ interface Props {
 
 const { locale } = Astro.props;
 const { monthly: monthlyRows, allTime: allTimeRows } = computeContributorRankings();
+
+// Build 3 staggered rows with rotated starting offsets so adjacent rows never align vertically
+const BASE_HANDLES = OPEN_SOURCE_CONTRIBUTORS.length > 0 ? OPEN_SOURCE_CONTRIBUTORS : ["hiyouga"];
+const REPEAT_PER_HALF = Math.max(2, Math.ceil(10 / BASE_HANDLES.length));
+const WALL_ROWS: string[][] = [0, 1, 2].map((rowIdx) => {
+  const offset = (rowIdx * 2) % BASE_HANDLES.length;
+  const rotated = [...BASE_HANDLES.slice(offset), ...BASE_HANDLES.slice(0, offset)];
+  return Array.from({ length: REPEAT_PER_HALF }, () => rotated).flat();
+});
 
 const COPY = {
   zh: {
@@ -19,7 +32,7 @@ const COPY = {
     committeeIntroSuffix: "申请加入。",
     leaderboardHeading: "贡献榜",
     leaderboardIntro:
-      "每月末按完成任务获得的经验值（EXP）发放 Token 额度与算力券。每 1 EXP 直接兑换 1 元额度，当月前五名额外奖励 800 / 400 / 200 / 100 / 50 元。",
+      "每月 5 日按上月完成任务获得的经验值（EXP）统一结算并发放 Token 额度与算力券。每 1 EXP 直接兑换 1 元额度，当月前五名额外奖励 800 / 400 / 200 / 100 / 50 元。",
     tabMonthly: "当月贡献榜",
     tabAllTime: "总贡献榜",
     colRank: "排名",
@@ -27,6 +40,8 @@ const COPY = {
     colExp: "经验值 (EXP)",
     colReward: "当月激励",
     empty: "暂无上榜记录",
+    ossWallHeading: "开源贡献名单",
+    ossWallIntro: "感谢所有为 PenguinHarness 社区生态提交代码、基准与评测的开源贡献者。",
   },
   en: {
     title: "People",
@@ -37,7 +52,7 @@ const COPY = {
     committeeIntroSuffix: ".",
     leaderboardHeading: "Contributor Leaderboard",
     leaderboardIntro:
-      "Settled monthly in Token credits and compute vouchers. Every 1 EXP converts 1:1 to ¥1 RMB, and the monthly Top 5 receive an extra ¥800 / ¥400 / ¥200 / ¥100 / ¥50 bonus.",
+      "Rewards for the previous month are settled and distributed on the 5th of each month in Token credits and compute vouchers. Every 1 EXP converts 1:1 to ¥1 RMB, and the monthly Top 5 receive an extra ¥800 / ¥400 / ¥200 / ¥100 / ¥50 bonus.",
     tabMonthly: "Monthly Leaderboard",
     tabAllTime: "All-Time Leaderboard",
     colRank: "Rank",
@@ -45,6 +60,9 @@ const COPY = {
     colExp: "EXP",
     colReward: "Monthly Reward",
     empty: "No entries yet",
+    ossWallHeading: "Open-Source Contributors",
+    ossWallIntro:
+      "Thanks to everyone who has contributed code, benchmarks, and evaluations across the PenguinHarness ecosystem.",
   },
 }[locale];
 ---
@@ -245,6 +263,59 @@ const COPY = {
       </table>
     </div>
   </section>
+
+  <!-- Part 3: Open-Source Contributors Name Wall -->
+  <section class="mt-16 border-t border-gray-200 pt-8 dark:border-gray-800">
+    <h2 class="text-2xl font-medium text-gray-950 dark:text-white">
+      {COPY.ossWallHeading}
+    </h2>
+    <p class="mt-2 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+      {COPY.ossWallIntro}
+    </p>
+
+    <div class="oss-wall-stage relative mt-6 overflow-hidden rounded-2xl border border-gray-200/90 bg-gradient-to-b from-gray-50/80 via-white to-gray-50/80 py-8 shadow-2xs dark:border-gray-800/90 dark:from-gray-900/50 dark:via-gray-950 dark:to-gray-900/50">
+      <div class="oss-wall relative z-10 space-y-4 overflow-hidden py-1">
+        {
+          WALL_ROWS.map((rowHandles, rowIdx) => (
+            <div class="oss-wall-row overflow-hidden py-0.5">
+              <div
+                class={`oss-wall-track ${
+                  rowIdx % 2 === 1 ? "oss-wall-track-reverse" : ""
+                }`}
+                style={`--wall-duration: ${58 + rowIdx * 6}s;`}
+              >
+                {[0, 1].map((dup) => (
+                  <div
+                    class="oss-wall-group flex shrink-0 items-center gap-3.5 pr-3.5"
+                    aria-hidden={dup === 1 ? "true" : undefined}
+                  >
+                    {rowHandles.map((handle) => (
+                      <a
+                        href={`https://github.com/${handle}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        tabindex={dup === 1 ? -1 : undefined}
+                        class="group mono inline-flex items-center gap-2.5 rounded-xl border border-gray-200/90 bg-white/95 px-4 py-2.5 text-sm font-medium text-gray-800 shadow-2xs backdrop-blur-xs transition-all duration-200 hover:-translate-y-0.5 hover:border-brand-500 hover:bg-white hover:text-brand-600 hover:shadow-md dark:border-gray-800 dark:bg-gray-900/90 dark:text-gray-200 dark:hover:border-brand-400 dark:hover:bg-gray-900 dark:hover:text-brand-300"
+                      >
+                        <svg
+                          viewBox="0 0 16 16"
+                          aria-hidden="true"
+                          class="h-4 w-4 shrink-0 fill-gray-400 transition-colors group-hover:fill-brand-500 dark:fill-gray-500 dark:group-hover:fill-brand-400"
+                        >
+                          <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z" />
+                        </svg>
+                        <span>@{handle}</span>
+                      </a>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
 </div>
 
 <style>
@@ -265,6 +336,75 @@ const COPY = {
   :global(.dark) .rank-tab.is-active {
     border-color: #f9fafb;
     color: #f9fafb;
+  }
+
+  .oss-wall-stage {
+    background-image: radial-gradient(rgba(107, 114, 128, 0.14) 1px, transparent 1px);
+    background-size: 18px 18px;
+  }
+
+  :global(.dark) .oss-wall-stage {
+    background-image: radial-gradient(rgba(156, 163, 175, 0.12) 1px, transparent 1px);
+  }
+
+  .oss-wall {
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      #000 10%,
+      #000 90%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      #000 10%,
+      #000 90%,
+      transparent 100%
+    );
+  }
+
+  .oss-wall-track {
+    display: flex;
+    width: max-content;
+    animation: oss-wall-scroll-left var(--wall-duration, 30s) linear infinite;
+  }
+
+  .oss-wall-track-reverse {
+    animation-name: oss-wall-scroll-right;
+  }
+
+  .oss-wall-row:hover .oss-wall-track {
+    animation-play-state: paused;
+  }
+
+  @keyframes oss-wall-scroll-left {
+    0% {
+      transform: translate3d(0, 0, 0);
+    }
+    100% {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+
+  @keyframes oss-wall-scroll-right {
+    0% {
+      transform: translate3d(-50%, 0, 0);
+    }
+    100% {
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .oss-wall-track {
+      animation: none;
+      flex-wrap: wrap;
+      width: 100%;
+    }
+    .oss-wall-group[aria-hidden="true"] {
+      display: none;
+    }
   }
 </style>
 

@@ -1,3 +1,4 @@
+import peopleYamlRaw from "../../../community/people.yaml?raw";
 import type { Locale } from "./i18n";
 
 type Text = Record<Locale, string>;
@@ -201,7 +202,7 @@ export const QUESTS: QuestItem[] = [
     publishedAt: "2026-11-10T10:15:00Z",
     status: "open",
     domain: "evaluation",
-    exp: 50,
+    exp: 100,
     targetRepository: "https://github.com/Prism-Shadow/penguin-harness-benchmark",
     title: {
       en: "GPT-6 Evolution Capability Experiment",
@@ -586,6 +587,24 @@ export function computeContributorRankings(): {
 
   return { monthly, allTime };
 }
+
+function parseOpenSourceContributorsFromYaml(raw: string): string[] {
+  const sectionMatch = raw.match(/(?:^|\n)open_source_contributors:\s*\n((?:\s*-\s*[^\n]+\n?)*)/);
+  if (!sectionMatch) return [];
+  return Array.from(sectionMatch[1].matchAll(/^\s*-\s*["']?([^"'\s#]+)["']?/gm), (m) => m[1]);
+}
+
+/**
+ * Open-source contributors synced directly from `community/people.yaml`
+ * (falling back to unique assignees on the Task Board).
+ */
+export const OPEN_SOURCE_CONTRIBUTORS: string[] = (() => {
+  const fromYaml = parseOpenSourceContributorsFromYaml(peopleYamlRaw);
+  if (fromYaml.length > 0) return fromYaml;
+  return Array.from(
+    new Set(QUESTS.map((q) => q.assignee).filter((a): a is string => Boolean(a))),
+  );
+})();
 
 /**
  * Opens the standardized `.github/ISSUE_TEMPLATE/task.yml` form (committee members only).

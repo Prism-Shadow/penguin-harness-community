@@ -8,6 +8,7 @@
 version: 1
 committee_monthly_stipend_rmb: 1000
 contributor_monthly_pool_rmb: 10000
+reward_payout_day_of_month: 5
 
 committee_groups:
   - id: "leadership"
@@ -92,3 +93,9 @@ contributors:
     monthly_exp: 50
     total_exp: 50
     reached_at: "2026-11-04T08:17:44Z"
+
+open_source_contributors:
+  - "Saigyouji-Yuyuko1000"
+  - "hiyouga"
+  - "rank-Yu"
+  - "Hoyant-Su"

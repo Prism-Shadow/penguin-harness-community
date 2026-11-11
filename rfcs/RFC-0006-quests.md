@@ -131,7 +131,7 @@ Every task issue must satisfy the stage-specific requirements for `### Status`, 
 
 1. **Transitioning to `in_progress` (`/claim`)**:
    - Contributors claim an open task by replying `/claim` under its official GitHub Issue (or `/claim @<handle> <pr-url>` if a PR is already open).
-   - **Concurrent Claim Limit**: Each GitHub user may hold at most **2** `in_progress` tasks at the same time; additional `/claim` requests beyond 2 are ignored. Claims with no progress for 14 consecutive days (or released via `/unclaim`) automatically return to `open`.
+   - **Concurrent Claim Limit & Completion Grace Period**: Each GitHub user may hold at most **2** `in_progress` tasks at the same time; additional `/claim` requests beyond 2 are ignored. Tasks have a **1-month (30-day) completion grace period** — claims not completed within 1 month (or released via `/unclaim`) automatically return to `open`.
    - Once verified, `rsi_community_steward` updates the Issue body's `### Status` to `in_progress` and `### Assignee` to `@<handle>` (plus `### Pull Request` if provided).
 2. **Transitioning to `completed` (`/complete`)**:
    - Once the Pull Request in `### Target Repository` is reviewed and merged by the Committee's Review Group, a standardized completion comment is recorded on the task Issue:
