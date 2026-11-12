@@ -494,8 +494,9 @@ tasks:
     published_at: "2026-11-12T09:23:57Z"
     status: "open"
     domain: "Awesome RSI"
-    exp: 50
+    exp: 10
     target_repository: "https://github.com/Prism-Shadow/awesome-rsi"
+    recurring: true
     related_issue: null
     title: "Submit New RSI Papers to Awesome RSI"
     title_zh: "向 Awesome RSI 按规范分类与格式提交新 RSI 论文"
