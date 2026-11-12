@@ -18,9 +18,9 @@
 
 <figure class="flowchart"><svg class="flowchart-svg" viewBox="0 0 560 132" role="img" aria-labelledby="concepts-rsi-zh-title"><title id="concepts-rsi-zh-title">自进化（RSI）四步闭环</title><defs><marker id="concepts-rsi-zh-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" class="fc-arrowhead"/></marker></defs><rect x="16" y="16" width="116" height="62" rx="6" class="fc-process"/><text x="74" y="42" class="fc-title" text-anchor="middle">1. 前向执行</text><text x="74" y="62" class="fc-text" text-anchor="middle">生成轨迹 Traces</text><path d="M132 47H152" class="fc-edge" marker-end="url(#concepts-rsi-zh-arrow)"/><rect x="154" y="16" width="116" height="62" rx="6" class="fc-process"/><text x="212" y="42" class="fc-title" text-anchor="middle">2. 评估归因</text><text x="212" y="62" class="fc-text" text-anchor="middle">打分与缺陷诊断</text><path d="M270 47H290" class="fc-edge" marker-end="url(#concepts-rsi-zh-arrow)"/><rect x="292" y="16" width="116" height="62" rx="6" class="fc-process"/><text x="350" y="42" class="fc-title" text-anchor="middle">3. 更新系统</text><text x="350" y="62" class="fc-text" text-anchor="middle">Harness / 权重</text><path d="M408 47H428" class="fc-edge" marker-end="url(#concepts-rsi-zh-arrow)"/><rect x="430" y="16" width="114" height="62" rx="6" class="fc-process"/><text x="487" y="42" class="fc-title" text-anchor="middle">4. 验证保留</text><text x="487" y="62" class="fc-text" text-anchor="middle">保留更优分支</text><path d="M487 78V108H74V80" class="fc-edge" marker-end="url(#concepts-rsi-zh-arrow)"/><text x="280" y="101" class="fc-label" text-anchor="middle">下一代自进化迭代（Next Generation）</text></svg><ol class="flowchart-steps"><li>前向执行：生成轨迹 Traces。</li><li>评估归因：打分与缺陷诊断。</li><li>更新系统：更新 Harness 或模型权重。</li><li>验证保留：保留更优分支并进入下一代迭代。</li></ol></figure>
 
-## 什么是 Harness
+## 什么是 Harness（Agent 框架）
 
-如果把底层大模型比作“大脑”，**Harness（智能体底座/运行框架）** 就是包裹在模型外围、将其转化为可靠智能体的**运行时架构与控制层**（如 [PenguinHarness](https://penguin.ooo/)），主要包括：
+如果把底层大模型比作“大脑”，**Harness（Agent 框架）** 就是包裹在模型外围、将其转化为可靠 Agent 的**运行时架构与控制层**（如 [PenguinHarness](https://penguin.ooo/)），主要包括：
 - **系统提示词（Prompts）**：如 `AGENTS.md`，定义行为规范与工作流。
 - **技能库（Skills）**：如 `SKILL.md` 与脚本，封装可按需加载的领域知识与操作流程。
 - **工具与沙箱（Tools & Sandbox）**：文件、终端、浏览器与 MCP 等执行接口。

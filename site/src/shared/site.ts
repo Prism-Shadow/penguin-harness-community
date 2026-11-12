@@ -86,6 +86,13 @@ export const ROADMAP_SECTIONS: DocSection[] = [
         title: { en: "Basic Concepts", zh: "基本概念" },
         source: { en: "roadmap/concepts.md", zh: "roadmap/concepts.zh.md" },
       },
+      {
+        area: "roadmap",
+        slug: "events",
+        number: "02",
+        title: { en: "Events & Meetings", zh: "社区活动" },
+        source: { en: "roadmap/events.md", zh: "roadmap/events.zh.md" },
+      },
     ],
   },
 ];

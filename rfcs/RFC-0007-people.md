@@ -11,23 +11,23 @@ To sustain high-quality open collaboration and reward contributors, Shared RSI C
 
 ## 1. RSI Community Committee
 
-To build an internationally recognized open-source community like Hugging Face — natively designed for Agents and Recursive Self-Improvement (RSI) — we established the **RSI Community Committee** to co-lead two primary responsibilities:
-1. **Publishing & Reviewing Research Topics to Uphold Quality**: Curating official research tasks on the live [RFC-0006 Task Board (`/quests/`)](https://club.penguin.ooo/quests/) (only tasks published by committee members are recognized by the community) and reviewing submitted code and experimental reproducibility to align progress.
-2. **Shaping Community Mechanisms & Connecting External Resources**: Exploring open governance and contributor incentives, connecting external compute/token resources and institutional partners, and welcoming passionate researchers worldwide.
+To build an internationally recognized Agent-native and RSI-native open community like Hugging Face, we established the **RSI Community Committee** (current members are listed on the `/people/` page) with two primary responsibilities:
+1. **Publishing and reviewing research topics to ensure quality**: Publishing official research tasks on the [RFC-0006 Task Board (`/quests/`)](/quests/) (only tasks published by committee members are recognized) and reviewing submitted PRs and experimental results.
+2. **Exploring community governance and connecting external resources**: Refining community mechanisms, connecting external resources, and inviting more collaborators.
 
-### 1.1 Committee Groups & Responsibilities
+### 1.1 Committee Groups & Workflow
 
-The committee is organized into three groups:
+The committee is organized into three groups (the live member list is maintained in `community/people.yaml` and displayed on `/people/`):
 
-| Group | Current Members | Domain Tracks | Core Responsibilities |
-| --- | --- | --- | --- |
-| **Project Leadership** | `Yaowei Zheng` ([@hiyouga](https://github.com/hiyouga)) | `Benchmark`, `Algorithm`, `Harness` | Overall roadmap, RFC standards, and core infrastructure |
-| **Proposal Group** | `Xiang Qu` ([@ArisaZz](https://github.com/ArisaZz)), `Zhihao Liu` ([@lzh368](https://github.com/lzh368)), `Yanke Yu` ([@rank-Yu](https://github.com/rank-Yu)), `Yuyang Li` ([@yu-yang-li](https://github.com/yu-yang-li)) | `Algorithm` (Xiang Qu), `Benchmark` (Zhihao Liu), `Harness` (Yanke Yu), `AI4S` (Yuyang Li) | Curate frontier papers and benchmark needs; publish official tasks via the [RFC-0006](RFC-0006-quests.md) template |
-| **Review Group** | `Leijun Zhou` ([@Saigyouji-Yuyuko1000](https://github.com/Saigyouji-Yuyuko1000)), `Zhihao Liu` ([@lzh368](https://github.com/lzh368)), `Yangxi Xiang` ([@Myriad-Dreamin](https://github.com/Myriad-Dreamin)), `Yuyang Li` ([@yu-yang-li](https://github.com/yu-yang-li)) | `Algorithm` (Leijun Zhou), `Benchmark` (Zhihao Liu), `Harness` (Yangxi Xiang), `AI4S` (Yuyang Li) | Review Benchmark, Evaluation, Algorithm Plugin, and Harness PRs for reproducibility and merge completion |
+| Group | Domain Tracks | Responsibilities & Workflow |
+| --- | --- | --- |
+| **Project Leadership** | `Benchmark`, `Algorithm`, `Harness` | Overall roadmap, RFC standards, and core infrastructure |
+| **Proposal Group** | `Benchmark`, `Algorithm`, `Harness`, `AI4S`, etc. | Survey frontier papers and benchmark needs; publish official tasks via the [RFC-0006](RFC-0006-quests.md) template |
+| **Review Group** | `Benchmark`, `Algorithm`, `Harness`, `AI4S`, etc. | Review Benchmark, Evaluation, Algorithm Plugin, and Agent framework PRs for reproducibility and merge completion |
 
-- **Expanding Domain Tracks**: Beyond `Benchmark`, `Algorithm`, and `Harness`, the committee continues to expand into vertical domains such as `Medicine` and `Telecom`.
-- **Fixed Committee Incentive**: Each committee member receives a fixed **¥1,000 RMB / month** incentive (issued in equivalent LLM Token credits and compute vouchers, distributed on the **5th of each month** for the previous calendar month).
-- **How to Apply**: Researchers and engineers interested in joining the RSI Community Committee may apply via the **community WeChat group**.
+- **Expanding Domain Tracks**: Beyond `Benchmark`, `Algorithm`, `Harness`, and `AI4S`, the committee continues to expand into vertical domains such as `Medicine` and `Telecom`.
+- **Fixed Committee Incentive**: Each committee member receives a fixed **¥1,000 RMB / month** incentive (issued in equivalent LLM Token credits and compute vouchers on the **5th of each month** for the previous calendar month).
+- **How to Apply**: Apply via the **community WeChat group**.
 
 ## 2. Contributor Leaderboard
 

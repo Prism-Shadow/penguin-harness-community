@@ -1,9 +1,10 @@
 # Shared RSI Community
 
-An open-source, co-built community and platform for **Recursive Self-Improvement (RSI)** — building the infrastructure, toolchains, and an **Agent-native & RSI-native** open community to touch the boundary of RSI and drive cross-domain AI applications.
+An open-source Agent Self-Evolution (RSI) community — RSI Benchmark × Evaluation × Algorithm.
 
 - **Website**: https://club.penguin.ooo/ (中文: https://club.penguin.ooo/zh/)
 - **Roadmap**: https://club.penguin.ooo/zh/roadmap/
+- **Events & Meetings**: https://club.penguin.ooo/zh/roadmap/events/
 - **Task Board (Quests)**: https://club.penguin.ooo/zh/quests/
 - **Committee & Leaderboard**: https://club.penguin.ooo/zh/people/
 

@@ -2,38 +2,35 @@
 
 [中文版](README.zh.md)
 
-Welcome to the open-source, co-built **Shared RSI Community**.
+Welcome to the open-source **Shared RSI Community**.
 
-In the Agent era, research velocity is accelerating every day with new breakthroughs emerging constantly — we believe both **AutoResearch** and **Recursive Self-Improvement (RSI)** will become reality. Yet the field still lacks a unified framework and open platform that lets researchers truly *touch the boundary of RSI*. We built this RSI community and platform so students, researchers, and engineers can apply RSI methods to frontier exploration and bring cross-domain AI applications into the real world.
+In the Agent era, research velocity is accelerating every day with new breakthroughs emerging constantly — we believe both **AutoResearch** and **Self-Evolution (RSI)** will become reality. Yet there is still no unified framework and platform that lets us truly touch the boundary of RSI. We built this RSI community and platform so everyone can explore with RSI methods and build cross-domain AI applications.
 
-Previously, we built [GDPevo](https://arxiv.org/pdf/2608.03764), an enterprise-grade evaluation benchmark for self-evolving agents, and authored a comprehensive [survey on RSI research](https://arxiv.org/abs/2610.14625). Building on this foundation, our community is shaped around **two core pillars**:
+Previously, we built [GDPevo](https://arxiv.org/pdf/2608.03764), an enterprise-grade evaluation benchmark for self-evolving agents, and wrote a [survey on RSI](https://arxiv.org/abs/2610.14625). Our community is built around two core ideas:
 
-1. **Infrastructure & Toolchain for Cross-Institutional RSI Research**: Building standardized benchmarks, evaluation sandboxes, and self-evolving harness toolchains so contributors can conduct hands-on research close to the frontier of RSI while encouraging open collaboration across universities, labs, and institutions.
-2. **An Agent-Native & RSI-Native Open Community**: We aim to build an open-source community like Hugging Face — but natively designed for Agents and RSI. To achieve this, we established the **[RSI Community Committee](https://club.penguin.ooo/people/)**, bringing passionate minds together to shape strategy and build an internationally recognized open-source community.
+1. **Solid infrastructure and toolchains**: Enabling students and researchers to work on problems right at the core of RSI, and encouraging collaboration across institutions.
+2. **An Agent-native and RSI-native open community like Hugging Face**: We established the **[Community Committee](/people/)** to work together toward an internationally recognized open-source community, focusing on two key tasks:
+   - Publishing and reviewing research topics to ensure overall quality, aligned through our **[Task Board](/quests/)**.
+   - Exploring RSI community governance, connecting external resources, and inviting more collaborators.
 
-Today, the **RSI Community Committee** focuses on two primary responsibilities:
-- **Publishing & Reviewing Research Topics**: Curating frontier research topics and reviewing submissions for reproducibility to guarantee community-wide quality. We have built a live **[Task Board (Quests)](https://club.penguin.ooo/quests/)** to transparently align progress across all contribution tracks.
-- **Shaping Community Mechanisms & Connecting Global Collaborators**: Continuously refining open community governance and monthly contributor incentives, connecting external compute/token resources, and inviting more peers to make the community ever more vibrant.
-
-> Although our community is still in its early days, our conviction in exploring RSI is unwavering — we look forward to building something extraordinary together with you.
+Although the community is still early, we are deeply committed to exploring RSI and look forward to building something great together.
 
 ## Core Tracks
 
-Currently, we are iterating along the following core tracks:
-- **Data**: Curating agent Benchmark datasets and Evaluation results to build **the largest RSI Leaderboard**.
-- **Survey**: Surveying **the latest RSI papers** and reorganizing their taxonomy to further improve the [Awesome RSI](https://github.com/Prism-Shadow/awesome-rsi) repository.
-- **Framework**: Optimizing the [PenguinHarness](https://penguin.ooo/) unified RSI framework to build **the most comprehensive self-evolving harness**.
+- **Data**: Curating Agent Benchmark datasets and Evaluation results to build **the largest RSI Leaderboard**.
+- **Survey**: Surveying **the latest RSI papers** and reorganizing their taxonomy in [Awesome RSI](https://github.com/Prism-Shadow/awesome-rsi).
+- **Framework**: Optimizing [PenguinHarness](https://penguin.ooo/), our open-source **self-evolving Agent framework**.
 
 ## Evolution Roadmap
 
-> If you are new to core concepts such as Agents, Self-Evolution (RSI), Harnesses, the distinction between Harness-Level and Model-Level Evolution, and Benchmarks, check out **[Basic Concepts](concepts.md)** first.
+> New to Agents, Self-Evolution (RSI), Harnesses (Agent Frameworks), or Benchmarks? See **[Basic Concepts](concepts.md)**.
 
-In **Stage 1**, we focus on **Data**, **Survey**, and **Harness-Level Evolution**. Because harness-level evolution does not require updating underlying model weights, it demands significantly less GPU compute and lower experimental cost, while producing human-interpretable prompts, skills, and tools that transfer across models—making RSI far more accessible and inclusive for the broader research and developer community.
+In **Stage 1**, we focus on **Data**, **Survey**, and **Harness-Level Evolution**. Because harness-level evolution does not update model weights, it requires minimal GPU compute and cost, and the evolved prompts, skills, and tools transfer across models — making RSI accessible to everyone.
 
-In **Stage 2**, building upon the benchmarks, algorithm plugins, and high-quality evolution traces accumulated by the community, we will expand into **Model-Level Evolution**:
-- **Trajectory Synthesis & Distillation**: Leveraging high-scoring execution traces and evolved skill assets produced by self-evolving harnesses across diverse benchmarks in Stage 1 to synthesize and curate training data, internalizing explicit external experience into model weights.
-- **Self-Evolving SFT & Agentic RL**: Driven by verifiable reward signals from standardized community sandboxes and automated evaluators, conducting supervised fine-tuning (SFT) and agentic reinforcement learning (Agentic RL) on long-horizon tasks to directly strengthen the base model's planning, tool use, and self-correction capabilities.
-- **Harness × Model Co-Evolution**: Closing the bi-level loop between outer-loop harness search and inner-loop parameter updates—where stronger harnesses synthesize higher-ceiling trajectories for model training, and stronger models in turn empower harnesses to tackle more complex task boundaries.
+In **Stage 2**, as benchmarks, algorithms, and evolution traces accumulate, we will expand into **Model-Level Evolution**:
+- **Trajectory Synthesis**: Using self-evolving Agent frameworks to generate high-scoring traces on benchmarks and distill them into model weights.
+- **Model Training**: Running SFT and Agentic RL with reward signals from standardized evaluation sandboxes.
+- **Co-Evolution**: Combining outer-loop Agent framework evolution with inner-loop model training.
 
 <figure class="flowchart"><svg class="flowchart-svg" viewBox="0 0 560 274" role="img" aria-labelledby="roadmap-en-title"><title id="roadmap-en-title">Shared RSI Community Evolution Roadmap</title><defs><marker id="roadmap-en-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" class="fc-arrowhead"/></marker></defs><rect x="16" y="10" width="528" height="112" rx="10" class="fc-stage-primary"/><text x="32" y="31" class="fc-stage-title">Stage 1</text><rect x="32" y="42" width="152" height="64" rx="6" class="fc-process"/><text x="108" y="69" class="fc-title" text-anchor="middle">Data</text><text x="108" y="91" class="fc-text" text-anchor="middle">RSI Leaderboard</text><rect x="204" y="42" width="152" height="64" rx="6" class="fc-process"/><text x="280" y="69" class="fc-title" text-anchor="middle">Survey</text><text x="280" y="91" class="fc-text" text-anchor="middle">Awesome RSI</text><rect x="376" y="42" width="152" height="64" rx="6" class="fc-process"/><text x="452" y="69" class="fc-title" text-anchor="middle">Harness Evolution</text><text x="452" y="91" class="fc-text" text-anchor="middle">PenguinHarness</text><path d="M280 122V150" class="fc-edge" marker-end="url(#roadmap-en-arrow)"/><rect x="16" y="152" width="528" height="112" rx="10" class="fc-stage-secondary"/><text x="32" y="173" class="fc-stage-badge">Stage 2 · Model-Level Evolution</text><rect x="32" y="184" width="152" height="64" rx="6" class="fc-process"/><text x="108" y="211" class="fc-title" text-anchor="middle">Trajectory Synthesis</text><text x="108" y="233" class="fc-text" text-anchor="middle">Experience Distillation</text><rect x="204" y="184" width="152" height="64" rx="6" class="fc-process"/><text x="280" y="211" class="fc-title" text-anchor="middle">Model Training</text><text x="280" y="233" class="fc-text" text-anchor="middle">SFT &amp; Agentic RL</text><rect x="376" y="184" width="152" height="64" rx="6" class="fc-process"/><text x="452" y="211" class="fc-title" text-anchor="middle">Co-Evolution</text><text x="452" y="233" class="fc-text" text-anchor="middle">Harness × Model</text></svg><ol class="flowchart-steps"><li>Stage 1: Data (RSI Leaderboard), Survey (Awesome RSI), Harness Evolution (PenguinHarness).</li><li>Stage 2 (Model-Level Evolution): Trajectory Synthesis (Experience Distillation), Model Training (SFT &amp; Agentic RL), Co-Evolution (Harness × Model).</li></ol></figure>
 
@@ -46,7 +43,7 @@ For detailed workflows, please refer to the **[Workflow](../workflow/README.md)*
 - How to contribute to PenguinHarness: [../workflow/harness.md](../workflow/harness.md)
 - How to submit papers to Awesome RSI: [../workflow/survey.md](../workflow/survey.md)
 
-We hold **[Bi-weekly Sync](../rfcs/RFC-0004-meeting.md)** community meetings for discussion, with meeting links posted in our community group the day before.
+We hold **[Bi-weekly Sync](../rfcs/RFC-0004-meeting.md)** community meetings for discussion, with meeting links posted in our community group the day before. Past meeting recordings and offline events are listed in **[Events & Meetings](events.md)**.
 
 We warmly welcome everyone to join our open-source community, and we commit to the following for contributors:
 - Active monthly contributors will receive **token resource packages** for frontier models such as Gemini.
