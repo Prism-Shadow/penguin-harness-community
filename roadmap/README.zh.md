@@ -8,8 +8,8 @@
 
 此前，我们构建了自进化 Agent 的企业级评估基准 [GDPevo](https://arxiv.org/pdf/2608.03764)，并撰写了 [RSI 综述](https://arxiv.org/abs/2610.14625)。目前我们的社区围绕两个构想展开：
 
-1. **做好基建和工具链**：让参与的同学能做非常靠近 RSI 核心的研究，鼓励不同机构之间合作探索。
-2. **做出像 Hugging Face 那样、但更加 Agent-native 和 RSI-native 的开源社区**：为此我们建立了 **[社区委员会](/zh/people/)**，大家一起出谋划策，做出一个国际知名的开源社区。目前社区委员会有两件重要事务：
+1. **做好基建和工具链**：围绕 [PenguinHarness](https://penguin.ooo/) 自进化框架，让参与的同学能做非常靠近 RSI 核心的研究，鼓励不同机构之间合作探索。
+2. **打造 Agent-native 与 RSI-native 开源社区**：我们希望做出像 Hugging Face 一样的国际知名开源社区，为此建立了 **[社区委员会](/zh/people/)**，主要负责两件事：
    - 发布和审核研究课题，保证社区的整体质量，通过**[任务板](/zh/quests/)**对齐进度。
    - 探讨 RSI 社区运作机制，链接外部资源，邀请更多同仁，把社区做得越来越热闹。
 
@@ -43,7 +43,7 @@
 - 如何参与 PenguinHarness 项目: [../workflow/harness.zh.md](../workflow/harness.zh.md)
 - 如何提交论文到 Awesome RSI: [../workflow/survey.zh.md](../workflow/survey.zh.md)
 
-我们会通过**[双周会](../rfcs/RFC-0004-meeting.zh.md)**的形式来进行社区讨论，会议链接会在前一天发布在交流群，往期双周会录播与线下活动见**[社区活动](events.zh.md)**。
+我们会通过**[双周会](meetings.zh.md)**（规范见 [RFC-0004](../rfcs/RFC-0004-meeting.zh.md)）进行社区讨论，会议链接会在前一天发布在交流群，线下活动见**[社区活动](events.zh.md)**。
 
 欢迎大家来参与到我们的开源社区建设中，我们也承诺：
 - 每月活跃的贡献者将获得 Gemini 等一线模型的 **Token 资源包**。

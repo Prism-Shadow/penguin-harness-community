@@ -37,4 +37,4 @@
 
 ## 会后归档
 
-每次双周会结束后，Maintainer 会整理简要的**会议纪要（Meeting Notes）**、录播视频与资料，归档在**[社区活动](../roadmap/events.zh.md)**页面并同步至社区交流群。
+每次双周会结束后，Maintainer 会整理简要的**会议纪要（Meeting Notes）**、录播视频与资料，归档在**[双周会](../roadmap/meetings.zh.md)**页面并同步至社区交流群。

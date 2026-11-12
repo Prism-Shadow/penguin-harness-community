@@ -4,7 +4,8 @@ An open-source Agent Self-Evolution (RSI) community — RSI Benchmark × Evaluat
 
 - **Website**: https://club.penguin.ooo/ (中文: https://club.penguin.ooo/zh/)
 - **Roadmap**: https://club.penguin.ooo/zh/roadmap/
-- **Events & Meetings**: https://club.penguin.ooo/zh/roadmap/events/
+- **Bi-weekly Meetings**: https://club.penguin.ooo/zh/roadmap/meetings/
+- **Community Events**: https://club.penguin.ooo/zh/roadmap/events/
 - **Task Board (Quests)**: https://club.penguin.ooo/zh/quests/
 - **Committee & Leaderboard**: https://club.penguin.ooo/zh/people/
 

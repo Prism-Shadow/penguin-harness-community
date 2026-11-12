@@ -8,8 +8,8 @@ In the Agent era, research velocity is accelerating every day with new breakthro
 
 Previously, we built [GDPevo](https://arxiv.org/pdf/2608.03764), an enterprise-grade evaluation benchmark for self-evolving agents, and wrote a [survey on RSI](https://arxiv.org/abs/2610.14625). Our community is built around two core ideas:
 
-1. **Solid infrastructure and toolchains**: Enabling students and researchers to work on problems right at the core of RSI, and encouraging collaboration across institutions.
-2. **An Agent-native and RSI-native open community like Hugging Face**: We established the **[Community Committee](/people/)** to work together toward an internationally recognized open-source community, focusing on two key tasks:
+1. **Solid infrastructure and toolchains**: Centered around the [PenguinHarness](https://penguin.ooo/) self-evolution framework, enabling students and researchers to work on problems right at the core of RSI and encouraging cross-institutional collaboration.
+2. **An Agent-native & RSI-native open community**: Building an internationally recognized open-source community like Hugging Face. We established the **[Community Committee](/people/)** to focus on two key tasks:
    - Publishing and reviewing research topics to ensure overall quality, aligned through our **[Task Board](/quests/)**.
    - Exploring RSI community governance, connecting external resources, and inviting more collaborators.
 
@@ -43,7 +43,7 @@ For detailed workflows, please refer to the **[Workflow](../workflow/README.md)*
 - How to contribute to PenguinHarness: [../workflow/harness.md](../workflow/harness.md)
 - How to submit papers to Awesome RSI: [../workflow/survey.md](../workflow/survey.md)
 
-We hold **[Bi-weekly Sync](../rfcs/RFC-0004-meeting.md)** community meetings for discussion, with meeting links posted in our community group the day before. Past meeting recordings and offline events are listed in **[Events & Meetings](events.md)**.
+We hold **[Bi-weekly Meetings](meetings.md)** (see [RFC-0004](../rfcs/RFC-0004-meeting.md)) for community discussion, with meeting links posted in our community group the day before. Offline events are listed in **[Community Events](events.md)**.
 
 We warmly welcome everyone to join our open-source community, and we commit to the following for contributors:
 - Active monthly contributors will receive **token resource packages** for frontier models such as Gemini.

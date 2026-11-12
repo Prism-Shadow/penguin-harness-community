@@ -88,9 +88,16 @@ export const ROADMAP_SECTIONS: DocSection[] = [
       },
       {
         area: "roadmap",
-        slug: "events",
+        slug: "meetings",
         number: "02",
-        title: { en: "Events & Meetings", zh: "社区活动" },
+        title: { en: "Bi-weekly Meetings", zh: "双周会" },
+        source: { en: "roadmap/meetings.md", zh: "roadmap/meetings.zh.md" },
+      },
+      {
+        area: "roadmap",
+        slug: "events",
+        number: "03",
+        title: { en: "Community Events", zh: "社区活动" },
         source: { en: "roadmap/events.md", zh: "roadmap/events.zh.md" },
       },
     ],

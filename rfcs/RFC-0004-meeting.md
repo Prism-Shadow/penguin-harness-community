@@ -37,4 +37,4 @@ Open floor for all attendees to ask questions, share findings, and collaborate (
 
 ## Post-Meeting Notes
 
-After each meeting, maintainers archive concise **Meeting Notes** and video recordings on the **[Events & Meetings](../roadmap/events.md)** page and share them in the community channels.
+After each meeting, maintainers archive concise **Meeting Notes** and video recordings on the **[Bi-weekly Meetings](../roadmap/meetings.md)** page and share them in the community channels.
