@@ -426,7 +426,7 @@ tasks:
     title: "Integrate Meta-Harness Method"
     title_zh: "集成 Meta-Harness 方法"
     description: "Implement and integrate Meta-Harness (arXiv:2603.28052) for end-to-end optimization of model harnesses, using an agentic proposer that inspects prior candidate source code, scores, and execution traces via a filesystem to automatically discover superior context management and retrieval harnesses (per RFC-0003)."
-    description_zh: "复现并集成端到端模型外骨骼优化方法 Meta-Harness（arXiv:2603.28052），通过可访问全部历史候选代码、得分与执行轨迹的文件系统 Proposer 智能体，自动搜索并演化更优的上下文存储、检索与呈现 Harness 代码（遵循 RFC-0003 规范）。"
+    description_zh: "复现并集成端到端Agent 框架优化方法 Meta-Harness（arXiv:2603.28052），通过可访问全部历史候选代码、得分与执行轨迹的文件系统 Proposer Agent，自动搜索并演化更优的上下文存储、检索与呈现 Harness 代码（遵循 RFC-0003 规范）。"
     references:
       - "https://arxiv.org/abs/2603.28052"
       - "https://yoonholee.com/meta-harness/"
