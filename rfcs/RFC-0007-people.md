@@ -11,7 +11,9 @@ To sustain high-quality open collaboration and reward contributors, Shared RSI C
 
 ## 1. RSI Community Committee
 
-The RSI Community Committee oversees project direction, publishes official tasks on the [RFC-0006 Task Board](RFC-0006-quests.md) (only tasks published by committee members are recognized by the community), and reviews submitted code and experimental reproducibility.
+To build an internationally recognized open-source community like Hugging Face — natively designed for Agents and Recursive Self-Improvement (RSI) — we established the **RSI Community Committee** to co-lead two primary responsibilities:
+1. **Publishing & Reviewing Research Topics to Uphold Quality**: Curating official research tasks on the live [RFC-0006 Task Board (`/quests/`)](https://club.penguin.ooo/quests/) (only tasks published by committee members are recognized by the community) and reviewing submitted code and experimental reproducibility to align progress.
+2. **Shaping Community Mechanisms & Connecting External Resources**: Exploring open governance and contributor incentives, connecting external compute/token resources and institutional partners, and welcoming passionate researchers worldwide.
 
 ### 1.1 Committee Groups & Responsibilities
 

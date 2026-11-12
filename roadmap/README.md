@@ -2,9 +2,24 @@
 
 [中文版](README.zh.md)
 
-Welcome to the Shared RSI Community! We focus on open-source research and engineering for Recursive Self-Improvement (RSI). Previously, we built [GDPevo](https://arxiv.org/pdf/2608.03764), an enterprise-grade evaluation benchmark for self-evolving agents, and authored a comprehensive [survey on RSI research](https://arxiv.org/abs/2610.14625).
+Welcome to the open-source, co-built **Shared RSI Community**.
 
-Currently, we are iterating along the following tracks:
+In the Agent era, research velocity is accelerating every day with new breakthroughs emerging constantly — we believe both **AutoResearch** and **Recursive Self-Improvement (RSI)** will become reality. Yet the field still lacks a unified framework and open platform that lets researchers truly *touch the boundary of RSI*. We built this RSI community and platform so students, researchers, and engineers can apply RSI methods to frontier exploration and bring cross-domain AI applications into the real world.
+
+Previously, we built [GDPevo](https://arxiv.org/pdf/2608.03764), an enterprise-grade evaluation benchmark for self-evolving agents, and authored a comprehensive [survey on RSI research](https://arxiv.org/abs/2610.14625). Building on this foundation, our community is shaped around **two core pillars**:
+
+1. **Infrastructure & Toolchain for Cross-Institutional RSI Research**: Building standardized benchmarks, evaluation sandboxes, and self-evolving harness toolchains so contributors can conduct hands-on research close to the frontier of RSI while encouraging open collaboration across universities, labs, and institutions.
+2. **An Agent-Native & RSI-Native Open Community**: We aim to build an open-source community like Hugging Face — but natively designed for Agents and RSI. To achieve this, we established the **[RSI Community Committee](https://club.penguin.ooo/people/)**, bringing passionate minds together to shape strategy and build an internationally recognized open-source community.
+
+Today, the **RSI Community Committee** focuses on two primary responsibilities:
+- **Publishing & Reviewing Research Topics**: Curating frontier research topics and reviewing submissions for reproducibility to guarantee community-wide quality. We have built a live **[Task Board (Quests)](https://club.penguin.ooo/quests/)** to transparently align progress across all contribution tracks.
+- **Shaping Community Mechanisms & Connecting Global Collaborators**: Continuously refining open community governance and monthly contributor incentives, connecting external compute/token resources, and inviting more peers to make the community ever more vibrant.
+
+> Although our community is still in its early days, our conviction in exploring RSI is unwavering — we look forward to building something extraordinary together with you.
+
+## Core Tracks
+
+Currently, we are iterating along the following core tracks:
 - **Data**: Curating agent Benchmark datasets and Evaluation results to build **the largest RSI Leaderboard**.
 - **Survey**: Surveying **the latest RSI papers** and reorganizing their taxonomy to further improve the [Awesome RSI](https://github.com/Prism-Shadow/awesome-rsi) repository.
 - **Framework**: Optimizing the [PenguinHarness](https://penguin.ooo/) unified RSI framework to build **the most comprehensive self-evolving harness**.
