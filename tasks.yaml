@@ -37,7 +37,7 @@ tasks:
   - id: "RSI-Q002"
     issue_number: 31
     published_at: "2026-11-10T10:05:00Z"
-    status: "open"
+    status: "in_progress"
     domain: "Benchmark"
     exp: 50
     target_repository: "https://github.com/Prism-Shadow/penguin-harness-benchmark"
@@ -50,7 +50,7 @@ tasks:
       - "https://arxiv.org/abs/2610.22350"
       - "https://fde-gym.com"
       - "https://github.com/deeplethe/fde-gym"
-    assignee: null
+    assignee: "kx-wzh"
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/31"
     linked_pr: null
 

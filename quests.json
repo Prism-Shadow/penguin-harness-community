@@ -31,7 +31,7 @@
       "issue_number": 31,
       "pr_number": null,
       "published_at": "2026-11-10T10:05:00Z",
-      "status": "open",
+      "status": "in_progress",
       "domain": "Benchmark",
       "exp": 50,
       "target_repository": "https://github.com/Prism-Shadow/penguin-harness-benchmark",
@@ -45,7 +45,7 @@
         "https://fde-gym.com",
         "https://github.com/deeplethe/fde-gym"
       ],
-      "assignee": null,
+      "assignee": "kx-wzh",
       "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/31",
       "linked_pr": null
     },
@@ -503,6 +503,7 @@
   ],
   "open_source_contributors": [
     "ussumer",
+    "kx-wzh",
     "hiyouga",
     "rank-Yu",
     "Hoyant-Su",
