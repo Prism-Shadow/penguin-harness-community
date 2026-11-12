@@ -464,8 +464,8 @@ tasks:
     related_issue: null
     title: "Build a Context Compaction Information Retention Benchmark"
     title_zh: "构建 Harness 上下文压缩信息保留能力评测基准"
-    description: "Design and build a benchmark in penguin-harness-benchmark specifically evaluating how well an agent harness preserves critical facts, constraints, intermediate tool states, and user steering instructions after one or more context compaction rounds in long-horizon multi-turn tasks, with reproducible test cases and automated grading scripts (per RFC-0001)."
-    description_zh: "构建一套专门评测 Agent Harness 在长程多轮任务经历单次或多次上下文压缩（Context Compaction）后关键事实、约束条件、工具中间状态与用户纠偏指令保留能力的评测基准，提供可复现的长上下文测试任务与自动化评分脚本，并集成至 penguin-harness-benchmark（遵循 RFC-0001 规范）。"
+    description: "Design and build a benchmark in penguin-harness-benchmark specifically evaluating how well an agent harness preserves critical facts, constraints, intermediate tool states, and user steering instructions after context compaction in long-horizon multi-turn tasks, enabling systematic comparison of the effectiveness, retention fidelity, and token-compression trade-offs across different context compaction algorithms with reproducible test cases and automated grading scripts (per RFC-0001)."
+    description_zh: "构建一套专门评测 Agent Harness 在长程多轮任务经历上下文压缩（Context Compaction）后关键事实、约束条件、工具中间状态与用户纠偏指令保留能力的评测基准，支持横向测试与对比不同上下文压缩算法的信息保留效果、下游任务成功率与压缩率权衡，提供可复现测试集与自动化评分脚本并集成至 penguin-harness-benchmark（遵循 RFC-0001 规范）。"
     references: []
     assignee: null
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/62"
