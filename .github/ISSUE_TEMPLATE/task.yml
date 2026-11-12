@@ -19,6 +19,7 @@ body:
         - "Evaluation"
         - "RSI Algorithm"
         - "PenguinHarness"
+        - "Awesome RSI"
     validations:
       required: true
 
@@ -54,8 +55,21 @@ body:
         - "https://github.com/Prism-Shadow/penguin-harness-community"
         - "https://github.com/Prism-Shadow/penguin-harness-benchmark"
         - "https://github.com/Prism-Shadow/penguin-harness-plugins"
+        - "https://github.com/Prism-Shadow/awesome-rsi"
     validations:
       required: true
+
+  - type: dropdown
+    id: recurring
+    attributes:
+      label: "Recurring Task"
+      description: "Whether this is a standing task (`true` = automatically clones a new `open` task issue whenever claimed; `false` = one-time task)."
+      options:
+        - "false"
+        - "true"
+      default: 0
+    validations:
+      required: false
 
   - type: input
     id: assignee

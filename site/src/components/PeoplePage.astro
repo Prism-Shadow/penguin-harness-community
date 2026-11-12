@@ -15,9 +15,9 @@ const { monthly: monthlyRows, allTime: allTimeRows } = computeContributorRanking
 
 // Build 3 staggered rows with rotated starting offsets so adjacent rows never align vertically
 const BASE_HANDLES = OPEN_SOURCE_CONTRIBUTORS.length > 0 ? OPEN_SOURCE_CONTRIBUTORS : ["hiyouga"];
-const REPEAT_PER_HALF = Math.max(2, Math.ceil(10 / BASE_HANDLES.length));
+const REPEAT_PER_HALF = Math.max(1, Math.ceil(12 / BASE_HANDLES.length));
 const WALL_ROWS: string[][] = [0, 1, 2].map((rowIdx) => {
-  const offset = (rowIdx * 2) % BASE_HANDLES.length;
+  const offset = Math.floor((rowIdx * BASE_HANDLES.length) / 3) || (rowIdx * 2) % BASE_HANDLES.length;
   const rotated = [...BASE_HANDLES.slice(offset), ...BASE_HANDLES.slice(0, offset)];
   return Array.from({ length: REPEAT_PER_HALF }, () => rotated).flat();
 });
@@ -273,8 +273,8 @@ const COPY = {
       {COPY.ossWallIntro}
     </p>
 
-    <div class="oss-wall-stage relative mt-6 overflow-hidden rounded-2xl border border-gray-200/90 bg-gradient-to-b from-gray-50/80 via-white to-gray-50/80 py-8 shadow-2xs dark:border-gray-800/90 dark:from-gray-900/50 dark:via-gray-950 dark:to-gray-900/50">
-      <div class="oss-wall relative z-10 space-y-4 overflow-hidden py-1">
+    <div class="oss-wall-stage relative mt-5 overflow-hidden rounded-xl border border-gray-200/90 bg-gradient-to-b from-gray-50/80 via-white to-gray-50/80 py-5 shadow-2xs dark:border-gray-800/90 dark:from-gray-900/50 dark:via-gray-950 dark:to-gray-900/50">
+      <div class="oss-wall relative z-10 space-y-2.5 overflow-hidden py-0.5">
         {
           WALL_ROWS.map((rowHandles, rowIdx) => (
             <div class="oss-wall-row overflow-hidden py-0.5">
@@ -282,11 +282,11 @@ const COPY = {
                 class={`oss-wall-track ${
                   rowIdx % 2 === 1 ? "oss-wall-track-reverse" : ""
                 }`}
-                style={`--wall-duration: ${58 + rowIdx * 6}s;`}
+                style={`--wall-duration: ${Math.max(120, rowHandles.length * 6) + rowIdx * 14}s;`}
               >
                 {[0, 1].map((dup) => (
                   <div
-                    class="oss-wall-group flex shrink-0 items-center gap-3.5 pr-3.5"
+                    class="oss-wall-group flex shrink-0 items-center gap-2 pr-2"
                     aria-hidden={dup === 1 ? "true" : undefined}
                   >
                     {rowHandles.map((handle) => (
@@ -295,12 +295,12 @@ const COPY = {
                         target="_blank"
                         rel="noopener noreferrer"
                         tabindex={dup === 1 ? -1 : undefined}
-                        class="group mono inline-flex items-center gap-2.5 rounded-xl border border-gray-200/90 bg-white/95 px-4 py-2.5 text-sm font-medium text-gray-800 shadow-2xs backdrop-blur-xs transition-all duration-200 hover:-translate-y-0.5 hover:border-brand-500 hover:bg-white hover:text-brand-600 hover:shadow-md dark:border-gray-800 dark:bg-gray-900/90 dark:text-gray-200 dark:hover:border-brand-400 dark:hover:bg-gray-900 dark:hover:text-brand-300"
+                        class="group mono inline-flex items-center gap-1.5 rounded-lg border border-gray-200/90 bg-white/95 px-2.5 py-1 text-xs font-medium text-gray-800 shadow-2xs backdrop-blur-xs transition-all duration-200 hover:-translate-y-0.5 hover:border-brand-500 hover:bg-white hover:text-brand-600 hover:shadow-xs dark:border-gray-800 dark:bg-gray-900/90 dark:text-gray-200 dark:hover:border-brand-400 dark:hover:bg-gray-900 dark:hover:text-brand-300"
                       >
                         <svg
                           viewBox="0 0 16 16"
                           aria-hidden="true"
-                          class="h-4 w-4 shrink-0 fill-gray-400 transition-colors group-hover:fill-brand-500 dark:fill-gray-500 dark:group-hover:fill-brand-400"
+                          class="h-3.5 w-3.5 shrink-0 fill-gray-400 transition-colors group-hover:fill-brand-500 dark:fill-gray-500 dark:group-hover:fill-brand-400"
                         >
                           <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z" />
                         </svg>

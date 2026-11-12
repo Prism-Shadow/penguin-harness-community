@@ -19,13 +19,14 @@ To coordinate open collaboration across Recursive Self-Improvement (RSI) benchma
 
 ## 2. Domain Groups, Sorting & Pagination
 
-All recognized tasks are indexed in `community/tasks.yaml` of [penguin-harness-community](https://github.com/Prism-Shadow/penguin-harness-community) and rendered on `/quests/` across four domain sections, each containing three equal-width progress columns:
+All recognized tasks are indexed in `community/tasks.yaml` of [penguin-harness-community](https://github.com/Prism-Shadow/penguin-harness-community) and rendered on `/quests/` across five domain sections, each containing three equal-width progress columns:
 
-- **Four Domain Groups (`Domain`)**:
+- **Five Domain Groups (`Domain`)**:
   1. `Benchmark`: Standardized benchmark integrations (following [RFC-0001](RFC-0001-benchmark.md), e.g., Integrate SWE-bench [#30](https://github.com/Prism-Shadow/penguin-harness-community/issues/30), Integrate FDE-gym [#31](https://github.com/Prism-Shadow/penguin-harness-community/issues/31), and completed tasks [#39](https://github.com/Prism-Shadow/penguin-harness-community/issues/39)–[#41](https://github.com/Prism-Shadow/penguin-harness-community/issues/41)).
   2. `Evaluation`: Cross-harness and frontier base-model self-evolution evaluations (following [RFC-0002](RFC-0002-evaluation.md), e.g., Codex Self-Evolution Comparison [#32](https://github.com/Prism-Shadow/penguin-harness-community/issues/32), GPT-6 Evolution Capability Experiment [#33](https://github.com/Prism-Shadow/penguin-harness-community/issues/33), and completed tasks [#42](https://github.com/Prism-Shadow/penguin-harness-community/issues/42)–[#43](https://github.com/Prism-Shadow/penguin-harness-community/issues/43)).
   3. `RSI Algorithm`: Core RSI paper reproductions and plugin integrations (following [RFC-0003](RFC-0003-plugin.md), e.g., Integrate RSIAgent Method [#34](https://github.com/Prism-Shadow/penguin-harness-community/issues/34), Integrate RRSI Method [#35](https://github.com/Prism-Shadow/penguin-harness-community/issues/35)).
   4. `PenguinHarness`: Core harness and plugin development (following [RFC-0003](RFC-0003-plugin.md), e.g., Develop Knowledge Base Plugin [#36](https://github.com/Prism-Shadow/penguin-harness-community/issues/36), Develop Ontology Plugin [#37](https://github.com/Prism-Shadow/penguin-harness-community/issues/37), Optimize Context Compaction [#44](https://github.com/Prism-Shadow/penguin-harness-community/issues/44), and High-Playability Self-Evolution Case Study [#45](https://github.com/Prism-Shadow/penguin-harness-community/issues/45)).
+  5. `Awesome RSI`: Curating and submitting new RSI papers to [awesome-rsi](https://github.com/Prism-Shadow/awesome-rsi) following the taxonomy and format in the [Contribute to Awesome RSI workflow](../workflow/survey.md) (standing task that automatically clones a new `open` task issue whenever claimed).
 - **Three Equal-Width Progress Columns**: `Open (open)` $\rightarrow$ `In Progress (in_progress)` $\rightarrow$ `Completed (completed)`.
 - **Newest-First Ordering & Per-Column Pagination**: Within each domain and progress column, tasks are ordered by timestamp **descending (newest first)** and paginated so individual sections stay compact.
 - **Cards & Detail Modal**: Each standard task awards **50 EXP**. Board cards show the title, prominent `+50 EXP` badge, Issue number (plus PR number when applicable), and assignee; clicking a card opens a modal showing the full task description, target repository, task issue, pull request, related issue, and plain URLs to original papers and repositories.
@@ -127,10 +128,11 @@ Every task issue must satisfy the stage-specific requirements for `### Status`, 
 
 | Section Heading (`###`) | Requirement | Format & Fallback Behavior |
 | --- | --- | --- |
-| `### Domain` | Required | One of `Benchmark`, `Evaluation`, `RSI Algorithm`, or `PenguinHarness`. |
+| `### Domain` | Required | One of `Benchmark`, `Evaluation`, `RSI Algorithm`, `PenguinHarness`, or `Awesome RSI`. |
 | `### Status` | Required | One of `open`, `in_progress`, or `completed`. |
 | `### EXP` | Required | Positive integer (default `50`) specifying the experience points awarded upon completion. |
-| `### Target Repository` | Required | Target repository URL where the Pull Request must be submitted; must be one of the four official repositories:<br>1. `https://github.com/Prism-Shadow/penguin-harness`<br>2. `https://github.com/Prism-Shadow/penguin-harness-community`<br>3. `https://github.com/Prism-Shadow/penguin-harness-benchmark`<br>4. `https://github.com/Prism-Shadow/penguin-harness-plugins` |
+| `### Target Repository` | Required | Target repository URL where the Pull Request must be submitted; must be one of the five official repositories:<br>1. `https://github.com/Prism-Shadow/penguin-harness`<br>2. `https://github.com/Prism-Shadow/penguin-harness-community`<br>3. `https://github.com/Prism-Shadow/penguin-harness-benchmark`<br>4. `https://github.com/Prism-Shadow/penguin-harness-plugins`<br>5. `https://github.com/Prism-Shadow/awesome-rsi` |
+| `### Recurring Task` | Optional | Standing-task flag (`true` / `false`, default `false`). When a `true` recurring task is claimed so no `open` instance remains, the `Quests Data` workflow automatically clones a fresh `open` task issue on GitHub. |
 | `### Assignee` | Required for `in_progress` & `completed` | Contributor's GitHub handle prefixed with `@` (e.g., `@hiyouga`); `_No response_` when `open`. |
 | `### Pull Request` | Required for `completed` | Plain URL to the Pull Request submitted to the target repository; `_No response_` when not yet opened. |
 | `### Related Issue` | Optional | Optional related GitHub Issue plain URL (`_No response_` if none). |
