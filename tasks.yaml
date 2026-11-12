@@ -433,3 +433,23 @@ tasks:
     assignee: "fanggejiaba"
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/58"
     linked_pr: null
+
+  - id: "RSI-Q024"
+    issue_number: 61
+    published_at: "2026-11-12T05:16:42Z"
+    status: "open"
+    domain: "Benchmark"
+    exp: 50
+    target_repository: "https://github.com/Prism-Shadow/penguin-harness-benchmark"
+    related_issue: null
+    title: "Integrate PostTrainBench"
+    title_zh: "集成 PostTrainBench"
+    description: "Integrate PostTrainBench into penguin-harness-benchmark to evaluate agents' ability to autonomously post-train base language models under fixed GPU and time budgets. Reuse the upstream Harbor adapter and the existing PenguinHarness agent adapter, providing standardized task packages, GPU execution configurations, scoring workflows, and reproducible end-to-end validation results (per RFC-0001)."
+    description_zh: "将大模型后训练评测基准 PostTrainBench 接入 penguin-harness-benchmark，评测智能体在限定 GPU 算力与时间预算下自主完成基础语言模型后训练的能力。复用上游 Harbor 适配器与现有 PenguinHarness Agent 适配器，完成标准化任务封装、GPU 运行配置与评分流程，并提供可复现的端到端验证结果（遵循 RFC-0001 规范）。"
+    references:
+      - "https://arxiv.org/abs/2603.08640"
+      - "https://github.com/aisa-group/PostTrainBench"
+      - "https://github.com/aisa-group/PostTrainBench/tree/main/src/harbor_adapter"
+    assignee: null
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/61"
+    linked_pr: null
