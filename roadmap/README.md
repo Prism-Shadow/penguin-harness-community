@@ -9,7 +9,7 @@ In the Agent era, research velocity is accelerating every day with new breakthro
 Previously, we built [GDPevo](https://arxiv.org/pdf/2608.03764), an enterprise-grade evaluation benchmark for self-evolving agents, and wrote a [survey on RSI](https://arxiv.org/abs/2610.14625). Our community is built around two core ideas:
 
 1. **Solid infrastructure and toolchains**: Centered around the [PenguinHarness](https://penguin.ooo/) self-evolution framework, enabling students and researchers to work on problems right at the core of RSI and encouraging cross-institutional collaboration.
-2. **An Agent-native & RSI-native open community**: Building an internationally recognized open-source community like Hugging Face. We established the **[Community Committee](/people/)** to focus on two key tasks:
+2. **Building the largest open-source RSI community**: We aim to build an internationally recognized open-source community like Hugging Face, but more Agent-native and RSI-native. We established the **[Community Committee](/people/)** to focus on two key tasks:
    - Publishing and reviewing research topics to ensure overall quality, aligned through our **[Task Board](/quests/)**.
    - Exploring RSI community governance, connecting external resources, and inviting more collaborators.
 

@@ -11,7 +11,7 @@ To sustain high-quality open collaboration and reward contributors, Shared RSI C
 
 ## 1. RSI Community Committee
 
-To build an internationally recognized Agent-native and RSI-native open community like Hugging Face, we established the **RSI Community Committee** (current members are listed on the `/people/` page) with two primary responsibilities:
+To build the largest open-source RSI community, we established the **RSI Community Committee** (current members are listed on the `/people/` page) with two primary responsibilities:
 1. **Publishing and reviewing research topics to ensure quality**: Publishing official research tasks on the [RFC-0006 Task Board (`/quests/`)](/quests/) (only tasks published by committee members are recognized) and reviewing submitted PRs and experimental results.
 2. **Exploring community governance and connecting external resources**: Refining community mechanisms, connecting external resources, and inviting more collaborators.
 
