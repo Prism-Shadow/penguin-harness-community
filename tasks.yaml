@@ -509,3 +509,20 @@ tasks:
     assignee: null
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/64"
     linked_pr: null
+
+  - id: "RSI-Q028"
+    issue_number: 68
+    published_at: "2026-11-12T16:50:16Z"
+    status: "open"
+    domain: "Benchmark"
+    exp: 50
+    target_repository: "https://github.com/Prism-Shadow/penguin-harness-benchmark"
+    related_issue: null
+    title: "Build an AI Writing Quality Benchmark"
+    title_zh: "构建 AI 写作质量评测基准"
+    description: "Design and build a standardized benchmark in `penguin-harness-benchmark` to evaluate AI writing quality across diverse long-form and technical writing scenarios (e.g., research reports, technical documentation, articles, and structured narratives), measuring clarity, coherence, factual grounding, style naturalness (avoiding \"AI-ese\"), and instruction adherence with reproducible test cases and automated grading rubrics (per RFC-0001)."
+    description_zh: "设计并构建一套评测 AI 写作质量的标准化 Benchmark（涵盖研究报告、技术文档、长文写作等场景），从结构逻辑、表达清晰度、事实依据、文风自然度（去 AI 味）及指令遵循度等维度评估 Agent 的写作水平，提供可复现评测集与自动化评分脚本并接入 `penguin-harness-benchmark`（遵循 RFC-0001 规范）。"
+    references: []
+    assignee: null
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/68"
+    linked_pr: null
