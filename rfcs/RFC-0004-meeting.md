@@ -37,4 +37,4 @@ Open floor for all attendees to ask questions, share findings, and collaborate (
 
 ## Post-Meeting Notes
 
-After each meeting, maintainers publish concise **Meeting Notes**, paper sharing slides/links, and action items to the community channels and GitHub repository so members who could not attend live can stay up to date.
+After each meeting, maintainers archive concise **Meeting Notes** and video recordings on the **[Bi-weekly Meetings](../roadmap/meetings.md)** page and share them in the community channels.

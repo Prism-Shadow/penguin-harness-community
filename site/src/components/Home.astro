@@ -18,6 +18,15 @@ const COPY = {
     ctaPeople: "成员",
     wechat: "微信群",
     discord: "Discord",
+    meetingNextDate: "11-17",
+    meetingNextText: "第二次双周会预告（社区进展与任务激励）",
+    meetingNotes: "双周会 →",
+    event1Date: "11-07",
+    event1Text: "五道口原点社区 PyTorch Meetup：RSI 实操 Workshop",
+    event1Link: "活动详情 →",
+    meeting1Date: "11-03",
+    meeting1Text: "首次双周会回顾",
+    meeting1Video: "录播视频 ↗",
   },
   en: {
     ctaRoadmap: "Roadmap",
@@ -27,13 +36,22 @@ const COPY = {
     ctaPeople: "People",
     wechat: "WeChat",
     discord: "Discord",
+    meetingNextDate: "11-17",
+    meetingNextText: "2nd Bi-weekly Meeting (Progress & Incentives)",
+    meetingNotes: "Meetings →",
+    event1Date: "11-07",
+    event1Text: "PyTorch Meetup @ Wudaokou: RSI Workshop",
+    event1Link: "Events →",
+    meeting1Date: "11-03",
+    meeting1Text: "1st Bi-weekly Meeting",
+    meeting1Video: "Video ↗",
   },
 }[locale];
 ---
 
 <section class="lg:flex lg:flex-1 lg:items-center" data-hero>
   <div class="relative mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:py-8">
-    <div>
+    <div class="min-w-0">
       <div class="rise flex items-center gap-3">
         <Logo class="h-10 w-10 shrink-0" />
       </div>
@@ -108,6 +126,44 @@ const COPY = {
           </svg>
           <span>{COPY.discord}</span>
         </a>
+      </div>
+
+      <div
+        class="rise mt-6 space-y-1.5 border-t border-gray-200/80 pt-4 text-[13px] text-gray-600 dark:border-gray-800/80 dark:text-gray-400"
+        style="animation-delay: 220ms"
+      >
+        <div class="flex items-center gap-2 overflow-hidden whitespace-nowrap">
+          <span class="mono shrink-0 text-xs text-brand-600 dark:text-brand-400">{COPY.meetingNextDate}</span>
+          <span class="truncate">{COPY.meetingNextText}</span>
+          <a
+            href={href("/roadmap/meetings/")}
+            class="shrink-0 text-brand-600 hover:underline dark:text-brand-400"
+          >
+            {COPY.meetingNotes}
+          </a>
+        </div>
+        <div class="flex items-center gap-2 overflow-hidden whitespace-nowrap">
+          <span class="mono shrink-0 text-xs text-gray-400 dark:text-gray-500">{COPY.event1Date}</span>
+          <span class="truncate">{COPY.event1Text}</span>
+          <a
+            href={href("/roadmap/events/")}
+            class="shrink-0 text-brand-600 hover:underline dark:text-brand-400"
+          >
+            {COPY.event1Link}
+          </a>
+        </div>
+        <div class="flex items-center gap-2 overflow-hidden whitespace-nowrap">
+          <span class="mono shrink-0 text-xs text-gray-400 dark:text-gray-500">{COPY.meeting1Date}</span>
+          <span class="truncate">{COPY.meeting1Text}</span>
+          <a
+            href="https://www.bilibili.com/video/BV1ACxS67EBa/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="shrink-0 text-brand-600 hover:underline dark:text-brand-400"
+          >
+            {COPY.meeting1Video}
+          </a>
+        </div>
       </div>
     </div>
 

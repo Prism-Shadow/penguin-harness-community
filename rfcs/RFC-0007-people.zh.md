@@ -11,21 +11,23 @@
 
 ## 1. RSI 社区委员会（RSI Community Committee）
 
-社区委员会负责基础设施维护、[RFC-0006 任务板](RFC-0006-quests.zh.md)官方任务提案发布（社区仅认可委员会成员发布的任务）以及 PR 代码与实验结果的可复现性审核。
+为了打造最大的 RSI 开源社区，我们设立了 **RSI 社区委员会**（当前成员名单展示在网站 `/people/` 页面），主要承担两项重要事务：
+1. **发布和审核研究课题，保证社区整体质量**：在 [RFC-0006 任务板（`/quests/`）](/zh/quests/)发布官方研究课题（社区仅认可委员会成员发布的任务），并审核贡献者提交的代码与实验结果，对齐研发进度。
+2. **探讨 RSI 社区运作机制，链接外部资源**：完善社区协作与激励机制，链接外部资源，邀请更多同仁加入。
 
-### 1.1 委员会分组与成员职责
+### 1.1 委员会分组与职责流程
 
-委员会目前下设三个小组：
+委员会下设三个小组，具体成员名单维护在 `community/people.yaml` 并在 `/people/` 页面实时展示：
 
-| 小组 | 当前成员 | 负责方向（词条） | 核心职责 |
-| --- | --- | --- | --- |
-| **项目主导方（Project Leadership）** | `Yaowei Zheng`（[@hiyouga](https://github.com/hiyouga)） | `Benchmark`、`算法`、`Harness` | 统筹社区路线图、标准规范制定与基础设施建设 |
-| **提案小组（Proposal Group）** | `Xiang Qu`（[@ArisaZz](https://github.com/ArisaZz)）、`Zhihao Liu`（[@lzh368](https://github.com/lzh368)）、`Yanke Yu`（[@rank-Yu](https://github.com/rank-Yu)）、`Yuyang Li`（[@yu-yang-li](https://github.com/yu-yang-li)） | `算法`（Xiang Qu）、`Benchmark`（Zhihao Liu）、`Harness`（Yanke Yu）、`AI4S`（Yuyang Li） | 调研前沿论文与基准需求，按 [RFC-0006](RFC-0006-quests.zh.md) 标准模板发布官方社区任务 |
-| **审核小组（Review Group）** | `Leijun Zhou`（[@Saigyouji-Yuyuko1000](https://github.com/Saigyouji-Yuyuko1000)）、`Zhihao Liu`（[@lzh368](https://github.com/lzh368)）、`Yangxi Xiang`（[@Myriad-Dreamin](https://github.com/Myriad-Dreamin)）、`Yuyang Li`（[@yu-yang-li](https://github.com/yu-yang-li)） | `算法`（Leijun Zhou）、`Benchmark`（Zhihao Liu）、`Harness`（Yangxi Xiang）、`AI4S`（Yuyang Li） | 审核贡献者提交的 Benchmark、Evaluation、算法插件与框架 PR，确认可复现性并合入结算 |
+| 小组 | 覆盖方向 | 核心职责与工作流程 |
+| --- | --- | --- |
+| **项目主导方（Project Leadership）** | `Benchmark`、`算法`、`Harness` | 统筹社区路线图、RFC 标准规范制定与基础设施建设 |
+| **提案小组（Proposal Group）** | `Benchmark`、`算法`、`Harness`、`AI4S` 等 | 调研前沿论文与基准需求，按 [RFC-0006](RFC-0006-quests.zh.md) 标准模板发布官方社区任务 |
+| **审核小组（Review Group）** | `Benchmark`、`算法`、`Harness`、`AI4S` 等 | 审核贡献者提交的 Benchmark、Evaluation、算法插件与 Agent 框架 PR，确认可复现性并合入结算 |
 
-- **领域词条扩展**：除现有的 `Benchmark`、`算法`、`Harness` 方向外，委员会后续将持续引入 `医学`、`通信` 等更多垂直领域方向。
+- **领域词条扩展**：除现有的 `Benchmark`、`算法`、`Harness`、`AI4S` 方向外，委员会后续将持续引入 `医学`、`通信` 等更多垂直领域方向。
 - **委员会固定激励**：每位社区委员会成员享有 **1,000 元 / 月固定激励**（以等值模型 Token 额度、算力代金券形式发放，于**每月 5 日**发放上个自然月的激励）。
-- **申请加入方式**：欢迎有志于共建开源自进化生态的研究者与开发者通过**社区微信群**申请加入社区委员会。
+- **申请加入方式**：欢迎通过**社区微信群**申请加入社区委员会。
 
 ## 2. 贡献榜（Contributor Leaderboard）
 
