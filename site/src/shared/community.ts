@@ -7,7 +7,12 @@ import type { Locale } from "./i18n";
 type Text = Record<Locale, string>;
 
 export type QuestStatus = "open" | "in_progress" | "completed";
-export type QuestDomainId = "benchmark" | "evaluation" | "rsi-algorithm" | "penguin-harness";
+export type QuestDomainId =
+  | "benchmark"
+  | "evaluation"
+  | "rsi-algorithm"
+  | "penguin-harness"
+  | "awesome-rsi";
 
 /**
  * Helper for bilingual fields where English is the default language.
@@ -30,6 +35,7 @@ export const QUEST_DOMAINS: QuestDomainMeta[] = [
   { id: "evaluation", label: { en: "Evaluation", zh: "Evaluation" } },
   { id: "rsi-algorithm", label: { en: "RSI Algorithm", zh: "RSI 算法" } },
   { id: "penguin-harness", label: { en: "PenguinHarness", zh: "PenguinHarness" } },
+  { id: "awesome-rsi", label: { en: "Awesome RSI", zh: "Awesome RSI" } },
 ];
 
 export const TARGET_REPOSITORIES = [
@@ -37,6 +43,7 @@ export const TARGET_REPOSITORIES = [
   "https://github.com/Prism-Shadow/penguin-harness-community",
   "https://github.com/Prism-Shadow/penguin-harness-benchmark",
   "https://github.com/Prism-Shadow/penguin-harness-plugins",
+  "https://github.com/Prism-Shadow/awesome-rsi",
 ] as const;
 
 export type TargetRepositoryUrl = (typeof TARGET_REPOSITORIES)[number];
@@ -54,6 +61,7 @@ export interface QuestItem {
   domain: QuestDomainId;
   exp: number;
   targetRepository: TargetRepositoryUrl;
+  recurring?: boolean;
   relatedIssue?: string;
   linkedPr?: string;
   title: { en?: string; zh?: string };
@@ -68,6 +76,7 @@ function normalizeDomain(raw: string | null): QuestDomainId {
   if (lower === "evaluation") return "evaluation";
   if (lower === "rsi algorithm" || lower === "rsi-algorithm") return "rsi-algorithm";
   if (lower === "penguinharness" || lower === "penguin-harness") return "penguin-harness";
+  if (lower === "awesome rsi" || lower === "awesome-rsi") return "awesome-rsi";
   return "benchmark";
 }
 
@@ -96,6 +105,7 @@ function parseQuestsFromYaml(content: string): QuestItem[] {
     const targetRepository =
       (field("target_repository") as TargetRepositoryUrl) ||
       "https://github.com/Prism-Shadow/penguin-harness-benchmark";
+    const recurring = field("recurring") === "true";
     const relatedIssue = field("related_issue");
     const linkedPr = field("linked_pr");
     const assignee = field("assignee");
@@ -112,6 +122,7 @@ function parseQuestsFromYaml(content: string): QuestItem[] {
       domain,
       exp,
       targetRepository,
+      ...(recurring ? { recurring: true } : {}),
       ...(relatedIssue ? { relatedIssue } : {}),
       ...(linkedPr ? { linkedPr } : {}),
       ...(assignee ? { assignee } : {}),

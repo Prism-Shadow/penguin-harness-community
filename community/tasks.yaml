@@ -13,6 +13,7 @@ target_repositories:
   - "https://github.com/Prism-Shadow/penguin-harness-community"
   - "https://github.com/Prism-Shadow/penguin-harness-benchmark"
   - "https://github.com/Prism-Shadow/penguin-harness-plugins"
+  - "https://github.com/Prism-Shadow/awesome-rsi"
 
 tasks:
   - id: "RSI-Q001"
@@ -37,7 +38,7 @@ tasks:
   - id: "RSI-Q002"
     issue_number: 31
     published_at: "2026-11-10T10:05:00Z"
-    status: "open"
+    status: "in_progress"
     domain: "Benchmark"
     exp: 50
     target_repository: "https://github.com/Prism-Shadow/penguin-harness-benchmark"
@@ -50,7 +51,7 @@ tasks:
       - "https://arxiv.org/abs/2610.22350"
       - "https://fde-gym.com"
       - "https://github.com/deeplethe/fde-gym"
-    assignee: null
+    assignee: "kx-wzh"
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/31"
     linked_pr: null
 
@@ -347,7 +348,7 @@ tasks:
   - id: "RSI-Q019"
     issue_number: 53
     published_at: "2026-11-11T13:17:00Z"
-    status: "open"
+    status: "in_progress"
     domain: "Benchmark"
     exp: 50
     target_repository: "https://github.com/Prism-Shadow/penguin-harness-benchmark"
@@ -357,7 +358,7 @@ tasks:
     description: "Targeting the scenario where an Agent Team autonomously launches and operates a business, design a benchmark that evaluates end-to-end commercial viability (market demand fulfillment, product delivery, token/compute cost accounting, and net profit settlement) to verify whether an agent team can build a genuinely profitable company (per RFC-0001)."
     description_zh: "面向“Agent 团队自主开办并运营一家公司”的真实商业场景，设计一套评测 Agent Team 商业闭环能力的 Benchmark（包含市场需求响应、产品交付、算力与人力成本核算及净收益结算），验证 Agent 团队是否能够运营出真正实现正向盈利的公司（遵循 RFC-0001 规范）。"
     references: []
-    assignee: null
+    assignee: "huangjunli864"
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/53"
     linked_pr: null
 
@@ -432,4 +433,79 @@ tasks:
       - "https://github.com/stanford-iris-lab/meta-harness"
     assignee: "fanggejiaba"
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/58"
+    linked_pr: null
+
+  - id: "RSI-Q024"
+    issue_number: 61
+    published_at: "2026-11-12T05:16:42Z"
+    status: "open"
+    domain: "Benchmark"
+    exp: 50
+    target_repository: "https://github.com/Prism-Shadow/penguin-harness-benchmark"
+    related_issue: null
+    title: "Integrate PostTrainBench"
+    title_zh: "集成 PostTrainBench"
+    description: "Integrate PostTrainBench into penguin-harness-benchmark to evaluate agents' ability to autonomously post-train base language models under fixed GPU and time budgets. Reuse the upstream Harbor adapter and the existing PenguinHarness agent adapter, providing standardized task packages, GPU execution configurations, scoring workflows, and reproducible end-to-end validation results (per RFC-0001)."
+    description_zh: "将大模型后训练评测基准 PostTrainBench 接入 penguin-harness-benchmark，评测智能体在限定 GPU 算力与时间预算下自主完成基础语言模型后训练的能力。复用上游 Harbor 适配器与现有 PenguinHarness Agent 适配器，完成标准化任务封装、GPU 运行配置与评分流程，并提供可复现的端到端验证结果（遵循 RFC-0001 规范）。"
+    references:
+      - "https://arxiv.org/abs/2603.08640"
+      - "https://github.com/aisa-group/PostTrainBench"
+      - "https://github.com/aisa-group/PostTrainBench/tree/main/src/harbor_adapter"
+    assignee: null
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/61"
+    linked_pr: null
+
+  - id: "RSI-Q025"
+    issue_number: 62
+    published_at: "2026-11-12T07:18:12Z"
+    status: "open"
+    domain: "Benchmark"
+    exp: 50
+    target_repository: "https://github.com/Prism-Shadow/penguin-harness-benchmark"
+    related_issue: null
+    title: "Build a Context Compaction Information Retention Benchmark"
+    title_zh: "构建 Harness 上下文压缩信息保留能力评测基准"
+    description: "Design and build a benchmark in penguin-harness-benchmark specifically evaluating how well an agent harness preserves critical facts, constraints, intermediate tool states, and user steering instructions after context compaction in long-horizon multi-turn tasks, enabling systematic comparison of the effectiveness, retention fidelity, and token-compression trade-offs across different context compaction algorithms with reproducible test cases and automated grading scripts (per RFC-0001)."
+    description_zh: "构建一套专门评测 Agent Harness 在长程多轮任务经历上下文压缩（Context Compaction）后关键事实、约束条件、工具中间状态与用户纠偏指令保留能力的评测基准，支持横向测试与对比不同上下文压缩算法的信息保留效果、下游任务成功率与压缩率权衡，提供可复现测试集与自动化评分脚本并集成至 penguin-harness-benchmark（遵循 RFC-0001 规范）。"
+    references: []
+    assignee: null
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/62"
+    linked_pr: null
+
+  - id: "RSI-Q026"
+    issue_number: 63
+    published_at: "2026-11-12T07:21:51Z"
+    status: "open"
+    domain: "Benchmark"
+    exp: 50
+    target_repository: "https://github.com/Prism-Shadow/penguin-harness-benchmark"
+    related_issue: null
+    title: "Integrate a Presentation Aesthetics Benchmark"
+    title_zh: "集成 PPT 演示文稿审美与排版质量评测基准"
+    description: "Integrate or build a presentation and slide-deck generation benchmark in penguin-harness-benchmark specifically evaluating visual aesthetics, layout balance, typography hierarchy, information density, and content fidelity of agent-generated slides (e.g., PPTX or HTML slide decks), with reproducible test cases and automated multimodal / VLM-based grading scripts (per RFC-0001)."
+    description_zh: "集成或构建一套面向 Agent 生成 PPT / 演示文稿的审美与排版质量评测基准，重点评测幻灯片在视觉美感、版式均衡度、字号层级、信息密度控制、图表可读性与内容准确性等方面的表现，提供可复现评测集与多模态视觉自动评分脚本并接入 penguin-harness-benchmark（遵循 RFC-0001 规范）。"
+    references: []
+    assignee: null
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/63"
+    linked_pr: null
+
+  - id: "RSI-Q027"
+    issue_number: 64
+    published_at: "2026-11-12T09:23:57Z"
+    status: "open"
+    domain: "Awesome RSI"
+    exp: 10
+    target_repository: "https://github.com/Prism-Shadow/awesome-rsi"
+    recurring: true
+    related_issue: null
+    title: "Submit New RSI Papers to Awesome RSI"
+    title_zh: "向 Awesome RSI 按规范分类与格式提交新 RSI 论文"
+    description: "Curate and submit newly published or missing Recursive Self-Improvement (RSI) papers to the Awesome RSI repository following the taxonomy dimensions and entry formatting guidelines in the Survey Workflow (https://club.penguin.ooo/workflow/survey/). This is a standing task — whenever claimed, the system automatically clones a new open task so anyone can continue contributing."
+    description_zh: "按照参与 Awesome RSI 流程指南（https://club.penguin.ooo/zh/workflow/survey/）规定的分类维度与条目格式，向 Awesome RSI 仓库整理并提交新的递归自进化（RSI）相关文章。本任务为常驻任务，被认领后系统将自动复制生成一个新的待认领任务。"
+    references:
+      - "https://club.penguin.ooo/zh/workflow/survey/"
+      - "https://github.com/Prism-Shadow/awesome-rsi"
+      - "https://arxiv.org/abs/2610.14625"
+    assignee: null
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/64"
     linked_pr: null

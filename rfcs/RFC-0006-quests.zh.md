@@ -19,13 +19,14 @@
 
 ## 2. 任务板领域分组、排序与分页
 
-所有有效任务登记在 [penguin-harness-community](https://github.com/Prism-Shadow/penguin-harness-community) 仓库的 `community/tasks.yaml` 中，并在网站 `/quests/` 页面按四大领域分组展示，每个领域下方设有三个等宽进度列：
+所有有效任务登记在 [penguin-harness-community](https://github.com/Prism-Shadow/penguin-harness-community) 仓库的 `community/tasks.yaml` 中，并在网站 `/quests/` 页面按五大领域分组展示，每个领域下方设有三个等宽进度列：
 
-- **四大领域分组（`Domain`）**：
+- **五大领域分组（`Domain`）**：
   1. `Benchmark`：标准评测基准集成（遵循 [RFC-0001](RFC-0001-benchmark.zh.md)，如集成 SWE-bench [#30](https://github.com/Prism-Shadow/penguin-harness-community/issues/30)、集成 FDE-gym [#31](https://github.com/Prism-Shadow/penguin-harness-community/issues/31)、已完成任务 [#39](https://github.com/Prism-Shadow/penguin-harness-community/issues/39)–[#41](https://github.com/Prism-Shadow/penguin-harness-community/issues/41)）。
   2. `Evaluation`：跨框架与基座模型自进化评测（遵循 [RFC-0002](RFC-0002-evaluation.zh.md)，如 Codex 自进化效果对比 [#32](https://github.com/Prism-Shadow/penguin-harness-community/issues/32)、GPT-6 模型进化能力实验 [#33](https://github.com/Prism-Shadow/penguin-harness-community/issues/33)、已完成任务 [#42](https://github.com/Prism-Shadow/penguin-harness-community/issues/42)–[#43](https://github.com/Prism-Shadow/penguin-harness-community/issues/43)）。
   3. `RSI Algorithm`（中文展示为 `RSI 算法`）：自进化核心论文方法复现与集成（遵循 [RFC-0003](RFC-0003-plugin.zh.md)，如集成 RSIAgent 方法 [#34](https://github.com/Prism-Shadow/penguin-harness-community/issues/34)、集成 RRSI 方法 [#35](https://github.com/Prism-Shadow/penguin-harness-community/issues/35)）。
   4. `PenguinHarness`：框架核心与插件生态开发（遵循 [RFC-0003](RFC-0003-plugin.zh.md)，如开发知识库插件 [#36](https://github.com/Prism-Shadow/penguin-harness-community/issues/36)、开发本体插件 [#37](https://github.com/Prism-Shadow/penguin-harness-community/issues/37)、优化压缩算法 [#44](https://github.com/Prism-Shadow/penguin-harness-community/issues/44)、可玩性自进化案例实验 [#45](https://github.com/Prism-Shadow/penguin-harness-community/issues/45)）。
+  5. `Awesome RSI`：按照 [参与 Awesome RSI 流程指南](../workflow/survey.zh.md) 的分类维度与格式向 [awesome-rsi](https://github.com/Prism-Shadow/awesome-rsi) 整理并提交新的 RSI 相关论文（常驻任务，被认领后系统自动复制生成新的待认领任务）。
 - **三阶段等宽进度列**：`待认领（open）` $\rightarrow$ `进行中（in_progress）` $\rightarrow$ `已完成（completed）`。
 - **时间倒序与列内分页**：每个版块各状态列默认按任务发布/完成时间**倒序排列（最新排在最前）**，并内置分页控件（每页展示固定数量卡片），避免单个版块过长。
 - **卡片与详情弹窗**：每项标准任务设为 **50 EXP**。看板卡片展示任务标题、经验值徽章（`+50 EXP`）、Issue 编号（及关联 PR 编号）与认领人；点击卡片弹出详情窗口，展示完整任务描述、目标仓库、任务 Issue、提交 PR、关联 Issue 以及原始论文/代码仓库纯链接列表。
@@ -127,10 +128,11 @@ Reply in the comments below with one of the following slash commands (automatica
 
 | 段落标题（`###`） | 必填规则 | 格式与回退说明 |
 | --- | --- | --- |
-| `### Domain` | 必填 | 取值必须为 `Benchmark`、`Evaluation`、`RSI Algorithm`、`PenguinHarness` 之一。 |
+| `### Domain` | 必填 | 取值必须为 `Benchmark`、`Evaluation`、`RSI Algorithm`、`PenguinHarness`、`Awesome RSI` 之一。 |
 | `### Status` | 必填 | 取值必须为 `open`、`in_progress`、`completed` 之一。 |
 | `### EXP` | 必填 | 正整数（默认 `50`），代表任务验收合入后授予的经验值。 |
-| `### Target Repository` | 必填 | 最终提交 PR 的目标仓库 URL，取值必须为以下四个官方仓库之一：<br>1. `https://github.com/Prism-Shadow/penguin-harness`<br>2. `https://github.com/Prism-Shadow/penguin-harness-community`<br>3. `https://github.com/Prism-Shadow/penguin-harness-benchmark`<br>4. `https://github.com/Prism-Shadow/penguin-harness-plugins` |
+| `### Target Repository` | 必填 | 最终提交 PR 的目标仓库 URL，取值必须为以下五个官方仓库之一：<br>1. `https://github.com/Prism-Shadow/penguin-harness`<br>2. `https://github.com/Prism-Shadow/penguin-harness-community`<br>3. `https://github.com/Prism-Shadow/penguin-harness-benchmark`<br>4. `https://github.com/Prism-Shadow/penguin-harness-plugins`<br>5. `https://github.com/Prism-Shadow/awesome-rsi` |
+| `### Recurring Task` | 选填 | 常驻任务标识（`true` / `false`，默认 `false`）。当标记为 `true` 的常驻任务被认领且当前不再存在 `open` 状态的同名实例时，`Quests Data` 工作流会自动克隆创建一个新的 `open` 任务 Issue。 |
 | `### Assignee` | `in_progress` / `completed` 必填 | 认领人 GitHub 用户名（以 `@` 开头，如 `@hiyouga`）；`open` 状态为 `_No response_`。 |
 | `### Pull Request` | `completed` 必填 | 提交至目标仓库的 Pull Request 纯链接；未提交时为 `_No response_`。 |
 | `### Related Issue` | 选填 | 关联的外部或目标仓库 GitHub Issue 纯链接（无关联时为 `_No response_`）。 |
