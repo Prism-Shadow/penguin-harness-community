@@ -376,7 +376,7 @@
       "issue_number": 53,
       "pr_number": null,
       "published_at": "2026-11-11T13:17:00Z",
-      "status": "open",
+      "status": "in_progress",
       "domain": "Benchmark",
       "exp": 50,
       "target_repository": "https://github.com/Prism-Shadow/penguin-harness-benchmark",
@@ -386,7 +386,7 @@
       "description": "Targeting the scenario where an Agent Team autonomously launches and operates a business, design a benchmark that evaluates end-to-end commercial viability (market demand fulfillment, product delivery, token/compute cost accounting, and net profit settlement) to verify whether an agent team can build a genuinely profitable company (per RFC-0001).",
       "description_zh": "面向“Agent 团队自主开办并运营一家公司”的真实商业场景，设计一套评测 Agent Team 商业闭环能力的 Benchmark（包含市场需求响应、产品交付、算力与人力成本核算及净收益结算），验证 Agent 团队是否能够运营出真正实现正向盈利的公司（遵循 RFC-0001 规范）。",
       "references": [],
-      "assignee": null,
+      "assignee": "huangjunli864",
       "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/53",
       "linked_pr": null
     },
@@ -577,6 +577,7 @@
     "zeng-yirong",
     "ACAne0320",
     "Myriad-Dreamin",
+    "huangjunli864",
     "fanggejiaba",
     "smith-source"
   ]
