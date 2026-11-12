@@ -470,3 +470,20 @@ tasks:
     assignee: null
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/62"
     linked_pr: null
+
+  - id: "RSI-Q026"
+    issue_number: 63
+    published_at: "2026-11-12T07:21:51Z"
+    status: "open"
+    domain: "Benchmark"
+    exp: 50
+    target_repository: "https://github.com/Prism-Shadow/penguin-harness-benchmark"
+    related_issue: null
+    title: "Integrate a Presentation Aesthetics Benchmark"
+    title_zh: "集成 PPT 演示文稿审美与排版质量评测基准"
+    description: "Integrate or build a presentation and slide-deck generation benchmark in penguin-harness-benchmark specifically evaluating visual aesthetics, layout balance, typography hierarchy, information density, and content fidelity of agent-generated slides (e.g., PPTX or HTML slide decks), with reproducible test cases and automated multimodal / VLM-based grading scripts (per RFC-0001)."
+    description_zh: "集成或构建一套面向 Agent 生成 PPT / 演示文稿的审美与排版质量评测基准，重点评测幻灯片在视觉美感、版式均衡度、字号层级、信息密度控制、图表可读性与内容准确性等方面的表现，提供可复现评测集与多模态视觉自动评分脚本并接入 penguin-harness-benchmark（遵循 RFC-0001 规范）。"
+    references: []
+    assignee: null
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/63"
+    linked_pr: null
