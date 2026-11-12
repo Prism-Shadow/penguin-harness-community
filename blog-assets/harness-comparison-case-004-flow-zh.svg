@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 244" width="820" height="244"><style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: transparent;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .fig-title {
+    fill: #111827;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .fig-branch-tag {
+    fill: #374151;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .fig-branch-tag-blue {
+    fill: #0b57d0;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .fig-legend {
+    fill: #374151;
+    font-size: 11px;
+    font-weight: 500;
+  }
+  .fig-label {
+    fill: #1f2937;
+    font-size: 11.5px;
+    font-weight: 500;
+  }
+  .fig-label-blue {
+    fill: #0b57d0;
+    font-size: 11.5px;
+    font-weight: 500;
+  }
+  .fig-label-amber {
+    fill: #78350f;
+    font-size: 11.5px;
+    font-weight: 500;
+  }
+  .fig-num {
+    font-variant-numeric: tabular-nums;
+    fill: #111827;
+    font-size: 11.5px;
+    font-weight: 600;
+  }
+  .fig-num-blue {
+    font-variant-numeric: tabular-nums;
+    fill: #0b57d0;
+    font-size: 11.5px;
+    font-weight: 600;
+  }
+  .fig-box {
+    fill: none;
+    stroke: #9ca3af;
+    stroke-width: 1.35px;
+  }
+  .fig-terminal {
+    fill: none;
+    stroke: #9ca3af;
+    stroke-width: 1.35px;
+  }
+  .fig-s2 {
+    fill: #e8f0fe;
+    stroke: #1a73e8;
+    stroke-width: 1.35px;
+  }
+  .fig-s3 {
+    fill: #fef3c7;
+    stroke: #b45309;
+    stroke-width: 1.35px;
+    stroke-dasharray: 4 2.5;
+  }
+  .line-gray {
+    stroke: #9ca3af;
+    stroke-width: 1.7px;
+    fill: none;
+  }
+  .line-blue {
+    stroke: #1a73e8;
+    stroke-width: 1.7px;
+    fill: none;
+  }
+  .head-gray { fill: #9ca3af; }
+  .head-blue { fill: #1a73e8; }
+</style><text x="8" y="20" class="fig-title">CASE-004 三次测试的执行流程</text><rect x="8" y="108.5" width="118" height="36" rx="6" class="fig-box" /><text x="67.0" y="130.7" text-anchor="middle" class="fig-label">定位清理逻辑缺陷</text>
+<path d="M126 126.5 H134.0 Q139.0 126.5 139.0 121.5 V77 Q139.0 72 144.0 72 H149" class="line-blue" /><polygon points="154,72 147,67.8 147,76.2" class="head-blue" />
+<path d="M126 126.5 H134.0 Q139.0 126.5 139.0 131.5 V176 Q139.0 181 144.0 181 H149" class="line-gray" /><polygon points="154,181 147,176.8 147,185.2" class="head-gray" />
+<text x="156" y="47" class="fig-branch-tag-blue">第 2 次测试</text>
+<rect x="154" y="54" width="160" height="36" rx="6" class="fig-s2" /><text x="234.0" y="76.2" text-anchor="middle" class="fig-label-blue">初次修改：保留所需版本</text>
+<line x1="314" y1="72" x2="337" y2="72" class="line-blue" /><polygon points="342,72 335,67.8 335,76.2" class="head-blue" />
+<rect x="342" y="54" width="154" height="36" rx="6" class="fig-s2" /><text x="419.0" y="76.2" text-anchor="middle" class="fig-label-blue">编写自测并验证通过</text>
+<line x1="496" y1="72" x2="513" y2="72" class="line-blue" /><polygon points="518,72 511,67.8 511,76.2" class="head-blue" />
+<rect x="518" y="54" width="154" height="36" rx="6" class="fig-s2" /><text x="595.0" y="76.2" text-anchor="middle" class="fig-num-blue">验收 15 / 15 项，100 分</text>
+<text x="156" y="156" class="fig-branch-tag">第 1、3 次测试</text>
+<rect x="154" y="163" width="160" height="36" rx="6" class="fig-box" /><text x="234.0" y="185.2" text-anchor="middle" class="fig-label">初次修改：漏掉中间版本</text>
+<path d="M314 181 H322.0 Q327.0 181 327.0 176 V151 Q327.0 146 332.0 146 H337" class="line-gray" /><polygon points="342,146 335,141.8 335,150.2" class="head-gray" />
+<path d="M314 181 H322.0 Q327.0 181 327.0 186 V211 Q327.0 216 332.0 216 H337" class="line-blue" /><polygon points="342,216 335,211.8 335,220.2" class="head-blue" />
+<text x="344" y="121" class="fig-branch-tag">第 1 次测试</text>
+<rect x="342" y="128" width="154" height="36" rx="6" class="fig-box" /><text x="419.0" y="150.2" text-anchor="middle" class="fig-label">仅跑常规自测</text>
+<line x1="496" y1="146" x2="513" y2="146" class="line-gray" /><polygon points="518,146 511,141.8 511,150.2" class="head-gray" />
+<rect x="518" y="128" width="126" height="36" rx="6" class="fig-box" /><text x="581.0" y="150.2" text-anchor="middle" class="fig-label">误判改好，提前结束</text>
+<line x1="644" y1="146" x2="661" y2="146" class="line-gray" /><polygon points="666,146 659,141.8 659,150.2" class="head-gray" />
+<rect x="666" y="128" width="146" height="36" rx="6" class="fig-terminal" /><text x="739.0" y="150.2" text-anchor="middle" class="fig-num">验收 11 / 15 项，0 分</text>
+<text x="344" y="191" class="fig-branch-tag-blue">第 3 次测试</text>
+<rect x="342" y="198" width="154" height="36" rx="6" class="fig-s2" /><text x="419.0" y="220.2" text-anchor="middle" class="fig-label-blue">随机自测发现缺陷</text>
+<line x1="496" y1="216" x2="513" y2="216" class="line-blue" /><polygon points="518,216 511,211.8 511,220.2" class="head-blue" />
+<rect x="518" y="198" width="126" height="36" rx="6" class="fig-s2" /><text x="581.0" y="220.2" text-anchor="middle" class="fig-label-blue">补齐逻辑并重跑通过</text>
+<line x1="644" y1="216" x2="661" y2="216" class="line-blue" /><polygon points="666,216 659,211.8 659,220.2" class="head-blue" />
+<rect x="666" y="198" width="146" height="36" rx="6" class="fig-s2" /><text x="739.0" y="220.2" text-anchor="middle" class="fig-num-blue">验收 15 / 15 项，100 分</text></svg>
