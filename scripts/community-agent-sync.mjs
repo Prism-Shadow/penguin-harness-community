@@ -98,6 +98,19 @@ export function parseTaskIssueBody(body, authorHandle) {
   };
 }
 
+const COMMANDS_REFERENCE_MD = [
+  "Reply in the comments below with one of the following slash commands (automatically synced by the `Quests Data` workflow):",
+  "在下方评论区回复以下指令即可自动触发状态流转与官网同步：",
+  "",
+  "| Command / 指令 | Who / 权限 | Action / 说明 |",
+  "| :--- | :--- | :--- |",
+  "| `/claim` | Any contributor / 任意社区成员 | Claim an `open` task (first-come, first-served; max 2 active claims per user; 30-day grace period) / 认领待认领任务（先到先得，每人同时最多 2 个进行中任务，宽限期 30 天） |",
+  "| `/claim @username` | Committee / 委员会成员 | Assign or reassign task to `@username` / 指定或改派任务认领人为 `@username` |",
+  "| `/claim https://github.com/.../pull/123` | Assignee or Committee / 认领人或委员会 | Link a target-repository Pull Request URL to this task / 关联目标仓库 PR 链接 |",
+  "| `/unclaim` | Assignee or Committee / 认领人或委员会 | Release claim and reset task status to `open` / 释放认领并将任务重置为 `open` 待认领状态 |",
+  "| `/complete @username https://github.com/.../pull/123` | Committee / 委员会成员 | Mark task as `completed`, record merged PR, settle EXP, and close issue / 标记任务完成、记录合入 PR、结算 EXP 并关闭 Issue |",
+].join("\n");
+
 export function formatTaskIssueBody(task) {
   const refs =
     Array.isArray(task.references) && task.references.length > 0
@@ -151,6 +164,10 @@ export function formatTaskIssueBody(task) {
     "### Original Papers & Repository Links",
     "",
     refs,
+    "",
+    "### Claim & Management Commands",
+    "",
+    COMMANDS_REFERENCE_MD,
   ].join("\n");
 }
 
@@ -400,18 +417,20 @@ async function syncFromGitHubIssues(baseTasks, maxConcurrent) {
       linked_pr: linkedPr,
     };
 
-    // If issue body on GitHub is out of sync with resolved status/assignee/linked_pr, update it when token is present
+    // If issue body on GitHub is out of sync with resolved fields or missing the command table, update it when token is present
+    const expectedBody = formatTaskIssueBody(updatedTask);
     if (
       (process.env.GH_TOKEN || process.env.GITHUB_TOKEN) &&
       (parsed.status !== status ||
         parsed.assignee !== assignee ||
-        parsed.linked_pr !== linkedPr)
+        parsed.linked_pr !== linkedPr ||
+        String(issue.body || "").trim() !== expectedBody.trim())
     ) {
       try {
         await ghFetch(`repos/${REPO}/issues/${issue.number}`, {
           method: "PATCH",
           body: JSON.stringify({
-            body: formatTaskIssueBody(updatedTask),
+            body: expectedBody,
             ...(status === "completed" && issue.state !== "closed"
               ? { state: "closed", state_reason: "completed" }
               : {}),
