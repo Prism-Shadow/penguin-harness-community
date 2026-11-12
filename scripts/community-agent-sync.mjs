@@ -311,12 +311,27 @@ async function syncFromGitHubIssues(baseTasks, maxConcurrent) {
     .filter((it) => !it.pull_request)
     .sort((a, b) => a.number - b.number);
 
+  const activeTaskIssueNums = new Set(
+    sortedIssues
+      .filter((it) => !(it.state === "closed" && it.state_reason === "not_planned"))
+      .map((it) => it.number),
+  );
+  for (const num of [...byIssueNum.keys()]) {
+    if (!activeTaskIssueNums.has(num)) {
+      byIssueNum.delete(num);
+    }
+  }
+
   let maxIdNum = baseTasks.reduce((acc, t) => {
     const m = String(t.id).match(/RSI-Q(\d+)/);
     return m ? Math.max(acc, Number(m[1])) : acc;
   }, 0);
 
   for (const issue of sortedIssues) {
+    if (issue.state === "closed" && issue.state_reason === "not_planned") {
+      byIssueNum.delete(issue.number);
+      continue;
+    }
     const author = issue.user?.login;
     const parsed = parseTaskIssueBody(issue.body, author);
     if (!parsed) continue;
