@@ -487,3 +487,23 @@ tasks:
     assignee: null
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/63"
     linked_pr: null
+
+  - id: "RSI-Q027"
+    issue_number: 64
+    published_at: "2026-11-12T09:23:57Z"
+    status: "open"
+    domain: "Awesome RSI"
+    exp: 50
+    target_repository: "https://github.com/Prism-Shadow/awesome-rsi"
+    related_issue: null
+    title: "Submit New RSI Papers to Awesome RSI"
+    title_zh: "向 Awesome RSI 按规范分类与格式提交新 RSI 论文"
+    description: "Curate and submit newly published or missing Recursive Self-Improvement (RSI) papers to the Awesome RSI repository following the taxonomy dimensions and entry formatting guidelines in the Survey Workflow (https://club.penguin.ooo/workflow/survey/). This is a standing task — whenever claimed, the system automatically clones a new open task so anyone can continue contributing."
+    description_zh: "按照参与 Awesome RSI 流程指南（https://club.penguin.ooo/zh/workflow/survey/）规定的分类维度与条目格式，向 Awesome RSI 仓库整理并提交新的递归自进化（RSI）相关文章。本任务为常驻任务，被认领后系统将自动复制生成一个新的待认领任务。"
+    references:
+      - "https://club.penguin.ooo/zh/workflow/survey/"
+      - "https://github.com/Prism-Shadow/awesome-rsi"
+      - "https://arxiv.org/abs/2610.14625"
+    assignee: null
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/64"
+    linked_pr: null
