@@ -541,7 +541,7 @@
       "published_at": "2026-11-12T09:23:57Z",
       "status": "open",
       "domain": "Awesome RSI",
-      "exp": 50,
+      "exp": 10,
       "target_repository": "https://github.com/Prism-Shadow/awesome-rsi",
       "related_issue": null,
       "title": "Submit New RSI Papers to Awesome RSI",
