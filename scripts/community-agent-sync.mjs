@@ -30,7 +30,7 @@ const COMMITTEE_HANDLES = new Set([
   "rank-Yu",
   "Saigyouji-Yuyuko1000",
   "Myriad-Dreamin",
-  "yu-yang-li",
+  "Yu-Yang-Li",
 ]);
 const AUTHORIZED_ISSUE_AUTHORS = new Set([...COMMITTEE_HANDLES, "github-actions[bot]"]);
 const TOP_FIVE_BONUSES_RMB = [800, 400, 200, 100, 50];
