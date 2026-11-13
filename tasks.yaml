@@ -567,3 +567,41 @@ tasks:
     assignee: null
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/72"
     linked_pr: null
+
+  - id: "RSI-Q031"
+    issue_number: 73
+    published_at: "2026-11-13T06:10:18Z"
+    status: "open"
+    domain: "RSI Algorithm"
+    exp: 100
+    target_repository: "https://github.com/Prism-Shadow/penguin-harness-plugins"
+    related_issue: "https://github.com/Prism-Shadow/penguin-harness-community/issues/66"
+    title: "Integrate Reflexion Method"
+    title_zh: "集成 Reflexion 方法"
+    description: "Implement and integrate Reflexion (arXiv:2303.11366) into PenguinHarness as an RSI plugin. With the foundation model frozen, generate natural-language reflections from task feedback, store and manage the reflections in episodic memory, and reuse the memory to guide subsequent trials and improve task execution (per RFC-0003)."
+    description_zh: "将 Reflexion（arXiv:2303.11366）复现并集成为 PenguinHarness RSI 插件，在冻结基座模型的条件下，基于任务执行反馈生成自然语言反思，保存与管理反思记忆并在后续尝试中调用，迭代改进 Agent 的决策与任务执行（遵循 RFC-0003 规范）。"
+    references:
+      - "https://arxiv.org/abs/2303.11366"
+      - "https://github.com/noahshinn/reflexion"
+    assignee: null
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/73"
+    linked_pr: null
+
+  - id: "RSI-Q032"
+    issue_number: 74
+    published_at: "2026-11-13T06:10:22Z"
+    status: "open"
+    domain: "RSI Algorithm"
+    exp: 100
+    target_repository: "https://github.com/Prism-Shadow/penguin-harness-plugins"
+    related_issue: "https://github.com/Prism-Shadow/penguin-harness-community/issues/66"
+    title: "Integrate SkillWeaver Method"
+    title_zh: "集成 SkillWeaver 方法"
+    description: "Implement and integrate SkillWeaver (arXiv:2504.07079) into PenguinHarness as an RSI plugin. Adapt the upstream browser execution environment and skill API invocation to support website exploration, synthesis and practice-driven refinement of reusable browser-operation APIs, and storage and reuse of the resulting skill library in subsequent web tasks (per RFC-0003)."
+    description_zh: "将 SkillWeaver（arXiv:2504.07079）复现并集成为 PenguinHarness RSI 插件，适配上游浏览器执行环境与技能 API 调用，支持站点探索、可复用浏览器操作 API 的合成与练习改进，以及技能库的保存和后续网页任务复用（遵循 RFC-0003 规范）。"
+    references:
+      - "https://arxiv.org/abs/2504.07079"
+      - "https://github.com/OSU-NLP-Group/SkillWeaver"
+    assignee: null
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/74"
+    linked_pr: null
