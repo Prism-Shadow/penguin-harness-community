@@ -714,6 +714,32 @@
       "assignee": null,
       "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/75",
       "linked_pr": null
+    },
+    {
+      "id": "RSI-Q033",
+      "issue_number": 77,
+      "pr_number": null,
+      "published_at": "2026-11-13T09:53:32Z",
+      "status": "open",
+      "domain": "Benchmark",
+      "exp": 50,
+      "target_repository": "https://github.com/Prism-Shadow/penguin-harness-benchmark",
+      "recurring": false,
+      "related_issue": "https://github.com/Prism-Shadow/penguin-harness-benchmark/issues/26",
+      "title": "Integrate the HLE-Diamond 50-Question Scientific Reasoning Benchmark",
+      "title_zh": "接入 HLE-Diamond 50 题科学推理基准",
+      "description": "Prepare the fixed 50-question HLE-Diamond reasoning subset for the community Evaluation challenge #75. The selection and public evaluation evidence are already available in Benchmark issue #26.\r\n\r\n#### Deliverables\r\n\r\n1. Add an RFC-0001 package with metadata and 50 task entries, separating solver statements from grader references. Submit the package with status `draft`.\r\n2. Provide a reproducible setup script pinned to the official dataset revision and selected IDs. The HLE-Diamond data card asks users not to redistribute the dataset; fetch it through the official authorized entry point and materialize questions locally.\r\n3. Implement final-answer grading for multiple-choice and short-answer questions, accepting equivalent short answers and reporting execution or grading errors separately.\r\n4. Run end-to-end checks using the exact model version, record grading and runtime evidence, and provide rerun commands.\r\n5. Submit a PR to the Benchmark repository and link it to this task and issue #26. After integration, participants can use the same question set in the recurring Evaluation challenge.",
+      "description_zh": "将已经选定的 HLE-Diamond 50 道推理题整理为社区可运行的 Benchmark，为 Evaluation 挑战 #75 提供题集和评分支持。题号及选题依据已在 Benchmark 登记 #26 中公开。\r\n\r\n#### 交付要求\r\n\r\n1. 按 RFC-0001 整理 Benchmark 元信息和 50 道题的配置，将题干与评分端参考答案分开，提交状态设为 `draft`。\r\n2. 提供固定数据版本、固定题号的准备脚本。HLE-Diamond 数据卡要求避免公开转载题库，使用者通过官方入口获得数据后，在本地生成题面与评分文件。\r\n3. 完成选择题和简答题的最终答案判分，接受等价的简答表达，分别记录答错、运行失败和评分失败。\r\n4. 使用注明精确版本的模型完成端到端自测，提供运行与判分记录及复跑命令。\r\n5. 向 Benchmark 仓库提交 PR，关联本任务和登记 #26。接入完成后，大家可以通过常驻 Evaluation 挑战在同一批题上比较 RSI 方法。",
+      "references": [
+        "https://huggingface.co/datasets/cais/hle-diamond",
+        "https://lastexam.ai/blog/hle-diamond",
+        "https://github.com/Prism-Shadow/penguin-harness-benchmark/issues/26",
+        "https://github.com/Prism-Shadow/penguin-harness-community/issues/75",
+        "https://github.com/Prism-Shadow/penguin-harness-community/blob/main/rfcs/RFC-0001-benchmark.zh.md"
+      ],
+      "assignee": null,
+      "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/77",
+      "linked_pr": null
     }
   ],
   "leaderboard": [
