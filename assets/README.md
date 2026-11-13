@@ -48,6 +48,12 @@ https://github.com/user-attachments/assets/1dbb57be-80be-45fa-8601-1322c74700dd
 
 [数据口径、费用明细与基准来源 / Measurement scope, cost breakdown and benchmark source](videos/demo-measurements.md)
 
+## 博客配图 / Blog pictures
+
+penguin.ooo 的博客文章以 `/blog-assets/<name>` 引用配图，网站从本目录下的 [`blog-assets/`](blog-assets) 加载。新配图请放在这里，不要放在仓库根目录。
+
+Posts on penguin.ooo reference their pictures as `/blog-assets/<name>`, and the site loads them from [`blog-assets/`](blog-assets) in this directory. Add new pictures here, not at the repository root.
+
 ## 微信社群 / WeChat community
 
 [<img src="wechat/penguin.jpg" width="320" alt="微信社群 / WeChat community">](wechat/penguin.jpg)
