@@ -603,6 +603,31 @@
       "assignee": null,
       "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/68",
       "linked_pr": null
+    },
+    {
+      "id": "RSI-Q029",
+      "issue_number": 71,
+      "pr_number": null,
+      "published_at": "2026-11-13T03:28:59Z",
+      "status": "open",
+      "domain": "RSI Algorithm",
+      "exp": 100,
+      "target_repository": "https://github.com/Prism-Shadow/penguin-harness-plugins",
+      "recurring": false,
+      "related_issue": "https://github.com/Prism-Shadow/penguin-harness-community/issues/66",
+      "title": "Integrate InfraRSI Method",
+      "title_zh": "集成 InfraRSI 方法",
+      "description": "Adapt and integrate InfraRSI (arXiv:2611.11558) into PenguinHarness as an RSI plugin, reusing its upstream optimization engine and infrarsi-optimize Skill to support iterative optimization of training configurations and code, candidate verification under fixed task contracts, and experience accumulation (per RFC-0003).",
+      "description_zh": "将 InfraRSI（arXiv:2611.11558）适配并集成为 PenguinHarness RSI 插件，复用上游优化引擎及 infrarsi-optimize Skill，支持训练配置与代码的迭代优化、固定任务约定下的候选验证及经验积累（遵循 RFC-0003）。",
+      "references": [
+        "https://arxiv.org/abs/2611.11558",
+        "https://github.com/TokenRhythm/InfraRSI",
+        "https://infrarsi.github.io/",
+        "https://github.com/TokenRhythm/InfraRSI/blob/main/agent_skill/README_ZH.md"
+      ],
+      "assignee": null,
+      "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/71",
+      "linked_pr": null
     }
   ],
   "leaderboard": [
