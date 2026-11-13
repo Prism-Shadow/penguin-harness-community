@@ -628,6 +628,30 @@
       "assignee": null,
       "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/71",
       "linked_pr": null
+    },
+    {
+      "id": "RSI-Q030",
+      "issue_number": 72,
+      "pr_number": null,
+      "published_at": "2026-11-13T03:45:21Z",
+      "status": "open",
+      "domain": "RSI Algorithm",
+      "exp": 100,
+      "target_repository": "https://github.com/Prism-Shadow/penguin-harness-plugins",
+      "recurring": false,
+      "related_issue": "https://github.com/Prism-Shadow/penguin-harness-community/issues/66",
+      "title": "Integrate Darwin Gödel Machine Method",
+      "title_zh": "集成 Darwin Gödel Machine 方法",
+      "description": "Implement and integrate Darwin Gödel Machine (DGM, arXiv:2505.22954) into PenguinHarness as an RSI plugin. With the foundation model frozen, maintain an archive of coding-agent variants and combine parent selection, code self-modification, and coding-benchmark evaluation to support multi-branch, open-ended self-improvement (per RFC-0003).",
+      "description_zh": "将 Darwin Gödel Machine（DGM，arXiv:2505.22954）复现并集成为 PenguinHarness RSI 插件，在冻结基座模型的条件下，维护编程 Agent 的代码版本档案，结合父版本选择、代码自修改与编程任务评测，开展多分支开放式自进化探索（遵循 RFC-0003 规范）。",
+      "references": [
+        "https://arxiv.org/abs/2505.22954",
+        "https://github.com/jennyzzt/dgm",
+        "https://sakana.ai/dgm/"
+      ],
+      "assignee": null,
+      "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/72",
+      "linked_pr": null
     }
   ],
   "leaderboard": [
