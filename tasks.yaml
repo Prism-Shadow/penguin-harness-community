@@ -398,23 +398,6 @@ tasks:
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/56"
     linked_pr: null
 
-  - id: "RSI-Q022"
-    issue_number: 57
-    published_at: "2026-11-11T14:31:00Z"
-    status: "in_progress"
-    domain: "Benchmark"
-    exp: 50
-    target_repository: "https://github.com/Prism-Shadow/penguin-harness-benchmark"
-    related_issue: null
-    title: "Build an AI Collaboration Quality Benchmark"
-    title_zh: "构建 AI 协作质量评测基准"
-    description: "Design and build a standardized benchmark evaluating AI collaboration quality across multi-agent and human-agent workflows, measuring handoff clarity, communication signal-to-noise ratio, context alignment efficiency, and net collaborative uplift over single-agent baselines (per RFC-0001)."
-    description_zh: "围绕“多智能体协同与人机协作”真实场景，设计并构建一套评测 AI 协作质量的标准化 Benchmark，量化评估任务交接清晰度、频道沟通信噪比、上下文对齐效率以及协作相对于单 Agent 的净增益（遵循 RFC-0001 规范）。"
-    references: []
-    assignee: "smith-source"
-    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/57"
-    linked_pr: null
-
   - id: "RSI-Q023"
     issue_number: 58
     published_at: "2026-11-11T14:32:00Z"
@@ -510,9 +493,9 @@ tasks:
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/64"
     linked_pr: null
 
-  - id: "RSI-Q028"
+  - id: "RSI-Q022"
     issue_number: 68
-    published_at: "2026-11-12T16:50:16Z"
+    published_at: "2026-11-12T16:10:00Z"
     status: "in_progress"
     domain: "Benchmark"
     exp: 50
@@ -527,7 +510,7 @@ tasks:
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/68"
     linked_pr: null
 
-  - id: "RSI-Q029"
+  - id: "RSI-Q028"
     issue_number: 71
     published_at: "2026-11-13T03:28:59Z"
     status: "in_progress"
@@ -548,7 +531,7 @@ tasks:
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/71"
     linked_pr: null
 
-  - id: "RSI-Q030"
+  - id: "RSI-Q029"
     issue_number: 72
     published_at: "2026-11-13T03:45:21Z"
     status: "open"
@@ -568,7 +551,7 @@ tasks:
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/72"
     linked_pr: null
 
-  - id: "RSI-Q031"
+  - id: "RSI-Q030"
     issue_number: 73
     published_at: "2026-11-13T06:10:18Z"
     status: "open"
@@ -587,7 +570,7 @@ tasks:
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/73"
     linked_pr: null
 
-  - id: "RSI-Q032"
+  - id: "RSI-Q031"
     issue_number: 74
     published_at: "2026-11-13T06:10:22Z"
     status: "open"
