@@ -614,7 +614,7 @@
       "issue_number": 72,
       "pr_number": null,
       "published_at": "2026-11-13T03:45:21Z",
-      "status": "open",
+      "status": "in_progress",
       "domain": "RSI Algorithm",
       "exp": 100,
       "target_repository": "https://github.com/Prism-Shadow/penguin-harness-plugins",
@@ -629,7 +629,7 @@
         "https://github.com/jennyzzt/dgm",
         "https://sakana.ai/dgm/"
       ],
-      "assignee": null,
+      "assignee": "leslie520-bye",
       "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/72",
       "linked_pr": null
     },
@@ -788,6 +788,7 @@
     "fanggejiaba",
     "smith-source",
     "Nhckdvrl",
+    "leslie520-bye",
     "Yu-Yang-Li"
   ]
 }
