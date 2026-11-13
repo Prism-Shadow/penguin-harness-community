@@ -720,7 +720,7 @@
       "issue_number": 77,
       "pr_number": null,
       "published_at": "2026-11-13T09:53:32Z",
-      "status": "open",
+      "status": "in_progress",
       "domain": "Benchmark",
       "exp": 50,
       "target_repository": "https://github.com/Prism-Shadow/penguin-harness-benchmark",
@@ -737,7 +737,7 @@
         "https://github.com/Prism-Shadow/penguin-harness-community/issues/75",
         "https://github.com/Prism-Shadow/penguin-harness-community/blob/main/rfcs/RFC-0001-benchmark.zh.md"
       ],
-      "assignee": null,
+      "assignee": "Yu-Yang-Li",
       "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/77",
       "linked_pr": null
     }
@@ -787,6 +787,7 @@
     "huangjunli864",
     "fanggejiaba",
     "smith-source",
-    "Nhckdvrl"
+    "Nhckdvrl",
+    "Yu-Yang-Li"
   ]
 }
