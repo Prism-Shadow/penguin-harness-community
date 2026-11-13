@@ -638,7 +638,7 @@
       "issue_number": 73,
       "pr_number": null,
       "published_at": "2026-11-13T06:10:18Z",
-      "status": "open",
+      "status": "in_progress",
       "domain": "RSI Algorithm",
       "exp": 100,
       "target_repository": "https://github.com/Prism-Shadow/penguin-harness-plugins",
@@ -652,7 +652,7 @@
         "https://arxiv.org/abs/2303.11366",
         "https://github.com/noahshinn/reflexion"
       ],
-      "assignee": null,
+      "assignee": "leslie520-bye",
       "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/73",
       "linked_pr": null
     },
