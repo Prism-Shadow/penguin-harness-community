@@ -785,6 +785,102 @@
       "assignee": null,
       "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/80",
       "linked_pr": null
+    },
+    {
+      "id": "RSI-Q036",
+      "issue_number": 83,
+      "pr_number": null,
+      "published_at": "2026-11-16T09:56:59Z",
+      "status": "open",
+      "domain": "Benchmark",
+      "exp": 50,
+      "target_repository": "https://github.com/Prism-Shadow/penguin-harness-benchmark",
+      "recurring": false,
+      "related_issue": null,
+      "title": "Integrate NanoChat AutoResearch Full-Stack Benchmark",
+      "title_zh": "集成 NanoChat AutoResearch 训练算法与架构自动研究基准",
+      "description": "Integrate the full-stack NanoChat AutoResearch benchmark (based on karpathy/autoresearch and evaluated in Baidu ERNIE Evolve and rekursiv.ai) into penguin-harness-benchmark. Unlike the Infra-only track (#80), this benchmark evaluates an automated research system's ability to jointly optimize model architecture, auxiliary prediction branches (e.g., n-gram statistics, retrieval-augmented context branches), optimizers, learning rate schedules, and custom Triton kernels within a fixed 5-minute single-GPU training budget to minimize validation bits-per-byte (val_bpb).\n\nDeliverables and acceptance criteria:\n1. Package NanoChat AutoResearch per RFC-0001 with pinned dataset, tokenizer, baseline training script, and isolated evaluator outside the agent-editable workspace.\n2. Enforce the 5-minute single-GPU training wall-clock budget and verify that candidate improvements are evaluated on the locked validation split using val_bpb (lower is better), recording public reference baselines (community best 0.8878, ERNIE Evolve 0.8763).\n3. Provide end-to-end setup, baseline reproduction, candidate verification, and scoring scripts.",
+      "description_zh": "将完整的 NanoChat AutoResearch 自动研究基准（基于 karpathy/autoresearch，对齐百度 ERNIE Evolve 与 rekursiv.ai 评测设定）接入 penguin-harness-benchmark。与仅限训练基础设施的 Infra-only 赛道（#80）不同，本基准评测自动研究系统在单卡 5 分钟固定训练预算内，协同优化模型结构、辅助预测分支（如全语料 n-gram 统计、相似上下文检索分支）、稀疏/融合优化器、学习率策略与自定义 Triton 算子的综合能力，以验证集 BPB（val_bpb，越低越好）为核心指标。\n\n交付与验收要求：\n1. 按 RFC-0001 规范完成 Benchmark 打包，锁定训练语料、tokenizer 与基线脚本，并将 Evaluator 隔离在智能体可修改范围之外。\n2. 严格执行单卡 5 分钟固定训练时间窗口与独立验证集 val_bpb 评测，内置公开参考基线（社区最佳 0.8878、ERNIE Evolve 0.8763）。\n3. 提供一键环境准备、基线复跑、候选版本隔离评测与自动计分脚本。",
+      "references": [
+        "https://ernie.baidu.com/zh/research/posts/ernie-evolve/",
+        "https://github.com/ernie-research/ERNIE-Evolve-Results",
+        "https://github.com/karpathy/autoresearch",
+        "https://rekursiv.ai/blog/autoautoresearch/"
+      ],
+      "assignee": null,
+      "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/83",
+      "linked_pr": null
+    },
+    {
+      "id": "RSI-Q037",
+      "issue_number": 84,
+      "pr_number": null,
+      "published_at": "2026-11-16T09:57:01Z",
+      "status": "open",
+      "domain": "Benchmark",
+      "exp": 50,
+      "target_repository": "https://github.com/Prism-Shadow/penguin-harness-benchmark",
+      "recurring": false,
+      "related_issue": null,
+      "title": "Integrate NanoGPT Speedrun Benchmark (Track 1 & Track 3)",
+      "title_zh": "集成 NanoGPT Speedrun 模型训练加速基准（Track 1 & Track 3）",
+      "description": "Integrate the NanoGPT Speedrun benchmark (KellerJordan/modded-nanogpt, as evaluated in ERNIE Evolve) into penguin-harness-benchmark, covering both Track 1 (wall-clock training time to reach the target validation loss) and Track 3 (training steps required to reach the target validation loss).\n\nDeliverables and acceptance criteria:\n1. Package Track 1 and Track 3 tasks per RFC-0001 with pinned FineWeb data shards, environment configuration, and multi-run target-loss verification protocol.\n2. Measure wall-clock time to target loss for Track 1 (reference: community best 39.9s, ERNIE Evolve 38.9s) and step count to target loss for Track 3 (reference: community best 2690 steps, ERNIE Evolve 2590 steps), rejecting candidates that fail target validation loss checks.\n3. Provide reproducible baseline verification and isolated candidate evaluation entry points.",
+      "description_zh": "将 NanoGPT Speedrun 训练速度优化基准（KellerJordan/modded-nanogpt，对齐 ERNIE Evolve 评测设定）接入 penguin-harness-benchmark，同时覆盖 Track 1（达到目标验证集损失所需的训练时间）与 Track 3（达到目标验证集损失所需的训练步数）两个赛道。\n\n交付与验收要求：\n1. 按 RFC-0001 规范完成 Track 1 与 Track 3 任务配置，锁定数据分片、依赖环境与目标损失多次验证协议。\n2. 准确计量 Track 1 达标训练时间（参考基线：社区最佳 39.9 秒、ERNIE Evolve 38.9 秒）与 Track 3 达标训练步数（参考基线：社区最佳 2690 步、ERNIE Evolve 2590 步），未通过目标损失验证的候选不予计分。\n3. 提供可复现的基线跑通脚本与隔离评测入口。",
+      "references": [
+        "https://ernie.baidu.com/zh/research/posts/ernie-evolve/",
+        "https://github.com/ernie-research/ERNIE-Evolve-Results",
+        "https://github.com/KellerJordan/modded-nanogpt"
+      ],
+      "assignee": null,
+      "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/84",
+      "linked_pr": null
+    },
+    {
+      "id": "RSI-Q038",
+      "issue_number": 85,
+      "pr_number": null,
+      "published_at": "2026-11-16T09:57:03Z",
+      "status": "open",
+      "domain": "Benchmark",
+      "exp": 100,
+      "target_repository": "https://github.com/Prism-Shadow/penguin-harness-benchmark",
+      "recurring": false,
+      "related_issue": null,
+      "title": "Integrate NVIDIA SOL-ExecBench GPU Kernel Optimization Benchmark",
+      "title_zh": "集成 NVIDIA SOL-ExecBench GPU 算子优化基准",
+      "description": "Integrate NVIDIA SOL-ExecBench (235 real-world model operator problems evaluated under Evaluation Stack v1.1, as benchmarked in ERNIE Evolve) into penguin-harness-benchmark to evaluate automated GPU kernel generation and optimization.\n\nDeliverables and acceptance criteria:\n1. Package SOL-ExecBench tasks per RFC-0001 under the Evaluation Stack v1.1 protocol, covering the 235 operator problems from production AI workloads.\n2. Implement isolated correctness verification (numerical tolerance against reference implementations across test inputs) and Speed-of-Light (SOL) performance scoring (reference average SOL score: leaderboard #1 0.827, ERNIE Evolve 0.819, Hyra-1.0 0.736).\n3. Support subset and full-suite evaluation modes so RSI algorithms can iterate on individual kernels and validate aggregate SOL scores.",
+      "description_zh": "将 NVIDIA SOL-ExecBench 底层算子优化基准（包含来自真实模型的 235 个 GPU kernel 算子问题，采用 Evaluation Stack v1.1 评测设定）接入 penguin-harness-benchmark，用于评测智能体编写高正确率、极致性能 GPU 算子的能力。\n\n交付与验收要求：\n1. 按 RFC-0001 规范集成 SOL-ExecBench（对齐 Evaluation Stack v1.1 评测标准），覆盖 235 个真实算子优化任务。\n2. 接入隔离的数值正确性校验与 Speed-of-Light（SOL）性能计分流程（参考平均 SOL 分数：榜单第一 0.827、ERNIE Evolve 0.819、Hyra-1.0 0.736）。\n3. 支持单题/子集快速迭代评测与全量 235 题汇总评测模式，供 ERNIE Evolve 等自动研究系统直接调用。",
+      "references": [
+        "https://ernie.baidu.com/zh/research/posts/ernie-evolve/",
+        "https://github.com/ernie-research/ERNIE-Evolve-Results",
+        "https://github.com/NVIDIA/SOL-ExecBench"
+      ],
+      "assignee": null,
+      "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/85",
+      "linked_pr": null
+    },
+    {
+      "id": "RSI-Q039",
+      "issue_number": 86,
+      "pr_number": null,
+      "published_at": "2026-11-16T09:57:10Z",
+      "status": "open",
+      "domain": "RSI Algorithm",
+      "exp": 150,
+      "target_repository": "https://github.com/Prism-Shadow/penguin-harness-plugins",
+      "recurring": false,
+      "related_issue": null,
+      "title": "Reproduce ERNIE Evolve Dual-Loop Automated Research System in PenguinHarness",
+      "title_zh": "在 PenguinHarness 中复现 ERNIE Evolve 双层循环自动研究系统",
+      "description": "Reproduce the ERNIE Evolve automated research architecture in PenguinHarness as a reusable RSI plugin/workflow, and validate it on the integrated public AI R&D benchmarks (NanoChat AutoResearch, NanoGPT Speedrun, and SOL-ExecBench).\n\nDeliverables and acceptance criteria:\n1. Implement the ERNIE Evolve dual-loop multi-agent architecture in PenguinHarness:\n   - Outer loop (`Director` + `Experience Bank` + `Knowledge Base`): proposes high-value research directions, selects starting checkpoints (baseline, best candidate, intermediate node, or upstream main), and manages parallel research lanes (`lanes`), each maintaining its own candidate tree.\n   - Inner loop (`Selector` + `Executor` + `Evaluator` + `Reviewer`): selects nodes along a research lane, formulates concrete hypotheses, executes code changes in an isolated environment, runs the immutable external `Evaluator` (accepting only gains above the noise threshold), and audits diffs with `Reviewer` to reject off-direction changes or evaluation-loophole exploits (reward hacking).\n2. Ensure failed attempts, root-cause diagnostics, and verified improvements flow back into the Experience Bank to guide subsequent outer/inner loop decisions.\n3. Demonstrate end-to-end automated research runs in PenguinHarness on at least one of NanoChat AutoResearch, NanoGPT Speedrun, or SOL-ExecBench with reproducible logs, candidate trees, and verified metric gains over baseline.",
+      "description_zh": "在 PenguinHarness 中复现百度 ERNIE Evolve 双层循环自动研究系统，封装为可复用的 RSI 插件/工作流，并在公开 AI 研发任务（NanoChat AutoResearch、NanoGPT Speedrun、SOL-ExecBench）上完成实验验证。\n\n交付与验收要求：\n1. 在 PenguinHarness 中完整实现 ERNIE Evolve 的双层循环与五角色协同架构：\n   - 外层循环（Director + 经验库 Experience Bank + 知识库 Knowledge Base）：回答“研究什么”，从历史实验候选与论文/领域经验库中提取研究方向、选择起点版本，并行调度多条研究线（lane）并维护各自的候选树（Candidate Tree）。\n   - 内层循环（Selector + Executor + Evaluator + Reviewer）：回答“如何做好”，在研究线内选择节点并提出本轮验证假设，由 Executor 在隔离环境中修改代码，由仓库外不可见的固定 Evaluator 测性能与正确性（仅接受超过噪声阈值的提升），再由 Reviewer 审查代码改动是否偏离方向或利用评测漏洞（防止 reward hacking）。\n2. 打通经验回流闭环：将每轮代码改动、评测指标、失败原因与复核结论沉淀回经验库，支撑跨方向转向与多分支发现整合。\n3. 在 NanoChat AutoResearch、NanoGPT Speedrun 或 SOL-ExecBench 上跑通端到端自动研究复现实验，提交完整候选树演化记录与相对基线的可验证提升结果。",
+      "references": [
+        "https://ernie.baidu.com/zh/research/posts/ernie-evolve/",
+        "https://github.com/ernie-research/ERNIE-Evolve-Results"
+      ],
+      "assignee": null,
+      "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/86",
+      "linked_pr": null
     }
   ],
   "leaderboard": [
