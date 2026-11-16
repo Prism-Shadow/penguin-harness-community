@@ -661,6 +661,9 @@ Use the fixed [Train package](https://github.com/Yu-Yang-Li/penguin-harness-benc
       - "https://github.com/Prism-Shadow/penguin-harness-community/blob/main/workflow/evaluation.zh.md"
       - "https://github.com/Prism-Shadow/penguin-harness-community/blob/main/rfcs/RFC-0002-evaluation.zh.md"
       - "https://github.com/Prism-Shadow/penguin-harness-community/blob/main/rfcs/RFC-0005-leaderboard.zh.md"
+      - "https://github.com/Yu-Yang-Li/penguin-harness-benchmark/tree/a59cffa75fd1cfabb8a7f2ffe2b00bf6161ec569/packages/hle-diamond-reasoning-50-train"
+      - "https://github.com/Yu-Yang-Li/penguin-harness-benchmark/tree/a59cffa75fd1cfabb8a7f2ffe2b00bf6161ec569/packages/hle-diamond-reasoning-50-test"
+      - "https://github.com/Yu-Yang-Li/penguin-harness-benchmark/tree/a59cffa75fd1cfabb8a7f2ffe2b00bf6161ec569/data/hle-diamond-reasoning-50"
     assignee: null
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/75"
     linked_pr: null
