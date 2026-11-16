@@ -1,5 +1,6 @@
 ---
 import type { Locale } from "../shared/i18n";
+import { renderQuestDescription } from "../shared/quest-markdown";
 import {
   QUESTS,
   QUEST_DOMAINS,
@@ -242,7 +243,7 @@ function tasksFor(domain: QuestDomainId, status: QuestStatus): QuestItem[] {
         class="site-leave m-auto w-[calc(100%-2rem)] max-w-lg text-left"
       >
         <div class="site-leave-body">
-          <div class="flex items-start justify-between gap-3">
+          <div class="flex flex-col items-start justify-between gap-3 sm:flex-row">
             <h2 class="text-lg font-semibold tracking-tight text-gray-950 dark:text-white">
               {resolveText(q.title, locale)}
             </h2>
@@ -266,9 +267,10 @@ function tasksFor(domain: QuestDomainId, status: QuestStatus): QuestItem[] {
             </div>
           </div>
 
-            <p class="mt-3 text-sm leading-relaxed text-gray-600 dark:text-gray-300">
-              {resolveText(q.description, locale)}
-            </p>
+            <div
+              class="quest-description md-body mt-3 text-sm text-gray-600 dark:text-gray-300"
+              set:html={renderQuestDescription(resolveText(q.description, locale))}
+            />
 
             <div class="mt-4">
               <div class="text-xs font-medium text-gray-500 dark:text-gray-400">
@@ -390,6 +392,24 @@ function tasksFor(domain: QuestDomainId, status: QuestStatus): QuestItem[] {
     ))
   }
 </div>
+
+<style>
+  .quest-description > :global(:first-child) {
+    margin-top: 0;
+  }
+
+  .quest-description :global(pre) {
+    max-width: 100%;
+    overflow-x: auto;
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    background: var(--color-gray-50);
+  }
+
+  :global(.dark) .quest-description :global(pre) {
+    background: var(--color-gray-900);
+  }
+</style>
 
 <script>
   const root = document.querySelector<HTMLElement>("[data-quests-root]");
