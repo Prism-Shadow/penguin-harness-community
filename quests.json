@@ -760,6 +760,54 @@
       "assignee": "Saigyouji-Yuyuko1000",
       "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/78",
       "linked_pr": null
+    },
+    {
+      "id": "RSI-Q035",
+      "issue_number": 80,
+      "pr_number": null,
+      "published_at": "2026-11-16T07:27:04Z",
+      "status": "open",
+      "domain": "Benchmark",
+      "exp": 50,
+      "target_repository": "https://github.com/Prism-Shadow/penguin-harness-benchmark",
+      "recurring": false,
+      "related_issue": "https://github.com/Prism-Shadow/penguin-harness-community/issues/71",
+      "title": "Integrate AutoResearch Benchmark",
+      "title_zh": "集成 AutoResearch 训练基础设施优化基准",
+      "description": "Integrate the AutoResearch benchmark (karpathy/autoresearch, including the Infra-only optimization track adopted in InfraRSI, arXiv:2611.11558) into penguin-harness-benchmark to evaluate agents' ability to autonomously optimize real GPU training throughput and system efficiency under a fixed 5-minute single-GPU wall-clock budget. With model architecture, parameter count, data ordering, and optimizer math frozen (verified via initial-step loss equivalence), agents optimize batch/accumulation splitting, torch.compile, CUDA graphs, FlashAttention/fused kernels, and dataloader prefetching to reduce step time and validation val_bpb. Provide standardized task packages, GPU execution configurations, equivalence and timing verifiers, and reproducible end-to-end validation results (per RFC-0001).",
+      "description_zh": "将 AutoResearch 训练优化基准（karpathy/autoresearch，含 InfraRSI arXiv:2611.11558 采用的 Infra-only 训练系统优化赛道）接入 penguin-harness-benchmark，评测智能体在单卡 GPU 固定 5 分钟真实训练时间预算下自主优化训练吞吐与底层系统效率的能力。在冻结模型结构、参数量、数据顺序与优化器数学语义（通过初始步 Loss 等价性校验）的前提下，智能体通过调优微批次与梯度累积切分、torch.compile、CUDA Graphs、FlashAttention/算子融合及数据预取来缩短真实 step time 并降低验证集 val_bpb。需完成标准化任务封装、GPU 运行配置、数值等价与计时评分脚本，并提供可复现的端到端真实 GPU 验证结果（遵循 RFC-0001 规范）。",
+      "references": [
+        "https://github.com/karpathy/autoresearch",
+        "https://arxiv.org/abs/2611.11558",
+        "https://github.com/TokenRhythm/InfraRSI/tree/main/infrarsi/ext/autoresearch"
+      ],
+      "assignee": null,
+      "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/80",
+      "linked_pr": null
+    },
+    {
+      "id": "RSI-Q036",
+      "issue_number": 81,
+      "pr_number": null,
+      "published_at": "2026-11-16T07:27:08Z",
+      "status": "open",
+      "domain": "Benchmark",
+      "exp": 50,
+      "target_repository": "https://github.com/Prism-Shadow/penguin-harness-benchmark",
+      "recurring": false,
+      "related_issue": "https://github.com/Prism-Shadow/penguin-harness-community/issues/66",
+      "title": "Integrate METR RE-Bench",
+      "title_zh": "集成 METR RE-Bench 机器学习研发与训练优化基准",
+      "description": "Integrate METR RE-Bench (arXiv:2411.15114) into penguin-harness-benchmark to evaluate agents on open-ended machine learning research engineering and training infrastructure optimization tasks, including LLM fine-tuning wall-clock acceleration under weight-equivalence constraints (ai_rd_optimize_llm_foundry), custom GPU kernel optimization (ai_rd_optimize_a_kernel), and model/training optimization environments. Provide standardized task packages, GPU container configurations, automated verification and timing scripts, and reproducible end-to-end validation results (per RFC-0001).",
+      "description_zh": "将机器学习研发工程评测基准 METR RE-Bench（arXiv:2411.15114）接入 penguin-harness-benchmark，评测智能体在开放式机器学习研发与训练基础设施优化任务上的能力（涵盖权重等价约束下的 LLM 微调训练加速 ai_rd_optimize_llm_foundry、自定义 GPU 算子内核优化 ai_rd_optimize_a_kernel 等环境）。需完成标准化任务封装、GPU 容器运行配置与自动校验计时评分脚本，并提供可复现的端到端真实 GPU 验证结果（遵循 RFC-0001 规范）。",
+      "references": [
+        "https://arxiv.org/abs/2411.15114",
+        "https://github.com/METR/RE-Bench",
+        "https://github.com/TokenRhythm/InfraRSI/tree/main/infrarsi/ext/rebench_llmf"
+      ],
+      "assignee": null,
+      "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/81",
+      "linked_pr": null
     }
   ],
   "leaderboard": [
