@@ -512,6 +512,7 @@ tasks:
 
   - id: "RSI-Q028"
     issue_number: 71
+    pr_number: 1551
     published_at: "2026-11-13T03:28:59Z"
     status: "in_progress"
     domain: "RSI Algorithm"
@@ -529,7 +530,7 @@ tasks:
       - "https://github.com/TokenRhythm/InfraRSI/blob/main/agent_skill/README_ZH.md"
     assignee: "Nhckdvrl"
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/71"
-    linked_pr: null
+    linked_pr: "https://github.com/Prism-Shadow/penguin-harness/pull/1551"
 
   - id: "RSI-Q029"
     issue_number: 72
