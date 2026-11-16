@@ -1090,6 +1090,29 @@
       "assignee": null,
       "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/95",
       "linked_pr": null
+    },
+    {
+      "id": "RSI-Q049",
+      "issue_number": 96,
+      "pr_number": null,
+      "published_at": "2026-11-16T10:01:17Z",
+      "status": "open",
+      "domain": "Benchmark",
+      "exp": 150,
+      "target_repository": "https://github.com/Prism-Shadow/penguin-harness-benchmark",
+      "recurring": false,
+      "related_issue": "https://github.com/Prism-Shadow/penguin-harness-community/issues/68",
+      "title": "Build TuringBench: Multi-Dimensional Benchmark for Human-Likeness and Eliminating \"AI Taste\" Across Agent Content & Behavior",
+      "title_zh": "构建 TuringBench：多维度评测智能体生成产物与交互行为“去 AI 味 / 拟人度”的图灵基准",
+      "description": "Current AI and agent outputs often exhibit unmistakable \"AI taste / AI slop\" (formulaic phrasing, over-hedged assistant tone, generic template layouts in web pages and slides, stiff video pacing, and robotic interaction patterns), making them trivially distinguishable from authentic human work. Inspired by the classic Turing Test, build **TuringBench** in `penguin-harness-benchmark` to rigorously measure how human-like an agent's artifacts and behaviors are across diverse modalities, and to provide an actionable feedback signal so any model can evolve via RSI to achieve top-tier human-like taste and craftsmanship (e.g., Claude-level writing and design quality).\n\nDeliverables and acceptance criteria:\n1. **Multi-Domain & Multi-Modal Task Suite (per RFC-0001)** covering four core dimensions:\n   - **Text & Deep Writing**: Fiction/novels, technical blogs, and algorithm/engineering documentation — evaluating narrative voice, information density, natural cadence, and freedom from LLM clichés.\n   - **Visual & Multimodal Artifacts**: Generated web pages/UIs, presentation slide decks (PPT / Bento slides layout & typography), and video storyboards/clips — evaluating whether visual hierarchy, spacing, color restraint, and pacing match human designer taste rather than generic AI templates.\n   - **Multi-Party Social & Group Chat**: Simulated or replay-based group chat scenarios — testing whether an agent joining a multi-person group conversation can blend in naturally (turn-taking, brevity, context pick-up, colloquial tone, and knowing when to stay silent rather than lecturing like an assistant) without being identified as an AI.\n   - **Interactive Behavioral Trajectories**: Gameplay and Browser Use / GUI action trajectories — evaluating whether decision timing, exploration paths, and error-recovery behavior resemble real human operators.\n2. **Turing Discriminator & Diagnostic Evaluator**:\n   - Pair high-quality authentic human reference corpora/trajectories against agent outputs under blind pairwise comparison and multi-feature Turing discrimination.\n   - Output both quantitative **Human-Likeness / Turing Pass Rate scores** and fine-grained **AI-Tell Diagnostics** (pinpointing exact sentences, slide layout defects, chat turns, or trajectory segments that betrayed the AI) while verifying that core task utility/correctness is preserved.\n3. **RSI Closed-Loop Readiness**:\n   - Provide a baseline evaluation comparing mainstream models and demonstrate an RSI evolution loop in PenguinHarness where a base open/commercial model iteratively refines its skills/playbooks against TuringBench feedback to significantly reduce \"AI taste\" and close the gap with top human-like models.",
+      "description_zh": "当前许多 AI 与 Agent 的生成产物存在明显的“一眼 AI 味”（如八股连接词、过度说教的助手腔、千篇一律的紫蓝渐变网页、机械堆砌的 PPT 排版、公式化的视频镜头，以及生硬的群聊互动和操作轨迹），很容易与真人的作品和行为区分开来。本任务旨在借鉴图灵测试（Turing Test）的思路，在 `penguin-harness-benchmark` 中构建 **TuringBench**，从多模态产物与交互行为等多个维度量化评测“AI 生成的内容与行为到底有多像人”，并作为 RSI 的奖励与归因信号，让任何模型都能通过自进化达到媲美顶级模型（如 Claude 水准）的拟人质感与审美品味。\n\n交付与验收要求：\n1. **构建覆盖四大维度的 TuringBench 多场景任务集（遵循 RFC-0001）**：\n   - **深度文字创作**：涵盖小说故事、科技博客、算法与架构文档等，考察叙事节奏、信息密度、行文呼吸感与“去八股/去翻译腔/去总结陈词”能力。\n   - **视觉与多模态生成产物**：涵盖网页前端 UI、Slides 演示文稿排版（PPT / Bento Slides）、生成式视频分镜与成片等，考察留白、字体层级、配色克制感与视觉叙事是否具备真人设计师品味。\n   - **多人社交与群聊潜伏场景**：模拟真实多人群聊上下文，评测 Agent 进入群聊后能否自然融入（话轮切入时机、短句口语感、接梗与上下文呼应、知道何时不发言而非像客服一样长篇大论），测试其是否会被识破为 AI。\n   - **交互与操作行为轨迹**：涵盖玩游戏（Gameplay）与 Browser Use / 桌面操作轨迹，评测其操作节奏、探索路径与纠错习惯是否符合真人行为分布。\n2. **图灵判别器与细粒度“AI 味”归因 Evaluator**：\n   - 建立高质量真人基准样本库，采用盲测成对比较（Pairwise Blind Turing Test）与多维特征判别器进行评测，同时确保任务本身的完成质量与准确性不退化。\n   - 不仅输出量化的**图灵通过率 / 拟人度得分（Turing Pass Rate / ELO）**，还需给出可操作的**“AI 味破绽归因诊断”**（精确定位暴露 AI 痕迹的具体句式、排版元素、群聊回复或轨迹片段）。\n3. **支撑 RSI 自进化闭环验证**：\n   - 提供主流模型的初始 TuringBench 评测基线，并在 PenguinHarness 中展示基于 TuringBench 反馈的 RSI 进化示例：让普通模型通过多轮迭代优化 Skill / Playbook 后显著消除“AI 味”，逼近顶级模型的拟人水准。",
+      "references": [
+        "https://github.com/Prism-Shadow/penguin-harness-benchmark",
+        "https://github.com/Prism-Shadow/penguin-harness"
+      ],
+      "assignee": null,
+      "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/96",
+      "linked_pr": null
     }
   ],
   "leaderboard": [
