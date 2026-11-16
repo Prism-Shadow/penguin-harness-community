@@ -18,6 +18,7 @@ target_repositories:
 tasks:
   - id: "RSI-Q001"
     issue_number: 30
+    pr_number: 25
     published_at: "2026-11-10T10:00:00Z"
     status: "in_progress"
     domain: "Benchmark"
@@ -33,7 +34,7 @@ tasks:
       - "https://arxiv.org/abs/2310.06770"
     assignee: "ussumer"
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/30"
-    linked_pr: null
+    linked_pr: "https://github.com/Prism-Shadow/penguin-harness-benchmark/pull/25"
 
   - id: "RSI-Q002"
     issue_number: 31
@@ -243,6 +244,7 @@ tasks:
 
   - id: "RSI-Q008"
     issue_number: 37
+    pr_number: 21
     published_at: "2026-11-10T10:35:00Z"
     status: "in_progress"
     domain: "PenguinHarness"
@@ -256,7 +258,7 @@ tasks:
     references: []
     assignee: "EonHao"
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/37"
-    linked_pr: null
+    linked_pr: "https://github.com/Prism-Shadow/penguin-harness-plugins/pull/21"
 
   - id: "RSI-Q014"
     issue_number: 44
