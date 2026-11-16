@@ -729,12 +729,35 @@ The challenge uses a fixed question set and a shared grading method. Dataset int
     exp: 50
     target_repository: "https://github.com/Prism-Shadow/penguin-harness-benchmark"
     related_issue: "https://github.com/Prism-Shadow/penguin-harness-community/issues/71"
-    title: "Integrate AutoResearch Benchmark"
-    title_zh: "集成 AutoResearch 训练基础设施优化基准"
-    description: "Integrate the AutoResearch benchmark (karpathy/autoresearch, including the Infra-only optimization track adopted in InfraRSI, arXiv:2611.11558) into penguin-harness-benchmark to evaluate agents' ability to autonomously optimize real GPU training throughput and system efficiency under a fixed 5-minute single-GPU wall-clock budget. With model architecture, parameter count, data ordering, and optimizer math frozen (verified via initial-step loss equivalence), agents optimize batch/accumulation splitting, torch.compile, CUDA graphs, FlashAttention/fused kernels, and dataloader prefetching to reduce step time and validation val_bpb. Provide standardized task packages, GPU execution configurations, equivalence and timing verifiers, and reproducible end-to-end validation results (per RFC-0001)."
-    description_zh: "将 AutoResearch 训练优化基准（karpathy/autoresearch，含 InfraRSI arXiv:2611.11558 采用的 Infra-only 训练系统优化赛道）接入 penguin-harness-benchmark，评测智能体在单卡 GPU 固定 5 分钟真实训练时间预算下自主优化训练吞吐与底层系统效率的能力。在冻结模型结构、参数量、数据顺序与优化器数学语义（通过初始步 Loss 等价性校验）的前提下，智能体通过调优微批次与梯度累积切分、torch.compile、CUDA Graphs、FlashAttention/算子融合及数据预取来缩短真实 step time 并降低验证集 val_bpb。需完成标准化任务封装、GPU 运行配置、数值等价与计时评分脚本，并提供可复现的端到端真实 GPU 验证结果（遵循 RFC-0001 规范）。"
+    title: "Integrate AutoResearch Infra-Only Benchmark"
+    title_zh: "集成 AutoResearch 训练基础设施优化赛道"
+    description: "Integrate the infrastructure-only track built on karpathy/autoresearch and defined in TokenRhythm/InfraRSI into penguin-harness-benchmark. Evaluate real GPU training optimizations while keeping the model, data order, effective batch size, optimizer mathematics, and permitted precision fixed within each workload configuration.
+
+Deliverables and acceptance criteria:
+
+1. Add an RFC-0001 package with task statements, grading instructions, reproducible setup, and GPU execution configuration. Pin the autoresearch and InfraRSI revisions, data/tokenizer versions, dependencies, and permitted edits. Submit with status draft.
+2. Preserve the infra-only contract and trusted evaluation: protected model/training definitions, code and data checks, initial-step loss checks, runtime metadata, and independent val_bpb recomputation from saved weights. Initial loss agreement alone is not sufficient validation.
+3. Define timing and budgets separately. The 300-second budget is the timed training window for one candidate under the pinned warm-up rules; it is not the wall-clock budget for preparation, compilation/warm-up, evaluation, or the complete optimization search. Declare the search trial/token/GPU-time limits and report actual total costs. The upstream ENV-C reference uses one H100 80GB and a separate four-hour search budget; the community run must state its own hardware and budget.
+4. Keep the upstream fixed-training-time objective: independently judged val_bpb is the primary metric, with training steps, tokens/s, step time, and peak memory as supporting metrics. Compare the baseline and final candidate on the same declared hardware, using at least three independent repetitions and reporting variability. Report any fixed-workload timing experiment separately; do not turn a val_bpb improvement into a runtime speedup ratio.
+5. Provide an end-to-end PenguinHarness run with the exact agent-model version, baseline and candidate code, verifier results, commands, logs, and a results report. Report unsuccessful candidates and no-improvement outcomes honestly; a positive gain is not an acceptance prerequisite.
+
+Hardware changes or a smaller workload must be declared as a separate configuration, with its own frozen baseline and results. Results from different configurations must not be pooled as if they used the original protocol. This benchmark may support validation of the InfraRSI integration task #71."
+    description_zh: "将基于 karpathy/autoresearch、由 TokenRhythm/InfraRSI 定义的 Infra-only（仅训练基础设施优化）赛道接入 penguin-harness-benchmark。在同一负载配置中固定模型、数据顺序、有效 batch size、优化器数学语义和允许的精度，评测 Agent 优化真实 GPU 训练实现与运行配置的能力。
+
+#### 交付与验收要求
+
+1. 按 RFC-0001 整理题干、评分说明、数据准备脚本、可复现环境和 GPU 运行配置，提交状态设为 draft。锁定 autoresearch、InfraRSI、数据与 tokenizer 的版本，明确依赖、允许修改的配置与代码范围。
+2. 保留 Infra-only 赛道的任务约束及可信验证流程，包括受保护的模型/训练定义、代码与数据检查、初始步 loss 检查、运行元信息，以及根据保存权重独立重算 val_bpb。初始 loss 接近不能单独作为完整正确性证明。
+3. 分开声明计时规则与资源预算：300 秒是单个候选按锁定上游预热规则执行的训练计时窗口，不是数据准备、编译/预热、验证及整轮优化搜索的总预算。另行明确搜索次数、Token、GPU 用时等上限，并报告实际总成本。上游 ENV-C 的参考配置为单张 H100 80GB，搜索预算另设为 4 小时；社区实验须明确自己的硬件和预算。
+4. 保留固定训练时间下的评测口径：以可信评分器重算的 val_bpb 为主指标，同时报告完成步数、tokens/s、step time 和峰值显存。在同一声明硬件上，对基线与最终候选分别独立重复至少 3 次，报告波动。若另做固定训练量的耗时比较，应单独报告，不能把 val_bpb 的改善直接换算为训练提速倍率。
+5. 完成一次 PenguinHarness 端到端实测，提供精确的 Agent 模型版本、基线与候选代码、验证结果、运行命令、原始日志和结果报告。如实记录失败候选与未提升结果，不以必须获得正向提升作为验收前提。
+
+如使用其他硬件或缩小训练负载，须作为独立配置说明，固定该配置自己的基线与约束，分别报告结果，不与原始协议的结果混算。本 Benchmark 可用于 InfraRSI 集成任务 #71 的真实效果验证。"
     references:
       - "https://github.com/karpathy/autoresearch"
+      - "https://github.com/karpathy/autoresearch/tree/228791fb499afffb54b46200aca536f79142f117"
+      - "https://github.com/TokenRhythm/InfraRSI/tree/512f8ea784054f4ca3331d03cc6589267a4cbdf5/infrarsi/ext/autoresearch"
+      - "https://arxiv.org/abs/2611.11558"
       - "https://arxiv.org/abs/2611.11558"
       - "https://github.com/TokenRhythm/InfraRSI/tree/main/infrarsi/ext/autoresearch"
     assignee: null
@@ -751,10 +774,56 @@ The challenge uses a fixed question set and a shared grading method. Dataset int
     related_issue: "https://github.com/Prism-Shadow/penguin-harness-community/issues/66"
     title: "Integrate METR RE-Bench"
     title_zh: "集成 METR RE-Bench 机器学习研发与训练优化基准"
-    description: "Integrate METR RE-Bench (arXiv:2411.15114) into penguin-harness-benchmark to evaluate agents on open-ended machine learning research engineering and training infrastructure optimization tasks, including LLM fine-tuning wall-clock acceleration under weight-equivalence constraints (ai_rd_optimize_llm_foundry), custom GPU kernel optimization (ai_rd_optimize_a_kernel), and model/training optimization environments. Provide standardized task packages, GPU container configurations, automated verification and timing scripts, and reproducible end-to-end validation results (per RFC-0001)."
-    description_zh: "将机器学习研发工程评测基准 METR RE-Bench（arXiv:2411.15114）接入 penguin-harness-benchmark，评测智能体在开放式机器学习研发与训练基础设施优化任务上的能力（涵盖权重等价约束下的 LLM 微调训练加速 ai_rd_optimize_llm_foundry、自定义 GPU 算子内核优化 ai_rd_optimize_a_kernel 等环境）。需完成标准化任务封装、GPU 容器运行配置与自动校验计时评分脚本，并提供可复现的端到端真实 GPU 验证结果（遵循 RFC-0001 规范）。"
+    description: "Integrate all seven METR RE-Bench environments (arXiv:2411.15114) into penguin-harness-benchmark to evaluate agents on open-ended machine-learning research and engineering tasks. This task covers the complete seven-environment suite, with one final acceptance review of the integration and validation evidence; it does not require staged submissions or separate milestone reviews.
+
+Scope (upstream directory names):
+
+- ai_rd_optimize_llm_foundry: accelerate fine-tuning while preserving the required training behavior and weight-equivalence constraints.
+- ai_rd_triton_cumsum: optimize the GPU prefix-sum kernel. The upstream task is titled Optimize kernel for operation; its directory is ai_rd_triton_cumsum.
+- ai_rd_rust_codecontests_inference: build an inference scaffold for Rust programming problems.
+- ai_rd_nanogpt_chat_rl: fine-tune GPT-2 for question answering with reinforcement learning.
+- ai_rd_fix_embedding: repair a model with corrupted/permuted embeddings.
+- ai_rd_small_scaling_law: predict compute-optimal hyperparameters through small-scale experiments.
+- ai_rd_restricted_mlm: train a language model under restricted architecture primitives.
+
+Deliverables and acceptance criteria:
+
+1. Add an RFC-0001 package covering all seven environments, with pinned upstream versions, source provenance, reproducible setup, task statements, grader materials, and execution configurations. Keep solver materials separate from protected evaluation material; submit with status draft.
+2. Adapt the METR Task Standard build, launch, and scoring procedures to PenguinHarness. Document each environment's GPU/CPU/memory requirements, dependencies, model/API access, and agent search budget. The upstream LLM Foundry configuration requires 4xH100; triton_cumsum requires 1xH100. Record and justify any adaptation, and label its results separately from the original configuration.
+3. Preserve and verify each task's own correctness constraints, official scoring function, resource accounting, and timing rules. Report original metrics and any explicit mapping into the community score format; do not average heterogeneous raw metrics without a defined normalization.
+4. Complete real end-to-end PenguinHarness checks for all seven environments. Provide an initial baseline, a scoring-path self-check, the exact agent-model version, commands, environment information, and execution/scoring records. For timing-sensitive tasks, repeat baseline and final-candidate measurements at least three times on the same hardware and report variability, numerical checks, and total search costs.
+
+METR has deprecated this upstream suite and no longer accepts contributions or bug reports. Pin the source and document compatibility fixes and remaining limitations. Any environment that is only packaged but not executed must be marked unverified; packaging alone does not complete this task.
+
+The training-acceleration and kernel tasks can support InfraRSI-related evaluation; the other five extend the community's broader AI R&D coverage. Method evaluation is separate from benchmark integration, and acceptance does not require an agent to improve every task's score."
+    description_zh: "将 METR RE-Bench（arXiv:2411.15114）的全部七个环境接入 penguin-harness-benchmark，评测 Agent 在开放式机器学习研发与工程任务上的能力。本任务以七个环境的完整接入与验证为最终交付，统一审核，不要求分批提交或设置阶段验收。
+
+#### 接入范围（使用上游真实目录名）
+
+- ai_rd_optimize_llm_foundry：在满足训练行为与权重等价约束的前提下，加速微调训练。
+- ai_rd_triton_cumsum：优化 GPU 前缀和算子。上游任务显示名称为 Optimize kernel for operation，真实目录名为 ai_rd_triton_cumsum。
+- ai_rd_rust_codecontests_inference：构建面向 Rust 编程题的模型推理与调用流程。
+- ai_rd_nanogpt_chat_rl：通过强化学习微调 GPT-2，使其完成问答任务。
+- ai_rd_fix_embedding：修复 embedding 被破坏或置换的模型。
+- ai_rd_small_scaling_law：通过小规模实验预测计算预算下的最优超参数。
+- ai_rd_restricted_mlm：使用受限架构算子训练语言模型。
+
+#### 交付与验收要求
+
+1. 按 RFC-0001 完成覆盖七个环境的标准化任务包，锁定上游版本，提供来源说明、可复现准备流程、题干、评分材料和运行配置；隔离解题端材料与受保护的评分材料，提交状态设为 draft。
+2. 将上游 METR Task Standard 的构建、启动与评分流程适配到 PenguinHarness。分别说明各环境的 GPU/CPU/内存需求、依赖、模型或 API 访问条件，以及 Agent 搜索预算。上游 LLM Foundry 配置需要 4 张 H100，triton_cumsum 配置需要 1 张 H100；发生适配时须说明原因与改动，并将适配结果与原配置结果分别标注。
+3. 保留并核验各任务自己的正确性约束、官方评分函数、资源记账与计时规则。报告原始指标；如需映射到社区评分格式，明确给出映射，不能直接平均不同量纲的原始指标。
+4. 七个环境均需完成真实的 PenguinHarness 端到端自测，提供初始基线、评分流程自检、精确的 Agent 模型版本、复跑命令、环境信息和运行/评分记录。对计时敏感的任务，在同一硬件上对基线与最终候选分别重复测量至少 3 次，报告波动、数值检查和搜索总成本。
+
+METR 已将该套件标记为停止维护，不再接受贡献或问题报告。接入时须锁定源码，说明兼容性修复与仍存在的限制。仅完成封装但未实跑的环境应标明未验证，不能据此将整项任务标记完成。
+
+其中训练加速与算子优化任务可支持 InfraRSI 等方法的评测，其余五个环境用于扩展社区的 AI 研发能力覆盖。Benchmark 接入与算法效果评估分别记录，不要求 Agent 在每个任务上都获得正向提升。"
     references:
       - "https://arxiv.org/abs/2411.15114"
+      - "https://github.com/METR/RE-Bench"
+      - "https://github.com/METR/RE-Bench/blob/main/ai_rd_optimize_llm_foundry/manifest.yaml"
+      - "https://github.com/METR/RE-Bench/blob/main/ai_rd_triton_cumsum/manifest.yaml"
+      - "https://github.com/TokenRhythm/InfraRSI/tree/512f8ea784054f4ca3331d03cc6589267a4cbdf5/infrarsi/ext/rebench_llmf"
       - "https://github.com/METR/RE-Bench"
       - "https://github.com/TokenRhythm/InfraRSI/tree/main/infrarsi/ext/rebench_llmf"
     assignee: null
