@@ -536,6 +536,7 @@ tasks:
 
   - id: "RSI-Q029"
     issue_number: 72
+    pr_number: 1553
     published_at: "2026-11-13T03:45:21Z"
     status: "in_progress"
     domain: "RSI Algorithm"
@@ -552,10 +553,11 @@ tasks:
       - "https://sakana.ai/dgm/"
     assignee: "leslie520-bye"
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/72"
-    linked_pr: null
+    linked_pr: "https://github.com/Prism-Shadow/penguin-harness/pull/1553"
 
   - id: "RSI-Q030"
     issue_number: 73
+    pr_number: 1555
     published_at: "2026-11-13T06:10:18Z"
     status: "in_progress"
     domain: "RSI Algorithm"
@@ -571,7 +573,7 @@ tasks:
       - "https://github.com/noahshinn/reflexion"
     assignee: "leslie520-bye"
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/73"
-    linked_pr: null
+    linked_pr: "https://github.com/Prism-Shadow/penguin-harness/pull/1555"
 
   - id: "RSI-Q031"
     issue_number: 74
