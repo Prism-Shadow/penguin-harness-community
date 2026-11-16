@@ -722,51 +722,6 @@ The challenge uses a fixed question set and a shared grading method. Dataset int
     linked_pr: null
 
   - id: "RSI-Q035"
-    issue_number: 80
-    published_at: "2026-11-16T07:27:04Z"
-    status: "open"
-    domain: "Benchmark"
-    exp: 50
-    target_repository: "https://github.com/Prism-Shadow/penguin-harness-benchmark"
-    related_issue: "https://github.com/Prism-Shadow/penguin-harness-community/issues/71"
-    title: "Integrate AutoResearch Benchmark"
-    title_zh: "集成 AutoResearch 自动研究评测基准"
-    description: "Integrate karpathy/autoresearch into penguin-harness-benchmark, preserving the complete task capabilities and evaluation workflow of the pinned upstream version. The default benchmark follows the upstream research scope, including changes to model architecture, hyperparameters, optimizers, batching, and training-code implementations in train.py.
-
-Deliverables and acceptance criteria:
-
-1. Package the complete benchmark per RFC-0001, including task metadata, statements, grading instructions, configuration, and source/version information. Submit with status draft.
-2. Preserve the upstream data preparation and tokenizer workflow (prepare.py), baseline model/optimizer/training loop (train.py), reference research instructions (program.md), dependencies, outputs, and experiment-record conventions. Provide reproducible preparation, baseline, and candidate-execution commands.
-3. Preserve the upstream editable and protected boundaries. Support the full optimization space allowed by the upstream protocol rather than freezing model architecture, optimizer mathematics, or learning-rate schedules across all experiments. Keep validation data and grading resources under the declared evaluation rules.
-4. Preserve the 300-second per-candidate training window, its warm-up/startup/compilation accounting, and validation bits-per-byte (val_bpb, lower is better) scoring. Provide candidate verification and automatic scoring entry points, with training steps, tokens/s, and step time as supporting metrics.
-5. Complete package/configuration validation and scoring-script tests. Provide rerun instructions and document any adaptations or upstream features that remain unsupported.
-
-An Infra-only configuration may be added to the same benchmark for InfraRSI task #71 and similar methods, fixing model/training semantics only within that configuration. The default integration retains the complete upstream optimization scope.
-
-This task overlaps with #83's AutoResearch integration. Coordinate a shared benchmark implementation, preparation scripts, and evaluation entry points; represent any research-specific evaluation settings as configurations on that shared implementation."
-    description_zh: "将 karpathy/autoresearch 接入 penguin-harness-benchmark，完整保留所锁定上游版本的任务能力和评测流程。默认采用上游完整优化范围，支持修改 train.py 中的模型结构、超参数、优化器、批次设置和训练代码实现。
-
-#### 交付与验收要求
-
-1. 按 RFC-0001 封装完整 Benchmark，包含元信息、题干、评分说明、任务配置及来源/版本信息，提交状态设为 draft。
-2. 保留上游数据准备与 tokenizer 流程（prepare.py）、基线模型/优化器/训练循环（train.py）、原始研究指引（program.md）、依赖、输出与实验记录约定，提供可复现的准备、基线运行及候选执行命令。
-3. 遵循上游可修改与受保护内容的边界，保留其允许的完整优化空间；模型结构、优化器数学规则和学习率策略按上游协议开放修改。验证数据与评分资源按约定的评测规则管理。
-4. 保留每个候选的 300 秒训练计时窗口、预热/启动/编译计时规则，以及验证集每字节比特数（val_bpb，越低越好）评分方式，提供候选校验和自动计分入口，同时记录训练步数、tokens/s 和 step time 等辅助指标。
-5. 完成任务包结构与配置校验、评分脚本测试，提供复跑说明，并列明适配改动及尚未支持的上游功能。
-
-可在同一 Benchmark 上按需增加 Infra-only 专用配置，为 InfraRSI 任务 #71 等方法固定模型与训练语义；默认接入范围保留上游完整优化能力。
-
-本任务与 #83 的 AutoResearch 接入存在重合，应共用同一套 Benchmark 实现、准备脚本与评测入口，将特定研究评测设定作为配置提供，避免重复开发。"
-    references:
-      - "https://github.com/karpathy/autoresearch"
-      - "https://github.com/karpathy/autoresearch/blob/master/README.md"
-      - "https://github.com/TokenRhythm/InfraRSI/tree/512f8ea784054f4ca3331d03cc6589267a4cbdf5/infrarsi/ext/autoresearch"
-      - "https://arxiv.org/abs/2611.11558"
-    assignee: null
-    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/80"
-    linked_pr: null
-
-  - id: "RSI-Q036"
     issue_number: 83
     published_at: "2026-11-16T09:56:59Z"
     status: "open"
@@ -797,7 +752,7 @@ Deliverables and acceptance criteria:
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/83"
     linked_pr: null
 
-  - id: "RSI-Q037"
+  - id: "RSI-Q036"
     issue_number: 84
     published_at: "2026-11-16T09:57:01Z"
     status: "open"
@@ -827,7 +782,7 @@ Deliverables and acceptance criteria:
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/84"
     linked_pr: null
 
-  - id: "RSI-Q038"
+  - id: "RSI-Q037"
     issue_number: 85
     published_at: "2026-11-16T09:57:03Z"
     status: "open"
@@ -857,7 +812,7 @@ Deliverables and acceptance criteria:
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/85"
     linked_pr: null
 
-  - id: "RSI-Q039"
+  - id: "RSI-Q038"
     issue_number: 86
     published_at: "2026-11-16T09:57:10Z"
     status: "open"
@@ -890,7 +845,7 @@ Deliverables and acceptance criteria:
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/86"
     linked_pr: null
 
-  - id: "RSI-Q040"
+  - id: "RSI-Q039"
     issue_number: 87
     published_at: "2026-11-16T09:57:16Z"
     status: "open"
@@ -918,7 +873,7 @@ Deliverables and acceptance criteria:
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/87"
     linked_pr: null
 
-  - id: "RSI-Q041"
+  - id: "RSI-Q040"
     issue_number: 88
     published_at: "2026-11-16T09:57:18Z"
     status: "open"
@@ -951,7 +906,7 @@ Deliverables and acceptance criteria:
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/88"
     linked_pr: null
 
-  - id: "RSI-Q042"
+  - id: "RSI-Q041"
     issue_number: 89
     published_at: "2026-11-16T09:57:21Z"
     status: "open"
@@ -979,7 +934,7 @@ Deliverables and acceptance criteria:
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/89"
     linked_pr: null
 
-  - id: "RSI-Q043"
+  - id: "RSI-Q042"
     issue_number: 90
     published_at: "2026-11-16T09:57:23Z"
     status: "open"
@@ -1020,7 +975,7 @@ Build and integrate an Agent Memory benchmark suite in penguin-harness-benchmark
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/90"
     linked_pr: null
 
-  - id: "RSI-Q044"
+  - id: "RSI-Q043"
     issue_number: 91
     published_at: "2026-11-16T09:57:31Z"
     status: "open"
@@ -1057,7 +1012,7 @@ Stage 2 — Stratified Graph View Layer (Nowledge Mem Super Graph Pattern):
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/91"
     linked_pr: null
 
-  - id: "RSI-Q045"
+  - id: "RSI-Q044"
     issue_number: 92
     published_at: "2026-11-16T09:57:33Z"
     status: "open"
@@ -1085,7 +1040,7 @@ Deliverables and acceptance criteria:
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/92"
     linked_pr: null
 
-  - id: "RSI-Q046"
+  - id: "RSI-Q045"
     issue_number: 93
     published_at: "2026-11-16T09:57:36Z"
     status: "open"
@@ -1115,7 +1070,7 @@ Deliverables and acceptance criteria:
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/93"
     linked_pr: null
 
-  - id: "RSI-Q047"
+  - id: "RSI-Q046"
     issue_number: 94
     published_at: "2026-11-16T09:57:38Z"
     status: "open"
@@ -1143,7 +1098,7 @@ Deliverables and acceptance criteria:
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/94"
     linked_pr: null
 
-  - id: "RSI-Q048"
+  - id: "RSI-Q047"
     issue_number: 95
     published_at: "2026-11-16T09:57:41Z"
     status: "open"
@@ -1179,7 +1134,7 @@ Deliverables and acceptance criteria:
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/95"
     linked_pr: null
 
-  - id: "RSI-Q049"
+  - id: "RSI-Q048"
     issue_number: 96
     published_at: "2026-11-16T10:01:17Z"
     status: "open"
