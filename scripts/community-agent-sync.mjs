@@ -362,7 +362,7 @@ async function syncFromGitHubIssues(baseTasks, maxConcurrent) {
       if (!commenter) continue;
 
       const completeMatch = body.match(
-        /^\/complete(?:\s+@?([A-Za-z0-9-]+))?(?:\s+(https:\/\/github\.com\/[^\s)]+\/pull\/(\d+)))?/m,
+        /^\/complete(?:\s+(?!https?:\/\/)@?([A-Za-z0-9-]+))?(?:\s+(https:\/\/github\.com\/[^\s)]+\/pull\/(\d+)))?/m,
       );
       if (completeMatch && COMMITTEE_HANDLES.has(commenter)) {
         status = "completed";
@@ -385,7 +385,7 @@ async function syncFromGitHubIssues(baseTasks, maxConcurrent) {
       }
 
       const claimMatch = body.match(
-        /^\/claim(?:\s+@?([A-Za-z0-9-]+))?(?:\s+(https:\/\/github\.com\/[^\s)]+\/pull\/(\d+)))?/m,
+        /^\/claim(?:\s+(?!https?:\/\/)@?([A-Za-z0-9-]+))?(?:\s+(https:\/\/github\.com\/[^\s)]+\/pull\/(\d+)))?/m,
       );
       if (claimMatch && status !== "completed") {
         const isCommitteeOverride = Boolean(claimMatch[1] && COMMITTEE_HANDLES.has(commenter));
