@@ -1091,6 +1091,26 @@
       "assignee": null,
       "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/96",
       "linked_pr": null
+    },
+    {
+      "id": "RSI-Q049",
+      "issue_number": 103,
+      "pr_number": null,
+      "published_at": "2026-11-17T09:18:47Z",
+      "status": "open",
+      "domain": "Benchmark",
+      "exp": 50,
+      "target_repository": "https://github.com/Prism-Shadow/penguin-harness-benchmark",
+      "recurring": false,
+      "related_issue": null,
+      "title": "Integrate Harbor-adapted TableQA Benchmarks",
+      "title_zh": "接入已完成 Harbor 改造的 TableQA Benchmark",
+      "description": "Integrate the existing Harbor-adapted TableQA benchmarks into `penguin-harness-benchmark` following [RFC-0001](https://github.com/Prism-Shadow/penguin-harness-community/blob/main/rfcs/RFC-0001-benchmark.md), and verify the evaluation flow with PenguinHarness.",
+      "description_zh": "将已完成 Harbor 改造的 TableQA Benchmark 接入 `penguin-harness-benchmark`，按 [RFC-0001](https://github.com/Prism-Shadow/penguin-harness-community/blob/main/rfcs/RFC-0001-benchmark.zh.md) 整理，并使用 PenguinHarness 跑通评测流程。",
+      "references": [],
+      "assignee": null,
+      "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/103",
+      "linked_pr": null
     }
   ],
   "leaderboard": [
