@@ -661,7 +661,7 @@
       "issue_number": 74,
       "pr_number": null,
       "published_at": "2026-11-13T06:10:22Z",
-      "status": "open",
+      "status": "in_progress",
       "domain": "RSI Algorithm",
       "exp": 100,
       "target_repository": "https://github.com/Prism-Shadow/penguin-harness-plugins",
@@ -675,7 +675,7 @@
         "https://arxiv.org/abs/2504.07079",
         "https://github.com/OSU-NLP-Group/SkillWeaver"
       ],
-      "assignee": null,
+      "assignee": "Nhckdvrl",
       "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/74",
       "linked_pr": null
     },
