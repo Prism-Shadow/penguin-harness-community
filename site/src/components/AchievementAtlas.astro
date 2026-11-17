@@ -64,7 +64,7 @@ const emptyNote = { completed: t("首个成果待点亮", "First result yet to l
       <div class="canvas" data-canvas>
         <svg class="wires" data-wires aria-hidden="true"></svg>
 
-        <div class="hub" data-hub>
+        <div class="hub" data-hub style={`grid-row: 1 / span ${atlas.domains.length}`}>
           <span class="medal">
             <svg class="progress" viewBox="0 0 80 80" aria-hidden="true">
               <circle class="track" cx="40" cy="40" r={R} />
@@ -83,7 +83,7 @@ const emptyNote = { completed: t("首个成果待点亮", "First result yet to l
               <div class="domain" data-domain-node>
                 <span class="domain-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={icons[d.id]} /></svg></span>
                 <h2 id={`atlas-heading-${d.id}`}>{d.title}</h2>
-                <span class="domain-stat"><b>{d.counts.completed}</b> / {d.total} {words.lit}</span>
+                <span class="domain-stat"><b class:list={{ lit: d.counts.completed > 0 }}>{d.counts.completed}</b> / {d.total} {words.lit}</span>
                 <span class="meter" aria-hidden="true">
                   {ATLAS_STATES.map((s) => d.counts[s] > 0 && <i data-state={s} style={`flex-grow:${d.counts[s]}`}></i>)}
                 </span>

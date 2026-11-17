@@ -81,39 +81,51 @@ export function initAtlas(root: HTMLDetailsElement) {
     const dot = (x: number, y: number, cls: string) => parts.push(`<circle class="${cls}" cx="${x}" cy="${y}" r="3.5"/>`);
     const f = (n: number) => Math.round(n * 10) / 10;
 
-    const hub = box(get("hub").querySelector(".medal")!);
+    // Centre the root on the midpoint of the first and last domain nodes (a transform, so layout is untouched).
+    const hubEl = get("hub");
     const domains = branches.map((b) => box(b.querySelector("[data-domain-node]")!));
-    const hy = hub.cy, sx = f(hub.r + (domains[0].l - hub.r) / 2), r = 14;
-    const trunk: string[] = [];
-    for (const d of domains) {
-      const dy = f(d.cy);
-      if (Math.abs(dy - hy) < r) trunk.push(`M${f(hub.r)} ${f(hy)} C${sx} ${f(hy)} ${sx} ${dy} ${f(d.l)} ${dy}`);
-      else trunk.push(`M${f(hub.r)} ${f(hy)} H${sx - r} Q${sx} ${f(hy)} ${sx} ${f(hy + Math.sign(dy - hy) * r)} V${dy - Math.sign(dy - hy) * r} Q${sx} ${dy} ${sx + r} ${dy} H${f(d.l)}`);
-    }
-    path(trunk.join(" "), "w-trunk-halo");
-    path(trunk.join(" "), "w-trunk");
+    const top = f(domains[0].cy), bottom = f(domains[domains.length - 1].cy), hy = f((top + bottom) / 2);
+    hubEl.style.transform = "";
+    hubEl.style.transform = `translateY(${f(hy - box(hubEl.querySelector(".medal")!).cy)}px)`;
+    const hub = box(hubEl.querySelector(".medal")!);
 
+    // Root → one short stub into the trunk; every domain then leaves the trunk on an equal twig.
+    const sx = f(hub.r + (domains[0].l - hub.r) / 2);
+    const r = Math.max(0, Math.min(12, domains[0].l - sx - 4, (bottom - top) / 2));
+    path(`M${f(hub.r)} ${hy} H${sx} M${sx} ${f(top + r)} V${f(bottom - r)}`, "w-trunk");
+    path(domains.map((d, i) => {
+      const dy = f(d.cy), bend = i === 0 ? r : i === domains.length - 1 ? -r : 0;
+      return bend ? `M${sx} ${f(dy + bend)} Q${sx} ${dy} ${f(sx + r)} ${dy} H${f(d.l)}` : `M${sx} ${dy} H${f(d.l)}`;
+    }).join(" "), "w-twig");
+    dot(sx, hy, "w-knot");
+
+    const BUS = 8; // gap between the shared bus and the top of the quest cards
     branches.forEach((branch, i) => {
       const d = domains[i];
       for (const lane of branch.querySelectorAll<HTMLElement>("[data-lane]")) {
         if (lane.hidden) continue;
-        const state = lane.dataset.lane!, empty = lane.dataset.count === "0";
+        const state = lane.dataset.lane!, empty = lane.dataset.count === "0" ? " w-empty" : "";
         const head = lane.querySelector<HTMLElement>("[data-lane-head]")!;
         // Lane heads stick while panning, so take x from the lane itself rather than the (possibly stuck) head.
-        const laneBox = box(lane), hy2 = f(box(head).cy), hl = f(laneBox.l), hr = f(laneBox.l + head.offsetWidth);
+        const laneBox = box(lane), py = f(box(head).cy), hl = f(laneBox.l), hr = f(laneBox.l + head.offsetWidth);
         const mx = f((d.r + hl) / 2);
-        path(`M${f(d.r)} ${f(d.cy)} C${mx} ${f(d.cy)} ${mx} ${hy2} ${hl} ${hy2}`, empty ? "w-fork w-empty" : "w-fork", state);
-        const leaves = box(lane.querySelector("[data-leaves]")!);
-        const end = empty ? leaves.l : Math.max(leaves.l, leaves.r - 24);
-        path(`M${hr} ${hy2} H${f(end)}`, empty ? "w-rail w-empty" : "w-rail", state);
+        path(`M${f(d.r)} ${f(d.cy)} C${mx} ${f(d.cy)} ${mx} ${py} ${hl} ${py}`, "w-fork" + empty, state);
+        const cards = Array.from(lane.querySelectorAll("[data-leaves] > li"), box);
+        if (cards.length < 2) {
+          // One quest (or the empty-lane note): a single line that stops at its edge.
+          const end = cards[0]?.l ?? box(lane.querySelector("[data-leaves]")!).l;
+          path(`M${hr} ${py} H${f(end)}`, "w-bus" + empty, state);
+          continue;
+        }
+        // Several quests: a shared bus above the row and one stem per card, so siblings read as parallel, not as a chain.
+        const busY = f(cards[0].t - BUS), x0 = f((hr + cards[0].l) / 2), rr = Math.min(8, x0 - hr, py - busY);
+        const stems = cards.map((k) => `M${f((k.l + k.r) / 2)} ${busY} V${f(k.t)}`).join(" ");
+        const last = cards[cards.length - 1];
+        path(`M${hr} ${py} H${f(x0 - rr)} Q${x0} ${py} ${x0} ${f(py - rr)} V${f(busY + rr)} Q${x0} ${busY} ${f(x0 + rr)} ${busY} H${f((last.l + last.r) / 2)} ${stems}`, "w-bus", state);
       }
       dot(f(d.l), f(d.cy), "w-joint");
     });
-    dot(f(hub.r), f(hy), "w-joint");
 
-    wires.setAttribute("width", String(canvas.scrollWidth));
-    wires.setAttribute("height", String(canvas.scrollHeight));
-    wires.setAttribute("viewBox", `0 0 ${canvas.scrollWidth} ${canvas.scrollHeight}`);
     wires.innerHTML = parts.join("");
   }
 
