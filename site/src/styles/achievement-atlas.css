@@ -35,7 +35,7 @@
   --trunk-gap: 36px;
   --domain-w: 206px;
   --fork-gap: 40px;
-  --head-w: 112px;
+  --head-w: 128px;
   --rail-gap: 20px;
   --leaf-w: 244px;
   --leaf-gap: 14px;
@@ -53,7 +53,7 @@
   background: var(--paper);
   box-shadow: 0 1px 2px rgb(16 24 40 / 0.04), 0 12px 32px -24px rgb(16 24 40 / 0.35);
 }
-.atlas:lang(en) { --head-w: 134px; --hub-w: 112px; --trunk-gap: 46px; }
+.atlas:lang(en) { --head-w: 152px; --hub-w: 112px; --trunk-gap: 46px; }
 .dark .atlas {
   --paper: #0d0d0d;
   --canvas: #050505;
@@ -103,10 +103,10 @@
 .atlas .filters button[aria-pressed="true"] { border-color: var(--ink); background: var(--ink); color: var(--paper); }
 .atlas .filters button[aria-pressed="true"] b { color: inherit; opacity: 0.7; }
 .atlas .glyph { width: 14px; height: 14px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.5; }
-.atlas [data-state="completed"] .glyph { fill: var(--gold); stroke: var(--gold-deep); stroke-linejoin: round; }
-.atlas [data-state="in_progress"] .glyph { stroke: var(--blue); }
-.atlas [data-state="in_progress"] .glyph .half { fill: var(--blue); stroke: none; }
-.atlas [data-state="open"] .glyph { stroke: var(--faint); stroke-dasharray: 2.4 1.8; }
+.atlas [data-state="lit"] .glyph { fill: var(--gold); stroke: var(--gold-deep); stroke-linejoin: round; }
+.atlas [data-state="ready"] .glyph { stroke: var(--blue); }
+.atlas [data-state="ready"] .glyph .half { fill: var(--blue); stroke: none; }
+.atlas [data-state="locked"] .glyph { stroke: var(--faint); stroke-dasharray: 2.4 1.8; }
 .atlas .filters button[aria-pressed="true"] .glyph { filter: brightness(1.15); }
 .atlas .tools { display: flex; align-items: center; gap: 14px; }
 .atlas .pan-controls { display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: 12px; }
@@ -161,7 +161,7 @@
 .atlas .w-joint { fill: var(--paper); stroke: var(--trunk); stroke-width: 2; }
 .atlas .w-fork { stroke: var(--wire); stroke-width: 2; }
 .atlas .w-bus { stroke: var(--wire); stroke-width: 1.5; }
-.atlas .wires [data-state="open"] { stroke-dasharray: 5 4; }
+.atlas .wires [data-state="locked"] { stroke-dasharray: 5 4; }
 .atlas .wires .w-empty { stroke: var(--line-strong); stroke-width: 1.5; stroke-dasharray: 2 4; }
 
 /* ---------- Hub ---------- */
@@ -191,9 +191,9 @@
 .atlas .domain-stat b.lit { color: var(--gold-text); }
 .atlas .meter { grid-column: 1 / -1; display: flex; gap: 2px; height: 5px; margin-top: -2px; border-radius: 5px; overflow: hidden; }
 .atlas .meter i { min-width: 3px; }
-.atlas .meter [data-state="completed"] { background: var(--gold); }
-.atlas .meter [data-state="in_progress"] { background: var(--blue); }
-.atlas .meter [data-state="open"] { background: var(--line); }
+.atlas .meter [data-state="lit"] { background: var(--gold); }
+.atlas .meter [data-state="ready"] { background: var(--blue); }
+.atlas .meter [data-state="locked"] { background: var(--line); }
 
 .atlas .lanes { display: grid; row-gap: var(--lane-gap); }
 .atlas .lane { display: grid; grid-template-columns: var(--head-w) max-content; align-items: center; column-gap: var(--rail-gap); }
@@ -203,18 +203,12 @@
 .atlas .lane-key { position: sticky; left: 0; z-index: 2; align-self: stretch; display: flex; align-items: center; margin: calc(var(--lane-gap) / -2) -10px; padding: calc(var(--lane-gap) / 2) 10px; transition: background-color 0.15s, box-shadow 0.15s; }
 .atlas .stage[data-pinned] .lane-key { background: var(--canvas); box-shadow: 10px 0 14px -12px rgb(16 24 40 / 0.35); }
 .dark .atlas .stage[data-pinned] .lane-key { box-shadow: 10px 0 14px -10px rgb(0 0 0 / 0.9); }
-.atlas .lane-head { box-sizing: border-box; display: flex; align-items: center; gap: 6px; width: var(--head-w); min-height: 32px; padding: 5px 11px; border: 1px solid var(--line-strong); border-radius: 999px; background: var(--paper); color: var(--muted); font-size: 12.5px; font-weight: 600; line-height: 1.2; white-space: nowrap; }
-.atlas .lane-head b { margin-left: auto; font: 650 12px var(--mono); font-variant-numeric: tabular-nums; }
-.atlas [data-lane="completed"] .lane-head { border-color: var(--gold-line); background: linear-gradient(135deg, var(--gold-tint), var(--gold-tint-2)); color: var(--gold-ink); }
-.atlas [data-lane="completed"] .glyph { fill: var(--gold); stroke: var(--gold-deep); stroke-linejoin: round; }
-.atlas [data-lane="in_progress"] .lane-head { border-color: var(--blue-line); background: var(--blue-tint); color: var(--blue-ink); }
-.atlas [data-lane="in_progress"] .glyph { stroke: var(--blue); }
-.atlas [data-lane="in_progress"] .glyph .half { fill: var(--blue); stroke: none; }
-.atlas [data-lane="open"] .lane-head { border-style: dashed; }
-.atlas [data-lane="open"] .glyph { stroke: var(--faint); stroke-dasharray: 2.4 1.8; }
-.atlas .lane[data-count="0"] .lane-head { border: 1px dashed var(--line-strong); background: var(--paper); color: var(--faint); box-shadow: none; }
-.atlas .lane[data-count="0"] .glyph { fill: none; stroke: var(--faint); stroke-dasharray: none; }
-.atlas .lane[data-count="0"] .glyph .half { fill: none; }
+.atlas .lane-head { box-sizing: border-box; display: flex; align-items: center; gap: 8px; width: var(--head-w); min-height: 32px; padding: 6px 11px; border: 1px solid var(--line-strong); border-radius: 12px; background: var(--paper); color: var(--ink); font-size: 12.5px; font-weight: 600; line-height: 1.25; }
+.atlas .lane-name { min-width: 0; }
+.atlas .lane-head b { margin-left: auto; padding-left: 4px; color: var(--muted); font: 650 11px var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+/* A branch whose medals are all lit carries the gold; a part-lit one only tints its count. */
+.atlas .lane[data-lit] .lane-head b { color: var(--gold-text); }
+.atlas .lane[data-complete] .lane-head { border-color: var(--gold-line); background: linear-gradient(135deg, var(--gold-tint), var(--gold-tint-2)); color: var(--gold-ink); }
 
 /* ---------- Leaves ---------- */
 .atlas .leaves { display: flex; align-items: stretch; gap: var(--leaf-gap); margin: 0; padding: 0; list-style: none; }
@@ -226,28 +220,26 @@
 .atlas .badge { display: grid; place-items: center; width: 22px; height: 22px; margin-top: 0; border-radius: 50%; }
 .atlas .badge svg { width: 14px; height: 14px; }
 
-/* Completed: lit. */
-.atlas .leaf[data-state="completed"] { border-color: var(--gold-line); background: linear-gradient(140deg, var(--gold-tint) 0%, var(--paper) 60%, var(--gold-tint-2) 100%); box-shadow: 0 6px 16px -12px rgb(217 119 6 / 0.55); }
-.atlas .leaf[data-state="completed"] .leaf-title { font-weight: 600; }
-.atlas .leaf[data-state="completed"] .leaf-title small { color: var(--gold-text); font-weight: 650; }
-.atlas .leaf[data-state="completed"] .badge { background: radial-gradient(circle at 35% 30%, #fde68a, var(--gold) 55%, var(--gold-deep)); box-shadow: 0 0 0 2px var(--paper), 0 0 0 3px var(--gold-line), 0 0 8px var(--gold-glow); }
-.atlas .leaf[data-state="completed"] .badge svg { fill: #fff; }
-.atlas .leaf[data-state="completed"]:hover { border-color: var(--gold-deep); box-shadow: 0 0 0 3px var(--gold-glow), 0 10px 20px -12px rgb(217 119 6 / 0.7); }
+/* Achieved: lit. */
+.atlas .leaf[data-state="lit"] { border-color: var(--gold-line); background: linear-gradient(140deg, var(--gold-tint) 0%, var(--paper) 60%, var(--gold-tint-2) 100%); box-shadow: 0 6px 16px -12px rgb(217 119 6 / 0.55); }
+.atlas .leaf[data-state="lit"] .leaf-title { font-weight: 600; }
+.atlas .leaf[data-state="lit"] .leaf-title small { color: var(--gold-text); font-weight: 650; }
+.atlas .leaf[data-state="lit"] .badge { background: radial-gradient(circle at 35% 30%, #fde68a, var(--gold) 55%, var(--gold-deep)); box-shadow: 0 0 0 2px var(--paper), 0 0 0 3px var(--gold-line), 0 0 8px var(--gold-glow); }
+.atlas .leaf[data-state="lit"] .badge svg { fill: #fff; }
+.atlas .leaf[data-state="lit"]:hover { border-color: var(--gold-deep); box-shadow: 0 0 0 3px var(--gold-glow), 0 10px 20px -12px rgb(217 119 6 / 0.7); }
 
-/* In progress: solid card, half-filled blue dial. */
-.atlas .leaf[data-state="in_progress"] .badge { box-shadow: inset 0 0 0 1px var(--blue-line); background: var(--blue-tint); }
-.atlas .leaf[data-state="in_progress"] .badge svg { fill: none; stroke: var(--blue); stroke-width: 1.6; }
-.atlas .leaf[data-state="in_progress"] .badge svg path { fill: var(--blue); stroke: none; }
+/* Ready: prerequisites are lit, so this one can be pushed now. */
+.atlas .leaf[data-state="ready"] .badge { box-shadow: inset 0 0 0 1px var(--blue-line); background: var(--blue-tint); }
+.atlas .leaf[data-state="ready"] .badge svg { fill: none; stroke: var(--blue); stroke-width: 1.6; }
+.atlas .leaf[data-state="ready"] .badge svg path { fill: var(--blue); stroke: none; }
 
-/* Open: an unlit slot waiting to be claimed. */
-.atlas .leaf[data-state="open"] { border-style: dashed; border-color: var(--line-strong); }
-.atlas .leaf[data-state="open"] .badge { border: 1px dashed var(--blue-line); }
-.atlas .leaf[data-state="open"] .badge svg { fill: none; stroke: var(--blue); stroke-width: 1.6; stroke-linecap: round; }
-.atlas .leaf[data-state="open"]:hover { border-style: solid; }
-.atlas .leaf[data-state="open"]:hover .badge { border-color: var(--blue); }
-.atlas .leaf[data-state="open"]:hover .badge svg { stroke: var(--blue); }
-
-.atlas .vacant { display: inline-flex; align-items: center; min-height: 30px; padding: 0 12px; border: 1px dashed var(--line-strong); border-radius: 999px; background: var(--paper); color: var(--faint); font-size: 12px; }
+/* Locked: a prerequisite medal is still dark, so the card stays grey. */
+.atlas .leaf[data-state="locked"] { border-style: dashed; border-color: var(--line-strong); }
+.atlas .leaf[data-state="locked"] .leaf-title { color: var(--muted); }
+.atlas .leaf[data-state="locked"] .badge { border: 1px dashed var(--line-strong); }
+.atlas .leaf[data-state="locked"] .badge svg { fill: none; stroke: var(--faint); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.atlas .leaf[data-state="locked"]:hover { border-style: solid; }
+.atlas .leaf[data-state="locked"]:hover .badge svg { stroke: var(--muted); }
 
 /* ---------- Details dialog ---------- */
 .atlas .dossier { position: fixed; inset: 0; box-sizing: border-box; width: min(520px, calc(100% - 32px)); max-height: 82dvh; margin: auto; padding: 0; overflow: auto; border: 1px solid var(--line); border-radius: 16px; background: var(--paper); color: var(--ink); box-shadow: 0 24px 80px -12px rgb(2 6 23 / 0.45); }
@@ -255,21 +247,31 @@
 .atlas .dossier-inner { position: relative; padding: 22px 24px 24px; }
 .atlas .dossier-kicker { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 40px 10px 0; color: var(--muted); font: 11.5px/1.4 var(--mono); }
 .atlas .pill { padding: 2px 9px; border: 1px solid var(--line-strong); border-radius: 999px; font: 600 11.5px/1.5 inherit; font-family: inherit; }
-.atlas .pill[data-state="completed"] { border-color: var(--gold-line); background: var(--gold-tint-2); color: var(--gold-ink); }
-.atlas .pill[data-state="in_progress"] { border-color: var(--blue-line); background: var(--blue-tint); color: var(--blue-ink); }
-.atlas .pill[data-state="open"] { border-style: dashed; color: var(--muted); }
+.atlas .pill[data-state="lit"] { border-color: var(--gold-line); background: var(--gold-tint-2); color: var(--gold-ink); }
+.atlas .pill[data-state="ready"] { border-color: var(--blue-line); background: var(--blue-tint); color: var(--blue-ink); }
+.atlas .pill[data-state="locked"] { border-style: dashed; color: var(--muted); }
 .atlas .dossier h3 { margin: 0 32px 10px 0; font-size: 18px; font-weight: 680; line-height: 1.4; letter-spacing: -0.01em; }
 .atlas .dossier-summary { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.7; }
 .atlas .close { position: absolute; top: 16px; right: 16px; display: grid; place-items: center; width: 30px; height: 30px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); }
 .atlas .close:hover { color: var(--ink); border-color: var(--line-strong); }
 .atlas .close svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
-.atlas .facts,
+/* What it takes to light the medal, then the quests that carry it. */
+.atlas .dossier-evidence { margin: 14px 0 0; padding: 11px 13px; border: 1px solid var(--line); border-radius: 12px; background: var(--canvas); font-size: 13px; line-height: 1.65; }
+.atlas .dossier-evidence b,
+.atlas .dossier-label { display: block; color: var(--muted); font: 650 11px var(--mono); letter-spacing: 0.04em; }
+.atlas .dossier-evidence b { margin-bottom: 4px; }
+.atlas .dossier-label { margin: 16px 0 8px; }
+.atlas .dossier-note { margin: 10px 0 0; padding: 9px 12px; border: 1px dashed var(--line-strong); border-radius: 10px; color: var(--muted); font-size: 12.5px; line-height: 1.6; }
+.atlas .quests { display: grid; gap: 9px; }
+.atlas .quest { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; font-size: 12.5px; }
+.atlas .quest > a:first-child { flex: 1 1 100%; color: var(--ink); font-weight: 550; line-height: 1.5; text-decoration: none; }
+.atlas .quest > a:first-child:hover { color: var(--blue-ink); text-decoration: underline; }
+.atlas .quest-meta { color: var(--muted); font: 11px/1.4 var(--mono); }
+.atlas .quest-meta[data-status="completed"] { color: var(--gold-text); }
+.atlas .quest-meta[data-status="in_progress"] { color: var(--blue-ink); }
+.atlas .quest .chip { padding: 2px 9px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font: 11px var(--mono); text-decoration: none; }
+.atlas .quest .chip:hover { border-color: var(--blue); color: var(--blue-ink); }
 .atlas .relations { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
-.atlas .facts { margin-top: 16px; color: var(--muted); font-size: 12.5px; }
-.atlas .facts a { padding: 5px 11px; border: 1px solid var(--line); border-radius: 999px; color: var(--ink); font-weight: 550; text-decoration: none; }
-.atlas .facts a:hover { border-color: var(--blue); color: var(--blue-ink); }
-.atlas .facts span { margin-left: 4px; }
-.atlas .relations:not(:empty) { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); }
 .atlas .relations button { max-width: 100%; padding: 6px 11px; overflow: hidden; border: 1px dashed var(--line-strong); border-radius: 10px; color: var(--ink); font-size: 12.5px; text-align: left; text-overflow: ellipsis; white-space: nowrap; }
 .atlas .relations button:hover { border-style: solid; border-color: var(--blue); }
 
@@ -281,7 +283,7 @@
 
 /* ---------- Narrow screens: keep the horizontal canvas, tighten the grid ---------- */
 @media (max-width: 650px) {
-  .atlas { --pad-x: 10px; --pad-y: 22px; --hub-w: 48px; --trunk-gap: 20px; --domain-w: 128px; --fork-gap: 16px; --head-w: 56px; --rail-gap: 12px; --leaf-w: 208px; --leaf-gap: 10px; --lane-gap: 18px; --branch-gap: 32px; }
+  .atlas { --pad-x: 10px; --pad-y: 22px; --hub-w: 48px; --trunk-gap: 20px; --domain-w: 128px; --fork-gap: 16px; --head-w: 104px; --rail-gap: 12px; --leaf-w: 208px; --leaf-gap: 10px; --lane-gap: 18px; --branch-gap: 32px; }
   .atlas .atlas-frame { margin-inline: -24px; border-inline: 0; border-radius: 0; }
   .atlas .toolbar { padding: 8px 12px; gap: 8px; }
   .atlas .filters { gap: 5px; }
@@ -302,15 +304,14 @@
   .atlas .domain-icon svg { width: 14px; height: 14px; }
   .atlas .domain h3 { font-size: 12px; }
   .atlas .lane-key { margin-inline: -8px; padding-inline: 8px; }
-  /* Status pills shrink to icon + count; the name stays for screen readers and the filter chips act as the legend. */
-  .atlas .lane-head { justify-content: center; min-height: 30px; padding: 4px 8px; gap: 5px; font-size: 12px; }
-  .atlas .lane-head b { margin-left: 0; }
-  .atlas .lane-name { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  /* The branch name is the only label for a lane, so it stays on the phone and wraps instead. */
+  .atlas .lane-head { min-height: 30px; padding: 5px 9px; gap: 6px; font-size: 11.5px; }
+  .atlas .lane-head b { font-size: 10px; }
   .atlas .leaf { padding: 9px 11px 9px 9px; column-gap: 8px; }
   .atlas .leaf-title { font-size: 12.5px; }
 }
 @media (max-width: 650px) {
-  .atlas:lang(en) { --head-w: 56px; --hub-w: 48px; --trunk-gap: 20px; }
+  .atlas:lang(en) { --head-w: 112px; --hub-w: 48px; --trunk-gap: 20px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .atlas *, .atlas *::before, .atlas *::after { transition: none !important; }

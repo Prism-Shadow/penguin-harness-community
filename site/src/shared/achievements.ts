@@ -1,119 +1,182 @@
-import { QUEST_DOMAINS, resolveText, type QuestDomainId, type QuestItem, type QuestStatus } from "./community";
+import { resolveText, type QuestItem, type QuestStatus } from "./community";
+import { ACHIEVEMENT_TREE, type MedalDef, type Text } from "./achievement-tree";
 import type { Locale } from "./i18n";
 
-/** Lanes run top to bottom in this order: what the community has done, what is moving, what is still open. */
-export const ATLAS_STATES = ["completed", "in_progress", "open"] as const satisfies readonly QuestStatus[];
+/**
+ * A medal is lit only when every quest it lists is registered as completed on the Task Board.
+ * It is ready while its prerequisites are lit, and locked until they are.
+ */
+export type MedalState = "lit" | "ready" | "locked";
+
+/** Cards hang in this order inside a branch: what the community has, what it can push, what is still shut. */
+export const ATLAS_STATES = ["lit", "ready", "locked"] as const satisfies readonly MedalState[];
 
 export interface AtlasLink { label: string; url: string }
-export interface AtlasRelation { id: string; label: string }
+export interface AtlasMedalRef { id: string; name: string; state: MedalState }
 
-export interface AtlasQuest {
-  id: string;
+export interface AtlasTask {
   number: number;
-  domain: QuestDomainId;
-  domainTitle: string;
-  state: QuestStatus;
   title: string;
-  summary: string;
+  status: QuestStatus;
+  statusLabel: string;
   assignee?: string;
   links: AtlasLink[];
-  related: AtlasRelation[];
 }
 
-export interface AtlasDomain {
-  id: QuestDomainId;
+export interface AtlasMedal {
+  id: string;
+  name: string;
+  intent: string;
+  evidence: string;
+  pending?: string;
+  state: MedalState;
+  routeTitle: string;
+  branchTitle: string;
+  /** Registered quests that light this medal, newest Issue first. */
+  tasks: AtlasTask[];
+  /** Listed Issue numbers the registry does not carry (yet). */
+  unregistered: number[];
+  requires: AtlasMedalRef[];
+  unlocks: AtlasMedalRef[];
+  /** Where a plain click goes: the first quest's Issue. */
+  href: string;
+  /** Card shorthand for the quests behind the medal, e.g. `#83 +1`. */
+  tag: string;
+}
+
+export interface AtlasBranch {
+  id: string;
   title: string;
   total: number;
-  counts: Record<QuestStatus, number>;
-  lanes: Record<QuestStatus, AtlasQuest[]>;
+  lit: number;
+  medals: AtlasMedal[];
+}
+
+export interface AtlasRoute {
+  id: string;
+  title: string;
+  aim: string;
+  total: number;
+  counts: Record<MedalState, number>;
+  branches: AtlasBranch[];
 }
 
 export interface Atlas {
-  domains: AtlasDomain[];
-  quests: AtlasQuest[];
-  counts: Record<QuestStatus, number>;
+  routes: AtlasRoute[];
+  medals: AtlasMedal[];
+  counts: Record<MedalState, number>;
   total: number;
-  statuses: Record<QuestStatus, string>;
+  statuses: Record<MedalState, string>;
+  /** Quests registered on the Task Board that no medal claims yet. */
+  unmapped: number[];
 }
 
-const issueLabel = (url: string) => {
-  const m = url.match(/github\.com\/[^/]+\/([^/]+)\/(issues|pull)\/(\d+)/);
-  if (!m) return url;
-  const repo = m[1] === "penguin-harness-community" ? "Issue" : m[1];
-  return `${repo} #${m[3]}`;
-};
-
-/** First sentence-ish line of the registry description, stripped of Markdown. The Issue holds the full text. */
-function summarize(description: string): string {
-  const first = (description.split(/\r?\n/)[0] || "")
-    .replace(/^["']|["']$/g, "")
-    .replace(/\[([^\]]+)\]\(https?:\/\/[^)]+\)/g, "$1")
-    .replace(/\*\*|`/g, "")
-    .trim();
-  return first.length > 220 ? first.slice(0, 217) + "…" : first;
-}
+const tally = (list: { state: MedalState }[]) =>
+  Object.fromEntries(ATLAS_STATES.map((s) => [s, list.filter((m) => m.state === s).length])) as Record<MedalState, number>;
 
 /**
- * Builds the community achievement tree from the Task Board registry only.
- * Relations come from `related_issue`: a quest that points at another quest's Issue,
- * or quests that share the same related Issue.
+ * Builds the community achievement tree: the shape comes from `achievement-tree.ts`,
+ * every lit medal and every quest link comes from the Task Board registry.
  */
 export function researchAtlas(quests: QuestItem[], locale: Locale): Atlas {
   const t = (zh: string, en: string) => (locale === "zh" ? zh : en);
-  const statuses: Record<QuestStatus, string> = {
+  const say = (text: Text) => resolveText(text, locale);
+  const statuses: Record<MedalState, string> = {
+    lit: t("已达成", "Achieved"),
+    ready: t("可推进", "Ready"),
+    locked: t("未解锁", "Locked"),
+  };
+  const questStatuses: Record<QuestStatus, string> = {
     completed: t("已完成", "Completed"),
     in_progress: t("进行中", "In progress"),
     open: t("待认领", "Open"),
   };
-  const domainTitle = new Map(QUEST_DOMAINS.map((d) => [d.id, d.label[locale]]));
-  const byIssueUrl = new Map(quests.map((q) => [q.issueUrl, q]));
-  const id = (q: QuestItem) => "q" + q.issueNumber;
+  const byNumber = new Map(quests.map((q) => [q.issueNumber, q]));
+  const claimed = new Set<number>();
 
-  const items: AtlasQuest[] = quests.map((q) => {
+  const describe = (q: QuestItem): AtlasTask => {
     const links: AtlasLink[] = [{ label: "Issue #" + q.issueNumber, url: q.issueUrl }];
     if (q.linkedPr) links.push({ label: "PR #" + q.linkedPr.split("/").pop(), url: q.linkedPr });
     for (const ref of q.references)
       if (ref.url.startsWith("https://penguin.ooo/leaderboards/")) links.push({ label: t("实验榜单", "Leaderboard"), url: ref.url });
-
-    const related: AtlasRelation[] = [];
-    const target = q.relatedIssue ? byIssueUrl.get(q.relatedIssue) : undefined;
-    if (target) related.push({ id: id(target), label: t("关联任务", "Related quest") });
-    else if (q.relatedIssue) links.push({ label: t("关联 ", "Related ") + issueLabel(q.relatedIssue), url: q.relatedIssue });
-    for (const other of quests) {
-      if (other === q || other === target) continue;
-      if (other.relatedIssue === q.issueUrl) related.push({ id: id(other), label: t("关联任务", "Related quest") });
-      else if (q.relatedIssue && other.relatedIssue === q.relatedIssue)
-        related.push({ id: id(other), label: t("同属 ", "Shares ") + issueLabel(q.relatedIssue) });
-    }
-
     return {
-      id: id(q),
       number: q.issueNumber,
-      domain: q.domain,
-      domainTitle: domainTitle.get(q.domain)!,
-      state: q.status,
       title: resolveText(q.title, locale),
-      summary: summarize(resolveText(q.description, locale)),
+      status: q.status,
+      statusLabel: questStatuses[q.status],
       ...(q.assignee ? { assignee: q.assignee } : {}),
       links,
-      related,
     };
+  };
+
+  // Pass 1: resolve quests and light the medals the registry already settles.
+  const defs = new Map<string, MedalDef>();
+  const built = new Map<string, AtlasMedal>();
+  for (const route of ACHIEVEMENT_TREE)
+    for (const branch of route.branches)
+      for (const def of branch.medals) {
+        defs.set(def.id, def);
+        const tasks = def.quests
+          .map((n) => byNumber.get(n))
+          .filter((q): q is QuestItem => !!q)
+          .map(describe)
+          .sort((a, b) => b.number - a.number);
+        for (const task of tasks) claimed.add(task.number);
+        const unregistered = def.quests.filter((n) => !byNumber.has(n));
+        // Only the registry may light a medal, and only when it carries every quest the medal lists.
+        const lit = def.quests.length > 0 && unregistered.length === 0 && tasks.every((q) => q.status === "completed");
+        built.set(def.id, {
+          id: def.id,
+          name: say(def.name),
+          intent: say(def.intent),
+          evidence: say(def.evidence),
+          ...(def.pending ? { pending: say(def.pending) } : {}),
+          state: lit ? "lit" : "locked",
+          routeTitle: say(route.name),
+          branchTitle: say(branch.name),
+          tasks,
+          unregistered,
+          requires: [],
+          unlocks: [],
+          href: tasks[0]?.links[0].url ?? (quests[0]?.issueUrl.replace(/\/\d+$/, "") || "#"),
+          tag: def.quests.length ? `#${def.quests[0]}${def.quests.length > 1 ? ` +${def.quests.length - 1}` : ""}` : "",
+        });
+      }
+
+  // Pass 2: a medal that is not lit is ready once every prerequisite is lit, and locked until then.
+  for (const [id, medal] of built) {
+    const requires = defs.get(id)!.requires ?? [];
+    if (medal.state !== "lit") medal.state = requires.every((r) => built.get(r)?.state === "lit") ? "ready" : "locked";
+    for (const required of requires) {
+      const other = built.get(required);
+      if (!other) continue;
+      medal.requires.push({ id: other.id, name: other.name, state: other.state });
+      other.unlocks.push({ id: medal.id, name: medal.name, state: medal.state });
+    }
+  }
+  // Prerequisite states are read back after every medal has settled.
+  for (const medal of built.values()) {
+    for (const ref of medal.requires) ref.state = built.get(ref.id)!.state;
+    for (const ref of medal.unlocks) ref.state = built.get(ref.id)!.state;
+  }
+
+  const order = (m: AtlasMedal) => ATLAS_STATES.indexOf(m.state);
+  const routes: AtlasRoute[] = ACHIEVEMENT_TREE.map((route) => {
+    const branches: AtlasBranch[] = route.branches.map((branch) => {
+      const medals = branch.medals.map((d) => built.get(d.id)!).sort((a, b) => order(a) - order(b));
+      return { id: branch.id, title: say(branch.name), total: medals.length, lit: medals.filter((m) => m.state === "lit").length, medals };
+    });
+    const medals = branches.flatMap((b) => b.medals);
+    return { id: route.id, title: say(route.name), aim: say(route.aim), total: medals.length, counts: tally(medals), branches };
   });
 
-  // Newest Issue first inside a lane, so fresh work sits next to its status.
-  const sorted = [...items].sort((a, b) => b.number - a.number);
-  const tally = (list: AtlasQuest[]) =>
-    Object.fromEntries(ATLAS_STATES.map((s) => [s, list.filter((q) => q.state === s).length])) as Record<QuestStatus, number>;
-  const domains: AtlasDomain[] = QUEST_DOMAINS.map((d) => {
-    const group = sorted.filter((q) => q.domain === d.id);
-    return {
-      id: d.id,
-      title: d.label[locale],
-      total: group.length,
-      counts: tally(group),
-      lanes: Object.fromEntries(ATLAS_STATES.map((s) => [s, group.filter((q) => q.state === s)])) as Record<QuestStatus, AtlasQuest[]>,
-    };
-  });
-
-  return { domains, quests: sorted, counts: tally(sorted), total: sorted.length, statuses };
+  const medals = routes.flatMap((r) => r.branches.flatMap((b) => b.medals));
+  return {
+    routes,
+    medals,
+    counts: tally(medals),
+    total: medals.length,
+    statuses,
+    unmapped: quests.filter((q) => !claimed.has(q.issueNumber)).map((q) => q.issueNumber).sort((a, b) => a - b),
+  };
 }

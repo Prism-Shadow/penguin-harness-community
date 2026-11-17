@@ -1,16 +1,16 @@
-import type { AtlasQuest } from "./achievements";
-import type { QuestStatus } from "./community";
+import type { AtlasMedal, AtlasMedalRef, MedalState } from "./achievements";
 
-type Model = { quests: AtlasQuest[]; statuses: Record<QuestStatus, string>; words: Record<string, string>; zoom: { initial: number; min: number; max: number } };
+type Model = { medals: AtlasMedal[]; statuses: Record<MedalState, string>; words: Record<string, string>; zoom: { initial: number; min: number; max: number } };
 type Box = { l: number; r: number; t: number; b: number; cy: number };
 
 export function initAtlas(root: HTMLDetailsElement) {
-  const { quests, statuses, words, zoom: zoomConfig } = JSON.parse(root.dataset.model!) as Model;
+  const { medals, statuses, words, zoom: zoomConfig } = JSON.parse(root.dataset.model!) as Model;
   const get = <T extends HTMLElement = HTMLElement>(attr: string) => root.querySelector<T>(`[data-${attr}]`)!;
-  const byId = new Map(quests.map((q) => [q.id, q]));
+  const byId = new Map(medals.map((m) => [m.id, m]));
   const filters = Array.from(root.querySelectorAll<HTMLButtonElement>("[data-filter]"));
   const lanes = Array.from(root.querySelectorAll<HTMLElement>("[data-lane]"));
   const branches = Array.from(root.querySelectorAll<HTMLElement>("[data-domain]"));
+  const cards = Array.from(root.querySelectorAll<HTMLAnchorElement>("[data-record]"));
   const dialog = get<HTMLDialogElement>("detail");
   const stage = get("stage"), viewport = get("scroll"), canvas = get("canvas"), wires = get("wires") as unknown as SVGSVGElement;
   const panTools = get("pan-tools");
@@ -20,7 +20,7 @@ export function initAtlas(root: HTMLDetailsElement) {
   /* ---------- Panning ---------- */
   // Current CSS zoom of the canvas; rects are in zoomed pixels, layout (and the SVG wires) in canvas pixels.
   const scaleOf = () => canvas.getBoundingClientRect().width / canvas.offsetWidth || 1;
-  // Scroll offset at which the status column reaches the left edge and freezes (measured in measurePin).
+  // Scroll offset at which the branch column reaches the left edge and freezes (measured in measurePin).
   let pinAt = Infinity;
   function measurePin() {
     const lane = root.querySelector<HTMLElement>("[data-lane]:not([hidden])");
@@ -141,47 +141,48 @@ export function initAtlas(root: HTMLDetailsElement) {
     const dot = (x: number, y: number, cls: string) => parts.push(`<circle class="${cls}" cx="${x}" cy="${y}" r="3.5"/>`);
     const f = (n: number) => Math.round(n * 10) / 10;
 
-    // Centre the root on the midpoint of the first and last domain nodes (a transform, so layout is untouched).
+    // Centre the root on the midpoint of the first and last route nodes (a transform, so layout is untouched).
     const hubEl = get("hub");
-    const domains = branches.map((b) => box(b.querySelector("[data-domain-node]")!));
-    const top = f(domains[0].cy), bottom = f(domains[domains.length - 1].cy), hy = f((top + bottom) / 2);
+    const routes = branches.map((b) => box(b.querySelector("[data-domain-node]")!));
+    const top = f(routes[0].cy), bottom = f(routes[routes.length - 1].cy), hy = f((top + bottom) / 2);
     hubEl.style.transform = "";
     hubEl.style.transform = `translateY(${f(hy - box(hubEl.querySelector(".medal")!).cy)}px)`;
     const hub = box(hubEl.querySelector(".medal")!);
 
-    // Root → one short stub into the trunk; every domain then leaves the trunk on an equal twig.
-    const sx = f(hub.r + (domains[0].l - hub.r) / 2);
-    const r = Math.max(0, Math.min(12, domains[0].l - sx - 4, (bottom - top) / 2));
+    // Root → one short stub into the trunk; every route then leaves the trunk on an equal twig.
+    const sx = f(hub.r + (routes[0].l - hub.r) / 2);
+    const r = Math.max(0, Math.min(12, routes[0].l - sx - 4, (bottom - top) / 2));
     path(`M${f(hub.r)} ${hy} H${sx} M${sx} ${f(top + r)} V${f(bottom - r)}`, "w-trunk");
-    path(domains.map((d, i) => {
-      const dy = f(d.cy), bend = i === 0 ? r : i === domains.length - 1 ? -r : 0;
+    path(routes.map((d, i) => {
+      const dy = f(d.cy), bend = i === 0 ? r : i === routes.length - 1 ? -r : 0;
       return bend ? `M${sx} ${f(dy + bend)} Q${sx} ${dy} ${f(sx + r)} ${dy} H${f(d.l)}` : `M${sx} ${dy} H${f(d.l)}`;
     }).join(" "), "w-twig");
     dot(sx, hy, "w-knot");
 
-    const BUS = 8; // gap between the shared bus and the top of the quest cards
+    const BUS = 8; // gap between the shared bus and the top of the medal cards
     branches.forEach((branch, i) => {
-      const d = domains[i];
+      const d = routes[i];
       for (const lane of branch.querySelectorAll<HTMLElement>("[data-lane]")) {
         if (lane.hidden) continue;
-        const state = lane.dataset.lane!, empty = lane.dataset.count === "0" ? " w-empty" : "";
         const head = lane.querySelector<HTMLElement>("[data-lane-head]")!;
-        // Lane heads stick while panning, so take x from the lane itself rather than the (possibly stuck) head.
+        // Branch heads stick while panning, so take x from the lane itself rather than the (possibly stuck) head.
         const laneBox = box(lane), py = f(box(head).cy), hl = f(laneBox.l), hr = f(laneBox.l + head.offsetWidth);
         const mx = f((d.r + hl) / 2);
-        path(`M${f(d.r)} ${f(d.cy)} C${mx} ${f(d.cy)} ${mx} ${py} ${hl} ${py}`, "w-fork" + empty, state);
-        const cards = Array.from(lane.querySelectorAll("[data-leaves] > li"), box);
-        if (cards.length < 2) {
-          // One quest (or the empty-lane note): a single line that stops at its edge.
-          const end = cards[0]?.l ?? box(lane.querySelector("[data-leaves]")!).l;
-          path(`M${hr} ${py} H${f(end)}`, "w-bus" + empty, state);
+        path(`M${f(d.r)} ${f(d.cy)} C${mx} ${f(d.cy)} ${mx} ${py} ${hl} ${py}`, "w-fork");
+        const items = Array.from(lane.querySelectorAll<HTMLElement>("[data-leaves] > li")).filter((li) => !li.hidden);
+        const states = items.map((li) => li.querySelector<HTMLElement>("[data-record]")!.dataset.state!);
+        const boxes = items.map(box);
+        if (boxes.length === 0) continue;
+        if (boxes.length === 1) {
+          // One medal: a single line that stops at its edge, dashed while the medal is locked.
+          path(`M${hr} ${py} H${f(boxes[0].l)}`, "w-bus", states[0]);
           continue;
         }
-        // Several quests: a shared bus above the row and one stem per card, so siblings read as parallel, not as a chain.
-        const busY = f(cards[0].t - BUS), x0 = f((hr + cards[0].l) / 2), rr = Math.min(8, x0 - hr, py - busY);
-        const stems = cards.map((k) => `M${f((k.l + k.r) / 2)} ${busY} V${f(k.t)}`).join(" ");
-        const last = cards[cards.length - 1];
-        path(`M${hr} ${py} H${f(x0 - rr)} Q${x0} ${py} ${x0} ${f(py - rr)} V${f(busY + rr)} Q${x0} ${busY} ${f(x0 + rr)} ${busY} H${f((last.l + last.r) / 2)} ${stems}`, "w-bus", state);
+        // Several medals: a shared bus above the row and one stem per card, so siblings read as parallel, not as a chain.
+        const busY = f(boxes[0].t - BUS), x0 = f((hr + boxes[0].l) / 2), rr = Math.min(8, x0 - hr, py - busY);
+        const last = boxes[boxes.length - 1];
+        path(`M${hr} ${py} H${f(x0 - rr)} Q${x0} ${py} ${x0} ${f(py - rr)} V${f(busY + rr)} Q${x0} ${busY} ${f(x0 + rr)} ${busY} H${f((last.l + last.r) / 2)}`, "w-bus");
+        boxes.forEach((k, j) => path(`M${f((k.l + k.r) / 2)} ${busY} V${f(k.t)}`, "w-bus", states[j]));
       }
       dot(f(d.l), f(d.cy), "w-joint");
     });
@@ -201,62 +202,103 @@ export function initAtlas(root: HTMLDetailsElement) {
   document.fonts?.ready.then(refresh);
   refresh();
 
-  /* ---------- Status filter ---------- */
+  /* ---------- State filter: hide the cards, then any branch left without one ---------- */
   for (const button of filters)
     button.addEventListener("click", () => {
       const state = button.dataset.filter!;
       filters.forEach((b) => b.setAttribute("aria-pressed", String(b === button)));
       root.dataset.filter = state;
       let total = 0;
-      for (const lane of lanes) {
-        lane.hidden = state !== "all" && lane.dataset.lane !== state;
-        if (!lane.hidden) total += Number(lane.dataset.count);
+      for (const card of cards) {
+        const hide = state !== "all" && card.dataset.state !== state;
+        card.parentElement!.hidden = hide;
+        if (!hide) total += 1;
       }
+      for (const lane of lanes)
+        lane.hidden = !lane.querySelector<HTMLElement>("[data-leaves] > li:not([hidden])");
       viewport.scrollTo(0, 0);
       refresh();
-      get("live").textContent = `${state === "all" ? words.all : statuses[state as QuestStatus]} · ${total} ${words.results}`;
+      get("live").textContent = `${state === "all" ? words.all : statuses[state as MedalState]} · ${total} ${words.results}`;
     });
 
-  /* ---------- Quest details ---------- */
-  function show(q: AtlasQuest) {
-    const pill = get("status");
-    pill.textContent = statuses[q.state];
-    pill.dataset.state = q.state;
-    get("domain-label").textContent = `${q.domainTitle} · #${q.number}`;
-    get("title").textContent = q.title;
-    get("summary").textContent = q.summary;
-    const facts = get("facts"), related = get("neighbors");
-    facts.replaceChildren();
-    related.replaceChildren();
-    for (const link of q.links) {
-      const a = document.createElement("a");
-      a.href = link.url; a.target = "_blank"; a.rel = "noopener noreferrer"; a.textContent = link.label + " ↗";
-      facts.append(a);
-    }
-    if (q.assignee) {
-      const by = document.createElement("span");
-      by.textContent = `${words.contributor} · @${q.assignee}`;
-      facts.append(by);
-    }
-    for (const rel of q.related) {
-      const other = byId.get(rel.id);
+  /* ---------- Medal details ---------- */
+  const label = (text: string) => {
+    const p = document.createElement("p");
+    p.className = "dossier-label";
+    p.textContent = text;
+    return p;
+  };
+  const chip = (text: string, url: string) => {
+    const a = document.createElement("a");
+    a.className = "chip";
+    a.href = url; a.target = "_blank"; a.rel = "noopener noreferrer"; a.textContent = text;
+    return a;
+  };
+  function relationGroup(title: string, refs: AtlasMedalRef[]) {
+    const group = document.createElement("div");
+    group.className = "relations";
+    for (const ref of refs) {
+      const other = byId.get(ref.id);
       if (!other) continue;
       const b = document.createElement("button");
       b.type = "button";
       b.dataset.state = other.state;
-      b.textContent = `${rel.label} · #${other.number} ${other.title}`;
+      b.textContent = `${statuses[other.state]} · ${other.name}`;
       b.addEventListener("click", () => show(other));
-      related.append(b);
+      group.append(b);
     }
+    return group.children.length ? [label(title), group] : [];
+  }
+
+  function show(m: AtlasMedal) {
+    const pill = get("status");
+    pill.textContent = statuses[m.state];
+    pill.dataset.state = m.state;
+    get("domain-label").textContent = `${m.routeTitle} · ${m.branchTitle}`;
+    get("title").textContent = m.name;
+    get("summary").textContent = m.intent;
+    get("evidence").textContent = m.evidence;
+
+    const note = get("note");
+    const notes = [m.pending, m.unregistered.length ? `${m.unregistered.map((n) => "#" + n).join(" ")} ${words.unregistered}` : ""].filter(Boolean);
+    note.hidden = notes.length === 0;
+    note.textContent = notes.join(" · ");
+
+    // The quests that light it, each with its Task Board status.
+    const facts = get("facts");
+    facts.replaceChildren();
+    if (m.tasks.length) {
+      const list = document.createElement("div");
+      list.className = "quests";
+      for (const task of m.tasks) {
+        const row = document.createElement("div");
+        row.className = "quest";
+        const main = document.createElement("a");
+        main.href = task.links[0].url; main.target = "_blank"; main.rel = "noopener noreferrer";
+        main.textContent = `#${task.number} ${task.title}`;
+        const meta = document.createElement("span");
+        meta.className = "quest-meta";
+        meta.dataset.status = task.status;
+        meta.textContent = task.assignee ? `${task.statusLabel} · ${words.contributor} @${task.assignee}` : task.statusLabel;
+        row.append(main, meta, ...task.links.slice(1).map((link) => chip(link.label, link.url)));
+        list.append(row);
+      }
+      facts.append(label(words.quests), list);
+    }
+
+    const related = get("neighbors");
+    related.replaceChildren(...relationGroup(words.needs, m.requires), ...relationGroup(words.unlocks, m.unlocks));
+
     if (!dialog.open) dialog.showModal();
     else get("close").focus({ preventScroll: true });
   }
-  for (const a of root.querySelectorAll<HTMLAnchorElement>("[data-record]")) {
+
+  for (const a of cards) {
     a.setAttribute("aria-haspopup", "dialog");
     a.addEventListener("click", (e) => {
       if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-      const q = byId.get(a.dataset.record!);
-      if (q) { e.preventDefault(); show(q); }
+      const m = byId.get(a.dataset.record!);
+      if (m) { e.preventDefault(); show(m); }
     });
   }
   get("close").addEventListener("click", () => dialog.close());
