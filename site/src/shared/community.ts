@@ -55,6 +55,7 @@ export interface QuestReference {
 export interface QuestItem {
   id: string;
   issueNumber: number;
+  author?: string;
   prNumber?: number;
   publishedAt: string;
   status: QuestStatus;
@@ -97,6 +98,7 @@ function parseQuestsFromYaml(content: string): QuestItem[] {
       : [];
 
     const issueNumber = Number(field("issue_number") || 0);
+    const author = field("author");
     const prNumberRaw = field("pr_number");
     const prNumber = prNumberRaw ? Number(prNumberRaw) : undefined;
     const status = (field("status") as QuestStatus) || "open";
@@ -116,6 +118,7 @@ function parseQuestsFromYaml(content: string): QuestItem[] {
     return {
       id,
       issueNumber,
+      ...(author ? { author } : {}),
       ...(prNumber ? { prNumber } : {}),
       publishedAt: field("published_at") || "",
       status,
