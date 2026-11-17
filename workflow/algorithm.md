@@ -21,10 +21,10 @@
 
 ## Algorithm PR Merge Criteria
 
-- **Reproduce the original method**: Link to the paper or upstream implementation and identify the code or Skills that implement the key steps. Explain any departures from the original method and label the plugin as a variant if it changes a core mechanism.
-- **Runnable plugin**: The plugin must follow RFC-0003. After following the installation instructions, a reviewer should be able to run the algorithm in PenguinHarness using the `quick_start` example.
-- **Measured improvement**: Compare the plugin in this PR against a baseline on a real task suited to the method and report at least one measured improvement. For example, the plugin might score higher on the same budget, or complete the task with fewer tokens or in less time at comparable quality. State the comparison conditions and main trade-offs.
-- **Verifiable results**: Specify the task or subset, key settings, and reproduction commands. Provide run records that let reviewers check both the baseline and plugin results.
+- **Reproduce the original method**: Link to the paper or upstream implementation and identify the code or Skills for its key steps. Explain any differences. If the plugin changes a core mechanism, label it as a variant.
+- **Runnable plugin**: The plugin must conform to RFC-0003. Once installed as documented, it must run the algorithm in PenguinHarness using the `quick_start` example.
+- **Measured improvement**: Compare the plugin in this PR against a baseline on a real task suited to the method and report at least one measured improvement. Examples include a higher score on the same budget, or fewer tokens or a shorter runtime at a comparable score. State the comparison conditions and any additional overhead.
+- **Verifiable results**: List the test task or subset, key settings, and reproduction commands. Include run records for both the baseline and the plugin so reviewers can check the results.
 
 ## Format Examples
 
