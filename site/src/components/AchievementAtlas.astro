@@ -32,99 +32,100 @@ const ZOOM = { initial: 0.8, min: 0.5, max: 1.25 };
 const emptyNote = { completed: t("首个成果待点亮", "First result yet to light"), in_progress: t("暂无进行中", "Nothing in progress"), open: t("暂无待认领", "Nothing open") };
 ---
 <details class="atlas" id="atlas" open data-atlas style={`--zoom: ${ZOOM.initial}`} data-model={JSON.stringify({ quests: atlas.quests, statuses, words, zoom: ZOOM })}>
-  <summary class="atlas-head">
-    <span class="head-copy">
-      <small class="kicker" lang="en"><i></i>COMMUNITY ATLAS</small>
-      <strong>{t("社区成就树", "Community achievement tree")}</strong>
-    </span>
-    <span class="disclosure"><span class="opened">{t("收起", "Collapse")}</span><span class="closed">{t("展开", "Expand")}</span><i></i></span>
+  <summary class="atlas-head border-b border-gray-200 pb-2.5 dark:border-gray-800">
+    <h2 class="flex items-center justify-between gap-4 text-xl font-semibold tracking-tight text-gray-950 dark:text-white">
+      <span>{t("社区成就树", "Community achievement tree")}</span>
+      <span class="disclosure"><span class="opened">{t("收起", "Collapse")}</span><span class="closed">{t("展开", "Expand")}</span><i aria-hidden="true"></i></span>
+    </h2>
   </summary>
 
-  <div class="toolbar">
-    <div class="filters" role="group" aria-label={t("按任务状态筛选", "Filter quests by status")}>
-      <button type="button" data-filter="all" aria-pressed="true">{words.all}<b>{total}</b></button>
-      {ATLAS_STATES.map((s) => (
-        <button type="button" data-filter={s} data-state={s} aria-pressed="false">
-          <svg class="glyph" viewBox="0 0 16 16" aria-hidden="true">{s === "completed" ? <path d={STAR} /> : <circle cx="8" cy="8" r="5.25" />}{s === "in_progress" && <path class="half" d="M8 2.75a5.25 5.25 0 0 1 0 10.5z" />}</svg>
-          {statuses[s]}<b>{counts[s]}</b>
-        </button>
-      ))}
+  <div class="atlas-frame mt-4">
+    <div class="toolbar">
+      <div class="filters" role="group" aria-label={t("按任务状态筛选", "Filter quests by status")}>
+        <button type="button" data-filter="all" aria-pressed="true">{words.all}<b>{total}</b></button>
+        {ATLAS_STATES.map((s) => (
+          <button type="button" data-filter={s} data-state={s} aria-pressed="false">
+            <svg class="glyph" viewBox="0 0 16 16" aria-hidden="true">{s === "completed" ? <path d={STAR} /> : <circle cx="8" cy="8" r="5.25" />}{s === "in_progress" && <path class="half" d="M8 2.75a5.25 5.25 0 0 1 0 10.5z" />}</svg>
+            {statuses[s]}<b>{counts[s]}</b>
+          </button>
+        ))}
+      </div>
+      <div class="tools">
+        <span class="pan-controls" data-pan-tools hidden>
+          <button type="button" data-pan-left aria-label={t("画布向左滚动", "Scroll canvas left")}><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3.5 5.5 8l4.5 4.5" /></svg></button>
+          <span>{t("横向浏览", "Pan")}</span>
+          <button type="button" data-pan-right aria-label={t("画布向右滚动", "Scroll canvas right")}><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5" /></svg></button>
+        </span>
+        <a class="skip" href="#quest-list">{t("跳到任务列表", "Skip to quest list")}</a>
+      </div>
     </div>
-    <div class="tools">
-      <span class="pan-controls" data-pan-tools hidden>
-        <button type="button" data-pan-left aria-label={t("画布向左滚动", "Scroll canvas left")}><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3.5 5.5 8l4.5 4.5" /></svg></button>
-        <span>{t("横向浏览", "Pan")}</span>
-        <button type="button" data-pan-right aria-label={t("画布向右滚动", "Scroll canvas right")}><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5" /></svg></button>
-      </span>
-      <a class="skip" href="#quest-list">{t("跳到任务列表", "Skip to quest list")}</a>
-    </div>
-  </div>
 
-  <div class="stage" data-stage>
-    <div class="viewport" data-scroll tabindex="0" role="region" aria-keyshortcuts="+ - 0" aria-label={t("社区成就树，从左往右浏览", "Community achievement tree, read from left to right")}>
-      <div class="canvas" data-canvas>
-        <svg class="wires" data-wires aria-hidden="true"></svg>
+    <div class="stage" data-stage>
+      <div class="viewport" data-scroll tabindex="0" role="region" aria-keyshortcuts="+ - 0" aria-label={t("社区成就树，从左往右浏览", "Community achievement tree, read from left to right")}>
+        <div class="canvas" data-canvas>
+          <svg class="wires" data-wires aria-hidden="true"></svg>
 
-        <div class="hub" data-hub style={`grid-row: 1 / span ${atlas.domains.length}`}>
-          <span class="medal">
-            <svg class="progress" viewBox="0 0 80 80" aria-hidden="true">
-              <circle class="track" cx="40" cy="40" r={R} />
-              <circle class="arc arc-move" cx="40" cy="40" r={R} stroke-dasharray={`${moveArc} ${C}`} stroke-dashoffset={-doneArc} />
-              <circle class="arc arc-done" cx="40" cy="40" r={R} stroke-dasharray={`${doneArc} ${C}`} />
-            </svg>
-            <Logo class="brand-mark" />
-          </span>
-          <b>{t("RSI 社区", "RSI community")}</b>
-          <small><strong>{counts.completed}</strong> / {total}<span> {words.lit}</span></small>
-        </div>
+          <div class="hub" data-hub style={`grid-row: 1 / span ${atlas.domains.length}`}>
+            <span class="medal">
+              <svg class="progress" viewBox="0 0 80 80" aria-hidden="true">
+                <circle class="track" cx="40" cy="40" r={R} />
+                <circle class="arc arc-move" cx="40" cy="40" r={R} stroke-dasharray={`${moveArc} ${C}`} stroke-dashoffset={-doneArc} />
+                <circle class="arc arc-done" cx="40" cy="40" r={R} stroke-dasharray={`${doneArc} ${C}`} />
+              </svg>
+              <Logo class="brand-mark" />
+            </span>
+            <b>{t("RSI 社区", "RSI community")}</b>
+            <small><strong>{counts.completed}</strong> / {total}<span> {words.lit}</span></small>
+          </div>
 
-        <div class="branches">
-          {atlas.domains.map((d) => (
-            <section class="branch" data-domain={d.id} aria-labelledby={`atlas-heading-${d.id}`}>
-              <div class="domain" data-domain-node>
-                <span class="domain-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={icons[d.id]} /></svg></span>
-                <h2 id={`atlas-heading-${d.id}`}>{d.title}</h2>
-                <span class="domain-stat"><b class:list={{ lit: d.counts.completed > 0 }}>{d.counts.completed}</b> / {d.total} {words.lit}</span>
-                <span class="meter" aria-hidden="true">
-                  {ATLAS_STATES.map((s) => d.counts[s] > 0 && <i data-state={s} style={`flex-grow:${d.counts[s]}`}></i>)}
-                </span>
-              </div>
-              <div class="lanes">
-                {ATLAS_STATES.map((state) => {
-                  const items = d.lanes[state];
-                  const labelId = `atlas-${d.id}-${state}`;
-                  return (
-                    <section class="lane" data-lane={state} data-count={items.length} aria-labelledby={labelId}>
-                      <div class="lane-key">
-                      <h3 class="lane-head" id={labelId} data-lane-head>
-                        <svg class="glyph" viewBox="0 0 16 16" aria-hidden="true">{state === "completed" ? <path d={STAR} /> : <circle cx="8" cy="8" r="5.25" />}{state === "in_progress" && <path class="half" d="M8 2.75a5.25 5.25 0 0 1 0 10.5z" />}</svg>
-                        <span class="lane-name">{statuses[state]}</span><b>{items.length}</b>
-                      </h3>
-                      </div>
-                      {items.length > 0 ? (
-                        <ul class="leaves" data-leaves>
-                          {items.map((q) => (
-                            <li>
-                              <a class="leaf" data-record={q.id} data-state={state} href={q.links[0].url} title={q.title}>
-                                <span class="badge" aria-hidden="true">
-                                  {state === "completed" && <svg viewBox="0 0 16 16"><path d={STAR} /></svg>}
-                                  {state === "in_progress" && <svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="5" /><path d="M8 3a5 5 0 0 1 0 10z" /></svg>}
-                                  {state === "open" && <svg viewBox="0 0 16 16"><path d="M8 4.5v7M4.5 8h7" /></svg>}
-                                </span>
-                                <span class="leaf-title"><small>#{q.number}</small>{q.title}</span>
-                              </a>
-                            </li>
-                          ))}
-                        </ul>
-                      ) : (
-                        <span class="vacant" data-leaves>{emptyNote[state]}</span>
-                      )}
-                    </section>
-                  );
-                })}
-              </div>
-            </section>
-          ))}
+          <div class="branches">
+            {atlas.domains.map((d) => (
+              <section class="branch" data-domain={d.id} aria-labelledby={`atlas-heading-${d.id}`}>
+                <div class="domain" data-domain-node>
+                  <span class="domain-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={icons[d.id]} /></svg></span>
+                  <h3 id={`atlas-heading-${d.id}`}>{d.title}</h3>
+                  <span class="domain-stat"><b class:list={{ lit: d.counts.completed > 0 }}>{d.counts.completed}</b> / {d.total} {words.lit}</span>
+                  <span class="meter" aria-hidden="true">
+                    {ATLAS_STATES.map((s) => d.counts[s] > 0 && <i data-state={s} style={`flex-grow:${d.counts[s]}`}></i>)}
+                  </span>
+                </div>
+                <div class="lanes">
+                  {ATLAS_STATES.map((state) => {
+                    const items = d.lanes[state];
+                    const labelId = `atlas-${d.id}-${state}`;
+                    return (
+                      <section class="lane" data-lane={state} data-count={items.length} aria-labelledby={labelId}>
+                        <div class="lane-key">
+                        <h4 class="lane-head" id={labelId} data-lane-head>
+                          <svg class="glyph" viewBox="0 0 16 16" aria-hidden="true">{state === "completed" ? <path d={STAR} /> : <circle cx="8" cy="8" r="5.25" />}{state === "in_progress" && <path class="half" d="M8 2.75a5.25 5.25 0 0 1 0 10.5z" />}</svg>
+                          <span class="lane-name">{statuses[state]}</span><b>{items.length}</b>
+                        </h4>
+                        </div>
+                        {items.length > 0 ? (
+                          <ul class="leaves" data-leaves>
+                            {items.map((q) => (
+                              <li>
+                                <a class="leaf" data-record={q.id} data-state={state} href={q.links[0].url} title={q.title}>
+                                  <span class="badge" aria-hidden="true">
+                                    {state === "completed" && <svg viewBox="0 0 16 16"><path d={STAR} /></svg>}
+                                    {state === "in_progress" && <svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="5" /><path d="M8 3a5 5 0 0 1 0 10z" /></svg>}
+                                    {state === "open" && <svg viewBox="0 0 16 16"><path d="M8 4.5v7M4.5 8h7" /></svg>}
+                                  </span>
+                                  <span class="leaf-title"><small>#{q.number}</small>{q.title}</span>
+                                </a>
+                              </li>
+                            ))}
+                          </ul>
+                        ) : (
+                          <span class="vacant" data-leaves>{emptyNote[state]}</span>
+                        )}
+                      </section>
+                    );
+                  })}
+                </div>
+              </section>
+            ))}
+          </div>
         </div>
       </div>
     </div>
