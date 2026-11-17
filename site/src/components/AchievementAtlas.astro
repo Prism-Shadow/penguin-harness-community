@@ -28,7 +28,7 @@ const R = 35, C = 2 * Math.PI * R;
 const doneArc = total ? (C * counts.completed) / total : 0;
 const moveArc = total ? (C * counts.in_progress) / total : 0;
 // Desktop zoom of the tree only (titles, filters and toolbar keep their size). Phones always use 100%.
-const ZOOM = { initial: 0.8, steps: [0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.25] };
+const ZOOM = { initial: 0.8, min: 0.5, max: 1.25 };
 const emptyNote = { completed: t("首个成果待点亮", "First result yet to light"), in_progress: t("暂无进行中", "Nothing in progress"), open: t("暂无待认领", "Nothing open") };
 ---
 <details class="atlas" id="atlas" open data-atlas style={`--zoom: ${ZOOM.initial}`} data-model={JSON.stringify({ quests: atlas.quests, statuses, words, zoom: ZOOM })}>
@@ -51,11 +51,6 @@ const emptyNote = { completed: t("首个成果待点亮", "First result yet to l
       ))}
     </div>
     <div class="tools">
-      <span class="zoom" role="group" aria-label={t("缩放成就树", "Zoom the tree")}>
-        <button type="button" data-zoom-step="-1" aria-label={t("缩小", "Zoom out")}><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 8h8" /></svg></button>
-        <button type="button" class="zoom-level" data-zoom-reset title={t("恢复默认缩放", "Reset zoom")}>{Math.round(ZOOM.initial * 100)}%</button>
-        <button type="button" data-zoom-step="1" aria-label={t("放大", "Zoom in")}><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 8h8M8 4v8" /></svg></button>
-      </span>
       <span class="pan-controls" data-pan-tools hidden>
         <button type="button" data-pan-left aria-label={t("画布向左滚动", "Scroll canvas left")}><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3.5 5.5 8l4.5 4.5" /></svg></button>
         <span>{t("横向浏览", "Pan")}</span>
@@ -66,7 +61,7 @@ const emptyNote = { completed: t("首个成果待点亮", "First result yet to l
   </div>
 
   <div class="stage" data-stage>
-    <div class="viewport" data-scroll tabindex="0" role="region" aria-label={t("社区成就树，从左往右浏览", "Community achievement tree, read from left to right")}>
+    <div class="viewport" data-scroll tabindex="0" role="region" aria-keyshortcuts="+ - 0" aria-label={t("社区成就树，从左往右浏览", "Community achievement tree, read from left to right")}>
       <div class="canvas" data-canvas>
         <svg class="wires" data-wires aria-hidden="true"></svg>
 

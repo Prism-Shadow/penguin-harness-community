@@ -1,7 +1,7 @@
 import type { AtlasQuest } from "./achievements";
 import type { QuestStatus } from "./community";
 
-type Model = { quests: AtlasQuest[]; statuses: Record<QuestStatus, string>; words: Record<string, string>; zoom: { initial: number; steps: number[] } };
+type Model = { quests: AtlasQuest[]; statuses: Record<QuestStatus, string>; words: Record<string, string>; zoom: { initial: number; min: number; max: number } };
 type Box = { l: number; r: number; t: number; b: number; cy: number };
 
 export function initAtlas(root: HTMLDetailsElement) {
@@ -74,33 +74,58 @@ export function initAtlas(root: HTMLDetailsElement) {
   viewport.addEventListener("pointerup", endDrag);
   viewport.addEventListener("pointercancel", endDrag);
 
-  /* ---------- Zoom: step the tree's scale on desktop; the frame keeps its size and scrolls ---------- */
+  // Zoom only the canvas. Anchor mouse input at the pointer and keyboard input at the centre.
   const desktop = window.matchMedia("(min-width: 651px)");
-  const { steps } = zoomConfig;
-  const level = get<HTMLButtonElement>("zoom-reset");
-  const zoomOut = root.querySelector<HTMLButtonElement>('[data-zoom-step="-1"]')!, zoomIn = root.querySelector<HTMLButtonElement>('[data-zoom-step="1"]')!;
   let zoom = zoomConfig.initial;
-  function setZoom(next: number) {
-    // Keep whatever sits at the centre of the frame in place while the scale changes.
-    const before = scaleOf();
-    const cx = (viewport.scrollLeft + viewport.clientWidth / 2) / before, cy = (viewport.scrollTop + viewport.clientHeight / 2) / before;
+  function setZoom(value: number, x: number, y: number) {
+    const next = Math.max(zoomConfig.min, Math.min(zoomConfig.max, value));
+    if (next === zoom) return false;
+    const ratio = next / zoom;
+    const left = (viewport.scrollLeft + x) * ratio - x;
+    const top = (viewport.scrollTop + y) * ratio - y;
     zoom = next;
-    canvas.style.zoom = String(next);
-    level.textContent = get("live").textContent = `${Math.round(next * 100)}%`;
-    zoomOut.disabled = next <= steps[0];
-    zoomIn.disabled = next >= steps[steps.length - 1];
-    viewport.scrollTo(cx * next - viewport.clientWidth / 2, cy * next - viewport.clientHeight / 2);
+    root.style.setProperty("--zoom", String(next));
+    viewport.scrollTo(left, top);
     refresh();
+    return true;
   }
-  const step = (dir: number) => {
-    const i = steps.reduce((best, s, j) => (Math.abs(s - zoom) < Math.abs(steps[best] - zoom) ? j : best), 0);
-    setZoom(steps[Math.min(steps.length - 1, Math.max(0, i + dir))]);
-  };
-  zoomOut.addEventListener("click", () => step(-1));
-  zoomIn.addEventListener("click", () => step(1));
-  level.addEventListener("click", () => setZoom(zoomConfig.initial));
-  // Phones never zoom; restore the chosen scale when the window is wide again.
-  desktop.addEventListener("change", () => { canvas.style.zoom = desktop.matches ? String(zoom) : ""; refresh(); });
+  function zoomAt(value: number, e: { clientX: number; clientY: number }) {
+    const rect = viewport.getBoundingClientRect();
+    setZoom(value, e.clientX - rect.left, e.clientY - rect.top);
+  }
+  // Two-finger scrolling is native on both axes. Chromium and Firefox mark pinch wheels with Ctrl.
+  let gestureStartZoom: number | null = null;
+  viewport.addEventListener("wheel", (e) => {
+    if (!desktop.matches || !e.ctrlKey || !e.cancelable) return;
+    e.preventDefault();
+    if (gestureStartZoom !== null) return;
+    const unit = e.deltaMode === WheelEvent.DOM_DELTA_LINE ? 16 : e.deltaMode === WheelEvent.DOM_DELTA_PAGE ? viewport.clientHeight : 1;
+    zoomAt(zoom * Math.exp(-e.deltaY * unit / 100), e);
+  }, { passive: false });
+  // Safari reports a cumulative scale for the whole pinch rather than wheel deltas.
+  viewport.addEventListener("gesturestart", (e) => {
+    if (!desktop.matches) return;
+    e.preventDefault();
+    gestureStartZoom = zoom;
+  });
+  viewport.addEventListener("gesturechange", (e) => {
+    if (gestureStartZoom === null) return;
+    e.preventDefault();
+    const gesture = e as MouseEvent & { scale: number };
+    zoomAt(gestureStartZoom * gesture.scale, gesture);
+  });
+  viewport.addEventListener("gestureend", (e) => {
+    if (gestureStartZoom !== null) e.preventDefault();
+    gestureStartZoom = null;
+  });
+  viewport.addEventListener("keydown", (e) => {
+    if (!desktop.matches || e.target !== viewport || e.ctrlKey || e.metaKey || e.altKey) return;
+    const value = e.key === "0" ? zoomConfig.initial : e.key === "-" ? zoom / 1.2 : e.key === "+" || e.key === "=" ? zoom * 1.2 : null;
+    if (value === null) return;
+    e.preventDefault();
+    if (setZoom(value, viewport.clientWidth / 2, viewport.clientHeight / 2))
+      get("live").textContent = `${Math.round(zoom * 100)}%`;
+  });
 
   /* ---------- Wires: trunk, forks and rails are drawn from the laid-out nodes ---------- */
   function drawWires() {

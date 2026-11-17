@@ -112,12 +112,6 @@
 .atlas .filters button[aria-pressed="true"] .glyph { filter: brightness(1.15); }
 .atlas .tools { display: flex; align-items: center; gap: 14px; }
 .atlas .pan-controls { display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: 12px; }
-.atlas .zoom { display: inline-flex; align-items: center; border: 1px solid var(--line); border-radius: 999px; background: var(--paper); }
-.atlas .zoom button { display: grid; place-items: center; min-width: 30px; height: 30px; padding: 0 6px; border-radius: 999px; color: var(--ink); }
-.atlas .zoom button:hover:not(:disabled) { background: var(--canvas); }
-.atlas .zoom button:disabled { opacity: 0.35; cursor: default; }
-.atlas .zoom svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
-.atlas .zoom .zoom-level { min-width: 48px; font: 600 12px var(--mono); font-variant-numeric: tabular-nums; }
 .atlas .pan-controls button { display: grid; place-items: center; width: 30px; height: 30px; border: 1px solid var(--line); border-radius: 999px; background: var(--paper); color: var(--ink); }
 .atlas .pan-controls button:hover:not(:disabled) { border-color: var(--line-strong); }
 .atlas .pan-controls button:disabled { opacity: 0.35; cursor: default; }
@@ -320,7 +314,6 @@
 }
 @media (max-width: 650px) {
   .atlas:lang(en) { --head-w: 56px; --hub-w: 48px; --trunk-gap: 20px; }
-  .atlas .zoom { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .atlas *, .atlas *::before, .atlas *::after { transition: none !important; }
