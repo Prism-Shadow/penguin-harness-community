@@ -11,10 +11,8 @@
     "@penguinharness/browser-automation",
     "@penguinharness/default-rsi-toolkit",
     "@penguinharness/penguin-support",
-    "@penguinharness/use-bento-slides",
     "@penguinharness/goal",
-    "@penguinharness/agent-company",
-    "@penguinharness/opro-rsi-toolkit"
+    "@penguinharness/agent-company"
   ],
   "plugins": {
     "@penguinharness/a2ui": {
