@@ -23,7 +23,7 @@
 
 - **Reproduce the original method**: Link to the paper or upstream implementation and identify the code or Skills that implement the key steps. Explain any departures from the original method and label the plugin as a variant if it changes a core mechanism.
 - **Runnable plugin**: The plugin must follow RFC-0003. After following the installation instructions, a reviewer should be able to run the algorithm in PenguinHarness using the `quick_start` example.
-- **Measured improvement**: Compare the plugin in this PR against a baseline on a real task suited to the method. Show better task performance at a comparable budget, or higher efficiency at comparable task quality. State the comparison conditions and main trade-offs.
+- **Measured improvement**: Compare the plugin in this PR against a baseline on a real task suited to the method and report at least one measured improvement. For example, the plugin might score higher on the same budget, or complete the task with fewer tokens or in less time at comparable quality. State the comparison conditions and main trade-offs.
 - **Verifiable results**: Specify the task or subset, key settings, and reproduction commands. Provide run records that let reviewers check both the baseline and plugin results.
 
 ## Format Examples
