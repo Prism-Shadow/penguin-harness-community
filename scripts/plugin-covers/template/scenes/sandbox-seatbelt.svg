@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" width="900" height="520">
+  <!-- Series D, sandbox-seatbelt: the shield crossed by a belt with its buckle in the middle,
+       and the `$ _` prompt chip under it. -->
+  <defs>
+    <clipPath id="sb-shield"><path d="M450 24L612 86V196C612 296 546 360 450 396 354 360 288 296 288 196V86Z" /></clipPath>
+  </defs>
+  <path class="ln f12" d="M450 24L612 86V196C612 296 546 360 450 396 354 360 288 296 288 196V86Z" />
+
+  <g clip-path="url(#sb-shield)">
+    <g transform="rotate(-45 450 210)">
+      <rect class="f22" x="200" y="178" width="500" height="64" />
+      <path class="ln" d="M200 178H700M200 242H700" />
+    </g>
+  </g>
+  <g transform="rotate(-45 450 210)">
+    <rect class="paper card" x="398" y="164" width="104" height="92" rx="16" />
+    <rect class="ink-ln" x="424" y="194" width="52" height="32" rx="6" />
+  </g>
+
+  <rect class="paper card" x="370" y="428" width="160" height="60" rx="30" />
+  <text class="txt ink" x="450" y="459" font-size="32" text-anchor="middle" dominant-baseline="central" letter-spacing="2">$ _</text>
+</svg>

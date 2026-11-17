@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" width="900" height="520">
+  <!-- Series D, sandbox-bwrap: a shield holding five bubbles of different sizes, and a `$ _`
+       prompt chip under it. -->
+  <path class="ln f12" d="M450 24L612 86V196C612 296 546 360 450 396 354 360 288 296 288 196V86Z" />
+
+  <g class="ln f16">
+    <circle cx="418" cy="182" r="58" />
+    <circle cx="528" cy="150" r="32" />
+    <circle cx="520" cy="256" r="40" />
+    <circle cx="410" cy="296" r="22" />
+    <circle cx="470" cy="104" r="14" />
+  </g>
+  <!-- a highlight arc in the three larger bubbles -->
+  <path class="ln" d="M381.4 168.7A39 39 0 0 1 404.7 145.4M494.6 246.8A27 27 0 0 1 510.8 230.6M508.3 142.8A21 21 0 0 1 520.8 130.3" />
+
+  <rect class="paper card" x="370" y="428" width="160" height="60" rx="30" />
+  <text class="txt ink" x="450" y="459" font-size="32" text-anchor="middle" dominant-baseline="central" letter-spacing="2">$ _</text>
+</svg>

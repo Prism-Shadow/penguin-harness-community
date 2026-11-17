@@ -1,0 +1,34 @@
+{
+  "$comment": "Screenshot masters, cut by cut-shots.py from the release and blog screenshots in assets/blog-assets/ (source is relative to this file). Per plugin folder, in display order: from (a file under source), crop [x, y, w, h] in source pixels. A crop without pad must be 16:10 and is scaled to 1600x1000; with pad (#rrggbb, or auto for the crop's top-left pixel) it is scaled by scale (default 1) and centred on a 1600x1000 canvas of that colour. Captions live in assets/plugins/market.json.",
+  "source": "../../../assets/blog-assets",
+  "shots": {
+    "a2ui": [
+      { "from": "penguinharness-0-2-14-a2ui-widgets-zh.png", "crop": [32, 270, 1600, 1000] },
+      { "from": "penguinharness-0-2-17-a2ui-charts-zh.png", "crop": [32, 36, 1600, 1000] },
+      { "from": "penguinharness-0-2-17-a2ui-form-zh.png", "crop": [0, 0, 1664, 1196], "pad": "auto", "scale": 0.836 },
+      { "from": "penguinharness-0-2-14-a2ui-blocks-zh.png", "crop": [0, 230, 1664, 1040] }
+    ],
+    "agent-company": [
+      { "from": "agent-company-org-chart-zh.png", "crop": [640, 40, 2240, 1400] },
+      { "from": "penguinharness-0-2-13-company-overview-zh.png", "crop": [0, 0, 2232, 1395] },
+      { "from": "penguinharness-0-2-13-company-tickets-zh.png", "crop": [0, 0, 1946, 1216] }
+    ],
+    "agent-evaluation": [
+      { "from": "evaluation-center-create-with-ai-zh.png", "crop": [0, 0, 1288, 1328], "pad": "auto", "scale": 0.75 },
+      { "from": "evaluation-center-use-evaluate-zh.png", "crop": [0, 0, 1504, 1216], "pad": "auto", "scale": 0.82 },
+      { "from": "evaluation-center-results-zh.png", "crop": [0, 0, 2880, 1800] }
+    ],
+    "browser-automation": [
+      { "from": "penguinharness-0-2-14-browser-zh.png", "crop": [0, 0, 2880, 1800] },
+      { "from": "browser-chrome-panel-zh.png", "crop": [0, 0, 2880, 1800] }
+    ],
+    "default-rsi-toolkit": [
+      { "from": "rsi-toolkits-optimize-chat-zh.png", "crop": [900, 740, 1980, 1238] },
+      { "from": "evaluation-center-use-optimize-zh.png", "crop": [0, 0, 1504, 1448], "pad": "auto", "scale": 0.69 }
+    ],
+    "goal": [{ "from": "goal-mode-zh-light.webp", "crop": [0, 0, 1920, 1200] }],
+    "penguin-support": [
+      { "from": "penguinharness-0-2-16-support-zh.jpg", "crop": [0, 0, 957, 650], "pad": "auto", "scale": 1.2 }
+    ]
+  }
+}
