@@ -11,13 +11,20 @@
 2. **提出 Issue**：在 [PenguinHarness Plugins Issues](https://github.com/Prism-Shadow/penguin-harness-plugins/issues) 中搜索或新建 Issue，说明计划实现或复现的 RSI 算法、论文来源与插件组件构成。
 3. **Issue 评论区占坑（可选）**：在 Issue 评论区留言认领（占坑是可选步骤，主要用于防止多人同时开发同一个 RSI 算法插件撞车）。
 4. **提交 PR**：按 `RFC-0003` 完成插件开发与效果测试后，向仓库提交 Pull Request 并关联 Issue。
-5. **Maintainer 审核合并**：等待 Maintainer 审核插件目录结构、`package.json` 配置及功能完整性；审核通过后合并入库。
+5. **Maintainer 审核合并**：Maintainer 按下方的[算法 PR 合入标准](#算法-pr-合入标准)审核，通过后合入。
 
 ## 实现与测试指导
 
 - **算法与数据解耦**：Plugin 的实现应只包含通用的 RSI 算法方法部分，不要与具体的 Benchmark 数据集绑定，以便插件能够直接迁移到不同 Benchmark 上运行。
 - **完善 `quick_start` 快速调用案例**：在 `package.json` 的 `penguin.quick_start` 中提供一个清晰、可直接运行的算法快速调用示例提示词与默认挂载的 `skills`。
 - **推荐效果验证配置**：完成插件实现后，推荐使用 **DeepSeek Flash** 模型（注明具体版本号，如 `deepseek-flash-1017`）在 **[GDPevo](https://arxiv.org/pdf/2608.03764)（`GDPevo-essential`）** 数据集上进行测试（在各任务组的 `*-train` 上运行自进化，在对应的 `*-test` 上评估并取平均），验证该算法相比基线是否带来稳定的得分提升。
+
+## 算法 PR 合入标准
+
+- **忠实原方法**：引用论文或上游实现，指出核心机制在插件中的实现位置，说明适配中的差异。改变核心机制的实现应标明为原方法的变体。
+- **插件可用**：插件符合 RFC-0003，能按文档安装，并通过 `quick_start` 在 PenguinHarness 中运行该算法。
+- **实测有提升**：用本 PR 的插件在适合该方法的真实任务上与基线对照，证明在可比预算下任务效果更好，或在任务质量相当时执行效率更高。说明比较条件和主要取舍。
+- **结果可复核**：列出测试任务或子集、关键配置和复现命令，附上可核对基线与插件实测结果的运行记录。
 
 ## 格式示例
 
@@ -34,7 +41,7 @@
 ### 开发计划
 - [ ] 实现 `<plugin-id>/skills/<skill-id>/SKILL.md`（与具体数据集解耦）
 - [ ] 配置 `<plugin-id>/package.json`（含 `penguin` 扩展字段与 `quick_start` 快速调用案例）
-- [ ] 使用 `deepseek-flash-1017` 在 `GDPevo-essential` 数据集上测试自进化是否有提升
+- [ ] 在适合该方法的任务上与基线对照（例如使用 `deepseek-flash-1017` 在 `GDPevo-essential` 上测试）
 ```
 
 ### 2. Issue 评论占坑示例（可选）
@@ -52,15 +59,16 @@ Closes #<issue-number>
 
 ### 变更内容
 - 新增 `<plugin-id>/` 插件包，实现 <RSI 算法名称>（算法与具体数据解耦）
+- **方法对应关系**：<论文或上游链接> → <核心机制及对应实现位置>；<与原方法的差异，如有>
 - 配置 `package.json` 中的 `penguin` 字段（`category: "rsi"`、`preinstall: false`、`quick_start` 快速调用案例）
 
 ### 效果验证
-- **测试模型**: `deepseek/deepseek-flash-1017`
-- **测试数据集**: `GDPevo-essential`
-- **测试集提升**: 基线 `<base_score>` → 自进化后 `<evolved_score>`
+- **测试条件**：<任务或子集、相关模型版本或硬件、比较预算>
+- **实测对照**：<指标及单位>：<基线配置与结果> → <使用插件的结果>；<主要取舍，如有>
+- **复现与记录**：<复现命令>；<基线与插件的运行记录链接或路径>
 
 ### 自查清单
 - [x] 插件包结构与 `package.json` 字段符合 RFC-0003 Plugin 规范，且算法实现与数据解耦
 - [x] 已在本地 PenguinHarness 中安装并通过 `quick_start` 快速调用案例验证
-- [x] 已使用 `deepseek-flash-1017` 在 `GDPevo-essential` 上测试并验证自进化效果
+- [x] 已在可比条件下实测并记录相对基线的提升
 ```
