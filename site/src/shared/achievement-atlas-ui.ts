@@ -1,11 +1,11 @@
 import type { AtlasQuest } from "./achievements";
 import type { QuestStatus } from "./community";
 
-type Model = { quests: AtlasQuest[]; statuses: Record<QuestStatus, string>; words: Record<string, string> };
+type Model = { quests: AtlasQuest[]; statuses: Record<QuestStatus, string>; words: Record<string, string>; zoom: { initial: number; steps: number[] } };
 type Box = { l: number; r: number; t: number; b: number; cy: number };
 
 export function initAtlas(root: HTMLDetailsElement) {
-  const { quests, statuses, words } = JSON.parse(root.dataset.model!) as Model;
+  const { quests, statuses, words, zoom: zoomConfig } = JSON.parse(root.dataset.model!) as Model;
   const get = <T extends HTMLElement = HTMLElement>(attr: string) => root.querySelector<T>(`[data-${attr}]`)!;
   const byId = new Map(quests.map((q) => [q.id, q]));
   const filters = Array.from(root.querySelectorAll<HTMLButtonElement>("[data-filter]"));
@@ -18,7 +18,7 @@ export function initAtlas(root: HTMLDetailsElement) {
   const reduceMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   /* ---------- Panning ---------- */
-  // Current CSS zoom of the canvas (1 unless the overview is on); rects are in zoomed pixels, layout in canvas pixels.
+  // Current CSS zoom of the canvas; rects are in zoomed pixels, layout (and the SVG wires) in canvas pixels.
   const scaleOf = () => canvas.getBoundingClientRect().width / canvas.offsetWidth || 1;
   // Scroll offset at which the status column reaches the left edge and freezes (measured in measurePin).
   let pinAt = Infinity;
@@ -74,25 +74,33 @@ export function initAtlas(root: HTMLDetailsElement) {
   viewport.addEventListener("pointerup", endDrag);
   viewport.addEventListener("pointercancel", endDrag);
 
-  /* ---------- Overview: zoom the whole tree into the frame, or back to 100% ---------- */
-  const zoomButton = get<HTMLButtonElement>("zoom");
-  let overview = false;
-  function fitOverview() {
-    if (!overview) return;
-    const frame = parseFloat(getComputedStyle(viewport).maxHeight);
-    const k = scaleOf(), w = canvas.getBoundingClientRect().width / k, h = canvas.getBoundingClientRect().height / k;
-    const fit = Math.min(1, viewport.clientWidth / w, (frame || viewport.clientHeight) / h);
-    if (Math.abs(fit - k) > 0.005) canvas.style.zoom = String(Math.floor(fit * 1000) / 1000);
-  }
-  zoomButton.addEventListener("click", () => {
-    overview = !overview;
-    zoomButton.setAttribute("aria-pressed", String(overview));
-    stage.toggleAttribute("data-overview", overview);
-    canvas.style.zoom = "";
-    viewport.scrollTo(0, 0);
-    fitOverview();
+  /* ---------- Zoom: step the tree's scale on desktop; the frame keeps its size and scrolls ---------- */
+  const desktop = window.matchMedia("(min-width: 651px)");
+  const { steps } = zoomConfig;
+  const level = get<HTMLButtonElement>("zoom-reset");
+  const zoomOut = root.querySelector<HTMLButtonElement>('[data-zoom-step="-1"]')!, zoomIn = root.querySelector<HTMLButtonElement>('[data-zoom-step="1"]')!;
+  let zoom = zoomConfig.initial;
+  function setZoom(next: number) {
+    // Keep whatever sits at the centre of the frame in place while the scale changes.
+    const before = scaleOf();
+    const cx = (viewport.scrollLeft + viewport.clientWidth / 2) / before, cy = (viewport.scrollTop + viewport.clientHeight / 2) / before;
+    zoom = next;
+    canvas.style.zoom = String(next);
+    level.textContent = get("live").textContent = `${Math.round(next * 100)}%`;
+    zoomOut.disabled = next <= steps[0];
+    zoomIn.disabled = next >= steps[steps.length - 1];
+    viewport.scrollTo(cx * next - viewport.clientWidth / 2, cy * next - viewport.clientHeight / 2);
     refresh();
-  });
+  }
+  const step = (dir: number) => {
+    const i = steps.reduce((best, s, j) => (Math.abs(s - zoom) < Math.abs(steps[best] - zoom) ? j : best), 0);
+    setZoom(steps[Math.min(steps.length - 1, Math.max(0, i + dir))]);
+  };
+  zoomOut.addEventListener("click", () => step(-1));
+  zoomIn.addEventListener("click", () => step(1));
+  level.addEventListener("click", () => setZoom(zoomConfig.initial));
+  // Phones never zoom; restore the chosen scale when the window is wide again.
+  desktop.addEventListener("change", () => { canvas.style.zoom = desktop.matches ? String(zoom) : ""; refresh(); });
 
   /* ---------- Wires: trunk, forks and rails are drawn from the laid-out nodes ---------- */
   function drawWires() {
@@ -159,7 +167,7 @@ export function initAtlas(root: HTMLDetailsElement) {
   let queued = 0;
   const refresh = () => {
     cancelAnimationFrame(queued);
-    queued = requestAnimationFrame(() => { fitOverview(); drawWires(); measurePin(); syncPan(); });
+    queued = requestAnimationFrame(() => { drawWires(); measurePin(); syncPan(); });
   };
   const observer = new ResizeObserver(refresh);
   observer.observe(viewport);

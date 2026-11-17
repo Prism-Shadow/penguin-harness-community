@@ -112,10 +112,12 @@
 .atlas .filters button[aria-pressed="true"] .glyph { filter: brightness(1.15); }
 .atlas .tools { display: flex; align-items: center; gap: 14px; }
 .atlas .pan-controls { display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: 12px; }
-.atlas .zoom-toggle { display: inline-flex; align-items: center; gap: 6px; min-height: 30px; padding: 3px 11px; border: 1px solid var(--line); border-radius: 999px; background: var(--paper); color: var(--ink); font-size: 12px; font-weight: 550; }
-.atlas .zoom-toggle:hover { border-color: var(--line-strong); }
-.atlas .zoom-toggle svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
-.atlas .zoom-toggle[aria-pressed="true"] { border-color: var(--ink); background: var(--ink); color: var(--paper); }
+.atlas .zoom { display: inline-flex; align-items: center; border: 1px solid var(--line); border-radius: 999px; background: var(--paper); }
+.atlas .zoom button { display: grid; place-items: center; min-width: 30px; height: 30px; padding: 0 6px; border-radius: 999px; color: var(--ink); }
+.atlas .zoom button:hover:not(:disabled) { background: var(--canvas); }
+.atlas .zoom button:disabled { opacity: 0.35; cursor: default; }
+.atlas .zoom svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+.atlas .zoom .zoom-level { min-width: 48px; font: 600 12px var(--mono); font-variant-numeric: tabular-nums; }
 .atlas .pan-controls button { display: grid; place-items: center; width: 30px; height: 30px; border: 1px solid var(--line); border-radius: 999px; background: var(--paper); color: var(--ink); }
 .atlas .pan-controls button:hover:not(:disabled) { border-color: var(--line-strong); }
 .atlas .pan-controls button:disabled { opacity: 0.35; cursor: default; }
@@ -279,12 +281,10 @@
 .atlas .relations button { max-width: 100%; padding: 6px 11px; overflow: hidden; border: 1px dashed var(--line-strong); border-radius: 10px; color: var(--ink); font-size: 12.5px; text-align: left; text-overflow: ellipsis; white-space: nowrap; }
 .atlas .relations button:hover { border-style: solid; border-color: var(--blue); }
 
-/* ---------- Desktop: a fixed-height frame that pans in 2D; on wide screens only the atlas grows wider ---------- */
+/* ---------- Desktop: a fixed-height frame that pans in 2D; the tree inside can be zoomed ---------- */
 @media (min-width: 651px) {
-  .atlas { --atlas-w: max(100%, min(100vw - 64px, 86rem)); width: var(--atlas-w); margin-inline: calc((100% - var(--atlas-w)) / 2); }
   .atlas .viewport { max-height: clamp(420px, calc(100svh - 300px), 720px); overflow: auto; overscroll-behavior-y: auto; }
-  /* In the overview the canvas keeps its own size, so the fit is computed from the tree, not the frame. */
-  .atlas .stage[data-overview] .canvas { min-width: 0; }
+  .atlas .canvas { zoom: var(--zoom, 1); }
 }
 
 /* ---------- Narrow screens: keep the horizontal canvas, tighten the grid ---------- */
@@ -320,7 +320,7 @@
 }
 @media (max-width: 650px) {
   .atlas:lang(en) { --head-w: 56px; --hub-w: 48px; --trunk-gap: 20px; }
-  .atlas .zoom-toggle { display: none; }
+  .atlas .zoom { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .atlas *, .atlas *::before, .atlas *::after { transition: none !important; }
