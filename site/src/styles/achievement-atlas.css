@@ -29,18 +29,18 @@
   --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
   /* layout */
-  --pad-x: 28px;
+  --pad-x: 20px;
   --pad-y: 30px;
-  --hub-w: 112px;
-  --trunk-gap: 46px;
+  --hub-w: 88px;
+  --trunk-gap: 36px;
   --domain-w: 206px;
-  --fork-gap: 58px;
+  --fork-gap: 40px;
   --head-w: 112px;
-  --rail-gap: 26px;
+  --rail-gap: 20px;
   --leaf-w: 244px;
   --leaf-gap: 14px;
   --lane-gap: 18px;
-  --branch-gap: 48px;
+  --branch-gap: 32px;
 
   margin: 0 0 2.5rem;
   border: 1px solid var(--line);
@@ -51,7 +51,7 @@
   box-shadow: 0 1px 2px rgb(16 24 40 / 0.04), 0 12px 32px -24px rgb(16 24 40 / 0.35);
   scroll-margin-top: 80px;
 }
-.atlas:lang(en) { --head-w: 134px; }
+.atlas:lang(en) { --head-w: 134px; --hub-w: 112px; --trunk-gap: 46px; }
 .dark .atlas {
   --paper: #0d0d0d;
   --canvas: #050505;
@@ -112,6 +112,10 @@
 .atlas .filters button[aria-pressed="true"] .glyph { filter: brightness(1.15); }
 .atlas .tools { display: flex; align-items: center; gap: 14px; }
 .atlas .pan-controls { display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: 12px; }
+.atlas .zoom-toggle { display: inline-flex; align-items: center; gap: 6px; min-height: 30px; padding: 3px 11px; border: 1px solid var(--line); border-radius: 999px; background: var(--paper); color: var(--ink); font-size: 12px; font-weight: 550; }
+.atlas .zoom-toggle:hover { border-color: var(--line-strong); }
+.atlas .zoom-toggle svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.atlas .zoom-toggle[aria-pressed="true"] { border-color: var(--ink); background: var(--ink); color: var(--paper); }
 .atlas .pan-controls button { display: grid; place-items: center; width: 30px; height: 30px; border: 1px solid var(--line); border-radius: 999px; background: var(--paper); color: var(--ink); }
 .atlas .pan-controls button:hover:not(:disabled) { border-color: var(--line-strong); }
 .atlas .pan-controls button:disabled { opacity: 0.35; cursor: default; }
@@ -127,7 +131,13 @@
 .atlas .stage::after { right: 0; background: linear-gradient(270deg, var(--canvas), transparent); }
 .atlas .stage[data-more-left]::before,
 .atlas .stage[data-more-right]::after { opacity: 1; }
-.atlas .viewport { overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; scrollbar-width: thin; scrollbar-color: var(--line-strong) transparent; }
+.atlas .viewport { overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; scroll-padding-left: calc(var(--head-w) + 24px); scrollbar-width: thin; scrollbar-color: var(--line-strong) transparent; }
+/* Vertical edges fade while there is more canvas above/below (macOS hides scrollbars by default). */
+.atlas .stage { --fade-top: 0px; --fade-bottom: 0px; }
+.atlas .stage[data-more-up] { --fade-top: 28px; }
+.atlas .stage[data-more-down] { --fade-bottom: 28px; }
+.atlas .stage[data-more-up] .viewport,
+.atlas .stage[data-more-down] .viewport { -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 var(--fade-top), #000 calc(100% - var(--fade-bottom)), transparent 100%); mask-image: linear-gradient(to bottom, transparent 0, #000 var(--fade-top), #000 calc(100% - var(--fade-bottom)), transparent 100%); }
 .atlas .viewport:focus-visible { outline: 2px solid var(--blue); outline-offset: -2px; }
 .atlas .viewport.dragging { cursor: grabbing; user-select: none; }
 .atlas .viewport.dragging .leaf { pointer-events: none; }
@@ -215,7 +225,7 @@
 /* ---------- Leaves ---------- */
 .atlas .leaves { display: flex; align-items: stretch; gap: var(--leaf-gap); margin: 0; padding: 0; list-style: none; }
 .atlas .leaves li { display: flex; width: var(--leaf-w); flex: none; }
-.atlas .leaf { box-sizing: border-box; display: grid; grid-template-columns: 22px 1fr; align-items: start; column-gap: 9px; width: 100%; padding: 10px 13px 10px 10px; border: 1px solid var(--line); border-radius: 12px; background: var(--paper); color: var(--ink); text-decoration: none; transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s; }
+.atlas .leaf { box-sizing: border-box; display: grid; grid-template-columns: 22px 1fr; align-items: start; column-gap: 9px; width: 100%; padding: 8px 13px 8px 10px; border: 1px solid var(--line); border-radius: 12px; background: var(--paper); color: var(--ink); text-decoration: none; transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s; }
 .atlas .leaf:hover { border-color: var(--blue); box-shadow: 0 6px 16px -10px rgb(71 125 251 / 0.6); transform: translateY(-1px); }
 .atlas .leaf-title { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; min-height: calc(2 * 1.45em); font-size: 13px; font-weight: 500; line-height: 1.45; overflow-wrap: anywhere; }
 .atlas .leaf-title small { margin-right: 6px; color: var(--muted); font: 500 11px var(--mono); }
@@ -269,9 +279,17 @@
 .atlas .relations button { max-width: 100%; padding: 6px 11px; overflow: hidden; border: 1px dashed var(--line-strong); border-radius: 10px; color: var(--ink); font-size: 12.5px; text-align: left; text-overflow: ellipsis; white-space: nowrap; }
 .atlas .relations button:hover { border-style: solid; border-color: var(--blue); }
 
+/* ---------- Desktop: a fixed-height frame that pans in 2D; on wide screens only the atlas grows wider ---------- */
+@media (min-width: 651px) {
+  .atlas { --atlas-w: max(100%, min(100vw - 64px, 86rem)); width: var(--atlas-w); margin-inline: calc((100% - var(--atlas-w)) / 2); }
+  .atlas .viewport { max-height: clamp(420px, calc(100svh - 300px), 720px); overflow: auto; overscroll-behavior-y: auto; }
+  /* In the overview the canvas keeps its own size, so the fit is computed from the tree, not the frame. */
+  .atlas .stage[data-overview] .canvas { min-width: 0; }
+}
+
 /* ---------- Narrow screens: keep the horizontal canvas, tighten the grid ---------- */
 @media (max-width: 650px) {
-  .atlas { --pad-x: 10px; --pad-y: 22px; --hub-w: 48px; --trunk-gap: 20px; --domain-w: 128px; --fork-gap: 16px; --head-w: 56px; --rail-gap: 12px; --leaf-w: 208px; --leaf-gap: 10px; --lane-gap: 16px; --branch-gap: 32px;
+  .atlas { --pad-x: 10px; --pad-y: 22px; --hub-w: 48px; --trunk-gap: 20px; --domain-w: 128px; --fork-gap: 16px; --head-w: 56px; --rail-gap: 12px; --leaf-w: 208px; --leaf-gap: 10px; --lane-gap: 18px; --branch-gap: 32px;
     margin-inline: -24px; border-inline: 0; border-radius: 0; }
   .atlas .atlas-head { padding: 16px 16px 14px; }
   .atlas .toolbar { padding: 8px 12px; gap: 8px; }
@@ -301,7 +319,8 @@
   .atlas .leaf-title { font-size: 12.5px; }
 }
 @media (max-width: 650px) {
-  .atlas:lang(en) { --head-w: 56px; }
+  .atlas:lang(en) { --head-w: 56px; --hub-w: 48px; --trunk-gap: 20px; }
+  .atlas .zoom-toggle { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .atlas *, .atlas *::before, .atlas *::after { transition: none !important; }

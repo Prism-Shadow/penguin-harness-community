@@ -49,6 +49,10 @@ const emptyNote = { completed: t("首个成果待点亮", "First result yet to l
       ))}
     </div>
     <div class="tools">
+      <button type="button" class="zoom-toggle" data-zoom aria-pressed="false" title={t("缩放整棵树以放进画板，再点一次回到 100%", "Fit the whole tree in the frame; press again for 100%")}>
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 6V2.5H6M10 2.5h3.5V6M13.5 10v3.5H10M6 13.5H2.5V10" /></svg>
+        {t("全览", "Overview")}
+      </button>
       <span class="pan-controls" data-pan-tools hidden>
         <button type="button" data-pan-left aria-label={t("画布向左滚动", "Scroll canvas left")}><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3.5 5.5 8l4.5 4.5" /></svg></button>
         <span>{t("横向浏览", "Pan")}</span>

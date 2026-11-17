@@ -18,6 +18,8 @@ export function initAtlas(root: HTMLDetailsElement) {
   const reduceMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   /* ---------- Panning ---------- */
+  // Current CSS zoom of the canvas (1 unless the overview is on); rects are in zoomed pixels, layout in canvas pixels.
+  const scaleOf = () => canvas.getBoundingClientRect().width / canvas.offsetWidth || 1;
   // Scroll offset at which the status column reaches the left edge and freezes (measured in measurePin).
   let pinAt = Infinity;
   function measurePin() {
@@ -25,15 +27,17 @@ export function initAtlas(root: HTMLDetailsElement) {
     if (!lane) return;
     const key = lane.querySelector<HTMLElement>(".lane-key")!;
     const left = lane.getBoundingClientRect().left - canvas.getBoundingClientRect().left;
-    pinAt = left - parseFloat(getComputedStyle(key).paddingLeft);
+    pinAt = left - parseFloat(getComputedStyle(key).paddingLeft) * scaleOf();
   }
   function syncPan() {
-    const end = viewport.scrollWidth - viewport.clientWidth;
+    const end = viewport.scrollWidth - viewport.clientWidth, bottom = viewport.scrollHeight - viewport.clientHeight;
     panTools.hidden = end <= 1;
     prev.disabled = viewport.scrollLeft <= 1;
     next.disabled = viewport.scrollLeft >= end - 1;
     stage.toggleAttribute("data-more-left", viewport.scrollLeft > 1);
     stage.toggleAttribute("data-more-right", viewport.scrollLeft < end - 1);
+    stage.toggleAttribute("data-more-up", viewport.scrollTop > 1);
+    stage.toggleAttribute("data-more-down", viewport.scrollTop < bottom - 1);
     stage.toggleAttribute("data-pinned", viewport.scrollLeft > pinAt);
   }
   const pan = (dir: number) => viewport.scrollBy({ left: dir * viewport.clientWidth * 0.72, behavior: reduceMotion() ? "instant" : "smooth" });
@@ -42,17 +46,19 @@ export function initAtlas(root: HTMLDetailsElement) {
   viewport.addEventListener("scroll", syncPan, { passive: true });
 
   // Drag the canvas with a mouse; touch and trackpads already scroll natively.
-  let drag: { x: number; left: number; moved: boolean } | null = null;
+  let drag: { x: number; y: number; left: number; top: number; moved: boolean } | null = null;
   viewport.addEventListener("pointerdown", (e) => {
-    if (e.pointerType !== "mouse" || e.button !== 0 || viewport.scrollWidth <= viewport.clientWidth) return;
-    drag = { x: e.clientX, left: viewport.scrollLeft, moved: false };
+    const pannable = viewport.scrollWidth > viewport.clientWidth || viewport.scrollHeight > viewport.clientHeight;
+    if (e.pointerType !== "mouse" || e.button !== 0 || !pannable) return;
+    drag = { x: e.clientX, y: e.clientY, left: viewport.scrollLeft, top: viewport.scrollTop, moved: false };
   });
   viewport.addEventListener("pointermove", (e) => {
     if (!drag) return;
-    const dx = e.clientX - drag.x;
-    if (!drag.moved && Math.abs(dx) < 5) return;
+    const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+    if (!drag.moved && Math.hypot(dx, dy) < 5) return;
     if (!drag.moved) { drag.moved = true; viewport.setPointerCapture(e.pointerId); viewport.classList.add("dragging"); }
     viewport.scrollLeft = drag.left - dx;
+    viewport.scrollTop = drag.top - dy;
   });
   // A drag ends with a click on whatever card is under the pointer; swallow that one click only.
   let swallowClick = false;
@@ -68,13 +74,34 @@ export function initAtlas(root: HTMLDetailsElement) {
   viewport.addEventListener("pointerup", endDrag);
   viewport.addEventListener("pointercancel", endDrag);
 
+  /* ---------- Overview: zoom the whole tree into the frame, or back to 100% ---------- */
+  const zoomButton = get<HTMLButtonElement>("zoom");
+  let overview = false;
+  function fitOverview() {
+    if (!overview) return;
+    const frame = parseFloat(getComputedStyle(viewport).maxHeight);
+    const k = scaleOf(), w = canvas.getBoundingClientRect().width / k, h = canvas.getBoundingClientRect().height / k;
+    const fit = Math.min(1, viewport.clientWidth / w, (frame || viewport.clientHeight) / h);
+    if (Math.abs(fit - k) > 0.005) canvas.style.zoom = String(Math.floor(fit * 1000) / 1000);
+  }
+  zoomButton.addEventListener("click", () => {
+    overview = !overview;
+    zoomButton.setAttribute("aria-pressed", String(overview));
+    stage.toggleAttribute("data-overview", overview);
+    canvas.style.zoom = "";
+    viewport.scrollTo(0, 0);
+    fitOverview();
+    refresh();
+  });
+
   /* ---------- Wires: trunk, forks and rails are drawn from the laid-out nodes ---------- */
   function drawWires() {
     const c = canvas.getBoundingClientRect();
     if (!root.open || !c.width) return;
+    const k = scaleOf();
     const box = (el: Element): Box => {
       const r = el.getBoundingClientRect();
-      return { l: r.left - c.left, r: r.right - c.left, t: r.top - c.top, b: r.bottom - c.top, cy: (r.top + r.bottom) / 2 - c.top };
+      return { l: (r.left - c.left) / k, r: (r.right - c.left) / k, t: (r.top - c.top) / k, b: (r.bottom - c.top) / k, cy: ((r.top + r.bottom) / 2 - c.top) / k };
     };
     const parts: string[] = [];
     const path = (d: string, cls: string, state = "") => parts.push(`<path class="${cls}"${state ? ` data-state="${state}"` : ""} d="${d}"/>`);
@@ -132,7 +159,7 @@ export function initAtlas(root: HTMLDetailsElement) {
   let queued = 0;
   const refresh = () => {
     cancelAnimationFrame(queued);
-    queued = requestAnimationFrame(() => { drawWires(); measurePin(); syncPan(); });
+    queued = requestAnimationFrame(() => { fitOverview(); drawWires(); measurePin(); syncPan(); });
   };
   const observer = new ResizeObserver(refresh);
   observer.observe(viewport);
@@ -152,7 +179,7 @@ export function initAtlas(root: HTMLDetailsElement) {
         lane.hidden = state !== "all" && lane.dataset.lane !== state;
         if (!lane.hidden) total += Number(lane.dataset.count);
       }
-      viewport.scrollLeft = 0;
+      viewport.scrollTo(0, 0);
       refresh();
       get("live").textContent = `${state === "all" ? words.all : statuses[state as QuestStatus]} · ${total} ${words.results}`;
     });
