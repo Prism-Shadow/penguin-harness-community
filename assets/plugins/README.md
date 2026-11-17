@@ -25,6 +25,11 @@ market.json                   the market document
   "updated": "2026-11-17",
   "hero": ["@penguinharness/a2ui"],
   "selected": ["@penguinharness/a2ui", "@penguinharness/goal"],
+  "popularity": {
+    "source": "placeholder",
+    "generatedAt": "2026-11-17",
+    "items": { "@penguinharness/a2ui": { "installs": 4180, "weekly": 162 } }
+  },
   "plugins": {
     "@penguinharness/a2ui": {
       "cover": { "src": "a2ui/cover.webp", "thumb": "a2ui/cover-640.webp", "tone": "#745fac" },
@@ -46,7 +51,7 @@ market.json                   the market document
 - **`plugins`**: per package, a `cover` (`src` required; `thumb` and `tone`, the cover's field colour as `#rrggbb`, optional), an optional `icon`, and up to 6 `screenshots` (`src` required; `thumb` and the two captions optional). `icon` is drawn only for a plugin that is listed by the index and not yet installed, which has no icon of its own on the server.
 - **Paths** are relative to this folder, lower-case `[a-z0-9._/-]`, inside the package's own folder, and end in `.webp`, `.png` or `.jpg`.
 - **`updated`** is the date of the last edit. Servers fold it into each picture's cache key, so change it whenever a picture changes; `to-webp.py` does.
-- Nothing in the document is a count, a rank or a rating, and there is no field for one.
+- **`popularity`** (optional) feeds the market's 热门 / 飙升 (popular / rising) panel: `source` (`"placeholder"` or `"live"`), `generatedAt` (`YYYY-MM-DD`) and `items`, by package name, each `{ installs, weekly }`: installs in all and in the last seven days, non-negative integers, `weekly` at most `installs`. **Today these are placeholder numbers**, generated with a fixed seed by `scripts/plugin-covers/popularity.mjs`; they measure nothing. A real install-count API will replace them, publishing the same shape with `source: "live"`. A server that cannot read this block drops it and keeps the rest of the document. Apart from it, nothing in the document is a count, a rank or a rating.
 
 A reader ignores keys it does not know. A document whose `schema` is not 1, or that fails these rules, is not used at all, and the copy embedded in the release stands.
 
@@ -65,7 +70,7 @@ A reader ignores keys it does not know. A document whose `schema` is not 1, or t
 
 ## Selected plugins
 
-"Selected" (精选) is an editorial choice by the maintainers, never a popularity ranking: the UI word is never "hot", "top" or "trending". A plugin is selected when:
+"Selected" (精选) is an editorial choice by the maintainers, never a popularity ranking, and never derived from `popularity`: the UI word for it is never "hot", "top" or "trending" (热门 and 飙升 name the separate ranking panel only). A plugin is selected when:
 
 - it works out of the box on a fresh install;
 - it has a quick start that shows its point in one prompt;
@@ -73,7 +78,9 @@ A reader ignores keys it does not know. A document whose `schema` is not 1, or t
 - it is maintained: its dated versions move;
 - and the selection as a whole covers the categories.
 
-There is no popularity board because nothing measures a plugin's popularity honestly today: the bundled plugins are dependencies of the server and the CLI, so npm counts every install of the product equally for all of them; they share one GitHub repository, so stars say nothing about one of them; and servers send no telemetry. The market shows what is real instead: how many of the Project's own agents use a plugin, and how recent its versions are.
+The ranking panel's numbers are placeholders because nothing measures a plugin's popularity honestly today: the bundled plugins are dependencies of the server and the CLI, so npm counts every install of the product equally for all of them; they share one GitHub repository, so stars say nothing about one of them; and servers send no telemetry. The product owner chose (2026-11-17) to build the panel now on generated numbers and swap in a real install-count API later; until then, what is real is how many of the Project's own agents use a plugin and how recent its versions are.
+
+The first selection leads with Bento slides, which carries the AI PPT workbench (the workbench joins `@penguinharness/use-bento-slides` in its own pull request); every selected plugin has real screenshots.
 
 ## Asking to be listed
 
@@ -102,9 +109,11 @@ python3 cut-shots.py template/shots.json --out <tmp>
 python3 to-webp.py <tmp> --into ../../assets/plugins/
 # a contact sheet on white and on near-black, to look at every cover before committing
 node sheet.mjs ../../assets/plugins <out-prefix> --match '^cover\.webp$' --root <harness checkout>
+# the placeholder popularity block (fixed seed: the same numbers on every run)
+node popularity.mjs --date <YYYY-MM-DD>
 ```
 
-`render.mjs --icons` also rasterises each plugin's `icon.svg` into `icon.png`; `--plugins` may point at another repository's plugin folders. A plugin that brings its own masters (a `cover.png` of 1600×900, `shot-<n>.png` of 1600×1000) puts them in `<tmp>/<folder>/` and runs `to-webp.py` alone. Masters are never committed.
+`render.mjs --icons` also rasterises each plugin's `icon.svg` into `icon.png`; `--plugins` may point at another repository's plugin folders. A plugin that brings its own masters (a `cover.png` of 1600×900, `shot-<n>.png` of 1600×1000) puts them in `<tmp>/<folder>/` and runs `to-webp.py` alone; Bento slides' screenshots are workbench captures taken at 1600×1000 and published this way, and its real-UI cover is cut from its published `shot-2.webp`. Masters are never committed.
 
 ## Checks
 

@@ -12,6 +12,11 @@
  * or neither, one sentence of at most 80 characters. Paths are relative, lower-case
  * [a-z0-9._/-], no `.` or `..` segment, under the package's own folder (`<name>/` for
  * @penguinharness/*, `<scope>__<name>/` for anyone else), ending in .webp, .png or .jpg.
+ * `popularity` is optional: { source: "placeholder" | "live", generatedAt: YYYY-MM-DD, items },
+ * items keyed by npm package name, each { installs, weekly } of non-negative integers with weekly
+ * at most installs. Today it is placeholder numbers (plugin-covers/popularity.mjs) until a real
+ * install-count API publishes `source: "live"`; a server drops a block that breaks these rules
+ * and keeps the rest of the document.
  *
  * Then the files: every named file exists, its bytes are the format its extension says (WebP,
  * PNG or JPEG, never animated), it has the size of its role and fits its budget (KB = 1000
@@ -34,7 +39,9 @@ const ROLES = {
   shotThumb: [640, 400, 45_000],
   icon: [256, 256, 30_000],
 };
-const DOC_KEYS = new Set(["$comment", "schema", "updated", "hero", "selected", "plugins"]);
+const DOC_KEYS = new Set(["$comment", "schema", "updated", "hero", "selected", "popularity", "plugins"]);
+const POPULARITY_KEYS = new Set(["source", "generatedAt", "items"]);
+const POPULARITY_SOURCES = new Set(["placeholder", "live"]);
 const ENTRY_KEYS = new Set(["cover", "icon", "screenshots"]);
 const COVER_KEYS = new Set(["src", "thumb", "tone"]);
 const SHOT_KEYS = new Set(["src", "thumb", "caption", "captionZh"]);
@@ -85,6 +92,32 @@ function caption(value, where) {
   if ([...value].length > 80) fail(where, `is ${[...value].length} characters, at most 80`);
 }
 
+// The popularity block: placeholder numbers today, a real install-count API's ("live") later.
+function popularity(value) {
+  if (!isRecord(value)) return fail("popularity", "must be an object { source, generatedAt, items }");
+  unknownKeys(value, POPULARITY_KEYS, "popularity");
+  if (!POPULARITY_SOURCES.has(value.source)) {
+    fail("popularity.source", `must be "placeholder" or "live", got ${JSON.stringify(value.source)}`);
+  }
+  if (typeof value.generatedAt !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value.generatedAt) || Number.isNaN(Date.parse(value.generatedAt))) {
+    fail("popularity.generatedAt", "must be an ISO date (YYYY-MM-DD)");
+  }
+  if (!isRecord(value.items)) return fail("popularity.items", "must be an object keyed by npm package name");
+  const count = (n) => Number.isSafeInteger(n) && n >= 0;
+  for (const [pkg, item] of Object.entries(value.items)) {
+    const at = `popularity.items["${pkg}"]`;
+    if (!PACKAGE.test(pkg)) fail(at, "key is not an npm package name");
+    if (!isRecord(item)) {
+      fail(at, "must be an object { installs, weekly }");
+      continue;
+    }
+    unknownKeys(item, new Set(["installs", "weekly"]), at);
+    if (!count(item.installs)) fail(`${at}.installs`, "must be a non-negative integer");
+    if (!count(item.weekly)) fail(`${at}.weekly`, "must be a non-negative integer");
+    else if (count(item.installs) && item.weekly > item.installs) fail(`${at}.weekly`, "is more than installs");
+  }
+}
+
 function readDocument() {
   let doc;
   try {
@@ -104,6 +137,7 @@ function readDocument() {
   if (hero.length < 1 || hero.length > 5) fail("hero", `names ${hero.length} packages, 1 to 5`);
   if (selected.length > 12) fail("selected", `names ${selected.length} packages, at most 12`);
   for (const n of hero) if (!selected.includes(n)) fail("hero", `${n} is not in selected`);
+  if (doc.popularity !== undefined) popularity(doc.popularity);
 
   if (!isRecord(doc.plugins)) return fail("plugins", "must be an object keyed by npm package name");
   for (const [pkg, entry] of Object.entries(doc.plugins)) {
@@ -231,5 +265,6 @@ const covers = entries.filter((e) => e.cover).length;
 const shots = entries.reduce((n, e) => n + (e.screenshots?.length ?? 0), 0);
 console.log(
   `check-plugin-assets: ok, ${entries.length} plugins, ${covers} covers, ${shots} screenshots, ${named.size} files, ${bytes} bytes; ` +
-    `${doc.selected.length} selected, ${doc.hero.length} may lead`,
+    `${doc.selected.length} selected, ${doc.hero.length} may lead` +
+    (doc.popularity ? `; popularity (${doc.popularity.source}) for ${Object.keys(doc.popularity.items).length}` : ""),
 );

@@ -80,7 +80,18 @@
     "software-development": { "series": "A", "hue": "violet", "scene": "software-development" },
     "trace-lookup": { "series": "A", "hue": "amber", "scene": "trace-lookup" },
     "trace-rsi-toolkit": { "series": "B", "hue": "red", "lettering": "TRACE", "scene": "rsi-loop" },
-    "use-bento-slides": { "series": "A", "hue": "orange", "scene": "use-bento-slides" },
+    "use-bento-slides": {
+      "series": "C",
+      "hue": "orange",
+      "window": { "left": 360, "top": 120, "width": 1240, "height": 840 },
+      "shot": {
+        "src": "../../../assets/plugins/use-bento-slides/shot-2.webp",
+        "crop": { "x": 222, "y": 60, "w": 1378, "h": 933 },
+        "scale": 0.9,
+        "offset": [0, 0],
+        "pad": "#f5f6fa"
+      }
+    },
     "use-claude-code": { "series": "A", "hue": "teal", "scene": "use-claude-code" },
     "use-firecrawl": { "series": "A", "hue": "red", "scene": "use-firecrawl" }
   }

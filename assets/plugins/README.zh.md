@@ -25,6 +25,11 @@ market.json                   市场文档
   "updated": "2026-11-17",
   "hero": ["@penguinharness/a2ui"],
   "selected": ["@penguinharness/a2ui", "@penguinharness/goal"],
+  "popularity": {
+    "source": "placeholder",
+    "generatedAt": "2026-11-17",
+    "items": { "@penguinharness/a2ui": { "installs": 4180, "weekly": 162 } }
+  },
   "plugins": {
     "@penguinharness/a2ui": {
       "cover": { "src": "a2ui/cover.webp", "thumb": "a2ui/cover-640.webp", "tone": "#745fac" },
@@ -46,7 +51,7 @@ market.json                   市场文档
 - **`plugins`**：按包名给出 `cover`（`src` 必填；`thumb` 与 `tone` 可选，`tone` 是封面底色，写作 `#rrggbb`）、可选的 `icon`，以及最多 6 张 `screenshots`（`src` 必填；`thumb` 与两种语言的说明可选）。`icon` 只用于索引里列出、尚未安装的插件：这类插件在服务端没有自己的图标。
 - **路径**相对于本目录，只用小写 `[a-z0-9._/-]`，必须位于该包自己的目录内，以 `.webp`、`.png` 或 `.jpg` 结尾。
 - **`updated`** 是最后一次编辑的日期。服务端把它计入每张图片的缓存键，所以图片有改动时必须更新它；`to-webp.py` 会自动更新。
-- 文档中没有任何计数、排名或评分，也没有容纳它们的字段。
+- **`popularity`**（可选）供市场的「热门 / 飙升」面板使用：`source`（`"placeholder"` 或 `"live"`）、`generatedAt`（`YYYY-MM-DD`）与按包名给出的 `items`，每项 `{ installs, weekly }`，即累计与近 7 天的安装数，非负整数，`weekly` 不大于 `installs`。**目前是占位数字**，由 `scripts/plugin-covers/popularity.mjs` 以固定种子生成，不代表任何实测；日后由真实的安装量接口替换，以同一形状发布，`source` 为 `"live"`。服务端读不懂这一块时会略去它，文档其余部分照常生效。除此之外，文档中没有任何计数、排名或评分。
 
 读取方忽略不认识的键。`schema` 不是 1 或不符合上述规则的文档整份不用，由发行版内置的副本顶上。
 
@@ -65,7 +70,7 @@ market.json                   市场文档
 
 ## 精选
 
-「精选」（Selected）是维护者的编辑选择，不是热度排名：界面上从不使用「热门」「Top」「趋势」之类的词。入选的条件是：
+「精选」（Selected）是维护者的编辑选择，不是热度排名，也从不由 `popularity` 推出：精选从不使用「热门」「Top」「趋势」之类的词（「热门」「飙升」只用作另外那个排行面板的名字）。入选的条件是：
 
 - 全新安装后开箱即用；
 - 有一个用一句提示就能展示其价值的快速开始；
@@ -73,7 +78,9 @@ market.json                   市场文档
 - 仍在维护：带日期的版本持续更新；
 - 整个精选集合覆盖各个分类。
 
-市场不设热度榜，因为目前没有能如实衡量插件热度的数据：内置插件是服务端与 CLI 的依赖，产品每被安装一次，npm 就为它们全部计数一次；它们共用一个 GitHub 仓库，Star 数说明不了其中任何一个；服务端也不上报遥测数据。市场改为展示真实的信息：本 Project 有多少个 Agent 在用某个插件，以及它的版本有多新。
+排行面板的数字之所以是占位，是因为目前没有能如实衡量插件热度的数据：内置插件是服务端与 CLI 的依赖，产品每被安装一次，npm 就为它们全部计数一次；它们共用一个 GitHub 仓库，Star 数说明不了其中任何一个；服务端也不上报遥测数据。产品负责人决定（2026-11-17）先以生成的数字把面板做出来，日后接入真实的安装量接口；在那之前，真实的信息是本 Project 有多少个 Agent 在用某个插件，以及它的版本有多新。
+
+首批精选以 Bento 幻灯片领衔，它带有 AI PPT 工作台（工作台另以 Pull Request 加入 `@penguinharness/use-bento-slides`）；每个入选插件都有真实截图。
 
 ## 申请上架
 
@@ -102,9 +109,11 @@ python3 cut-shots.py template/shots.json --out <tmp>
 python3 to-webp.py <tmp> --into ../../assets/plugins/
 # 白底与近黑底各一张的样张，提交前逐张检查封面
 node sheet.mjs ../../assets/plugins <out-prefix> --match '^cover\.webp$' --root <harness checkout>
+# 占位的 popularity（固定种子：每次运行数字相同）
+node popularity.mjs --date <YYYY-MM-DD>
 ```
 
-`render.mjs --icons` 还会把每个插件的 `icon.svg` 栅格化为 `icon.png`；`--plugins` 可以指向其他仓库的插件目录。自带母版的插件（1600×900 的 `cover.png`、1600×1000 的 `shot-<n>.png`）把母版放进 `<tmp>/<folder>/`，单独运行 `to-webp.py` 即可。母版从不提交。
+`render.mjs --icons` 还会把每个插件的 `icon.svg` 栅格化为 `icon.png`；`--plugins` 可以指向其他仓库的插件目录。自带母版的插件（1600×900 的 `cover.png`、1600×1000 的 `shot-<n>.png`）把母版放进 `<tmp>/<folder>/`，单独运行 `to-webp.py` 即可；Bento 幻灯片的截图是按 1600×1000 拍下的工作台画面，就这样发布，其真实界面封面截自已发布的 `shot-2.webp`。母版从不提交。
 
 ## 检查
 
