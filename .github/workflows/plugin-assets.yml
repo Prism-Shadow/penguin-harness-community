@@ -1,0 +1,38 @@
+name: Plugin assets
+
+# The plugin market's pictures and their document: every pull request that touches them is
+# checked against the spec in assets/plugins/README.md before it can reach a server.
+on:
+  push:
+    branches:
+      - "main"
+    paths:
+      - "assets/plugins/**"
+      - "scripts/check-plugin-assets.mjs"
+      - ".github/workflows/plugin-assets.yml"
+  pull_request:
+    branches:
+      - "main"
+    paths:
+      - "assets/plugins/**"
+      - "scripts/check-plugin-assets.mjs"
+      - ".github/workflows/plugin-assets.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Check the market document and its pictures
+        run: node scripts/check-plugin-assets.mjs

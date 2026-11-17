@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" width="900" height="520">
+  <!-- Series A, skill-porting: three skill cards from elsewhere, fanned out; one is carried along
+       a dashed path into the agent's tray and gets a check once reviewed. -->
+
+  <!-- the fan -->
+  <g transform="rotate(-12 200 330)">
+    <rect class="paper card" x="110" y="150" width="180" height="230" rx="16" />
+    <rect class="acc" x="136" y="178" width="70" height="14" rx="7" />
+    <path class="acc-ln" d="M136 222h126M136 256h100M136 290h126" />
+  </g>
+  <g transform="rotate(10 200 330)">
+    <rect class="paper card" x="110" y="150" width="180" height="230" rx="16" />
+    <rect class="acc" x="136" y="178" width="96" height="14" rx="7" />
+    <path class="acc-ln" d="M136 222h110M136 256h126M136 290h80" />
+  </g>
+  <rect class="paper card" x="110" y="150" width="180" height="230" rx="16" />
+  <rect class="ink" x="136" y="178" width="84" height="14" rx="7" />
+  <path class="ink-ln" d="M136 222h126M136 256h92M136 290h118" />
+
+  <!-- the path -->
+  <path class="ln dash" d="M310 190C420 100 560 80 640 150" />
+  <path class="ln" d="M620 142l22 10 2-24" />
+
+  <!-- the tray -->
+  <path class="ln f12" d="M520 300V400A24 24 0 0 0 544 424H816A24 24 0 0 0 840 400V300" />
+  <path class="ln" d="M520 340H600L630 380H730L760 340H840" />
+  <!-- the card going in, with its check -->
+  <rect class="paper card" x="600" y="180" width="160" height="180" rx="14" />
+  <rect class="ink" x="624" y="206" width="70" height="12" rx="6" />
+  <path class="ink-ln" d="M624 244h110M624 276h84" />
+  <circle class="acc" cx="752" cy="190" r="30" />
+  <path class="ink-ln" d="M739 190l9 9 17-18" />
+</svg>
