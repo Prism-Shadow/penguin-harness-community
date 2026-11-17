@@ -1185,7 +1185,7 @@ Deliverables and acceptance criteria:
     published_at: "2026-11-17T09:18:47Z"
     status: "open"
     domain: "Benchmark"
-    exp: 50
+    exp: 100
     target_repository: "https://github.com/Prism-Shadow/penguin-harness-benchmark"
     related_issue: null
     title: "Integrate Harbor-adapted TableQA Benchmarks"
