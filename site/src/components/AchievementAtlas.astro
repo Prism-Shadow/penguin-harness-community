@@ -1,0 +1,89 @@
+---
+import "../styles/achievement-atlas.css";
+import type { Locale } from "../shared/i18n";
+import { QUESTS } from "../shared/community";
+import { researchAtlas } from "../shared/achievements";
+import Logo from "./Logo.astro";
+interface Props { locale: Locale }
+const {locale}=Astro.props;
+const t=(zh:string,en:string)=>locale==="zh"?zh:en;
+const model=researchAtlas(QUESTS,locale);
+const domains=model.nodes.filter(n=>n.stage===1);
+const states=["open","in_progress","completed"] as const;
+const tasks=model.nodes.filter(n=>n.stage===2).sort((a,b)=>Number(b.id.slice(1))-Number(a.id.slice(1)));
+const done=tasks.filter(n=>n.state==="completed").length;
+const words={author:t("贡献者","Contributor"),all:t("全部","All"),results:t("项任务","quests")};
+const icons: Record<string,string>={
+ benchmark:"m3 7 9-5 9 5-9 5z M3 12l9 5 9-5 M3 17l9 5 9-5",
+ evaluation:"M3 18h18 M5 14l4-5 4 3 6-7",
+ "rsi-algorithm":"M5 8a8 8 0 0 1 14-2l2 3m0-5v5h-5 M19 16a8 8 0 0 1-14 2l-2-3m0 5v-5h5",
+ "penguin-harness":"m7 7-5 5 5 5m10-10 5 5-5 5M14 4l-4 16",
+ "awesome-rsi":"M3 4c4-1 7 0 9 2 2-2 5-3 9-2v15c-4-1-7-1-9 1-2-2-5-2-9-1zM12 6v14",
+};
+---
+<details class="atlas" id="atlas" open data-atlas data-model={JSON.stringify({...model,words})}>
+  <summary class="atlas-head">
+    <span class="head-copy"><small class="kicker" lang="en"><i></i> COMMUNITY ATLAS</small><strong>{t("社区成就树","Community achievement tree")}</strong></span>
+    <span class="disclosure"><span class="opened">{t("收起","Collapse")}</span><span class="closed">{t("展开","Expand")}</span><i></i></span>
+  </summary>
+  <div class="toolbar">
+    <div class="filters" role="group" aria-label={t("按任务状态筛选","Filter quests by status")}>
+      <button type="button" data-filter="all" aria-pressed="true">{words.all}<b>{tasks.length}</b></button>
+      {states.map(s=><button type="button" data-filter={s} data-state={s} aria-pressed="false"><i></i>{model.statuses[s]}<b>{tasks.filter(n=>n.state===s).length}</b></button>)}
+    </div>
+    <div class="tools"><span class="pan-controls" data-pan-tools hidden><button type="button" data-pan-left aria-label={t("画布向左滚动","Scroll canvas left")}>←</button><span>{t("横向浏览","Pan across")}</span><button type="button" data-pan-right aria-label={t("画布向右滚动","Scroll canvas right")}>→</button></span>
+    <a class="skip" href="#quest-list">{t("跳到任务列表","Skip to quest list")} ↓</a></div>
+  </div>
+  <div class="viewport" data-scroll tabindex="0" role="region" aria-label={t("社区成就树，从左往右浏览","Community achievement tree, read from left to right")}>
+  <div class="canvas">
+    <div class="hub">
+      <span class="hub-logo"><Logo class="brand-mark"/></span>
+      <span class="hub-copy"><b>{t("RSI 社区","RSI community")}</b><small>{t("已完成","Completed")} <strong>{done}</strong> / {tasks.length}</small></span>
+    </div>
+    <div class="branches">
+      {domains.map(d=>{
+        const group=tasks.filter(n=>n.track===d.id),lit=group.filter(n=>n.state==="completed").length;
+        return <section class="branch" id={'atlas-'+d.id} data-domain={d.id} aria-labelledby={'atlas-heading-'+d.id}>
+          <div class="branch-head">
+            <div class="branch-title"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={icons[d.id]}/></svg><h2 id={'atlas-heading-'+d.id}>{d.title}</h2></div>
+            <div class="branch-count"><span>{t("已完成","Completed")}</span><b>{lit} / {group.length}</b></div>
+            <div class="meter" aria-hidden="true"><i style={`width:${group.length?100*lit/group.length:0}%`}></i></div>
+          </div>
+          <div class="status-fork">
+            {states.map(state=>{
+              const items=group.filter(n=>n.state===state);
+              const labelId=`atlas-${d.id}-${state}`;
+              return <section class="status-branch" data-status-branch={state} data-count={items.length} aria-labelledby={labelId}>
+                <h3 class="status-head" id={labelId}>
+                  <span aria-hidden="true">{state==="completed"?"✓":state==="in_progress"?"◐":"○"}</span>
+                  {model.statuses[state]}<small>{items.length}</small>
+                </h3>
+                {items.length>0 && <ul class="records">
+                  {items.map(n=><li data-leaf data-state={state}>
+                    <a class="record" data-record={n.id} href={n.links[0].url}>
+                      <small class="record-number">#{n.id.slice(1)}</small>
+                      <b>{n.fullTitle||n.title}</b>
+                    </a>
+                  </li>)}
+                </ul>}
+              </section>;
+            })}
+          </div>
+        </section>
+      })}
+    </div>
+  </div>
+  </div>
+  <dialog class="dossier" data-detail aria-labelledby="atlas-detail-title">
+    <div class="dossier-inner">
+      <small data-status></small><h3 id="atlas-detail-title" data-title></h3>
+      <button class="close" type="button" data-close autofocus aria-label={t("关闭详情","Close details")}>×</button>
+      <p data-summary></p><div class="facts" data-facts></div><div class="relations" data-neighbors></div>
+    </div>
+  </dialog>
+  <span class="sr-only" aria-live="polite" data-live></span>
+</details>
+<script>
+ import {initAtlas} from "../shared/achievement-atlas-ui";
+ document.querySelectorAll<HTMLDetailsElement>("[data-atlas]").forEach(initAtlas);
+</script>
