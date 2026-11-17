@@ -21,8 +21,8 @@
 
 ## Algorithm PR Merge Criteria
 
-- **Method fidelity**: Cite the paper or upstream implementation, point to where the plugin implements its core mechanisms, and explain any adaptations. Label an implementation that changes a core mechanism as a variant.
-- **Working plugin**: The plugin conforms to RFC-0003, installs as documented, and runs the algorithm in PenguinHarness via `quick_start`.
+- **Algorithm implementation**: Link to the paper or upstream implementation and identify the code or Skills that implement the key steps. Explain any departures from the original method and label the plugin as a variant if it changes a core mechanism.
+- **Installation and use**: The plugin must follow RFC-0003. After following the installation instructions, a reviewer should be able to run the algorithm in PenguinHarness using the `quick_start` example.
 - **Measured improvement**: Compare the plugin in this PR against a baseline on a real task suited to the method. Show better task performance at a comparable budget, or higher efficiency at comparable task quality. State the comparison conditions and main trade-offs.
 - **Verifiable results**: Specify the task or subset, key settings, and reproduction commands. Provide run records that let reviewers check both the baseline and plugin results.
 
