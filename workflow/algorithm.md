@@ -11,7 +11,7 @@
 2. **Open an Issue**: Search or open an Issue in [PenguinHarness Plugins Issues](https://github.com/Prism-Shadow/penguin-harness-plugins/issues) describing the RSI algorithm, paper reference, and planned plugin components.
 3. **Claim in Issue Comments (Optional)**: Leave a comment on the Issue to claim the plugin implementation (claiming is optional and prevents duplicate effort on the same algorithm).
 4. **Submit a PR**: Implement and test the plugin according to `RFC-0003`, then open a Pull Request linked to the Issue.
-5. **Maintainer Review & Merge**: Maintainers review the PR against the [algorithm PR merge criteria](#algorithm-pr-merge-criteria) before merging.
+5. **Maintainer Review & Merge**: Merge the PR once it meets all [algorithm PR merge criteria](#algorithm-pr-merge-criteria).
 
 ## Implementation & Testing Guidelines
 

@@ -11,7 +11,7 @@
 2. **提出 Issue**：在 [PenguinHarness Plugins Issues](https://github.com/Prism-Shadow/penguin-harness-plugins/issues) 中搜索或新建 Issue，说明计划实现或复现的 RSI 算法、论文来源与插件组件构成。
 3. **Issue 评论区占坑（可选）**：在 Issue 评论区留言认领（占坑是可选步骤，主要用于防止多人同时开发同一个 RSI 算法插件撞车）。
 4. **提交 PR**：按 `RFC-0003` 完成插件开发与效果测试后，向仓库提交 Pull Request 并关联 Issue。
-5. **Maintainer 审核合并**：Maintainer 按下方的[算法 PR 合入标准](#算法-pr-合入标准)审核，通过后合入。
+5. **Maintainer 审核合并**：按[算法 PR 合入标准](#算法-pr-合入标准)逐项审核，通过后合入。
 
 ## 实现与测试指导
 
