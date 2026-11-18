@@ -11,11 +11,18 @@
 2. **提出 Issue**：在 [PenguinHarness Benchmark Issues](https://github.com/Prism-Shadow/penguin-harness-benchmark/issues) 中搜索是否已有对应 Benchmark 的 Issue；若没有，则新建一个 Issue 说明要整理的 Benchmark 来源与题目规模。
 3. **Issue 评论区占坑（可选）**：在目标 Issue 评论区留言认领（占坑是可选步骤，主要是为了防止多人同时整理同一个 Benchmark 撞车）。
 4. **提交 PR**：按 `RFC-0001` 完成 Benchmark 转换与自测（提交时 `benchmark_config.toml` 的 `status` 设为 `"draft"`），提交 Pull Request 并关联 Issue。
-5. **Maintainer 审核合并**：等待 Maintainer 审核题目描述、评分标准与配置完整性；审核通过后将 `status` 更新为 `"published"` 并合并入库。
+5. **Maintainer 审核合并**：按 [Benchmark PR 合入标准](#benchmark-pr-合入标准)审核，通过后将 `status` 更新为 `"published"` 并合并入库。
+
+## Benchmark PR 合入标准
+
+- **来源清楚**。附上题目和数据的来源与许可。接入上游基准时，注明版本、纳入的题目范围以及对题目或评分规则所做的改动。
+- **任务能跑通**。目录和配置符合 RFC-0001。按文档准备依赖与运行环境后，用代表性题目走完加载任务、执行和评分的流程。
+- **评分能区分好坏**。评分规则对应题目要求。用符合要求和不符合要求的样例核对评分结果。有训练集和测试集时，说明划分方式并检查是否有题目重叠或答案泄漏。
+- **结果可复核**。提供验证用的题目或子集、运行环境、复现命令和评分记录，方便维护者核对验证范围和结果。
 
 ## 推荐验证指导与参考样例
 
-- **推荐验证模型与指标**：完成 Benchmark 整理后，推荐使用 **DeepSeek Flash** 模型重复运行 $k = 3$ 次来验证题目是否可解、评分器是否稳定且具备区分度，可选报告 **`pass@k`**。
+- **推荐验证模型与指标**。完成 Benchmark 整理后，推荐使用 **DeepSeek Flash** 模型重复运行 $k = 3$ 次，检查任务执行和评分的一致性，可选报告 **`pass@k`**。
 - **记录模型版本号**：若一并提交基线验证结果，使用 `deepseek-flash` 这类模型时必须在 `model_name` 中注明具体版本号（例如 `deepseek-flash-1017`）。
 - **参考样例**：
   - 通用评测基准样例：[`penguinharness-benchmark-sec-a`](https://github.com/Prism-Shadow/penguin-harness-benchmark/tree/main/packages/penguinharness-benchmark-sec-a)（Data Analysis Bench 子集）至 [`penguinharness-benchmark-sec-e`](https://github.com/Prism-Shadow/penguin-harness-benchmark/tree/main/packages/penguinharness-benchmark-sec-e)（Terminal-Bench 子集）。
@@ -37,7 +44,7 @@
 ### 整理计划
 - [ ] 整理 `packages/<benchmark-id>/benchmark_config.toml` 与各题 `<task-id>/`
 - [ ] 整理 `data/<benchmark-id>/` 原始数据（如需要）
-- [ ] 使用 `deepseek-flash-1017` 验证题目可正常执行并完成计分
+- [ ] 用代表性题目验证执行与评分流程
 ```
 
 ### 2. Issue 评论占坑示例（可选）
@@ -57,8 +64,12 @@ Closes #<issue-number>
 - 新增 `packages/<benchmark-id>/`，包含 `benchmark_config.toml` 及 <N> 道题目的 `statement/`、`rubric/` 和 `task_config.toml`
 - （可选）新增 `data/<benchmark-id>/` 存放原始任务数据
 
+### 验证方式
+- **来源与范围**：<来源、许可、版本、纳入范围和改动>
+- **运行与评分**：<验证题目、环境、命令、评分样例和结果记录>
+
 ### 自查清单
 - [x] 目录结构与字段符合 RFC-0001 Benchmark 规范
 - [x] `benchmark_config.toml` 中 `status` 已设为 `"draft"`
-- [x] 已使用 `deepseek-flash-1017` 验证题目可正常执行并完成评分
+- [x] 已跑通代表性题目并核对评分结果
 ```

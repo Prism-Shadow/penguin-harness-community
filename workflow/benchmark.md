@@ -11,11 +11,18 @@
 2. **Open an Issue**: Check [PenguinHarness Benchmark Issues](https://github.com/Prism-Shadow/penguin-harness-benchmark/issues) for an existing Issue for the Benchmark, or open a new Issue describing the upstream source and number of tasks.
 3. **Claim in Issue Comments (Optional)**: Leave a comment on the Issue to claim the work (claiming is optional and primarily prevents duplicate effort).
 4. **Submit a PR**: Organize the Benchmark files according to `RFC-0001` (with `status = "draft"` in `benchmark_config.toml`) and open a Pull Request linked to the Issue.
-5. **Maintainer Review & Merge**: Wait for a maintainer to review the task statements, rubrics, and configuration; once approved, `status` is updated to `"published"` and the PR is merged.
+5. **Maintainer Review & Merge**: Review the PR against the [Benchmark PR merge criteria](#benchmark-pr-merge-criteria), then set `status` to `"published"` and merge once approved.
+
+## Benchmark PR Merge Criteria
+
+- **Traceable sources.** Provide the sources and licenses for the tasks and data. For an upstream benchmark, state the version, which tasks are included, and any changes to the tasks or grading rules.
+- **Runnable tasks.** Follow RFC-0001 for the layout and configuration. With the documented dependencies and environment, run representative tasks from loading through execution and grading.
+- **Meaningful grading.** Check that the rubric measures what each task asks for. Verify scores on outputs that meet the task requirements and outputs that fail them. If the benchmark includes training and test sets, explain the split and check for task overlap or answer leakage.
+- **Verifiable results.** Include the tasks or subset used for verification, the runtime environment, reproduction commands, and grading records so maintainers can check what was verified and how it scored.
 
 ## Recommended Verification & Examples
 
-- **Recommended Model & Metric**: After organizing a Benchmark, we recommend running $k = 3$ repeated attempts with the **DeepSeek Flash** model to verify that tasks are solvable, discriminative, and graded deterministically, optionally reporting **`pass@k`**.
+- **Recommended Model & Metric.** After organizing a Benchmark, we recommend running $k = 3$ attempts with **DeepSeek Flash** to check task execution and scoring consistency. You can also report **`pass@k`**.
 - **Model Version Suffix**: If you also submit baseline evaluation records using models like `deepseek-flash`, always include the explicit version suffix in `model_name` (e.g., `deepseek-flash-1017`).
 - **Reference Examples**:
   - General evaluation benchmarks: [`penguinharness-benchmark-sec-a`](https://github.com/Prism-Shadow/penguin-harness-benchmark/tree/main/packages/penguinharness-benchmark-sec-a) (Data Analysis Bench subset) through [`penguinharness-benchmark-sec-e`](https://github.com/Prism-Shadow/penguin-harness-benchmark/tree/main/packages/penguinharness-benchmark-sec-e) (Terminal-Bench subset).
@@ -37,7 +44,7 @@
 ### Plan
 - [ ] Prepare `packages/<benchmark-id>/benchmark_config.toml` and `<task-id>/` directories
 - [ ] Prepare `data/<benchmark-id>/` raw task files (if applicable)
-- [ ] Verify tasks with `deepseek-flash-1017` to ensure tasks run and score properly
+- [ ] Verify execution and grading on representative tasks
 ```
 
 ### 2. Issue Claim Comment Example (Optional)
@@ -57,8 +64,12 @@ Closes #<issue-number>
 - Added `packages/<benchmark-id>/` with `benchmark_config.toml` and <N> tasks (`statement/`, `rubric/`, `task_config.toml`)
 - (Optional) Added `data/<benchmark-id>/` for raw task data
 
+### Verification
+- **Sources and scope**: <sources, licenses, versions, included tasks, and changes>
+- **Execution and grading**: <tasks tested, environment, commands, scoring examples, and run records>
+
 ### Checklist
 - [x] Directory layout and manifest fields conform to RFC-0001 Benchmark
 - [x] `status` in `benchmark_config.toml` is set to `"draft"`
-- [x] Verified tasks with `deepseek-flash-1017`
+- [x] Ran representative tasks and checked the grading results
 ```
