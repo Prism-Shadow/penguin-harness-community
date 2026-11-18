@@ -159,7 +159,7 @@
 .atlas .w-joint { fill: var(--paper); stroke: var(--trunk); stroke-width: 2; }
 .atlas .w-fork { stroke: var(--wire); stroke-width: 2; }
 .atlas .w-membership { stroke: var(--wire); stroke-width: 1.5; }
-.atlas .w-dependency { stroke: var(--blue-ink); stroke-width: 2; }
+.atlas .w-dependency { stroke: var(--muted); stroke-width: 2; }
 .atlas .w-dependency:not([data-state="lit"]) { stroke-dasharray: 4 3; }
 
 /* ---------- Hub ---------- */

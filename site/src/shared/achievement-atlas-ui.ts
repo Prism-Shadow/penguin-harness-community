@@ -167,7 +167,6 @@ export function initAtlas(root: HTMLDetailsElement) {
     const visibleEdges = edges.filter(({ from, to }) =>
       !filter || filter === "all" || (from.state === filter && to.state === filter)
     );
-    const inspecting = new Set(visibleEdges.flatMap(({ from, to }) => [from.id, to.id]));
     const positions = new Map<string, Box>();
     visibleBranches.forEach((branch, i) => {
       const d = routes[i];
@@ -183,26 +182,34 @@ export function initAtlas(root: HTMLDetailsElement) {
         const leaves = lane.querySelector<HTMLElement>("[data-leaves]")!;
         const firstColumnX = box(leaves).l;
         const forkX = f((titleRight + firstColumnX) / 2);
-        const attachments = [titleY];
-        const memberPaths: string[] = [];
-        let inspectingLane = false;
+        const rows = new Map<number, Box[]>();
         for (const item of leaves.querySelectorAll<HTMLElement>(":scope > li:not([hidden])")) {
           const id = item.querySelector<HTMLElement>("[data-record]")!.dataset.record!;
           const card = box(item);
           positions.set(id, card);
-          if (inspecting.has(id)) inspectingLane = true;
-          // Later columns take their membership line at the top, leaving the left edge for unlock arrows.
-          const firstColumn = Math.abs(card.l - firstColumnX) < 1;
-          const y = f(firstColumn ? card.cy : card.t - 6);
-          const end = firstColumn ? `H${f(card.l)}` : `H${f((card.l + card.r) / 2)} V${f(card.t)}`;
-          memberPaths.push(`M${forkX} ${y} ${end}`);
-          attachments.push(y);
+          const top = f(card.t);
+          if (!rows.has(top)) rows.set(top, []);
+          rows.get(top)!.push(card);
         }
-        // In the lanes being inspected, give the unlock arrows their own space.
-        if (!inspectingLane) {
-          memberPaths.push(`M${titleRight} ${titleY} H${forkX} M${forkX} ${Math.min(...attachments)} V${Math.max(...attachments)}`);
-          path(memberPaths.join(" "), "w-membership");
+        const attachments = [titleY];
+        const memberPaths = [`M${titleRight} ${titleY} H${forkX}`];
+        for (const [top, row] of rows) {
+          const first = row[0];
+          if (row.length === 1 && Math.abs(first.l - firstColumnX) < 1) {
+            const y = f(first.cy);
+            memberPaths.push(`M${forkX} ${y} H${f(first.l)}`);
+            attachments.push(y);
+          } else {
+            // Share one rail in the row gap, leaving card sides free for prerequisite arrows.
+            const y = f(top - 6);
+            const centres = row.map((card) => f((card.l + card.r) / 2));
+            memberPaths.push(`M${forkX} ${y} H${Math.max(...centres)}`);
+            for (const x of centres) memberPaths.push(`M${x} ${y} V${top}`);
+            attachments.push(y);
+          }
         }
+        memberPaths.push(`M${forkX} ${Math.min(...attachments)} V${Math.max(...attachments)}`);
+        path(memberPaths.join(" "), "w-membership");
       }
       dot(f(d.l), f(d.cy), "w-joint");
     });
@@ -341,7 +348,7 @@ export function initAtlas(root: HTMLDetailsElement) {
     }
 
     const related = get("neighbors");
-    const prerequisiteTitle = m.state === "locked" ? words.unlockCondition : words.needs;
+    const prerequisiteTitle = m.anyPrerequisite ? words.needsAny : m.state === "locked" ? words.unlockCondition : words.needs;
     related.replaceChildren(...relationGroup(prerequisiteTitle, m.requires), ...relationGroup(words.unlocks, m.unlocks));
 
     if (!dialog.open) dialog.showModal();

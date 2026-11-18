@@ -32,6 +32,8 @@ export interface MedalDef {
   requiresQuests?: number[];
   /** Medals that must be lit before this one can be earned. */
   requires?: string[];
+  /** Any one of the listed prerequisite medals unlocks this result. */
+  anyPrerequisite?: boolean;
   /** Anything the materials do not settle yet. */
   pending?: Text;
 }
@@ -86,9 +88,9 @@ export const ACHIEVEMENT_TREE: RouteDef[] = [
           },
           {
             id: "infra-autoresearch", name: { zh: "双层自动研究系统验证", en: "Two-level research system validated" },
-            intent: { zh: "在训练与算子优化任务上验证 ERNIE Evolve 双层研究循环。", en: "Verify ERNIE Evolve’s two-level research loop on training and kernel tasks." },
-            evidence: { zh: "在 PenguinHarness 中复现双层循环，提供训练与算子基准的候选方案及运行记录。", en: "Reproduce both loops in PenguinHarness and provide candidate histories and logs on training and kernel benchmarks." },
-            quests: [86], requires: ["infra-train-bench", "infra-kernel-bench"],
+            intent: { zh: "在训练或算子优化任务上验证 ERNIE Evolve 双层研究循环。", en: "Verify ERNIE Evolve’s two-level research loop on a training or kernel optimisation task." },
+            evidence: { zh: "在 NanoChat、NanoGPT Speedrun 或 SOL-ExecBench 中任选一项跑通端到端实验，提交候选树演化记录和相对基线的改进结果。", en: "Run an end-to-end experiment on NanoChat, NanoGPT Speedrun or SOL-ExecBench. Submit the candidate tree history and a verified improvement over the baseline." },
+            quests: [86], requires: ["infra-train-bench", "infra-kernel-bench"], anyPrerequisite: true,
           },
         ],
       },
@@ -97,10 +99,10 @@ export const ACHIEVEMENT_TREE: RouteDef[] = [
         name: { zh: "实验验证", en: "Experimental validation" },
         medals: [
           {
-            id: "infra-recipe", name: { zh: "首次验证训练提速", en: "First verified training speedup" },
-            intent: { zh: "将优化方法用于真实训练负载，并与该负载的基线对比。", en: "Run the optimisation method on a real workload and compare against its baseline." },
-            evidence: { zh: "在可比配置、工作量和模型质量下，独立复核训练耗时或吞吐的提升，附基线和优化后的运行记录。", en: "Independently verify a time or throughput improvement at comparable workload, configuration and model quality, with baseline and optimised logs." },
-            quests: [87], requires: ["infra-method", "infra-train-bench"],
+            id: "infra-recipe", name: { zh: "Qwen3.8 训练优化验证", en: "Qwen3.8 training optimisation" },
+            intent: { zh: "在 Qwen3.8 训练或后训练中验证优化效果。", en: "Evaluate an optimisation during Qwen3.8 training or post-training." },
+            evidence: { zh: "与 Qwen3.8 基线对比，在模型精度不降低的前提下验证收敛加速或能力提升。提交经独立复核的改动、候选树实验记录和对比报告。", en: "Compare against a Qwen3.8 baseline and demonstrate faster convergence or improved model capability without loss of accuracy. Submit independently reviewed changes, candidate tree logs and the comparison report." },
+            quests: [87],
           },
           {
             id: "infra-chip-kernel", name: { zh: "国产芯片分布式训练性能验证", en: "Distributed training on domestic accelerators" },
@@ -211,11 +213,12 @@ export const ACHIEVEMENT_TREE: RouteDef[] = [
               en: "Compare retention scores before and after the compression algorithm changes.",
             },
             evidence: {
-              zh: "压缩算法改动合入（penguin-harness PR #1491），并在压缩保留基准上给出前后得分",
-              en: "Compression changes merged (penguin-harness PR #1491) with before/after scores on the retention benchmark",
+              zh: "压缩算法改动合入后，在 #62 的信息保留基准上比较修改前后的得分，并提交通过验收的对照报告。",
+              en: "After the compression changes are merged, submit an accepted report comparing scores before and after the change on the retention benchmark from #62.",
             },
             quests: [44],
-            requires: ["agent-memory-bench"],
+            requiresQuests: [62],
+            acceptedReport: null,
           },
           {
             id: "std-knowledge-plugin",

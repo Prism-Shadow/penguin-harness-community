@@ -37,6 +37,7 @@ export interface AtlasMedal {
   /** Listed Issue numbers the registry does not carry (yet). */
   unregistered: number[];
   requires: AtlasMedalRef[];
+  anyPrerequisite: boolean;
   unlocks: AtlasMedalRef[];
   prerequisiteTasks: { number: number; title: string; url?: string; completed: boolean }[];
   acceptedReport?: string | null;
@@ -135,10 +136,8 @@ export function researchAtlas(quests: QuestItem[], locale: Locale): Atlas {
           return { number, title: quest ? resolveText(quest.title, locale) : "", url: quest?.issueUrl, completed: quest?.status === "completed" };
         });
         const completed = tasks.filter((q) => q.status === "completed").length;
-        const ownResultAccepted = def.acceptedReport !== undefined
-          ? Boolean(def.acceptedReport)
-          : completed > 0 && (def.anyQuest || completed === numbers.length);
-        if (ownResultAccepted) accepted.add(def.id);
+        const tasksAccepted = completed > 0 && (def.anyQuest || completed === numbers.length);
+        if (tasksAccepted && (def.acceptedReport === undefined || def.acceptedReport)) accepted.add(def.id);
         built.set(def.id, {
           id: def.id,
           column: 0,
@@ -154,6 +153,7 @@ export function researchAtlas(quests: QuestItem[], locale: Locale): Atlas {
           prerequisiteTasks,
           acceptedReport: def.acceptedReport,
           requires: [],
+          anyPrerequisite: def.anyPrerequisite === true,
           unlocks: [],
           href: tasks[0]?.links[0].url ?? (quests[0]?.issueUrl.replace(/\/\d+$/, "") || "#"),
         });
@@ -171,7 +171,8 @@ export function researchAtlas(quests: QuestItem[], locale: Locale): Atlas {
     const parentStates = parents.map(resolveState);
     // Parallel outcomes share a column. Only an actual medal prerequisite advances a column.
     medal.column = 1 + Math.max(0, ...parents.map((parent) => built.get(parent)?.column ?? 0));
-    const ready = parentStates.every((state) => state === "lit") && medal.prerequisiteTasks.every((q) => q.completed);
+    const parentsReady = medal.anyPrerequisite ? parentStates.includes("lit") : parentStates.every((state) => state === "lit");
+    const ready = parentsReady && medal.prerequisiteTasks.every((q) => q.completed);
     medal.state = !ready ? "locked" : accepted.has(id) ? "lit" : "ready";
     visiting.delete(id);
     resolved.add(id);
