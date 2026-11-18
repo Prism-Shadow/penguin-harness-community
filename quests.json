@@ -1156,7 +1156,7 @@
       "issue_number": 108,
       "pr_number": null,
       "published_at": "2026-11-18T09:19:30Z",
-      "status": "open",
+      "status": "in_progress",
       "domain": "Benchmark",
       "exp": 100,
       "target_repository": "https://github.com/Prism-Shadow/penguin-harness-benchmark",
@@ -1171,7 +1171,7 @@
         "https://arxiv.org/abs/2611.20218",
         "https://github.com/Prism-Shadow/penguin-harness-community/blob/main/rfcs/RFC-0001-benchmark.zh.md"
       ],
-      "assignee": null,
+      "assignee": "yenanjing",
       "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/108",
       "linked_pr": null
     }
