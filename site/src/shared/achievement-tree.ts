@@ -96,13 +96,13 @@ export const ACHIEVEMENT_TREE: RouteDef[] = [
         name: { zh: "优化方法", en: "Optimisation methods" },
         medals: [
           {
-            id: "infra-method", name: { zh: "优化方法可运行", en: "Runnable optimisation method" },
+            id: "infra-method", name: { zh: "优化插件端到端验证", en: "Optimisation plugin validated end to end" },
             intent: { zh: "InfraRSI 能修改训练配置与代码并运行候选方案。", en: "InfraRSI can modify a training configuration or code and execute a candidate." },
             evidence: { zh: "InfraRSI 插件通过验收，提供一次端到端运行的配置与记录。", en: "An accepted InfraRSI plugin with the configuration and logs for an end-to-end run." },
             quests: [71],
           },
           {
-            id: "infra-autoresearch", name: { zh: "双层自动研究系统验证", en: "Two-level research system validated" },
+            id: "infra-autoresearch", name: { zh: "双层研究循环验证", en: "Two-level research loop validated" },
             intent: { zh: "在训练或算子优化任务上验证 ERNIE Evolve 双层研究循环。", en: "Verify ERNIE Evolve’s two-level research loop on a training or kernel optimisation task." },
             evidence: { zh: "在 NanoChat、NanoGPT Speedrun 或 SOL-ExecBench 中任选一项跑通端到端实验，提交候选树演化记录和相对基线的改进结果。", en: "Run an end-to-end experiment on NanoChat, NanoGPT Speedrun or SOL-ExecBench. Submit the candidate tree history and a verified improvement over the baseline." },
             quests: [86], requires: ["infra-train-bench", "infra-kernel-bench"], anyPrerequisite: true,
@@ -231,7 +231,7 @@ export const ACHIEVEMENT_TREE: RouteDef[] = [
           },
           {
             id: "agent-memory-bench",
-            name: { zh: "记忆与压缩基准可复现", en: "Memory arena reproducible" },
+            name: { zh: "记忆与上下文压缩基准接入", en: "Memory & context compaction benchmarks" },
             intent: {
               zh: "在相同的检索与压缩任务上比较不同记忆方案。",
               en: "Compare memory approaches on the same retrieval and compression tasks.",
@@ -329,7 +329,7 @@ export const ACHIEVEMENT_TREE: RouteDef[] = [
         medals: [
           {
             id: "prod-turing-bench",
-            name: { zh: "TuringBench 拟人度评测", en: "TuringBench human-likeness benchmark" },
+            name: { zh: "TuringBench 基准接入", en: "TuringBench integration" },
             intent: {
               zh: "用 TuringBench 评估生成内容和交互行为与人类表现的相似度。",
               en: "Use TuringBench to measure how closely generated content and interactions resemble human work.",
@@ -377,7 +377,7 @@ export const ACHIEVEMENT_TREE: RouteDef[] = [
           },
           {
             id: "method-search-pack",
-            name: { zh: "候选代码搜索", en: "Candidate code search" },
+            name: { zh: "候选代码生成与评测", en: "Candidate code generation and evaluation" },
             intent: {
               zh: "扩展候选方案搜索能力，支持 DGM 的多分支搜索和 Meta-Harness 的迭代优化。",
               en: "Extend candidate search to DGM's branching search and Meta-Harness's iterative optimization.",
@@ -599,7 +599,7 @@ export const ACHIEVEMENT_TREE: RouteDef[] = [
     branches: [
       {
         id: "protocol",
-        name: { zh: "标准与接口", en: "Standards & APIs" },
+        name: { zh: "接口规范", en: "Interface specifications" },
         medals: [
           {
             id: "std-simple-api",
@@ -656,7 +656,7 @@ export const ACHIEVEMENT_TREE: RouteDef[] = [
           },
           {
             id: "prod-writing-bench",
-            name: { zh: "写作质量基准可复现", en: "Writing arena reproducible" },
+            name: { zh: "写作质量基准接入", en: "Writing quality benchmark integrated" },
             intent: {
               zh: "长文与文档写得好不好，能打分",
               en: "Long-form and documentation quality can be scored",
@@ -697,7 +697,7 @@ export const ACHIEVEMENT_TREE: RouteDef[] = [
           },
           {
             id: "std-safety",
-            name: { zh: "安全边界与进化锁定", en: "Safety limits & evolution lock" },
+            name: { zh: "部署后进化锁定方案", en: "Post-deployment evolution lock design" },
             intent: {
               zh: "企业把自进化部署进生产前，知道风险边界在哪",
               en: "Before self-evolution ships to production, the risk boundary is known",
