@@ -1273,3 +1273,23 @@ Use the fixed [Train package](https://github.com/Yu-Yang-Li/penguin-harness-benc
     assignee: null
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/104"
     linked_pr: null
+
+  - id: "RSI-Q051"
+    issue_number: 108
+    published_at: "2026-11-18T09:19:30Z"
+    status: "open"
+    domain: "Benchmark"
+    exp: 100
+    target_repository: "https://github.com/Prism-Shadow/penguin-harness-benchmark"
+    related_issue: null
+    title: "Integrate SWE-CoWork"
+    title_zh: "接入 SWE-CoWork Benchmark"
+    description: "Integrate all 101 SWE-CoWork tasks into `penguin-harness-benchmark` following RFC-0001. Preserve the upstream collaboration environment and grading procedure. Select three distinct tasks, run each once with PenguinHarness, and list their task IDs and scores in the PR."
+    description_zh: "按 RFC-0001 将 SWE-CoWork 的全部 101 道题接入 `penguin-harness-benchmark`，保留上游的协作环境和评分方式。从中抽取 3 道题，用 PenguinHarness 各跑一次，并在 PR 中列出每道题的 ID 和得分。"
+    references:
+      - "https://github.com/TokenWave-AI/swe-cowork-bench"
+      - "https://arxiv.org/abs/2611.20218"
+      - "https://github.com/Prism-Shadow/penguin-harness-community/blob/main/rfcs/RFC-0001-benchmark.zh.md"
+    assignee: null
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/108"
+    linked_pr: null
