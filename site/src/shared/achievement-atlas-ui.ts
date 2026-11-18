@@ -1,4 +1,5 @@
 import type { AtlasMedal, AtlasMedalRef, MedalState } from "./achievements";
+import { medalRows } from "./achievement-atlas-layout";
 
 type Model = { medals: AtlasMedal[]; statuses: Record<MedalState, string>; words: Record<string, string>; zoom: { initial: number; min: number; max: number } };
 type Box = { l: number; r: number; t: number; b: number; cy: number };
@@ -177,6 +178,7 @@ export function initAtlas(root: HTMLDetailsElement) {
       !filter || filter === "all" || (from.state === filter && to.state === filter)
     );
     const positions = new Map<string, Box>();
+    const inlineEdges = new Map<string, string>();
     visibleBranches.forEach((branch, i) => {
       const d = routes[i];
       for (const lane of branch.querySelectorAll<HTMLElement>("[data-lane]")) {
@@ -192,31 +194,23 @@ export function initAtlas(root: HTMLDetailsElement) {
         const leaves = lane.querySelector<HTMLElement>("[data-leaves]")!;
         const firstColumnX = box(leaves).l;
         const forkX = f((titleRight + firstColumnX) / 2);
-        const rows = new Map<number, Box[]>();
+        const rowEnds = new Map<number, string>();
+        const attachments = [titleY];
+        const memberPaths = [`M${titleRight} ${titleY} H${forkX}`];
         for (const item of leaves.querySelectorAll<HTMLElement>(":scope > li:not([hidden])")) {
           const id = item.querySelector<HTMLElement>("[data-record]")!.dataset.record!;
           const card = box(item);
           positions.set(id, card);
-          const top = f(card.t);
-          if (!rows.has(top)) rows.set(top, []);
-          rows.get(top)!.push(card);
-        }
-        const attachments = [titleY];
-        const memberPaths = [`M${titleRight} ${titleY} H${forkX}`];
-        for (const [top, row] of rows) {
-          const first = row[0];
-          if (row.length === 1 && Math.abs(first.l - firstColumnX) < 1) {
-            const y = f(first.cy);
-            memberPaths.push(`M${forkX} ${y} H${f(first.l)}`);
-            attachments.push(y);
+          const row = Number(item.style.gridRowStart);
+          const parent = rowEnds.get(row);
+          if (parent) {
+            inlineEdges.set(id, parent);
           } else {
-            // Share one rail in the row gap, leaving card sides free for prerequisite arrows.
-            const y = f(top - 6);
-            const centres = row.map((card) => f((card.l + card.r) / 2));
-            memberPaths.push(`M${forkX} ${y} H${Math.max(...centres)}`);
-            for (const x of centres) memberPaths.push(`M${x} ${y} V${top}`);
+            const y = f(card.cy);
+            memberPaths.push(`M${forkX} ${y} H${f(card.l)}`);
             attachments.push(y);
           }
+          rowEnds.set(row, id);
         }
         memberPaths.push(`M${forkX} ${Math.min(...attachments)} V${Math.max(...attachments)}`);
         path(memberPaths.join(" "), "w-membership");
@@ -226,12 +220,16 @@ export function initAtlas(root: HTMLDetailsElement) {
 
     // Follow the gaps between cards, including across categories. Only visible endpoints are linked.
     const gap = parseFloat(getComputedStyle(canvas).getPropertyValue("--leaf-gap"));
+    for (const [child, parent] of inlineEdges) {
+      if (!visibleEdges.some(({ from, to }) => from.id === parent && to.id === child))
+        visibleEdges.push({ from: byId.get(parent)!, to: byId.get(child)! });
+    }
     for (const { from, to } of visibleEdges) {
       const source = positions.get(from.id), target = positions.get(to.id);
       if (!source || !target || source.r >= target.l) continue;
       const x1 = f(source.r + gap / 2), x2 = f(target.l - gap / 2);
       const approachY = f(target.t - 4);
-      const turns = Math.abs(x1 - x2) < 1
+      const turns = inlineEdges.get(to.id) === from.id ? "" : Math.abs(x1 - x2) < 1
         ? `H${x2} V${f(target.cy)}`
         : `H${x1} V${approachY} H${x2} V${f(target.cy)}`;
       const d = `M${f(source.r)} ${f(source.cy)} ${turns} H${f(target.l - 1)}`;
@@ -269,8 +267,12 @@ export function initAtlas(root: HTMLDetailsElement) {
           total += 1;
         }
       }
-      for (const lane of lanes)
-        lane.hidden = !lane.querySelector<HTMLElement>("[data-leaves] > li:not([hidden])");
+      for (const lane of lanes) {
+        const shown = Array.from(lane.querySelectorAll<HTMLElement>("li:not([hidden]) [data-record]"));
+        const rows = medalRows(shown.map((card) => byId.get(card.dataset.record!)!));
+        for (const card of shown) card.parentElement!.style.gridRowStart = String(rows.get(card.dataset.record!));
+        lane.hidden = shown.length === 0;
+      }
       for (const branch of branches)
         branch.hidden = !branch.querySelector("[data-lane]:not([hidden])");
       viewport.scrollTo(0, 0);

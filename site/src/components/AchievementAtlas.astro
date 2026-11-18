@@ -3,6 +3,7 @@ import "../styles/achievement-atlas.css";
 import type { Locale } from "../shared/i18n";
 import { QUESTS } from "../shared/community";
 import { ATLAS_STATES, researchAtlas } from "../shared/achievements";
+import { medalRows } from "../shared/achievement-atlas-layout";
 import Logo from "./Logo.astro";
 interface Props { locale: Locale }
 const { locale } = Astro.props;
@@ -113,6 +114,7 @@ const ZOOM = { initial: 0.8, min: 0.5, max: 1.25 };
                 <div class="lanes">
                   {route.branches.map((branch) => {
                     const labelId = `atlas-${route.id}-${branch.id}`;
+                    const rows = medalRows(branch.medals);
                     return (
                       <section class="lane" data-lane={branch.id} aria-labelledby={labelId}>
                         <h4 class="lane-head" id={labelId} data-lane-head>
@@ -121,7 +123,7 @@ const ZOOM = { initial: 0.8, min: 0.5, max: 1.25 };
                         </h4>
                         <ul class="leaves" data-leaves>
                           {branch.medals.map((m) => (
-                            <li style={`grid-column-start: ${m.column}`}>
+                            <li style={`grid-column-start: ${m.column}; grid-row-start: ${rows.get(m.id)}`}>
                               <a class="leaf" data-record={m.id} data-state={m.state} href={m.href} aria-label={`${m.name} · ${statuses[m.state]}`} title={`${m.name} · ${statuses[m.state]}\n${m.intent}`}>
                                 <span class="badge" aria-hidden="true">
                                   <svg viewBox="0 0 16 16"><path d={m.state === "lit" ? STAR : m.state === "ready" ? UNLOCK : LOCK} /></svg>
