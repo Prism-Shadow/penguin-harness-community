@@ -3,12 +3,11 @@ import { ACHIEVEMENT_TREE, type MedalDef, type Text } from "./achievement-tree";
 import type { Locale } from "./i18n";
 
 /**
- * A medal is lit only when every quest it lists is registered as completed on the Task Board.
- * It is ready while its prerequisites are lit, and locked until they are.
+ * Prerequisites unlock a medal. The result is awarded on task acceptance or an independently accepted report.
  */
 export type MedalState = "lit" | "ready" | "locked";
 
-/** Cards hang in this order inside a branch: what the community has, what it can push, what is still shut. */
+/** Display order for the state filters and progress indicators. */
 export const ATLAS_STATES = ["lit", "ready", "locked"] as const satisfies readonly MedalState[];
 
 export interface AtlasLink { label: string; url: string }
@@ -25,6 +24,7 @@ export interface AtlasTask {
 
 export interface AtlasMedal {
   id: string;
+  column: number;
   name: string;
   intent: string;
   evidence: string;
@@ -32,16 +32,16 @@ export interface AtlasMedal {
   state: MedalState;
   routeTitle: string;
   branchTitle: string;
-  /** Registered quests that light this medal, newest Issue first. */
+  /** Related tasks, newest Issue first. */
   tasks: AtlasTask[];
   /** Listed Issue numbers the registry does not carry (yet). */
   unregistered: number[];
   requires: AtlasMedalRef[];
   unlocks: AtlasMedalRef[];
-  /** Where a plain click goes: the first quest's Issue. */
+  prerequisiteTasks: { number: number; title: string; url?: string; completed: boolean }[];
+  acceptedReport?: string | null;
+  /** Link used outside the interactive details view. */
   href: string;
-  /** Card shorthand for the quests behind the medal, e.g. `#83 +1`. */
-  tag: string;
 }
 
 export interface AtlasBranch {
@@ -109,44 +109,77 @@ export function researchAtlas(quests: QuestItem[], locale: Locale): Atlas {
     };
   };
 
-  // Pass 1: resolve quests and light the medals the registry already settles.
+  // Resolve each milestone’s own acceptance independently of its prerequisites.
+  const accepted = new Set<string>();
   const defs = new Map<string, MedalDef>();
   const built = new Map<string, AtlasMedal>();
   for (const route of ACHIEVEMENT_TREE)
     for (const branch of route.branches)
       for (const def of branch.medals) {
         defs.set(def.id, def);
-        const tasks = def.quests
+        const template = def.recurringQuest && byNumber.get(def.recurringQuest);
+        // The registry clones standing tasks by domain and English title.
+        const instances = template && template.title.en
+          ? quests.filter((q) => q.recurring && q.domain === template.domain && q.title.en === template.title.en)
+          : [];
+        const numbers = [...new Set([...def.quests, ...instances.map((q) => q.issueNumber)])];
+        const tasks = numbers
           .map((n) => byNumber.get(n))
           .filter((q): q is QuestItem => !!q)
           .map(describe)
           .sort((a, b) => b.number - a.number);
         for (const task of tasks) claimed.add(task.number);
         const unregistered = def.quests.filter((n) => !byNumber.has(n));
-        // Only the registry may light a medal, and only when it carries every quest the medal lists.
-        const lit = def.quests.length > 0 && unregistered.length === 0 && tasks.every((q) => q.status === "completed");
+        const prerequisiteTasks = (def.requiresQuests ?? []).map((number) => {
+          const quest = byNumber.get(number);
+          return { number, title: quest ? resolveText(quest.title, locale) : "", url: quest?.issueUrl, completed: quest?.status === "completed" };
+        });
+        const completed = tasks.filter((q) => q.status === "completed").length;
+        const ownResultAccepted = def.acceptedReport !== undefined
+          ? Boolean(def.acceptedReport)
+          : completed > 0 && (def.anyQuest || completed === numbers.length);
+        if (ownResultAccepted) accepted.add(def.id);
         built.set(def.id, {
           id: def.id,
+          column: 0,
           name: say(def.name),
           intent: say(def.intent),
           evidence: say(def.evidence),
           ...(def.pending ? { pending: say(def.pending) } : {}),
-          state: lit ? "lit" : "locked",
+          state: "locked",
           routeTitle: say(route.name),
           branchTitle: say(branch.name),
           tasks,
           unregistered,
+          prerequisiteTasks,
+          acceptedReport: def.acceptedReport,
           requires: [],
           unlocks: [],
           href: tasks[0]?.links[0].url ?? (quests[0]?.issueUrl.replace(/\/\d+$/, "") || "#"),
-          tag: def.quests.length ? `#${def.quests[0]}${def.quests.length > 1 ? ` +${def.quests.length - 1}` : ""}` : "",
         });
       }
 
-  // Pass 2: a medal that is not lit is ready once every prerequisite is lit, and locked until then.
+  // Resolve dependencies before dependants, regardless of their order on the canvas.
+  const resolved = new Set<string>();
+  const visiting = new Set<string>();
+  function resolveState(id: string): MedalState {
+    const medal = built.get(id);
+    if (!medal || visiting.has(id)) return "locked";
+    if (resolved.has(id)) return medal.state;
+    visiting.add(id);
+    const parents = defs.get(id)!.requires ?? [];
+    const parentStates = parents.map(resolveState);
+    // Parallel outcomes share a column. Only an actual medal prerequisite advances a column.
+    medal.column = 1 + Math.max(0, ...parents.map((parent) => built.get(parent)?.column ?? 0));
+    const ready = parentStates.every((state) => state === "lit") && medal.prerequisiteTasks.every((q) => q.completed);
+    medal.state = !ready ? "locked" : accepted.has(id) ? "lit" : "ready";
+    visiting.delete(id);
+    resolved.add(id);
+    return medal.state;
+  }
+  for (const id of built.keys()) resolveState(id);
   for (const [id, medal] of built) {
     const requires = defs.get(id)!.requires ?? [];
-    if (medal.state !== "lit") medal.state = requires.every((r) => built.get(r)?.state === "lit") ? "ready" : "locked";
     for (const required of requires) {
       const other = built.get(required);
       if (!other) continue;
@@ -154,16 +187,11 @@ export function researchAtlas(quests: QuestItem[], locale: Locale): Atlas {
       other.unlocks.push({ id: medal.id, name: medal.name, state: medal.state });
     }
   }
-  // Prerequisite states are read back after every medal has settled.
-  for (const medal of built.values()) {
-    for (const ref of medal.requires) ref.state = built.get(ref.id)!.state;
-    for (const ref of medal.unlocks) ref.state = built.get(ref.id)!.state;
-  }
-
-  const order = (m: AtlasMedal) => ATLAS_STATES.indexOf(m.state);
   const routes: AtlasRoute[] = ACHIEVEMENT_TREE.map((route) => {
     const branches: AtlasBranch[] = route.branches.map((branch) => {
-      const medals = branch.medals.map((d) => built.get(d.id)!).sort((a, b) => order(a) - order(b));
+      const medals = branch.medals.map((d) => built.get(d.id)!).sort((a, b) =>
+        a.column - b.column || ATLAS_STATES.indexOf(a.state) - ATLAS_STATES.indexOf(b.state)
+      );
       return { id: branch.id, title: say(branch.name), total: medals.length, lit: medals.filter((m) => m.state === "lit").length, medals };
     });
     const medals = branches.flatMap((b) => b.medals);

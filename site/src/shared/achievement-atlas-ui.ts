@@ -12,23 +12,16 @@ export function initAtlas(root: HTMLDetailsElement) {
   const branches = Array.from(root.querySelectorAll<HTMLElement>("[data-domain]"));
   const cards = Array.from(root.querySelectorAll<HTMLAnchorElement>("[data-record]"));
   const dialog = get<HTMLDialogElement>("detail");
-  const stage = get("stage"), viewport = get("scroll"), canvas = get("canvas"), wires = get("wires") as unknown as SVGSVGElement;
+  const stage = get("stage"), viewport = get("scroll"), canvas = get("canvas");
+  const paths = root.querySelector<SVGGElement>("[data-paths]")!;
   const panTools = get("pan-tools");
   const prev = get<HTMLButtonElement>("pan-left"), next = get<HTMLButtonElement>("pan-right");
   const reduceMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const canHover = window.matchMedia("(any-hover: hover)");
 
   /* ---------- Panning ---------- */
   // Current CSS zoom of the canvas; rects are in zoomed pixels, layout (and the SVG wires) in canvas pixels.
   const scaleOf = () => canvas.getBoundingClientRect().width / canvas.offsetWidth || 1;
-  // Scroll offset at which the branch column reaches the left edge and freezes (measured in measurePin).
-  let pinAt = Infinity;
-  function measurePin() {
-    const lane = root.querySelector<HTMLElement>("[data-lane]:not([hidden])");
-    if (!lane) return;
-    const key = lane.querySelector<HTMLElement>(".lane-key")!;
-    const left = lane.getBoundingClientRect().left - canvas.getBoundingClientRect().left;
-    pinAt = left - parseFloat(getComputedStyle(key).paddingLeft) * scaleOf();
-  }
   function syncPan() {
     const end = viewport.scrollWidth - viewport.clientWidth, bottom = viewport.scrollHeight - viewport.clientHeight;
     panTools.hidden = end <= 1;
@@ -38,7 +31,6 @@ export function initAtlas(root: HTMLDetailsElement) {
     stage.toggleAttribute("data-more-right", viewport.scrollLeft < end - 1);
     stage.toggleAttribute("data-more-up", viewport.scrollTop > 1);
     stage.toggleAttribute("data-more-down", viewport.scrollTop < bottom - 1);
-    stage.toggleAttribute("data-pinned", viewport.scrollLeft > pinAt);
   }
   const pan = (dir: number) => viewport.scrollBy({ left: dir * viewport.clientWidth * 0.72, behavior: reduceMotion() ? "instant" : "smooth" });
   prev.addEventListener("click", () => pan(-1));
@@ -127,7 +119,7 @@ export function initAtlas(root: HTMLDetailsElement) {
       get("live").textContent = `${Math.round(zoom * 100)}%`;
   });
 
-  /* ---------- Wires: trunk, forks and rails are drawn from the laid-out nodes ---------- */
+  /* ---------- Wires: the trunk groups lanes, arrows connect dependent medals ---------- */
   function drawWires() {
     const c = canvas.getBoundingClientRect();
     if (!root.open || !c.width) return;
@@ -137,13 +129,17 @@ export function initAtlas(root: HTMLDetailsElement) {
       return { l: (r.left - c.left) / k, r: (r.right - c.left) / k, t: (r.top - c.top) / k, b: (r.bottom - c.top) / k, cy: ((r.top + r.bottom) / 2 - c.top) / k };
     };
     const parts: string[] = [];
-    const path = (d: string, cls: string, state = "") => parts.push(`<path class="${cls}"${state ? ` data-state="${state}"` : ""} d="${d}"/>`);
+    const path = (d: string, cls: string) => parts.push(`<path class="${cls}" d="${d}"/>`);
     const dot = (x: number, y: number, cls: string) => parts.push(`<circle class="${cls}" cx="${x}" cy="${y}" r="3.5"/>`);
     const f = (n: number) => Math.round(n * 10) / 10;
 
     // Centre the root on the midpoint of the first and last route nodes (a transform, so layout is untouched).
     const hubEl = get("hub");
-    const routes = branches.map((b) => box(b.querySelector("[data-domain-node]")!));
+    const visibleBranches = branches.filter((b) => !b.hidden);
+    hubEl.hidden = !visibleBranches.length;
+    if (hubEl.hidden) { paths.replaceChildren(); return; }
+    hubEl.style.gridRow = `1 / span ${visibleBranches.length}`;
+    const routes = visibleBranches.map((b) => box(b.querySelector("[data-domain-node]")!));
     const top = f(routes[0].cy), bottom = f(routes[routes.length - 1].cy), hy = f((top + bottom) / 2);
     hubEl.style.transform = "";
     hubEl.style.transform = `translateY(${f(hy - box(hubEl.querySelector(".medal")!).cy)}px)`;
@@ -159,41 +155,78 @@ export function initAtlas(root: HTMLDetailsElement) {
     }).join(" "), "w-twig");
     dot(sx, hy, "w-knot");
 
-    const BUS = 8; // gap between the shared bus and the top of the medal cards
-    branches.forEach((branch, i) => {
+    const focused = canvas.querySelector<HTMLElement>("[data-record]:focus-visible");
+    const hovered = canHover.matches ? canvas.querySelector<HTMLElement>("[data-record]:hover") : null;
+    const active = dialog.open ? undefined : (focused ?? hovered)?.dataset.record;
+    const selected = active ? byId.get(active) : undefined;
+    const edges = selected ? [
+      ...selected.requires.map((parent) => ({ from: parent, to: selected })),
+      ...selected.unlocks.map((child) => ({ from: selected, to: child })),
+    ] : [];
+    const filter = root.dataset.filter;
+    const visibleEdges = edges.filter(({ from, to }) =>
+      !filter || filter === "all" || (from.state === filter && to.state === filter)
+    );
+    const inspecting = new Set(visibleEdges.flatMap(({ from, to }) => [from.id, to.id]));
+    const positions = new Map<string, Box>();
+    visibleBranches.forEach((branch, i) => {
       const d = routes[i];
       for (const lane of branch.querySelectorAll<HTMLElement>("[data-lane]")) {
         if (lane.hidden) continue;
         const head = lane.querySelector<HTMLElement>("[data-lane-head]")!;
-        // Branch heads stick while panning, so take x from the lane itself rather than the (possibly stuck) head.
-        const laneBox = box(lane), py = f(box(head).cy), hl = f(laneBox.l), hr = f(laneBox.l + head.offsetWidth);
-        const mx = f((d.r + hl) / 2);
-        path(`M${f(d.r)} ${f(d.cy)} C${mx} ${f(d.cy)} ${mx} ${py} ${hl} ${py}`, "w-fork");
-        const items = Array.from(lane.querySelectorAll<HTMLElement>("[data-leaves] > li")).filter((li) => !li.hidden);
-        const states = items.map((li) => li.querySelector<HTMLElement>("[data-record]")!.dataset.state!);
-        const boxes = items.map(box);
-        if (boxes.length === 0) continue;
-        if (boxes.length === 1) {
-          // One medal: a single line that stops at its edge, dashed while the medal is locked.
-          path(`M${hr} ${py} H${f(boxes[0].l)}`, "w-bus", states[0]);
-          continue;
+        // Anchor the tree at the category's layout position even when its label sticks during panning.
+        const heading = box(head);
+        const titleX = f(box(lane).l), titleY = f(heading.cy);
+        const titleRight = f(titleX + heading.r - heading.l);
+        const mx = f((d.r + titleX) / 2);
+        path(`M${f(d.r)} ${f(d.cy)} C${mx} ${f(d.cy)} ${mx} ${titleY} ${titleX} ${titleY}`, "w-fork");
+        const leaves = lane.querySelector<HTMLElement>("[data-leaves]")!;
+        const firstColumnX = box(leaves).l;
+        const forkX = f((titleRight + firstColumnX) / 2);
+        const attachments = [titleY];
+        const memberPaths: string[] = [];
+        let inspectingLane = false;
+        for (const item of leaves.querySelectorAll<HTMLElement>(":scope > li:not([hidden])")) {
+          const id = item.querySelector<HTMLElement>("[data-record]")!.dataset.record!;
+          const card = box(item);
+          positions.set(id, card);
+          if (inspecting.has(id)) inspectingLane = true;
+          // Later columns take their membership line at the top, leaving the left edge for unlock arrows.
+          const firstColumn = Math.abs(card.l - firstColumnX) < 1;
+          const y = f(firstColumn ? card.cy : card.t - 6);
+          const end = firstColumn ? `H${f(card.l)}` : `H${f((card.l + card.r) / 2)} V${f(card.t)}`;
+          memberPaths.push(`M${forkX} ${y} ${end}`);
+          attachments.push(y);
         }
-        // Several medals: a shared bus above the row and one stem per card, so siblings read as parallel, not as a chain.
-        const busY = f(boxes[0].t - BUS), x0 = f((hr + boxes[0].l) / 2), rr = Math.min(8, x0 - hr, py - busY);
-        const last = boxes[boxes.length - 1];
-        path(`M${hr} ${py} H${f(x0 - rr)} Q${x0} ${py} ${x0} ${f(py - rr)} V${f(busY + rr)} Q${x0} ${busY} ${f(x0 + rr)} ${busY} H${f((last.l + last.r) / 2)}`, "w-bus");
-        boxes.forEach((k, j) => path(`M${f((k.l + k.r) / 2)} ${busY} V${f(k.t)}`, "w-bus", states[j]));
+        // In the lanes being inspected, give the unlock arrows their own space.
+        if (!inspectingLane) {
+          memberPaths.push(`M${titleRight} ${titleY} H${forkX} M${forkX} ${Math.min(...attachments)} V${Math.max(...attachments)}`);
+          path(memberPaths.join(" "), "w-membership");
+        }
       }
       dot(f(d.l), f(d.cy), "w-joint");
     });
 
-    wires.innerHTML = parts.join("");
+    // Follow the gaps between cards, including across categories. Only visible endpoints are linked.
+    const gap = parseFloat(getComputedStyle(canvas).getPropertyValue("--leaf-gap"));
+    for (const { from, to } of visibleEdges) {
+      const source = positions.get(from.id), target = positions.get(to.id);
+      if (!source || !target || source.r >= target.l) continue;
+      const x1 = f(source.r + gap / 2), x2 = f(target.l - gap / 2);
+      const approachY = f(target.t - 4);
+      const turns = Math.abs(x1 - x2) < 1
+        ? `H${x2} V${f(target.cy)}`
+        : `H${x1} V${approachY} H${x2} V${f(target.cy)}`;
+      const d = `M${f(source.r)} ${f(source.cy)} ${turns} H${f(target.l - 1)}`;
+      parts.push(`<path class="w-dependency" data-from="${from.id}" data-to="${to.id}" data-state="${from.state}" d="${d}" marker-end="url(#atlas-arrow)"/>`);
+    }
+    paths.innerHTML = parts.join("");
   }
 
   let queued = 0;
   const refresh = () => {
     cancelAnimationFrame(queued);
-    queued = requestAnimationFrame(() => { drawWires(); measurePin(); syncPan(); });
+    queued = requestAnimationFrame(() => { drawWires(); syncPan(); });
   };
   const observer = new ResizeObserver(refresh);
   observer.observe(viewport);
@@ -208,14 +241,21 @@ export function initAtlas(root: HTMLDetailsElement) {
       const state = button.dataset.filter!;
       filters.forEach((b) => b.setAttribute("aria-pressed", String(b === button)));
       root.dataset.filter = state;
+      const visibleColumns = [...new Set(medals.filter((m) => state === "all" || m.state === state).map((m) => m.column))].sort((a, b) => a - b);
       let total = 0;
       for (const card of cards) {
         const hide = state !== "all" && card.dataset.state !== state;
         card.parentElement!.hidden = hide;
-        if (!hide) total += 1;
+        if (!hide) {
+          const column = byId.get(card.dataset.record!)!.column;
+          card.parentElement!.style.gridColumnStart = String(visibleColumns.indexOf(column) + 1);
+          total += 1;
+        }
       }
       for (const lane of lanes)
         lane.hidden = !lane.querySelector<HTMLElement>("[data-leaves] > li:not([hidden])");
+      for (const branch of branches)
+        branch.hidden = !branch.querySelector("[data-lane]:not([hidden])");
       viewport.scrollTo(0, 0);
       refresh();
       get("live").textContent = `${state === "all" ? words.all : statuses[state as MedalState]} · ${total} ${words.results}`;
@@ -243,7 +283,11 @@ export function initAtlas(root: HTMLDetailsElement) {
       const b = document.createElement("button");
       b.type = "button";
       b.dataset.state = other.state;
-      b.textContent = `${statuses[other.state]} · ${other.name}`;
+      const status = document.createElement("span");
+      status.className = "pill";
+      status.dataset.state = other.state;
+      status.textContent = statuses[other.state];
+      b.append(other.name + " ", status);
       b.addEventListener("click", () => show(other));
       group.append(b);
     }
@@ -260,13 +304,23 @@ export function initAtlas(root: HTMLDetailsElement) {
     get("evidence").textContent = m.evidence;
 
     const note = get("note");
-    const notes = [m.pending, m.unregistered.length ? `${m.unregistered.map((n) => "#" + n).join(" ")} ${words.unregistered}` : ""].filter(Boolean);
+    const notes = [m.acceptedReport === null ? words.awaitingReport : "", m.pending, m.unregistered.length ? `${m.unregistered.map((n) => "#" + n).join(" ")} ${words.unregistered}` : ""].filter(Boolean);
     note.hidden = notes.length === 0;
     note.textContent = notes.join(" · ");
 
     // The quests that light it, each with its Task Board status.
     const facts = get("facts");
     facts.replaceChildren();
+    if (m.acceptedReport) facts.append(chip(words.report, m.acceptedReport));
+    if (m.prerequisiteTasks.length) {
+      const list = document.createElement("div");
+      list.className = "quests";
+      for (const task of m.prerequisiteTasks) {
+        const text = `#${task.number} ${task.title} · ${task.completed ? words.accepted : words.pendingTask}`;
+        list.append(task.url ? chip(text, task.url) : document.createTextNode(text));
+      }
+      facts.append(label(words.requiredTasks), list);
+    }
     if (m.tasks.length) {
       const list = document.createElement("div");
       list.className = "quests";
@@ -287,13 +341,15 @@ export function initAtlas(root: HTMLDetailsElement) {
     }
 
     const related = get("neighbors");
-    related.replaceChildren(...relationGroup(words.needs, m.requires), ...relationGroup(words.unlocks, m.unlocks));
+    const prerequisiteTitle = m.state === "locked" ? words.unlockCondition : words.needs;
+    related.replaceChildren(...relationGroup(prerequisiteTitle, m.requires), ...relationGroup(words.unlocks, m.unlocks));
 
     if (!dialog.open) dialog.showModal();
     else get("close").focus({ preventScroll: true });
   }
 
   for (const a of cards) {
+    for (const event of ["pointerenter", "pointerleave", "focus", "blur"]) a.addEventListener(event, refresh);
     a.setAttribute("aria-haspopup", "dialog");
     a.addEventListener("click", (e) => {
       if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
@@ -305,4 +361,26 @@ export function initAtlas(root: HTMLDetailsElement) {
   let backdrop = false;
   dialog.addEventListener("pointerdown", (e) => { backdrop = e.target === dialog; });
   dialog.addEventListener("click", (e) => { if (backdrop && e.target === dialog) dialog.close(); });
+
+  // A category link should bring both the toolbar and the category inside the panned board into view.
+  function revealLinkedLane() {
+    const heading = document.getElementById(location.hash.slice(1));
+    if (!heading?.hasAttribute("data-lane-head") || !root.contains(heading)) return;
+    root.open = true;
+    if (heading.closest("[hidden]")) filters[0].click();
+    requestAnimationFrame(() => {
+      if (desktop.matches) {
+        root.scrollIntoView({ block: "start", behavior: "instant" });
+        const lane = heading.closest<HTMLElement>("[data-lane]")!;
+        const offset = lane.getBoundingClientRect().top - viewport.getBoundingClientRect().top;
+        viewport.scrollTo({ left: 0, top: viewport.scrollTop + offset - 12, behavior: "instant" });
+      } else {
+        viewport.scrollLeft = 0;
+        heading.scrollIntoView({ block: "center", behavior: "instant" });
+      }
+    });
+  }
+  window.addEventListener("hashchange", revealLinkedLane);
+  window.addEventListener("pageshow", revealLinkedLane);
+  if (document.readyState === "complete") revealLinkedLane();
 }

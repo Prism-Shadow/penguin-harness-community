@@ -13,23 +13,34 @@ const words = {
   all: t("全部", "All"),
   results: t("枚勋章", "medals"),
   lit: t("已点亮", "lit"),
-  evidence: t("点亮证据", "Evidence"),
-  quests: t("点亮任务", "Quests behind it"),
-  needs: t("需要先点亮", "Needs lighting first"),
-  unlocks: t("点亮后解锁", "Lights the way to"),
+  evidence: t("验收要求", "Acceptance criteria"),
+  quests: t("关联任务", "Related tasks"),
+  requiredTasks: t("前置任务", "Required tasks"),
+  accepted: t("已验收", "Accepted"),
+  pendingTask: t("待完成", "Pending"),
+  report: t("已验收的对照报告", "Accepted comparison report"),
+  awaitingReport: t("对照报告待验收", "Awaiting acceptance of the comparison report"),
+  needs: t("前置成果", "Prerequisites"),
+  unlockCondition: t("所需的前置勋章", "Required medals"),
+  unlocks: t("后续成果", "Unlocks"),
   contributor: t("贡献者", "Contributor"),
   unregistered: t("项任务尚未登记", "quests not on the board yet"),
+};
+const stateHelp = {
+  lit: t("前置成果和这枚勋章的验收要求都已满足。", "All prerequisites and this medal’s acceptance criteria have been met."),
+  ready: t("前置条件已满足，勋章本身待达成。", "All prerequisites are met. The medal itself is still to be earned."),
+  locked: t("还有前置成果未达成，点开勋章可查看。", "One or more prerequisites are still unmet. Open the medal to see which."),
 };
 // One icon per long-term route.
 const icons: Record<string, string> = {
   infra: "m3 7 9-5 9 5-9 5z M3 12l9 5 9-5 M3 17l9 5 9-5",
   agent: "M12 3.5a2 2 0 1 1 0 4 2 2 0 0 1 0-4M5.5 16a2 2 0 1 1 0 4 2 2 0 0 1 0-4M18.5 16a2 2 0 1 1 0 4 2 2 0 0 1 0-4M10.7 6.9 7 14M13.3 6.9 17 14M7.5 18h9",
   method: "M5 8a8 8 0 0 1 14-2l2 3m0-5v5h-5 M19 16a8 8 0 0 1-14 2l-2-3m0 5v-5h5",
-  standard: "m7 7-5 5 5 5m10-10 5 5-5 5M14 4l-4 16",
-  product: "M3 18h18 M5 14l4-5 4 3 6-7",
+  platform: "m7 7-5 5 5 5m10-10 5 5-5 5M14 4l-4 16",
 };
 const STAR = "M8 1.6l1.95 3.95 4.35.63-3.15 3.07.74 4.33L8 11.53l-3.89 2.05.74-4.33L1.7 6.18l4.35-.63z";
 const LOCK = "M5.6 7.4V5.9a2.4 2.4 0 0 1 4.8 0v1.5M4.6 7.4h6.8v5.2H4.6z";
+const UNLOCK = "M6 7.4V5.3a2.5 2.5 0 0 1 4.9-.7M4.6 7.4h6.8v5.2H4.6z";
 // Hub ring: the lit arc first, then what is ready to push, on a neutral track.
 const R = 35, C = 2 * Math.PI * R;
 const litArc = total ? (C * counts.lit) / total : 0;
@@ -50,8 +61,8 @@ const ZOOM = { initial: 0.8, min: 0.5, max: 1.25 };
       <div class="filters" role="group" aria-label={t("按勋章状态筛选", "Filter medals by state")}>
         <button type="button" data-filter="all" aria-pressed="true">{words.all}<b>{total}</b></button>
         {ATLAS_STATES.map((s) => (
-          <button type="button" data-filter={s} data-state={s} aria-pressed="false">
-            <svg class="glyph" viewBox="0 0 16 16" aria-hidden="true">{s === "lit" ? <path d={STAR} /> : s === "locked" ? <path d={LOCK} /> : <><circle cx="8" cy="8" r="5.25" /><path class="half" d="M8 2.75a5.25 5.25 0 0 1 0 10.5z" /></>}</svg>
+          <button type="button" data-filter={s} data-state={s} aria-pressed="false" title={stateHelp[s]}>
+            <svg class="glyph" viewBox="0 0 16 16" aria-hidden="true"><path d={s === "lit" ? STAR : s === "ready" ? UNLOCK : LOCK} /></svg>
             {statuses[s]}<b>{counts[s]}</b>
           </button>
         ))}
@@ -69,7 +80,10 @@ const ZOOM = { initial: 0.8, min: 0.5, max: 1.25 };
     <div class="stage" data-stage>
       <div class="viewport" data-scroll tabindex="0" role="region" aria-keyshortcuts="+ - 0" aria-label={t("社区成就树，从左往右浏览", "Community achievement tree, read from left to right")}>
         <div class="canvas" data-canvas>
-          <svg class="wires" data-wires aria-hidden="true"></svg>
+          <svg class="wires" data-wires aria-hidden="true">
+            <defs><marker id="atlas-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" orient="auto" markerUnits="userSpaceOnUse"><polygon points="0,0 8,4 0,8" fill="context-stroke" /></marker></defs>
+            <g data-paths></g>
+          </svg>
 
           <div class="hub" data-hub style={`grid-row: 1 / span ${atlas.routes.length}`}>
             <span class="medal">
@@ -99,22 +113,19 @@ const ZOOM = { initial: 0.8, min: 0.5, max: 1.25 };
                   {route.branches.map((branch) => {
                     const labelId = `atlas-${route.id}-${branch.id}`;
                     return (
-                      <section class="lane" data-lane={branch.id} data-count={branch.total} data-lit={branch.lit > 0 ? "" : null} data-complete={branch.lit === branch.total ? "" : null} aria-labelledby={labelId}>
-                        <div class="lane-key">
-                          <h4 class="lane-head" id={labelId} data-lane-head>
-                            <span class="lane-name">{branch.title}</span><b>{branch.lit}/{branch.total}</b>
-                          </h4>
-                        </div>
+                      <section class="lane" data-lane={branch.id} aria-labelledby={labelId}>
+                        <h4 class="lane-head" id={labelId} data-lane-head>
+                          <span class="lane-name">{branch.title}</span>
+                          <span class="lane-count">{t(`${branch.total} 枚勋章 · 已达成 ${branch.lit} 枚`, `${branch.total} ${branch.total === 1 ? "medal" : "medals"} · ${branch.lit} achieved`)}</span>
+                        </h4>
                         <ul class="leaves" data-leaves>
                           {branch.medals.map((m) => (
-                            <li>
-                              <a class="leaf" data-record={m.id} data-state={m.state} href={m.href} title={m.intent}>
+                            <li style={`grid-column-start: ${m.column}`}>
+                              <a class="leaf" data-record={m.id} data-state={m.state} href={m.href} aria-label={`${m.name} · ${statuses[m.state]}`} title={`${m.name} · ${statuses[m.state]}\n${m.intent}`}>
                                 <span class="badge" aria-hidden="true">
-                                  {m.state === "lit" && <svg viewBox="0 0 16 16"><path d={STAR} /></svg>}
-                                  {m.state === "ready" && <svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="5" /><path d="M8 3a5 5 0 0 1 0 10z" /></svg>}
-                                  {m.state === "locked" && <svg viewBox="0 0 16 16"><path d={LOCK} /></svg>}
+                                  <svg viewBox="0 0 16 16"><path d={m.state === "lit" ? STAR : m.state === "ready" ? UNLOCK : LOCK} /></svg>
                                 </span>
-                                <span class="leaf-title"><small>{m.tag}</small>{m.name}</span>
+                                <span class="leaf-title">{m.name}</span>
                               </a>
                             </li>
                           ))}
