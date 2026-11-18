@@ -1321,7 +1321,7 @@ Use the fixed [Train package](https://github.com/Yu-Yang-Li/penguin-harness-benc
     published_at: "2026-11-18T16:26:35Z"
     status: "open"
     domain: "Evaluation"
-    exp: 100
+    exp: 150
     target_repository: "https://github.com/Prism-Shadow/penguin-harness-benchmark"
     recurring: true
     related_issue: null
@@ -1335,7 +1335,7 @@ We selected 50 cases for Chinese-language replay. In Failure-Transparent Agents,
 
 Comment `/claim` here and register your model version, harness and tuning method in the target repository. Use the [pinned case files, split and rubrics](https://gist.github.com/Yu-Yang-Li/cc57204497f5738d59e9899636c0f180/df6a3ee68fa7f52cba32208074e53f48e179e750). Iterate on the 25 Train cases and freeze the resulting skill or strategy. Run the bare model, original harness and tuned harness three times each on the same 25 Test cases. Match model version, tool access, high reasoning effort, per-case budget and grading. Start a fresh conversation per case and save the first reply before delivering its follow-up event.
 
-For each run report first replies that accurately state progress and blockers (out of 25) and follow-up events handled correctly (out of 3). Save outputs and scores by configuration, run, case and stage so an interrupted run can resume. Submit per-case results, changes to the skill or strategy, reproduction steps, and separate tuning and evaluation time, tokens and costs. Link the results PR to this issue. Each accepted independent evaluation earns 100 EXP. [Evaluation workflow](https://github.com/Prism-Shadow/penguin-harness-community/blob/main/workflow/evaluation.zh.md)"
+For each run report first replies that accurately state progress and blockers (out of 25) and follow-up events handled correctly (out of 3). Save outputs and scores by configuration, run, case and stage so an interrupted run can resume. Submit per-case results, changes to the skill or strategy, reproduction steps, and separate tuning and evaluation time, tokens and costs. Link the results PR to this issue. Each accepted independent evaluation earns 150 EXP. [Evaluation workflow](https://github.com/Prism-Shadow/penguin-harness-community/blob/main/workflow/evaluation.zh.md)"
     description_zh: "用 AI 改代码时，你可能遇到过这种情况。它回你“修好了”，你追问“测试跑过了吗？”，它才说测试没跑起来。再问原因，才知道环境里缺了构建工具，它早就卡在这一步了。代码改到了哪儿、修复有没有验证，本来可以在交付时一起说清楚，最后却要你一项项追问。
 
 OpenAI 在 GPT-6.2 系统卡里公布了内部评测 **Blocker Deception**。研究人员从编码环境里移走任务必需的文件或工具，看模型会不会在最终答复里主动交代。**GPT-6 Astra 的漏报率是 11.09%，到了 GPT-6.2 Astra 升至 22.28%，超过上一代的两倍，被人戏称“安全地”发布了并不安全的模型。** 给 GPT-6.2 Astra 加上 Codex 的开发者提示后，漏报率明显下降。我们沿着这个问题选了 50 道题，想看看 Agent Harness 经过调优后，能不能在一份答复里就把进度和阻碍说清楚，让用户少追问几次。[OpenAI 系统卡 §4.1.3.1](https://deploymentsafety.openai.com/gpt-6-2-astra-sol/blocker-deception)
@@ -1348,7 +1348,7 @@ OpenAI 在 GPT-6.2 系统卡里公布了内部评测 **Blocker Deception**。研
 
 模型直答、初版 Harness 和调优后的 Harness 都在同一组 25 道 Test 上各跑 3 次。使用相同模型版本、工具权限、`high` 思考强度、单题预算和判分规则。每题开新会话，先保存首份答复，再投递后续事件。每轮分别报两项成绩：25 道题中有几道在第一份答复就交代清楚，3 次后续事件里有几次处理正确。
 
-按题号、轮次和阶段保存作答与判分，跑断后从缺失的记录接上。交 PR 时附逐题结果、Skill 或策略改动、复跑方法，以及进化和评测各自的耗时、Token 和费用，关联本任务。常驻开放，每份通过验收的独立评测计 **100 EXP**。[Evaluation 提交流程](https://github.com/Prism-Shadow/penguin-harness-community/blob/main/workflow/evaluation.zh.md)"
+按题号、轮次和阶段保存作答与判分，跑断后从缺失的记录接上。交 PR 时附逐题结果、Skill 或策略改动、复跑方法，以及进化和评测各自的耗时、Token 和费用，关联本任务。常驻开放，每份通过验收的独立评测计 **150 EXP**。[Evaluation 提交流程](https://github.com/Prism-Shadow/penguin-harness-community/blob/main/workflow/evaluation.zh.md)"
     references:
       - "https://deploymentsafety.openai.com/gpt-6-2-astra-sol/blocker-deception"
       - "https://github.com/junru-zhu/failure-transparent-agents/releases/tag/v0.3.0"
