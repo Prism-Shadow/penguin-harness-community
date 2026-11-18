@@ -12,7 +12,7 @@
 3. **提交 PR**：完成代码开发与测试验证后，向 [PenguinHarness](https://github.com/Prism-Shadow/penguin-harness) 仓库提交 Pull Request 并关联对应 Issue。
 4. **Maintainer 审核合并**：按 [PenguinHarness PR 合入标准](#penguinharness-pr-合入标准)审核，通过后合入主分支。
 
-开发、测试或提交插件时，可以在 PenguinHarness 会话中请 Agent 使用 [penguin-plugin Skill](https://github.com/Prism-Shadow/penguin-harness/blob/main/plugins/agent-development/skills/penguin-plugin/SKILL.md)。
+提交插件前，可以在 PenguinHarness 会话中请 Agent 用 [penguin-plugin Skill](https://github.com/Prism-Shadow/penguin-harness/blob/main/plugins/agent-development/skills/penguin-plugin/SKILL.md) 检查插件结构、运行相关测试，并告诉你该往哪个仓库提 PR。
 
 ## PenguinHarness PR 合入标准
 
@@ -20,7 +20,7 @@
 - **验证记录完整**。写明实际运行的检查及结果。修复问题时附复现步骤和修复后的验证结果。新增功能时说明如何验证，并补上相关测试。仓库要求的 CI 检查应通过。
 - **文档与变更日志齐全**。按主仓库要求补齐中英文变更日志。涉及使用方式、接口或配置变更时，同步更新文档，并说明适用的迁移步骤。
 
-使用英文填写 PR 标题和正文，具体要求见 [PenguinHarness 贡献指南](https://github.com/Prism-Shadow/penguin-harness/blob/main/.github/CONTRIBUTING.zh.md#pull-request)和 [PR 模板](https://github.com/Prism-Shadow/penguin-harness/blob/main/.github/PULL_REQUEST_TEMPLATE.md)。提交 RSI 算法插件时，也请参照[提交 Algorithm](algorithm.zh.md)。
+PR 标题和正文用英文，按 [主仓 PR 模板](https://github.com/Prism-Shadow/penguin-harness/blob/main/.github/PULL_REQUEST_TEMPLATE.md)填写。
 
 ## 格式示例
 

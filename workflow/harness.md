@@ -12,7 +12,7 @@
 3. **Submit a PR**: Implement the change, run tests and checks, and open a Pull Request in [PenguinHarness](https://github.com/Prism-Shadow/penguin-harness) linked to the Issue.
 4. **Maintainer Review & Merge**: Maintainers review the PR against the [PenguinHarness PR merge criteria](#penguinharness-pr-merge-criteria) before merging.
 
-When developing, testing, or submitting a plugin, ask your Agent to use the [penguin-plugin skill](https://github.com/Prism-Shadow/penguin-harness/blob/main/plugins/agent-development/skills/penguin-plugin/SKILL.md) in a PenguinHarness session.
+Before submitting a plugin, ask your Agent in a PenguinHarness session to use the [penguin-plugin skill](https://github.com/Prism-Shadow/penguin-harness/blob/main/plugins/agent-development/skills/penguin-plugin/SKILL.md) to check the plugin structure, run the relevant tests, and tell you where to open the PR.
 
 ## PenguinHarness PR Merge Criteria
 
@@ -20,7 +20,7 @@ When developing, testing, or submitting a plugin, ask your Agent to use the [pen
 - **Complete verification records.** Record the checks you ran and their results. For a fix, give the reproduction steps and how you verified it. For a feature, explain how to verify it and include relevant tests. Required CI checks should pass.
 - **Docs and changelog.** Add matching English and Chinese changelog entries. Update documentation for changes to usage, interfaces, or configuration, and explain any migration steps.
 
-Write the PR title and description in English. See the [PenguinHarness contribution guide](https://github.com/Prism-Shadow/penguin-harness/blob/main/.github/CONTRIBUTING.md#pull-requests) and [PR template](https://github.com/Prism-Shadow/penguin-harness/blob/main/.github/PULL_REQUEST_TEMPLATE.md). For RSI algorithm plugins, also see [Submit Algorithm](algorithm.md).
+Write the PR title and description in English and follow the [PenguinHarness PR template](https://github.com/Prism-Shadow/penguin-harness/blob/main/.github/PULL_REQUEST_TEMPLATE.md).
 
 ## Format Examples
 
