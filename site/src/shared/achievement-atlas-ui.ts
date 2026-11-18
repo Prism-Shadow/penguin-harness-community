@@ -139,7 +139,16 @@ export function initAtlas(root: HTMLDetailsElement) {
     hubEl.hidden = !visibleBranches.length;
     if (hubEl.hidden) { paths.replaceChildren(); return; }
     hubEl.style.gridRow = `1 / span ${visibleBranches.length}`;
-    const routes = visibleBranches.map((b) => box(b.querySelector("[data-domain-node]")!));
+    const routes = visibleBranches.map((branch) => {
+      const node = branch.querySelector<HTMLElement>("[data-domain-node]")!;
+      const heads = branch.querySelectorAll("[data-lane]:not([hidden]) [data-lane-head]");
+      const upper = heads[Math.floor((heads.length - 1) / 2)];
+      const lower = heads[Math.floor(heads.length / 2)];
+      // Keep the middle twig horizontal even when categories contain different numbers of medals.
+      const centre = (box(upper).cy + box(lower).cy) / 2;
+      node.style.transform = `translateY(${f(centre - box(branch).cy)}px)`;
+      return box(node);
+    });
     const top = f(routes[0].cy), bottom = f(routes[routes.length - 1].cy), hy = f((top + bottom) / 2);
     hubEl.style.transform = "";
     hubEl.style.transform = `translateY(${f(hy - box(hubEl.querySelector(".medal")!).cy)}px)`;
@@ -178,7 +187,8 @@ export function initAtlas(root: HTMLDetailsElement) {
         const titleX = f(box(lane).l), titleY = f(heading.cy);
         const titleRight = f(titleX + heading.r - heading.l);
         const mx = f((d.r + titleX) / 2);
-        path(`M${f(d.r)} ${f(d.cy)} C${mx} ${f(d.cy)} ${mx} ${titleY} ${titleX} ${titleY}`, "w-fork");
+        const allLocked = !lane.querySelector('[data-record]:not([data-state="locked"])');
+        path(`M${f(d.r)} ${f(d.cy)} C${mx} ${f(d.cy)} ${mx} ${titleY} ${titleX} ${titleY}`, allLocked ? "w-fork w-locked" : "w-fork");
         const leaves = lane.querySelector<HTMLElement>("[data-leaves]")!;
         const firstColumnX = box(leaves).l;
         const forkX = f((titleRight + firstColumnX) / 2);

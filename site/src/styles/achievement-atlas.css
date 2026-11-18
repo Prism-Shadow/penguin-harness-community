@@ -33,7 +33,7 @@
   --hub-w: 88px;
   --trunk-gap: 36px;
   --domain-w: 206px;
-  --fork-gap: 40px;
+  --fork-gap: 84px;
   --category-w: 140px;
   --member-gap: 40px;
   --leaf-w: 244px;
@@ -158,6 +158,7 @@
 .atlas .w-knot { fill: var(--trunk); }
 .atlas .w-joint { fill: var(--paper); stroke: var(--trunk); stroke-width: 2; }
 .atlas .w-fork { stroke: var(--wire); stroke-width: 2; }
+.atlas .w-fork.w-locked { stroke-dasharray: 5 4; }
 .atlas .w-membership { stroke: var(--wire); stroke-width: 1.5; }
 .atlas .w-dependency { stroke: var(--muted); stroke-width: 2; }
 .atlas .w-dependency:not([data-state="lit"]) { stroke-dasharray: 4 3; }
@@ -206,9 +207,10 @@
   box-sizing: border-box;
   width: var(--category-w);
   margin: 0;
-  padding: 5px 8px;
-  border-inline-start: 2px solid var(--wire);
-  background: var(--canvas);
+  padding: 5px 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--paper);
   color: var(--ink);
   font-size: 14px;
   font-weight: 600;
@@ -286,7 +288,7 @@
 
 /* ---------- Narrow screens: keep the horizontal canvas, tighten the grid ---------- */
 @media (max-width: 650px) {
-  .atlas { --pad-x: 10px; --pad-y: 22px; --hub-w: 48px; --trunk-gap: 20px; --domain-w: 128px; --fork-gap: 16px; --category-w: 118px; --member-gap: 20px; --leaf-w: 208px; --leaf-gap: 20px; --lane-gap: 18px; --branch-gap: 32px; }
+  .atlas { --pad-x: 10px; --pad-y: 22px; --hub-w: 48px; --trunk-gap: 20px; --domain-w: 128px; --fork-gap: 32px; --category-w: 118px; --member-gap: 20px; --leaf-w: 208px; --leaf-gap: 20px; --lane-gap: 18px; --branch-gap: 32px; }
   .atlas .atlas-frame { margin-inline: -24px; border-inline: 0; border-radius: 0; }
   .atlas .toolbar { padding: 8px 12px; gap: 8px; }
   .atlas .filters { gap: 5px; }
@@ -306,7 +308,7 @@
   .atlas .domain-icon { width: 26px; height: 26px; border-radius: 8px; }
   .atlas .domain-icon svg { width: 14px; height: 14px; }
   .atlas .domain h3 { font-size: 12px; }
-  .atlas .lane-head { font-size: 12px; }
+  .atlas .lane-head { padding-inline: 10px; font-size: 12px; }
   .atlas .lane-count { font-size: 10.5px; }
   .atlas .leaf { padding: 9px 11px 9px 9px; column-gap: 8px; }
   .atlas .leaf-title { font-size: 12.5px; }
