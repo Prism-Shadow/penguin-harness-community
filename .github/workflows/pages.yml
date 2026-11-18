@@ -6,6 +6,7 @@ on:
       - "main"
     paths:
       - "site/**"
+      - "assets/**"
       - "community/**"
       - "roadmap/**"
       - "workflow/**"
@@ -16,6 +17,7 @@ on:
       - "main"
     paths:
       - "site/**"
+      - "assets/**"
       - "community/**"
       - "roadmap/**"
       - "workflow/**"
