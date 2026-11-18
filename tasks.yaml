@@ -208,8 +208,9 @@ tasks:
 
   - id: "RSI-Q006"
     issue_number: 35
-    published_at: "2026-11-10T10:25:00Z"
-    status: "in_progress"
+    pr_number: 1535
+    published_at: "2026-11-16T13:28:14Z"
+    status: "completed"
     domain: "RSI Algorithm"
     exp: 100
     target_repository: "https://github.com/Prism-Shadow/penguin-harness-plugins"
@@ -223,7 +224,7 @@ tasks:
       - "https://github.com/google-research/rrsi"
     assignee: "yenanjing"
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/35"
-    linked_pr: null
+    linked_pr: "https://github.com/Prism-Shadow/penguin-harness/pull/1535"
 
   - id: "RSI-Q007"
     issue_number: 36

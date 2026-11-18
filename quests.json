@@ -229,9 +229,9 @@
     {
       "id": "RSI-Q006",
       "issue_number": 35,
-      "pr_number": null,
-      "published_at": "2026-11-10T10:25:00Z",
-      "status": "in_progress",
+      "pr_number": 1535,
+      "published_at": "2026-11-16T13:28:14Z",
+      "status": "completed",
       "domain": "RSI Algorithm",
       "exp": 100,
       "target_repository": "https://github.com/Prism-Shadow/penguin-harness-plugins",
@@ -247,7 +247,7 @@
       ],
       "assignee": "yenanjing",
       "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/35",
-      "linked_pr": null
+      "linked_pr": "https://github.com/Prism-Shadow/penguin-harness/pull/1535"
     },
     {
       "id": "RSI-Q007",
@@ -1157,6 +1157,11 @@
       "handle": "Saigyouji-Yuyuko1000",
       "monthlyExp": 100,
       "reachedAt": "2026-11-03T08:28:27Z"
+    },
+    {
+      "handle": "yenanjing",
+      "monthlyExp": 100,
+      "reachedAt": "2026-11-16T13:28:14Z"
     },
     {
       "handle": "hiyouga",
