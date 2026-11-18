@@ -12,6 +12,16 @@ import type { Locale } from "./i18n";
 
 export type Text = { zh: string; en: string };
 
+// Artifact names follow Awesome-RSI's Methods & Systems taxonomy.
+export const RSI_ARTIFACTS = {
+  "model-parameters": { zh: "模型参数", en: "Model parameters" },
+  "harness-code": { zh: "Harness 代码", en: "Harness code" },
+  context: { zh: "上下文", en: "Context" },
+  memory: { zh: "记忆", en: "Memory" },
+  skill: { zh: "技能", en: "Skill" },
+  "other-artifacts": { zh: "其他产物", en: "Other artifacts" },
+} satisfies Record<string, Text>;
+
 export interface MedalDef {
   id: string;
   /** Short enough for a card: at most ~14 Chinese characters. */
@@ -24,6 +34,8 @@ export interface MedalDef {
   quests: number[];
   /** A verified merged integration PR for a milestone without a registry task. */
   mergedPr?: string;
+  /** Secondary artifact categories shown in details. The medal is counted in its own branch. */
+  relatedArtifacts?: (keyof typeof RSI_ARTIFACTS)[];
   /** Any one of the listed tasks satisfies this milestone. */
   anyQuest?: boolean;
   /** Include future instances of the standing quest, matched as in community-agent-sync. */
@@ -336,28 +348,19 @@ export const ACHIEVEMENT_TREE: RouteDef[] = [
     id: "method",
     name: { zh: "RSI 算法与实验", en: "RSI algorithms & experiments" },
     aim: {
-      zh: "持续接入 RSI 算法，扩充评测基准，并用可复现的对照实验验证方法效果。",
-      en: "Integrate RSI methods, expand benchmark coverage and assess the methods in reproducible comparisons.",
+      zh: "按进化产物归类 RSI 算法，扩充评测基准，并用可复现的对照实验验证方法效果。",
+      en: "Group RSI methods by the artifacts they improve, expand benchmark coverage and assess methods in reproducible comparisons.",
     },
     branches: [
       {
-        id: "library",
-        name: { zh: "算法插件集成", en: "Algorithm plugin integration" },
+        id: "model-parameters",
+        name: RSI_ARTIFACTS["model-parameters"],
+        medals: [],
+      },
+      {
+        id: "harness-code",
+        name: RSI_ARTIFACTS["harness-code"],
         medals: [
-          {
-            id: "method-skill-toolkits",
-            name: { zh: "技能优化", en: "Skill optimization" },
-            intent: {
-              zh: "PenguinHarness 的 Skill 优化可选用 SkillAdam、SkillOpt、OpenSkill 和 TRACE 四种方法。",
-              en: "PenguinHarness offers SkillAdam, SkillOpt, OpenSkill and TRACE for Skill optimization.",
-            },
-            evidence: {
-              zh: "四种方法各自以 RSI 工具包形式合入 PenguinHarness 主仓库。",
-              en: "All four methods are merged into the PenguinHarness repository as RSI toolkits.",
-            },
-            quests: [],
-            mergedPr: "https://github.com/Prism-Shadow/penguin-harness/pull/1374",
-          },
           {
             id: "method-rrsi",
             name: { zh: "正则化自进化", en: "Regularized self-improvement" },
@@ -370,19 +373,67 @@ export const ACHIEVEMENT_TREE: RouteDef[] = [
               en: "The RRSI toolkit is merged into PenguinHarness and community Issue #35 is accepted.",
             },
             quests: [35],
+            relatedArtifacts: ["context", "memory", "skill"],
           },
           {
-            id: "method-harness-pack",
-            name: { zh: "环境探索与反馈学习", en: "Environment exploration and learning from feedback" },
+            id: "method-search-pack",
+            name: { zh: "候选代码搜索", en: "Candidate code search" },
             intent: {
-              zh: "让智能体通过环境探索积累经验，并用执行反馈改进后续决策。",
-              en: "Help agents gain experience through exploration and use execution feedback to improve later decisions.",
+              zh: "扩展候选方案搜索能力，支持 DGM 的多分支搜索和 Meta-Harness 的迭代优化。",
+              en: "Extend candidate search to DGM's branching search and Meta-Harness's iterative optimization.",
+            },
+            evidence: {
+              zh: "Darwin Gödel Machine 与 Meta-Harness 插件合入，各附候选搜索的运行记录。",
+              en: "Merge Darwin Gödel Machine and Meta-Harness, each with a recorded candidate-search run.",
+            },
+            quests: [72, 58],
+            relatedArtifacts: ["context", "memory"],
+          },
+        ],
+      },
+      {
+        id: "context",
+        name: RSI_ARTIFACTS.context,
+        medals: [],
+      },
+      {
+        id: "memory",
+        name: RSI_ARTIFACTS.memory,
+        medals: [
+          {
+            id: "method-harness-pack",
+            name: { zh: "探索经验与反思记忆", en: "Memory from exploration and reflection" },
+            intent: {
+              zh: "将探索经验与执行反思保存为记忆，供后续任务决策使用。",
+              en: "Save exploration experience and reflections as memory for later decisions.",
             },
             evidence: {
               zh: "RSIAgent 和 Reflexion 按 RFC-0003 合入，分别提供探索和反馈反思的可复现运行记录。",
               en: "Merge RSIAgent and Reflexion under RFC-0003, with reproducible runs for exploration and reflection on feedback.",
             },
             quests: [34, 73],
+            relatedArtifacts: ["context", "skill"],
+          },
+        ],
+      },
+      {
+        id: "skill",
+        name: RSI_ARTIFACTS.skill,
+        medals: [
+          {
+            id: "method-skill-toolkits",
+            name: { zh: "技能自进化工具包接入", en: "Skill evolution toolkits integrated" },
+            intent: {
+              zh: "PenguinHarness 支持用 SkillAdam、SkillOpt、OpenSkill 和 TRACE 构建或改进技能。",
+              en: "PenguinHarness supports building or refining skills with SkillAdam, SkillOpt, OpenSkill and TRACE.",
+            },
+            evidence: {
+              zh: "四种方法各自以 RSI 工具包形式合入 PenguinHarness 主仓库。",
+              en: "All four methods are merged into the PenguinHarness repository as RSI toolkits.",
+            },
+            quests: [],
+            mergedPr: "https://github.com/Prism-Shadow/penguin-harness/pull/1374",
+            relatedArtifacts: ["harness-code", "context", "memory"],
           },
           {
             id: "method-web-skill-learning",
@@ -397,20 +448,12 @@ export const ACHIEVEMENT_TREE: RouteDef[] = [
             },
             quests: [74],
           },
-          {
-            id: "method-search-pack",
-            name: { zh: "Harness 代码演化", en: "Harness code evolution" },
-            intent: {
-              zh: "扩展候选方案搜索能力，支持 DGM 的多分支搜索和 Meta-Harness 的迭代优化。",
-              en: "Extend candidate search to DGM's branching search and Meta-Harness's iterative optimization.",
-            },
-            evidence: {
-              zh: "Darwin Gödel Machine 与 Meta-Harness 插件合入，各附候选搜索的运行记录",
-              en: "Darwin Gödel Machine and Meta-Harness merged, each with a candidate-search run recorded",
-            },
-            quests: [72, 58],
-          },
         ],
+      },
+      {
+        id: "other-artifacts",
+        name: RSI_ARTIFACTS["other-artifacts"],
+        medals: [],
       },
       {
         id: "arena",

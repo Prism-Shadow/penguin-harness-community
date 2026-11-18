@@ -184,17 +184,18 @@ export function initAtlas(root: HTMLDetailsElement) {
       for (const lane of branch.querySelectorAll<HTMLElement>("[data-lane]")) {
         if (lane.hidden) continue;
         const head = lane.querySelector<HTMLElement>("[data-lane-head]");
+        const leaves = lane.querySelector<HTMLElement>("[data-leaves]");
         let startX = f(d.r), startY = f(d.cy);
         if (head) {
           // Sticky headings keep their original connection point during horizontal panning.
           const heading = box(head), titleX = f(box(lane).l), titleY = f(heading.cy);
           const mx = f((d.r + titleX) / 2);
-          const allLocked = !lane.querySelector('[data-record]:not([data-state="locked"])');
+          const allLocked = leaves && !leaves.querySelector('[data-record]:not([data-state="locked"])');
           path(`M${startX} ${startY} C${mx} ${startY} ${mx} ${titleY} ${titleX} ${titleY}`, allLocked ? "w-fork w-locked" : "w-fork");
           startX = f(titleX + heading.r - heading.l);
           startY = titleY;
         }
-        const leaves = lane.querySelector<HTMLElement>("[data-leaves]")!;
+        if (!leaves) continue;
         const firstColumnX = box(leaves).l;
         const forkX = f((startX + firstColumnX) / 2);
         const rowEnds = new Map<number, string>();
@@ -274,7 +275,7 @@ export function initAtlas(root: HTMLDetailsElement) {
         const shown = Array.from(lane.querySelectorAll<HTMLElement>("li:not([hidden]) [data-record]"));
         const rows = medalRows(shown.map((card) => byId.get(card.dataset.record!)!));
         for (const card of shown) card.parentElement!.style.gridRowStart = String(rows.get(card.dataset.record!));
-        lane.hidden = shown.length === 0;
+        lane.hidden = state !== "all" && shown.length === 0;
       }
       for (const branch of branches)
         branch.hidden = !branch.querySelector("[data-lane]:not([hidden])");
@@ -324,6 +325,12 @@ export function initAtlas(root: HTMLDetailsElement) {
     get("title").textContent = m.name;
     get("summary").textContent = m.intent;
     get("evidence").textContent = m.evidence;
+
+    const artifacts = get("related-artifacts");
+    artifacts.hidden = !m.relatedArtifacts?.length;
+    artifacts.textContent = m.relatedArtifacts?.length
+      ? `${words.relatedArtifacts} · ${m.relatedArtifacts.join(" / ")}`
+      : "";
 
     const note = get("note");
     const notes = [m.acceptedReport === null ? words.awaitingReport : "", m.pending, m.unregistered.length ? `${m.unregistered.map((n) => "#" + n).join(" ")} ${words.unregistered}` : ""].filter(Boolean);
@@ -385,10 +392,14 @@ export function initAtlas(root: HTMLDetailsElement) {
   dialog.addEventListener("pointerdown", (e) => { backdrop = e.target === dialog; });
   dialog.addEventListener("click", (e) => { if (backdrop && e.target === dialog) dialog.close(); });
 
+  const renamedAnchors = new Map([
+    ["atlas-method-tools", "atlas-heading-auto-bench"],
+    ["atlas-method-library", "atlas-method-model-parameters"],
+  ]);
   // A category link should bring both the toolbar and the category inside the panned board into view.
   function revealLinkedLane() {
     const hash = location.hash.slice(1);
-    const heading = document.getElementById(hash === "atlas-method-tools" ? "atlas-heading-auto-bench" : hash);
+    const heading = document.getElementById(renamedAnchors.get(hash) ?? hash);
     if (!heading || !root.contains(heading)) return;
     const section = heading.hasAttribute("data-lane-head") ? heading.closest("[data-lane]")
       : heading.matches("[data-domain-node] h3") ? heading.closest("[data-domain]") : null;

@@ -1,5 +1,5 @@
 import { resolveText, type QuestItem, type QuestStatus } from "./community";
-import { ACHIEVEMENT_TREE, type MedalDef, type Text } from "./achievement-tree";
+import { ACHIEVEMENT_TREE, RSI_ARTIFACTS, type MedalDef, type Text } from "./achievement-tree";
 import type { Locale } from "./i18n";
 
 /**
@@ -32,6 +32,7 @@ export interface AtlasMedal {
   state: MedalState;
   routeTitle: string;
   branchTitle?: string;
+  relatedArtifacts?: string[];
   /** Related tasks, newest Issue first. */
   tasks: AtlasTask[];
   /** Listed Issue numbers the registry does not carry (yet). */
@@ -150,6 +151,7 @@ export function researchAtlas(quests: QuestItem[], locale: Locale): Atlas {
           state: "locked",
           routeTitle: say(route.name),
           branchTitle: branch.name && say(branch.name),
+          relatedArtifacts: def.relatedArtifacts?.map((artifact) => say(RSI_ARTIFACTS[artifact])),
           tasks,
           unregistered,
           prerequisiteTasks,
