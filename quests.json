@@ -543,7 +543,7 @@
     {
       "id": "RSI-Q027",
       "issue_number": 64,
-      "pr_number": null,
+      "pr_number": 88,
       "published_at": "2026-11-12T09:23:57Z",
       "status": "in_progress",
       "domain": "Awesome RSI",
@@ -562,7 +562,7 @@
       ],
       "assignee": "yenanjing",
       "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/64",
-      "linked_pr": null
+      "linked_pr": "https://github.com/Prism-Shadow/awesome-rsi/pull/88"
     },
     {
       "id": "RSI-Q022",
