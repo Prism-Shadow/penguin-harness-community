@@ -78,13 +78,13 @@ export const ACHIEVEMENT_TREE: RouteDef[] = [
         name: { zh: "评测基准", en: "Benchmarks" },
         medals: [
           {
-            id: "infra-train-bench", name: { zh: "训练基线可复现", en: "Reproducible training baseline" },
+            id: "infra-train-bench", name: { zh: "训练基线建立", en: "Training baseline established" },
             intent: { zh: "在一个真实训练负载上建立可重复运行的比较基线。", en: "Establish a repeatable baseline on a real training workload." },
             evidence: { zh: "NanoChat 或 NanoGPT Speedrun 至少一项通过验收，记录基线配置、工作量、计时规则与实测结果。", en: "Accept a NanoChat or NanoGPT Speedrun baseline with its configuration, workload, timing protocol and measurements." },
             quests: [83, 84], anyQuest: true,
           },
           {
-            id: "infra-kernel-bench", name: { zh: "算子基准可复现", en: "Reproducible kernel benchmark" },
+            id: "infra-kernel-bench", name: { zh: "算子评测基准接入", en: "Kernel benchmark integrated" },
             intent: { zh: "使用 SOL-ExecBench 评测 GPU 算子的正确性与性能。", en: "Evaluate GPU kernel correctness and performance on SOL-ExecBench." },
             evidence: { zh: "基准接入并通过验收，提供数值校验与性能评分的复现步骤。", en: "An accepted benchmark integration with reproducible numerical checks and performance scores." },
             quests: [85],
