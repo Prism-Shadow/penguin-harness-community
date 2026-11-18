@@ -4,8 +4,8 @@ import type { Locale } from "./i18n";
  * The community achievement tree: long-term routes → work branches → medals.
  *
  * Each medal names its acceptance criteria and prerequisites. Most are verified by
- * completed registry tasks. A separately assessed experiment records its approved
- * report link here, even when the report was submitted under an existing task.
+ * completed registry tasks. An integration outside the registry records its merged
+ * PR here. A separately assessed experiment records its approved report link.
  *
  * Arrows follow explicit medal prerequisites. Sharing a quest does not imply a prerequisite.
  */
@@ -22,6 +22,8 @@ export interface MedalDef {
   evidence: Text;
   /** Registry Issue numbers whose completion lights this medal. */
   quests: number[];
+  /** A verified merged integration PR for a milestone without a registry task. */
+  mergedPr?: string;
   /** Any one of the listed tasks satisfies this milestone. */
   anyQuest?: boolean;
   /** Include future instances of the standing quest, matched as in community-agent-sync. */
@@ -334,8 +336,8 @@ export const ACHIEVEMENT_TREE: RouteDef[] = [
     id: "method",
     name: { zh: "RSI 算法与实验", en: "RSI algorithms & experiments" },
     aim: {
-      zh: "将 RSI 方法实现为插件，在相同的评测基准上比较实验结果。",
-      en: "Implement RSI methods as plugins and compare results on the same benchmarks.",
+      zh: "持续接入 RSI 算法，扩充评测基准，并用可复现的对照实验验证方法效果。",
+      en: "Integrate RSI methods, expand benchmark coverage and assess the methods in reproducible comparisons.",
     },
     branches: [
       {
@@ -343,24 +345,64 @@ export const ACHIEVEMENT_TREE: RouteDef[] = [
         name: { zh: "算法插件集成", en: "Algorithm plugin integration" },
         medals: [
           {
-            id: "method-harness-pack",
-            name: { zh: "首批 Harness 算法插件集成", en: "First harness algorithm plugins integrated" },
+            id: "method-skill-toolkits",
+            name: { zh: "技能优化", en: "Skill optimization" },
             intent: {
-              zh: "提示词、技能与反思类方法可以直接装上就用",
-              en: "Prompt, skill and reflection methods can simply be plugged in",
+              zh: "PenguinHarness 的 Skill 优化可选用 SkillAdam、SkillOpt、OpenSkill 和 TRACE 四种方法。",
+              en: "PenguinHarness offers SkillAdam, SkillOpt, OpenSkill and TRACE for Skill optimization.",
             },
             evidence: {
-              zh: "RSIAgent、RRSI、Reflexion、SkillWeaver 四个插件按 RFC-0003 合入，各附可复现运行记录",
-              en: "RSIAgent, RRSI, Reflexion and SkillWeaver merged under RFC-0003, each with a reproducible run",
+              zh: "四种方法各自以 RSI 工具包形式合入 PenguinHarness 主仓库。",
+              en: "All four methods are merged into the PenguinHarness repository as RSI toolkits.",
             },
-            quests: [34, 35, 73, 74],
+            quests: [],
+            mergedPr: "https://github.com/Prism-Shadow/penguin-harness/pull/1374",
+          },
+          {
+            id: "method-rrsi",
+            name: { zh: "正则化自进化", en: "Regularized self-improvement" },
+            intent: {
+              zh: "用修改预算、评测过拟合检查和 Token 剪枝约束自进化过程。",
+              en: "Constrain self-improvement with an edit budget, evaluation overfitting checks and token pruning.",
+            },
+            evidence: {
+              zh: "RRSI 工具包合入 PenguinHarness，社区任务 #35 通过验收。",
+              en: "The RRSI toolkit is merged into PenguinHarness and community Issue #35 is accepted.",
+            },
+            quests: [35],
+          },
+          {
+            id: "method-harness-pack",
+            name: { zh: "环境探索与反馈学习", en: "Environment exploration and learning from feedback" },
+            intent: {
+              zh: "让智能体通过环境探索积累经验，并用执行反馈改进后续决策。",
+              en: "Help agents gain experience through exploration and use execution feedback to improve later decisions.",
+            },
+            evidence: {
+              zh: "RSIAgent 和 Reflexion 按 RFC-0003 合入，分别提供探索和反馈反思的可复现运行记录。",
+              en: "Merge RSIAgent and Reflexion under RFC-0003, with reproducible runs for exploration and reflection on feedback.",
+            },
+            quests: [34, 73],
+          },
+          {
+            id: "method-web-skill-learning",
+            name: { zh: "网页技能学习与复用", en: "Learning and reusing browser skills" },
+            intent: {
+              zh: "从网站探索中学习浏览器操作，将其保存为后续网页任务可调用的技能。",
+              en: "Learn browser operations through website exploration and save them as skills for later tasks.",
+            },
+            evidence: {
+              zh: "SkillWeaver 按 RFC-0003 合入，提供从网站探索、生成操作技能到在后续任务中复用的运行记录。",
+              en: "Merge SkillWeaver under RFC-0003 and provide a run showing website exploration, skill creation and reuse in a later task.",
+            },
+            quests: [74],
           },
           {
             id: "method-search-pack",
-            name: { zh: "进化搜索插件集成", en: "Evolutionary search plugins integrated" },
+            name: { zh: "Harness 代码演化", en: "Harness code evolution" },
             intent: {
-              zh: "会自己生成并筛选候选的进化方法可用",
-              en: "Methods that generate and screen their own candidates are available",
+              zh: "扩展候选方案搜索能力，支持 DGM 的多分支搜索和 Meta-Harness 的迭代优化。",
+              en: "Extend candidate search to DGM's branching search and Meta-Harness's iterative optimization.",
             },
             evidence: {
               zh: "Darwin Gödel Machine 与 Meta-Harness 插件合入，各附候选搜索的运行记录",
@@ -376,10 +418,10 @@ export const ACHIEVEMENT_TREE: RouteDef[] = [
         medals: [
           {
             id: "method-first-bench",
-            name: { zh: "首批多领域基准接入", en: "First multi-domain benchmarks" },
+            name: { zh: "多领域、GDPevo 与生物医学题集", en: "Multi-domain, GDPevo and biomedical task sets" },
             intent: {
-              zh: "社区有了自己的第一批评测题",
-              en: "The community has its first set of exam questions",
+              zh: "建立社区的基础评测题集，覆盖五个领域的任务、六类业务场景和生物医学数据分析。",
+              en: "Establish the community's initial benchmark collection, covering tasks across five domains, six business scenarios and biomedical data analysis.",
             },
             evidence: {
               zh: "50 个多领域任务、GDPevo Essential 60 题与生物医学基准合入（benchmark PR #3 / #5 / #15）",

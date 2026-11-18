@@ -40,6 +40,7 @@ export interface AtlasMedal {
   anyPrerequisite: boolean;
   unlocks: AtlasMedalRef[];
   prerequisiteTasks: { number: number; title: string; url?: string; completed: boolean }[];
+  mergedPr?: string;
   acceptedReport?: string | null;
   /** Link used outside the interactive details view. */
   href: string;
@@ -77,7 +78,7 @@ const tally = (list: { state: MedalState }[]) =>
 
 /**
  * Builds the community achievement tree: the shape comes from `achievement-tree.ts`,
- * every lit medal and every quest link comes from the Task Board registry.
+ * medals are verified by registry tasks or a recorded merged PR.
  */
 export function researchAtlas(quests: QuestItem[], locale: Locale): Atlas {
   const t = (zh: string, en: string) => (locale === "zh" ? zh : en);
@@ -137,7 +138,8 @@ export function researchAtlas(quests: QuestItem[], locale: Locale): Atlas {
         });
         const completed = tasks.filter((q) => q.status === "completed").length;
         const tasksAccepted = completed > 0 && (def.anyQuest || completed === numbers.length);
-        if (tasksAccepted && (def.acceptedReport === undefined || def.acceptedReport)) accepted.add(def.id);
+        const integrationAccepted = numbers.length === 0 && Boolean(def.mergedPr);
+        if ((tasksAccepted || integrationAccepted) && (def.acceptedReport === undefined || def.acceptedReport)) accepted.add(def.id);
         built.set(def.id, {
           id: def.id,
           column: 0,
@@ -155,7 +157,8 @@ export function researchAtlas(quests: QuestItem[], locale: Locale): Atlas {
           requires: [],
           anyPrerequisite: def.anyPrerequisite === true,
           unlocks: [],
-          href: tasks[0]?.links[0].url ?? (quests[0]?.issueUrl.replace(/\/\d+$/, "") || "#"),
+          mergedPr: def.mergedPr,
+          href: tasks[0]?.links[0].url ?? def.mergedPr ?? (quests[0]?.issueUrl.replace(/\/\d+$/, "") || "#"),
         });
       }
 

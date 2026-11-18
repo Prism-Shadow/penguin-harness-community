@@ -330,9 +330,10 @@ export function initAtlas(root: HTMLDetailsElement) {
     note.hidden = notes.length === 0;
     note.textContent = notes.join(" · ");
 
-    // The quests that light it, each with its Task Board status.
+    // Evidence links and the status of each related Task Board quest.
     const facts = get("facts");
     facts.replaceChildren();
+    if (m.mergedPr) facts.append(chip(words.mergedPr, m.mergedPr));
     if (m.acceptedReport) facts.append(chip(words.report, m.acceptedReport));
     if (m.prerequisiteTasks.length) {
       const list = document.createElement("div");
