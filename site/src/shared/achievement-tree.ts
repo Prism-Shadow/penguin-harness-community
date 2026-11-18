@@ -40,7 +40,8 @@ export interface MedalDef {
 
 export interface BranchDef {
   id: string;
-  name: Text;
+  /** Omit for medals attached directly to the route. */
+  name?: Text;
   medals: MedalDef[];
 }
 
@@ -121,6 +122,28 @@ export const ACHIEVEMENT_TREE: RouteDef[] = [
     ],
   },
   {
+    id: "auto-bench",
+    name: { zh: "Auto Bench", en: "Auto Bench" },
+    aim: { zh: "根据评测目标和原始数据自动生成评测基准。", en: "Generate benchmarks from evaluation goals and source data." },
+    branches: [
+      {
+        id: "generator",
+        medals: [
+          {
+            id: "std-autobench",
+            name: { zh: "从目标和数据生成评测基准", en: "Generate a benchmark from a goal and source data" },
+            intent: { zh: "使用 Auto Bench 插件将评测目标和原始数据转换为可运行的基准。", en: "Use the Auto Bench plugin to turn an evaluation goal and source data into a runnable benchmark." },
+            evidence: {
+              zh: "插件按 RFC-0003 合入。提供一组评测目标和原始数据、据此生成的基准，以及该基准的运行结果。",
+              en: "The plugin is integrated under RFC-0003. Include an evaluation objective, its source data, the generated benchmark and the results of running it.",
+            },
+            quests: [78],
+          },
+        ],
+      },
+    ],
+  },
+  {
     id: "agent",
     name: { zh: "Super Agent 与 Personal Agent", en: "Super Agent & Personal Agent" },
     aim: {
@@ -130,7 +153,7 @@ export const ACHIEVEMENT_TREE: RouteDef[] = [
     branches: [
       {
         id: "org",
-        name: { zh: "多智能体协作", en: "Multi-agent collaboration" },
+        name: { zh: "多智能体协作与调度", en: "Multi-agent coordination and scheduling" },
         medals: [
           {
             id: "agent-company-comms",
@@ -161,7 +184,7 @@ export const ACHIEVEMENT_TREE: RouteDef[] = [
           },
           {
             id: "agent-company-case",
-            name: { zh: "公司模式跑通真实案例", en: "Company mode proven on a case" },
+            name: { zh: "智能体公司项目交付", en: "Project delivery by an agent company" },
             intent: {
               zh: "一家 Agent 公司从战略到交付自己走完一遍",
               en: "An agent company goes from strategy to delivery on its own",
@@ -177,18 +200,18 @@ export const ACHIEVEMENT_TREE: RouteDef[] = [
       },
       {
         id: "memory",
-        name: { zh: "记忆与上下文", en: "Memory & context" },
+        name: { zh: "记忆与知识管理", en: "Memory and knowledge management" },
         medals: [
           {
             id: "agent-memory-layer",
-            name: { zh: "原始历史可检索", en: "Raw history searchable" },
+            name: { zh: "会话历史检索与溯源", en: "Session history search and tracing" },
             intent: {
-              zh: "历史不被压成摘要，随时能追回原文",
-              en: "History is never flattened into summaries; the original is always reachable",
+              zh: "通过分层索引定位相关记录，再回到原始会话核对。",
+              en: "Use the layered index to find relevant records and verify them against the original session.",
             },
             evidence: {
-              zh: "Obelisk 原始历史层与查询 Skill 合入，可接入主流 Harness 的会话历史并追溯到原文",
-              en: "The Obelisk raw-history layer and its query skill merged, reading mainstream harness sessions and tracing back to the original text",
+              zh: "合入 Obelisk 原始历史层和查询 Skill，能检索主流 Harness 的会话历史并追溯到原文。",
+              en: "Merge the Obelisk history layer and query skill. Demonstrate search across supported harness session histories and trace a result to its original record.",
             },
             quests: [91],
           },
@@ -237,7 +260,7 @@ export const ACHIEVEMENT_TREE: RouteDef[] = [
       },
       {
         id: "personal",
-        name: { zh: "个人助理", en: "Personal assistant" },
+        name: { zh: "主动提醒与规划", en: "Reminders and proactive planning" },
         medals: [
           {
             id: "agent-personal",
@@ -256,11 +279,11 @@ export const ACHIEVEMENT_TREE: RouteDef[] = [
       },
       {
         id: "control",
-        name: { zh: "交互能力", en: "Interaction capabilities" },
+        name: { zh: "网页与桌面操作", en: "Browser and desktop control" },
         medals: [
           {
             id: "agent-computer-use",
-            name: { zh: "原生 Computer Use 可用", en: "Native computer use" },
+            name: { zh: "跨平台桌面操作", en: "Cross-platform desktop control" },
             intent: {
               zh: "智能体能操控终端和浏览器之外的桌面软件",
               en: "Agents drive desktop software beyond the terminal and the browser",
@@ -284,6 +307,12 @@ export const ACHIEVEMENT_TREE: RouteDef[] = [
             },
             quests: [93],
           },
+        ],
+      },
+      {
+        id: "human-likeness",
+        name: { zh: "内容与行为拟人度", en: "Human likeness in content and behaviour" },
+        medals: [
           {
             id: "prod-turing-bench",
             name: { zh: "TuringBench 拟人度评测", en: "TuringBench human-likeness benchmark" },
@@ -391,25 +420,6 @@ export const ACHIEVEMENT_TREE: RouteDef[] = [
               en: "The set integrated under RFC-0001 (benchmark PR #27) with prompts split from answers, a fixed-ID preparation script and scoring self-tested; selection recorded in #75 and benchmark #26",
             },
             quests: [77],
-          },
-        ],
-      },
-      {
-        id: "tools",
-        name: { zh: "评测工具", en: "Evaluation tools" },
-        medals: [
-          {
-            id: "std-autobench",
-            name: { zh: "Auto Bench 基准生成插件", en: "Auto Bench benchmark generator" },
-            intent: {
-              zh: "根据评测目标和原始数据生成评测基准。",
-              en: "Generate a benchmark from an evaluation objective and source data.",
-            },
-            evidence: {
-              zh: "插件按 RFC-0003 合入。提供一组评测目标和原始数据、据此生成的基准，以及该基准的运行结果。",
-              en: "The plugin is integrated under RFC-0003. Include an evaluation objective, its source data, the generated benchmark and the results of running it.",
-            },
-            quests: [78],
           },
         ],
       },

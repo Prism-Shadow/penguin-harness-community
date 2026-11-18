@@ -142,9 +142,9 @@ export function initAtlas(root: HTMLDetailsElement) {
     hubEl.style.gridRow = `1 / span ${visibleBranches.length}`;
     const routes = visibleBranches.map((branch) => {
       const node = branch.querySelector<HTMLElement>("[data-domain-node]")!;
-      const heads = branch.querySelectorAll("[data-lane]:not([hidden]) [data-lane-head]");
-      const upper = heads[Math.floor((heads.length - 1) / 2)];
-      const lower = heads[Math.floor(heads.length / 2)];
+      const visibleLanes = branch.querySelectorAll("[data-lane]:not([hidden])");
+      const upper = visibleLanes[Math.floor((visibleLanes.length - 1) / 2)];
+      const lower = visibleLanes[Math.floor(visibleLanes.length / 2)];
       // Keep the middle twig horizontal even when categories contain different numbers of medals.
       const centre = (box(upper).cy + box(lower).cy) / 2;
       node.style.transform = `translateY(${f(centre - box(branch).cy)}px)`;
@@ -183,20 +183,23 @@ export function initAtlas(root: HTMLDetailsElement) {
       const d = routes[i];
       for (const lane of branch.querySelectorAll<HTMLElement>("[data-lane]")) {
         if (lane.hidden) continue;
-        const head = lane.querySelector<HTMLElement>("[data-lane-head]")!;
-        // Anchor the tree at the category's layout position even when its label sticks during panning.
-        const heading = box(head);
-        const titleX = f(box(lane).l), titleY = f(heading.cy);
-        const titleRight = f(titleX + heading.r - heading.l);
-        const mx = f((d.r + titleX) / 2);
-        const allLocked = !lane.querySelector('[data-record]:not([data-state="locked"])');
-        path(`M${f(d.r)} ${f(d.cy)} C${mx} ${f(d.cy)} ${mx} ${titleY} ${titleX} ${titleY}`, allLocked ? "w-fork w-locked" : "w-fork");
+        const head = lane.querySelector<HTMLElement>("[data-lane-head]");
+        let startX = f(d.r), startY = f(d.cy);
+        if (head) {
+          // Sticky headings keep their original connection point during horizontal panning.
+          const heading = box(head), titleX = f(box(lane).l), titleY = f(heading.cy);
+          const mx = f((d.r + titleX) / 2);
+          const allLocked = !lane.querySelector('[data-record]:not([data-state="locked"])');
+          path(`M${startX} ${startY} C${mx} ${startY} ${mx} ${titleY} ${titleX} ${titleY}`, allLocked ? "w-fork w-locked" : "w-fork");
+          startX = f(titleX + heading.r - heading.l);
+          startY = titleY;
+        }
         const leaves = lane.querySelector<HTMLElement>("[data-leaves]")!;
         const firstColumnX = box(leaves).l;
-        const forkX = f((titleRight + firstColumnX) / 2);
+        const forkX = f((startX + firstColumnX) / 2);
         const rowEnds = new Map<number, string>();
-        const attachments = [titleY];
-        const memberPaths = [`M${titleRight} ${titleY} H${forkX}`];
+        const attachments = [startY];
+        const memberPaths = [`M${startX} ${startY} H${forkX}`];
         for (const item of leaves.querySelectorAll<HTMLElement>(":scope > li:not([hidden])")) {
           const id = item.querySelector<HTMLElement>("[data-record]")!.dataset.record!;
           const card = box(item);
@@ -317,7 +320,7 @@ export function initAtlas(root: HTMLDetailsElement) {
     const pill = get("status");
     pill.textContent = statuses[m.state];
     pill.dataset.state = m.state;
-    get("domain-label").textContent = `${m.routeTitle} · ${m.branchTitle}`;
+    get("domain-label").textContent = m.branchTitle ? `${m.routeTitle} · ${m.branchTitle}` : m.routeTitle;
     get("title").textContent = m.name;
     get("summary").textContent = m.intent;
     get("evidence").textContent = m.evidence;
@@ -383,15 +386,18 @@ export function initAtlas(root: HTMLDetailsElement) {
 
   // A category link should bring both the toolbar and the category inside the panned board into view.
   function revealLinkedLane() {
-    const heading = document.getElementById(location.hash.slice(1));
-    if (!heading?.hasAttribute("data-lane-head") || !root.contains(heading)) return;
+    const hash = location.hash.slice(1);
+    const heading = document.getElementById(hash === "atlas-method-tools" ? "atlas-heading-auto-bench" : hash);
+    if (!heading || !root.contains(heading)) return;
+    const section = heading.hasAttribute("data-lane-head") ? heading.closest("[data-lane]")
+      : heading.matches("[data-domain-node] h3") ? heading.closest("[data-domain]") : null;
+    if (!section) return;
     root.open = true;
     if (heading.closest("[hidden]")) filters[0].click();
     requestAnimationFrame(() => {
       if (desktop.matches) {
         root.scrollIntoView({ block: "start", behavior: "instant" });
-        const lane = heading.closest<HTMLElement>("[data-lane]")!;
-        const offset = lane.getBoundingClientRect().top - viewport.getBoundingClientRect().top;
+        const offset = section.getBoundingClientRect().top - viewport.getBoundingClientRect().top;
         viewport.scrollTo({ left: 0, top: viewport.scrollTop + offset - 12, behavior: "instant" });
       } else {
         viewport.scrollLeft = 0;

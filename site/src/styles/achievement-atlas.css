@@ -196,6 +196,7 @@
 
 .atlas .lanes { display: grid; row-gap: var(--lane-gap); }
 .atlas .lane { display: grid; grid-template-columns: var(--category-w) max-content; column-gap: var(--member-gap); align-items: center; }
+.atlas .lane-direct { display: block; }
 .atlas .lane-head {
   grid-area: 1 / 1 / 2 / -1;
   justify-self: start;

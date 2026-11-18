@@ -31,7 +31,7 @@ export interface AtlasMedal {
   pending?: string;
   state: MedalState;
   routeTitle: string;
-  branchTitle: string;
+  branchTitle?: string;
   /** Related tasks, newest Issue first. */
   tasks: AtlasTask[];
   /** Listed Issue numbers the registry does not carry (yet). */
@@ -47,7 +47,7 @@ export interface AtlasMedal {
 
 export interface AtlasBranch {
   id: string;
-  title: string;
+  title?: string;
   total: number;
   lit: number;
   medals: AtlasMedal[];
@@ -147,7 +147,7 @@ export function researchAtlas(quests: QuestItem[], locale: Locale): Atlas {
           ...(def.pending ? { pending: say(def.pending) } : {}),
           state: "locked",
           routeTitle: say(route.name),
-          branchTitle: say(branch.name),
+          branchTitle: branch.name && say(branch.name),
           tasks,
           unregistered,
           prerequisiteTasks,
@@ -193,7 +193,7 @@ export function researchAtlas(quests: QuestItem[], locale: Locale): Atlas {
       const medals = branch.medals.map((d) => built.get(d.id)!).sort((a, b) =>
         a.column - b.column || ATLAS_STATES.indexOf(a.state) - ATLAS_STATES.indexOf(b.state)
       );
-      return { id: branch.id, title: say(branch.name), total: medals.length, lit: medals.filter((m) => m.state === "lit").length, medals };
+      return { id: branch.id, title: branch.name && say(branch.name), total: medals.length, lit: medals.filter((m) => m.state === "lit").length, medals };
     });
     const medals = branches.flatMap((b) => b.medals);
     return { id: route.id, title: say(route.name), aim: say(route.aim), total: medals.length, counts: tally(medals), branches };

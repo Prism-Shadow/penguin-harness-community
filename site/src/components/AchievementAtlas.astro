@@ -36,6 +36,7 @@ const stateHelp = {
 // One icon per long-term route.
 const icons: Record<string, string> = {
   infra: "m3 7 9-5 9 5-9 5z M3 12l9 5 9-5 M3 17l9 5 9-5",
+  "auto-bench": "M5 3h14v18H5z M8 8h8 M8 12h8 M8 16h4",
   agent: "M12 3.5a2 2 0 1 1 0 4 2 2 0 0 1 0-4M5.5 16a2 2 0 1 1 0 4 2 2 0 0 1 0-4M18.5 16a2 2 0 1 1 0 4 2 2 0 0 1 0-4M10.7 6.9 7 14M13.3 6.9 17 14M7.5 18h9",
   method: "M5 8a8 8 0 0 1 14-2l2 3m0-5v5h-5 M19 16a8 8 0 0 1-14 2l-2-3m0 5v-5h5",
   platform: "m7 7-5 5 5 5m10-10 5 5-5 5M14 4l-4 16",
@@ -116,11 +117,11 @@ const ZOOM = { initial: 0.8, min: 0.5, max: 1.25 };
                     const labelId = `atlas-${route.id}-${branch.id}`;
                     const rows = medalRows(branch.medals);
                     return (
-                      <section class="lane" data-lane={branch.id} aria-labelledby={labelId}>
-                        <h4 class="lane-head" id={labelId} data-lane-head>
+                      <section class:list={["lane", { "lane-direct": !branch.title }]} data-lane={branch.id} aria-labelledby={branch.title ? labelId : `atlas-heading-${route.id}`}>
+                        {branch.title && <h4 class="lane-head" id={labelId} data-lane-head>
                           <span class="lane-name">{branch.title}</span>
                           <span class="lane-count">{t(`${branch.total} 枚勋章 · 已达成 ${branch.lit} 枚`, `${branch.total} ${branch.total === 1 ? "medal" : "medals"} · ${branch.lit} achieved`)}</span>
-                        </h4>
+                        </h4>}
                         <ul class="leaves" data-leaves>
                           {branch.medals.map((m) => (
                             <li style={`grid-column-start: ${m.column}; grid-row-start: ${rows.get(m.id)}`}>
