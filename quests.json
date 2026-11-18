@@ -432,7 +432,7 @@
     {
       "id": "RSI-Q021",
       "issue_number": 56,
-      "pr_number": null,
+      "pr_number": 33,
       "published_at": "2026-11-11T14:30:00Z",
       "status": "in_progress",
       "domain": "Benchmark",
@@ -450,7 +450,7 @@
       ],
       "assignee": "fanggejiaba",
       "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/56",
-      "linked_pr": null
+      "linked_pr": "https://github.com/Prism-Shadow/penguin-harness-benchmark/pull/33"
     },
     {
       "id": "RSI-Q023",
