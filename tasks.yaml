@@ -882,6 +882,7 @@ Deliverables and acceptance criteria:
 
   - id: "RSI-Q040"
     issue_number: 88
+    pr_number: 1627
     published_at: "2026-11-16T09:57:18Z"
     status: "in_progress"
     domain: "Evaluation"
@@ -911,7 +912,7 @@ Deliverables and acceptance criteria:
       - "https://github.com/ernie-research/ERNIE-Evolve-Results"
     assignee: "VinciJL"
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/88"
-    linked_pr: null
+    linked_pr: "https://github.com/Prism-Shadow/penguin-harness/pull/1627"
 
   - id: "RSI-Q041"
     issue_number: 89
