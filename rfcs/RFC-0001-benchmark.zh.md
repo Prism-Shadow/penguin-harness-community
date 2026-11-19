@@ -29,7 +29,7 @@ penguin-harness-benchmark/
 ```
 
 - `packages/`：承载 Benchmark 的元信息和描述文件，轻量且便于在不同环境间快速迁移。如果任务体量较小，可以直接放在 `statement/`（题干）和 `rubric/`（评分标准）中；对于体量较大的任务，则将原始数据放到独立的外部数据仓库中。
-- **外部数据仓库（按需）**：存放体积较大的原始数据文件（例如 Harbor 格式的任务、Docker 环境与大型数据集），避免主仓库体积膨胀或迁移 `packages/` 时占用过多磁盘空间。每个需要存放大体积原始数据的 Benchmark 对应一个独立的外部仓库（既可以由贡献者自行创建，也可以联系社区维护者创建）。如果是 Harbor 格式的任务，将 Harbor 的运行方式与固定 Commit 的数据仓库链接写入 `statement/README.md` 中，并将 Harbor 的原始任务数据存放在对应的独立外部仓库下。
+- **外部数据仓库（按需）**：存放体积较大的原始数据文件（例如 Harbor 格式的任务、Docker 环境或大型数据集），避免主仓库体积膨胀或迁移 `packages/` 时占用过多磁盘空间。每个需要存放大体积原始数据的 Benchmark 对应一个独立的外部仓库（既可以由贡献者自行创建，也可以联系社区维护者创建），并在 `statement/README.md` 中写明固定 Commit 的外部数据仓库链接、数据获取方式与任务运行方式（例如 Harbor 任务的启动命令）。
 
 示例：[penguinharness-benchmark-sec-a](https://github.com/Prism-Shadow/penguin-harness-benchmark/tree/main/packages/penguinharness-benchmark-sec-a)
 

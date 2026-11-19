@@ -29,7 +29,7 @@ penguin-harness-benchmark/
 ```
 
 - `packages/`: Holds the metadata and description files of the Benchmark, keeping packages lightweight for fast migration across environments. Lightweight tasks can be placed directly inside `statement/` (problem statement) and `rubric/` (scoring rubric), whereas larger tasks store their raw data in a dedicated external data repository.
-- **External Data Repository (Optional)**: Stores large raw task files (such as Harbor tasks, Docker environments, and large datasets) in a separate Git repository per Benchmark so the index repository stays lightweight. The external data repository can be created either by the contributor or by the community maintainers. For Harbor tasks, record the Harbor execution instructions and the pinned-commit link to the external data repository inside `statement/README.md`, and store the raw Harbor task data in that external repository.
+- **External Data Repository (Optional)**: Stores large raw task files (such as Harbor tasks, Docker environments, or large datasets) in a separate Git repository per Benchmark so the index repository stays lightweight. The external data repository can be created either by the contributor or by the community maintainers, and must be referenced at a pinned commit in `statement/README.md` together with the data-fetching and task-execution instructions (such as the Harbor launch command).
 
 Example: [penguinharness-benchmark-sec-a](https://github.com/Prism-Shadow/penguin-harness-benchmark/tree/main/packages/penguinharness-benchmark-sec-a)
 
