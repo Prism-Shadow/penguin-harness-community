@@ -1249,6 +1249,30 @@
       "assignee": null,
       "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/115",
       "linked_pr": null
+    },
+    {
+      "id": "RSI-Q055",
+      "issue_number": 116,
+      "pr_number": null,
+      "published_at": "2026-11-19T07:50:45Z",
+      "status": "open",
+      "domain": "Evaluation",
+      "exp": 50,
+      "target_repository": "https://github.com/Prism-Shadow/penguin-harness-benchmark",
+      "recurring": false,
+      "related_issue": "https://github.com/Prism-Shadow/penguin-harness-community/issues/32",
+      "title": "Self-Evolution Comparison for Claude Code, DeepSeek Harness, and Pi on GDPEVO Essential",
+      "title_zh": "Claude Code、DeepSeek Harness 与 Pi 在 GDPEVO Essential 上的自进化效果对比",
+      "description": "Evaluate Claude Code, DeepSeek Harness (DSH), and Pi across all six GDPEVO Essential scenarios using DeepSeek-V4.1-Flash-1017 (`deepseek-flash`) at `max` reasoning effort for training and testing. For each harness, compare a no-skill baseline with SkillOpt and SkillAdam. Use the same training protocol for each method across harnesses, freeze the resulting skills, and run each held-out task three times in fresh sessions and containers.\n\nSubmit the run configurations, per-task scores, input, cached-input and output token counts, agent execution times, and redacted traces to `penguin-harness-benchmark` under RFC-0002. Report gains over each harness's own baseline and add the results to the GDPEVO Essential leaderboard.",
+      "description_zh": "统一使用 DeepSeek-V4.1-Flash-1017（`deepseek-flash`）和 `max` 推理强度，在 GDPEVO Essential 六个场景上评测 Claude Code、DeepSeek Harness（DSH）和 Pi。每个 Harness 分别跑无 Skill Baseline、SkillOpt 和 SkillAdam。同一方法在三个 Harness 上采用统一的训练协议，训练后冻结 Skill，每道留出题在独立容器和新会话里跑三次。\n\n按 RFC-0002 向 `penguin-harness-benchmark` 提交运行配置、逐题得分、输入 Token、缓存命中的输入 Token、输出 Token、Agent 执行耗时和脱敏轨迹。汇报各方法相对同一 Harness 的 Baseline 的提升，并将结果补充至 GDPEVO Essential 榜单。",
+      "references": [
+        "https://penguin.ooo/leaderboards/gdpevo-essential",
+        "https://arxiv.org/abs/2605.23904",
+        "https://arxiv.org/abs/2609.08944"
+      ],
+      "assignee": null,
+      "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/116",
+      "linked_pr": null
     }
   ],
   "leaderboard": [
