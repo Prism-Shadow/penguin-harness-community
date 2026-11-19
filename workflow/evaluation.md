@@ -11,7 +11,14 @@
 2. **Open an Issue**: Open an Issue in [PenguinHarness Benchmark Issues](https://github.com/Prism-Shadow/penguin-harness-benchmark/issues) describing the target Benchmark, backbone model, Harness, and RSI algorithm setup.
 3. **Claim in Issue Comments (Optional)**: Leave a comment on the Issue to claim the experiment (claiming is optional and prevents duplicate evaluation runs).
 4. **Submit a PR**: Run the evaluation, organize `experiments/<leaderboard-id>/<experiment-id>/` according to `RFC-0002` (with `status: "draft"` in `meta_info.yaml`), and open a Pull Request linked to the Issue.
-5. **Maintainer Review & Merge**: Wait for a maintainer to verify the experiment metadata, score statistics, and cost calculation; once approved, `status` is updated to `"published"` and the PR is merged.
+5. **Maintainer Review & Merge**: Review the PR against the [Evaluation PR merge criteria](#evaluation-pr-merge-criteria), then set `status` to `"published"` and merge once approved.
+
+## Evaluation PR Merge Criteria
+
+- **Reproducible setup.** Submit the configuration and results according to RFC-0002. Record the benchmark version, test subset, model and Harness versions, algorithm settings, and run budget. Include reproduction commands.
+- **Comparable conditions.** When comparing runs, use the same test tasks and grading rules. Explain any differences in the setups and how they affect the conclusions. If training or tuning is involved, document the data splits and hold the test tasks out of training and tuning.
+- **Complete run records.** Submit per-task results for each attempt, record failures and timeouts, and explain how they were scored. Give the count and reason for any excluded runs or tasks.
+- **Verifiable summaries.** Check the reported scores, duration, token usage, and cost against the per-task records. State what the totals cover, the units, and the pricing basis.
 
 ## Recommended Evaluation Guidelines & Examples
 
@@ -53,8 +60,10 @@ Closes #<issue-number>
 ### Results Summary
 - **Experiment ID**: `<experiment-id>`
 - **Model**: `deepseek/deepseek-flash-1017`
-- **Test Phase (`test`) Score**: `<score_mean> ± <score_std>`, `pass@k` (optional): `<pass@k>` (`n_attempt: 3`)
+- **Test Phase (`test`) Score**: `<score_mean> ± <score_std>` (where applicable), `pass@k` (optional): `<pass@k>` (`n_attempt: <N>`)
 - **Single-Experiment Cost / Duration**: `$<cost>` / `<duration_ms> ms`
+- **Reproduction and Records**: <test subset, reproduction commands, per-task records, and handling of failures and timeouts>
+- **Comparison Setup (if applicable)**: <links to comparison runs, shared evaluation conditions, and configuration differences>
 
 ### Checklist
 - [x] Directory layout and YAML fields conform to RFC-0002 Evaluation

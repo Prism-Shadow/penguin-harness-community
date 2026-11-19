@@ -11,7 +11,14 @@
 2. **提出 Issue**：在 [PenguinHarness Benchmark Issues](https://github.com/Prism-Shadow/penguin-harness-benchmark/issues) 中创建 Issue，说明计划评测的 Benchmark、基座模型、Harness 与 RSI 算法组合。
 3. **Issue 评论区占坑（可选）**：在 Issue 评论区留言认领该组实验（占坑是可选步骤，主要用于防止多人跑完全相同的实验配置撞车）。
 4. **提交 PR**：完成评测实验后，按 `RFC-0002` 整理好 `experiments/<leaderboard-id>/<experiment-id>/` 下的 `meta_info.yaml`（`status` 设为 `"draft"`）、各阶段 `summary.yaml` 与 `attempt-<n>.yaml`，提交 Pull Request。
-5. **Maintainer 审核合并**：等待 Maintainer 审核实验配置、分数统计与计费数据；审核通过后将 `status` 更新为 `"published"` 并合并入库。
+5. **Maintainer 审核合并**：按 [Evaluation PR 合入标准](#evaluation-pr-合入标准)审核，通过后将 `status` 更新为 `"published"` 并合并入库。
+
+## Evaluation PR 合入标准
+
+- **配置可复现**。按 RFC-0002 提交实验配置与结果，写明 Benchmark 版本、测试子集、模型和 Harness 版本、算法配置及运行预算，并提供复现命令。
+- **评测口径一致**。涉及对比时，使用相同的测试题目和评分规则，说明各组配置的差异及其对结论的影响。涉及训练或调参时，说明数据划分，确保测试题目独立于训练和调参。
+- **运行记录完整**。提交各次试验的逐题结果，记录失败和超时，说明如何计分。如有排除的运行或题目，注明数量和原因。
+- **汇总结果可复核**。根据逐题记录核对汇总分数、耗时、Token 和费用，说明统计范围、单位和计费口径。
 
 ## 推荐实验指导与例子
 
@@ -53,8 +60,10 @@ Closes #<issue-number>
 ### 实验结果摘要
 - **Experiment ID**: `<experiment-id>`
 - **Model**: `deepseek/deepseek-flash-1017`
-- **测试集 (`test`) 平均分**: `<score_mean> ± <score_std>`，`pass@k`（选填）: `<pass@k>`（`n_attempt: 3`）
+- **测试集 (`test`) 平均分**: `<score_mean> ± <score_std>`（如适用），`pass@k`（选填）: `<pass@k>`（`n_attempt: <N>`）
 - **单次实验成本 / 耗时**: `$<cost>` / `<duration_ms> ms`
+- **复现与核对**: <测试子集、复现命令、逐题记录位置、失败及超时的处理方式>
+- **对比设置（如适用）**: <对照实验链接、相同的评测条件及配置差异>
 
 ### 自查清单
 - [x] 目录结构与 YAML 字段符合 RFC-0002 Evaluation 规范
