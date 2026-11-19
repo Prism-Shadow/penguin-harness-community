@@ -544,8 +544,8 @@
       "id": "RSI-Q027",
       "issue_number": 64,
       "pr_number": 88,
-      "published_at": "2026-11-12T09:23:57Z",
-      "status": "in_progress",
+      "published_at": "2026-11-19T05:41:23Z",
+      "status": "completed",
       "domain": "Awesome RSI",
       "exp": 10,
       "target_repository": "https://github.com/Prism-Shadow/awesome-rsi",
@@ -1229,14 +1229,14 @@
   ],
   "leaderboard": [
     {
+      "handle": "yenanjing",
+      "monthlyExp": 110,
+      "reachedAt": "2026-11-19T05:41:23Z"
+    },
+    {
       "handle": "Saigyouji-Yuyuko1000",
       "monthlyExp": 100,
       "reachedAt": "2026-11-03T08:28:27Z"
-    },
-    {
-      "handle": "yenanjing",
-      "monthlyExp": 100,
-      "reachedAt": "2026-11-16T13:28:14Z"
     },
     {
       "handle": "hiyouga",

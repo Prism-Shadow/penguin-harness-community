@@ -479,8 +479,8 @@ tasks:
   - id: "RSI-Q027"
     issue_number: 64
     pr_number: 88
-    published_at: "2026-11-12T09:23:57Z"
-    status: "in_progress"
+    published_at: "2026-11-19T05:41:23Z"
+    status: "completed"
     domain: "Awesome RSI"
     exp: 10
     target_repository: "https://github.com/Prism-Shadow/awesome-rsi"
