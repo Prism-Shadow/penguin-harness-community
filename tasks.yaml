@@ -113,6 +113,7 @@ tasks:
 
   - id: "RSI-Q003"
     issue_number: 32
+    pr_number: 29
     published_at: "2026-11-10T10:10:00Z"
     status: "in_progress"
     domain: "Evaluation"
@@ -128,7 +129,7 @@ tasks:
       - "https://github.com/openai/codex"
     assignee: "Peiyuan-Wang"
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/32"
-    linked_pr: null
+    linked_pr: "https://github.com/Prism-Shadow/penguin-harness-benchmark/pull/29"
 
   - id: "RSI-Q004"
     issue_number: 33
