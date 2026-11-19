@@ -1386,7 +1386,7 @@ Use the fixed [Train package](https://github.com/Yu-Yang-Li/penguin-harness-benc
     published_at: "2026-11-19T07:50:45Z"
     status: "open"
     domain: "Evaluation"
-    exp: 50
+    exp: 75
     target_repository: "https://github.com/Prism-Shadow/penguin-harness-benchmark"
     related_issue: "https://github.com/Prism-Shadow/penguin-harness-community/issues/32"
     title: "Self-Evolution Comparison for Claude Code, DeepSeek Harness, and Pi on GDPEVO Essential"

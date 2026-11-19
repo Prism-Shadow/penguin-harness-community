@@ -1257,7 +1257,7 @@
       "published_at": "2026-11-19T07:50:45Z",
       "status": "open",
       "domain": "Evaluation",
-      "exp": 50,
+      "exp": 75,
       "target_repository": "https://github.com/Prism-Shadow/penguin-harness-benchmark",
       "recurring": false,
       "related_issue": "https://github.com/Prism-Shadow/penguin-harness-community/issues/32",
