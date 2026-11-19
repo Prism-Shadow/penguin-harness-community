@@ -8,7 +8,7 @@
 ## 提交流程
 
 1. **学习 RFC 文件结构**：先阅读 [RFC-0001 Benchmark](../rfcs/RFC-0001-benchmark.zh.md)，了解 `packages/<benchmark-id>/`、`<task-id>/`（`statement/`、`rubric/`、`task_config.toml`）、`benchmark_config.toml` 以及大体积原始数据存放在独立外部仓库的规范。
-2. **提出 Issue**：在 [PenguinHarness Benchmark Issues](https://github.com/Prism-Shadow/penguin-harness-benchmark/issues) 中搜索是否已有对应 Benchmark 的 Issue；若没有，则新建一个 Issue 说明要整理的 Benchmark 来源与题目规模（若包含大体积原始数据，可使用自建仓库，也可在 Issue 中申请由社区新建外部数据仓库）。
+2. **提出 Issue**：在 [PenguinHarness Benchmark Issues](https://github.com/Prism-Shadow/penguin-harness-benchmark/issues) 中搜索是否已有对应 Benchmark 的 Issue；若没有，则新建一个 Issue 说明要整理的 Benchmark 来源与题目规模（若包含大体积原始数据，可使用自建仓库，也可联系社区委员会创建外部数据仓库）。
 3. **Issue 评论区占坑（可选）**：在目标 Issue 评论区留言认领（占坑是可选步骤，主要是为了防止多人同时整理同一个 Benchmark 撞车）。
 4. **提交 PR**：按 `RFC-0001` 完成 Benchmark 转换与自测（提交时 `benchmark_config.toml` 的 `status` 设为 `"draft"`；若包含大体积原始数据，将其推入对应的独立外部数据仓库并在 `statement/README.md` 中通过固定 Commit 引用），向 `penguin-harness-benchmark` 提交 `packages/<benchmark-id>/` 的 Pull Request 并关联 Issue。
 5. **Maintainer 审核合并**：等待 Maintainer 审核题目描述、评分标准与配置完整性；审核通过后将 `status` 更新为 `"published"` 并合并入库。
@@ -36,7 +36,7 @@
 
 ### 整理计划
 - [ ] 整理 `packages/<benchmark-id>/benchmark_config.toml` 与各题 `<task-id>/`
-- [ ] 将原始任务数据整理至独立外部数据仓库（如需要，可自建或申请社区新建）
+- [ ] 将原始任务数据整理至独立外部数据仓库（如需要，可自行创建或联系社区委员会创建）
 - [ ] 使用 `deepseek-flash-1017` 验证题目可正常执行并完成计分
 ```
 

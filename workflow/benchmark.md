@@ -8,7 +8,7 @@
 ## Submission Workflow
 
 1. **Learn the RFC File Structure**: Read [RFC-0001 Benchmark](../rfcs/RFC-0001-benchmark.md) to understand the required layout of `packages/<benchmark-id>/`, `<task-id>/` (`statement/`, `rubric/`, `task_config.toml`), `benchmark_config.toml`, and storing large raw task data in a dedicated external repository.
-2. **Open an Issue**: Check [PenguinHarness Benchmark Issues](https://github.com/Prism-Shadow/penguin-harness-benchmark/issues) for an existing Issue for the Benchmark, or open a new Issue describing the upstream source and number of tasks (if the Benchmark has large raw data, note whether you will use your own repository or would like community maintainers to create one).
+2. **Open an Issue**: Check [PenguinHarness Benchmark Issues](https://github.com/Prism-Shadow/penguin-harness-benchmark/issues) for an existing Issue for the Benchmark, or open a new Issue describing the upstream source and number of tasks (if the Benchmark has large raw data, you may use your own repository or contact the Community Committee to create one).
 3. **Claim in Issue Comments (Optional)**: Leave a comment on the Issue to claim the work (claiming is optional and primarily prevents duplicate effort).
 4. **Submit a PR**: Organize the Benchmark files according to `RFC-0001` (with `status = "draft"` in `benchmark_config.toml`; if large raw data is required, push it to the dedicated external data repository and reference it at a pinned commit in `statement/README.md`) and open a Pull Request for `packages/<benchmark-id>/` linked to the Issue.
 5. **Maintainer Review & Merge**: Wait for a maintainer to review the task statements, rubrics, and configuration; once approved, `status` is updated to `"published"` and the PR is merged.
@@ -36,7 +36,7 @@
 
 ### Plan
 - [ ] Prepare `packages/<benchmark-id>/benchmark_config.toml` and `<task-id>/` directories
-- [ ] Place raw task files in a dedicated external data repository (if applicable; self-hosted or community-created)
+- [ ] Place raw task files in a dedicated external data repository (if applicable; self-hosted or created by contacting the Community Committee)
 - [ ] Verify tasks with `deepseek-flash-1017` to ensure tasks run and score properly
 ```
 

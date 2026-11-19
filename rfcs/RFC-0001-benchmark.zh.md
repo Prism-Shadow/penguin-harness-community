@@ -29,7 +29,7 @@ penguin-harness-benchmark/
 ```
 
 - `packages/`：承载 Benchmark 的元信息和描述文件，轻量且便于在不同环境间快速迁移。如果任务体量较小，可以直接放在 `statement/`（题干）和 `rubric/`（评分标准）中；对于体量较大的任务，则将原始数据放到独立的外部数据仓库中。
-- **外部数据仓库（按需）**：存放体积较大的原始数据文件（例如 Harbor 格式的任务、Docker 环境或大型数据集），避免主仓库体积膨胀或迁移 `packages/` 时占用过多磁盘空间。每个需要存放大体积原始数据的 Benchmark 对应一个独立的外部仓库（既可以由贡献者自行创建，也可以联系社区维护者创建），并在 `statement/README.md` 中写明固定 Commit 的外部数据仓库链接、数据获取方式与任务运行方式（例如 Harbor 任务的启动命令）。
+- **外部数据仓库（按需）**：存放体积较大的原始数据文件（例如 Harbor 格式的任务、Docker 环境或大型数据集）。每个需要存放大体积原始数据的 Benchmark 对应一个独立的外部仓库（既可以由贡献者自行创建，也可以联系社区委员会创建），并在 `statement/README.md` 中写明固定 Commit 的外部数据仓库链接、数据获取方式与任务运行方式（例如 Harbor 任务的启动命令）。
 
 示例：[penguinharness-benchmark-sec-a](https://github.com/Prism-Shadow/penguin-harness-benchmark/tree/main/packages/penguinharness-benchmark-sec-a)
 
@@ -120,7 +120,7 @@ gpus = 0                                # 选填。GPU 数量限制（单位：�
   - `disk` — 分配的磁盘空间，单位为 GB（例如 `20`；不填代表不限制）。
   - `gpus` — 分配的 GPU 数量（`0` 表示不使用 GPU，正整数表示卡数；不填代表不限制）。
 
-4. （可选）如果题目包含体积较大的原始数据或沙箱环境文件（如 Harbor 任务），请为该 Benchmark 单独准备一个外部数据仓库（贡献者可自行新建仓库，也可在 Issue 中联系社区维护者新建），并在仓库中提供 `README.md` 说明文件。外部数据仓库内部的数据组织形式不限，只需在 `packages/<benchmark-id>/<task-id>/statement/README.md` 中通过固定 Commit 链接引用（同时可在 `benchmark_config.toml` 的 `references` 中列出该仓库地址），只要 Agent 可以参考 `packages/<benchmark-id>/` 中的元信息自动拉取数据并运行该 Benchmark 即可。
+4. （可选）如果题目包含体积较大的原始数据或沙箱环境文件（如 Harbor 任务），请为该 Benchmark 单独准备一个外部数据仓库（既可以由贡献者自行创建，也可以联系社区委员会创建），并在仓库中提供 `README.md` 说明文件。外部数据仓库内部的数据组织形式不限，只需在 `packages/<benchmark-id>/<task-id>/statement/README.md` 中通过固定 Commit 链接引用（同时可在 `benchmark_config.toml` 的 `references` 中列出该仓库地址），只要 Agent 可以参考 `packages/<benchmark-id>/` 中的元信息自动拉取数据并运行该 Benchmark 即可。
 
 ## 训练数据与 GDPevo 评估方法
 
