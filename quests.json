@@ -1376,7 +1376,7 @@
       "published_at": "2026-11-19T12:16:51Z",
       "status": "open",
       "domain": "PenguinHarness",
-      "exp": 50,
+      "exp": 75,
       "target_repository": "https://github.com/Prism-Shadow/penguin-harness-paper",
       "recurring": false,
       "related_issue": "https://github.com/Prism-Shadow/penguin-harness-community/issues/118",
