@@ -1,0 +1,51 @@
+---
+import AchievementAtlas from "./AchievementAtlas.astro";
+import { QUESTS } from "../shared/community";
+import { researchVersions } from "../shared/achievement-research";
+import type { Locale } from "../shared/i18n";
+
+const { locale } = Astro.props as { locale: Locale };
+const versions = researchVersions(QUESTS, locale);
+const versionIds = versions.map((version) => version.id);
+const currentId = versions.filter((version) => !version.preview).at(-1)?.id ?? versionIds[0];
+---
+<div id="atlas" data-atlas-versions data-current-version={currentId}>
+  {versions.map((version) => (
+    <AchievementAtlas locale={locale} version={version} versionIds={versionIds} current={version.id === currentId} />
+  ))}
+</div>
+
+<script>
+  for (const container of document.querySelectorAll<HTMLElement>("[data-atlas-versions]")) {
+    const trees = Array.from(container.querySelectorAll<HTMLDetailsElement>("[data-atlas-version]"));
+    const current = trees.find((tree) => tree.dataset.atlasVersion === container.dataset.currentVersion);
+    if (!current) continue;
+    function show(target: HTMLDetailsElement) {
+      for (const tree of trees) {
+        const visible = tree === target;
+        if (tree.hidden === !visible) continue;
+        tree.hidden = !visible;
+        tree.dispatchEvent(new Event("atlas-version-change"));
+      }
+    }
+
+    function showLinkedVersion() {
+      const hash = location.hash.slice(1);
+      const linked = trees.find((tree) => hash === tree.id || hash.startsWith(tree.id + "-"));
+      if (linked) show(linked);
+      else if (!hash || hash === "atlas") show(current!);
+    }
+
+    container.addEventListener("click", (event) => {
+      if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || !(event.target instanceof Element)) return;
+      const link = event.target.closest("[data-atlas-switch]") as HTMLAnchorElement | null;
+      if (!link) return;
+      const target = trees.find((tree) => tree.id === link.hash.slice(1));
+      if (!target || !target.hidden) return;
+      show(target);
+      target.querySelector<HTMLElement>("[data-version-label]")?.focus({ preventScroll: true });
+    });
+    window.addEventListener("hashchange", showLinkedVersion);
+    showLinkedVersion();
+  }
+</script>

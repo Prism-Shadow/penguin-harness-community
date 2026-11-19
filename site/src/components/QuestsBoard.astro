@@ -1,5 +1,5 @@
 ---
-import AchievementAtlas from "./AchievementAtlas.astro";
+import AchievementAtlasVersions from "./AchievementAtlasVersions.astro";
 import type { Locale } from "../shared/i18n";
 import {
   QUESTS,
@@ -109,7 +109,7 @@ function tasksFor(domain: QuestDomainId, status: QuestStatus): QuestItem[] {
     </a>
   </header>
 
-  <AchievementAtlas locale={locale} />
+  <AchievementAtlasVersions locale={locale} />
 
   <!-- Domain Sections -->
   <div id="quest-list" tabindex="-1" class="scroll-mt-28 space-y-12">

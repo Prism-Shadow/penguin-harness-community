@@ -112,8 +112,6 @@
 .atlas .pan-controls button:hover:not(:disabled) { border-color: var(--line-strong); }
 .atlas .pan-controls button:disabled { opacity: 0.35; cursor: default; }
 .atlas .pan-controls svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-.atlas .skip { color: var(--muted); font-size: 12px; text-decoration: underline; text-decoration-color: var(--line-strong); text-underline-offset: 3px; }
-.atlas .skip:hover { color: var(--ink); }
 
 /* ---------- Stage & canvas ---------- */
 .atlas .stage { position: relative; border-top: 1px solid var(--line); background: var(--canvas); }
@@ -155,13 +153,11 @@
 /* Lines taper level by level and stay neutral: status is carried by the pills and cards, gold only by completed work. */
 .atlas .w-trunk { stroke: var(--trunk); stroke-width: 4; }
 .atlas .w-twig { stroke: var(--trunk); stroke-width: 2.5; }
-.atlas .w-knot { fill: var(--trunk); }
 .atlas .w-joint { fill: var(--paper); stroke: var(--trunk); stroke-width: 2; }
 .atlas .w-fork { stroke: var(--wire); stroke-width: 2; }
 .atlas .w-fork.w-locked { stroke-dasharray: 5 4; }
 .atlas .w-membership { stroke: var(--wire); stroke-width: 1.5; }
 .atlas .w-dependency { stroke: var(--muted); stroke-width: 2; }
-.atlas .w-dependency:not([data-state="lit"]) { stroke-dasharray: 4 3; }
 
 /* ---------- Hub ---------- */
 .atlas .hub { grid-column: 1; justify-self: center; display: grid; justify-items: center; }
@@ -196,7 +192,7 @@
 
 .atlas .lanes { display: grid; row-gap: var(--lane-gap); }
 .atlas .lane { display: grid; grid-template-columns: var(--category-w) max-content; column-gap: var(--member-gap); align-items: center; }
-.atlas .lane-direct { display: block; }
+.atlas .lane-direct { display: flex; align-items: center; gap: 32px; }
 .atlas .lane-head {
   grid-area: 1 / 1 / 2 / -1;
   justify-self: start;

@@ -1,59 +1,33 @@
 ---
 import "../styles/achievement-atlas.css";
 import type { Locale } from "../shared/i18n";
-import { QUESTS } from "../shared/community";
-import { ATLAS_STATES, researchAtlas } from "../shared/achievements";
-import { medalRows } from "../shared/achievement-atlas-layout";
+import type { ResearchVersion } from "../shared/achievement-research";
+import AchievementResearchCard from "./AchievementResearchCard.astro";
 import Logo from "./Logo.astro";
-interface Props { locale: Locale }
-const { locale } = Astro.props;
+
+interface Props {
+  locale: Locale;
+  version: ResearchVersion;
+  versionIds: string[];
+  current: boolean;
+}
+const { locale, version, versionIds, current } = Astro.props;
 const t = (zh: string, en: string) => (locale === "zh" ? zh : en);
-const atlas = researchAtlas(QUESTS, locale);
-const { counts, total, statuses } = atlas;
-const words = {
-  all: t("全部", "All"),
-  results: t("枚勋章", "medals"),
-  lit: t("已点亮", "lit"),
-  evidence: t("验收要求", "Acceptance criteria"),
-  quests: t("关联任务", "Related tasks"),
-  requiredTasks: t("前置任务", "Required tasks"),
-  accepted: t("已验收", "Accepted"),
-  pendingTask: t("待完成", "Pending"),
-  report: t("已验收的对照报告", "Accepted comparison report"),
-  mergedPr: t("查看已合入 PR", "View merged PR"),
-  relatedArtifacts: t("其他相关产物", "Other related artifacts"),
-  awaitingReport: t("对照报告待验收", "Awaiting acceptance of the comparison report"),
-  needs: t("前置成果", "Prerequisites"),
-  needsAny: t("前置成果（任一项达成即可）", "Prerequisites (any one)"),
-  unlockCondition: t("所需的前置勋章", "Required medals"),
-  unlocks: t("后续成果", "Unlocks"),
-  contributor: t("贡献者", "Contributor"),
-  unregistered: t("项任务尚未登记", "quests not on the board yet"),
-};
-const stateHelp = {
-  lit: t("前置成果和这枚勋章的验收要求都已满足。", "All prerequisites and this medal’s acceptance criteria have been met."),
-  ready: t("前置条件已满足，勋章本身待达成。", "All prerequisites are met. The medal itself is still to be earned."),
-  locked: t("还有前置成果未达成，点开勋章可查看。", "One or more prerequisites are still unmet. Open the medal to see which."),
-};
-// One icon per long-term route.
+const prefix = `atlas-${version.id}`;
+const detailsId = `${prefix}-research-details`;
+const index = versionIds.indexOf(version.id);
+const previous = versionIds[index - 1];
+const next = versionIds[index + 1];
 const icons: Record<string, string> = {
   infra: "m3 7 9-5 9 5-9 5z M3 12l9 5 9-5 M3 17l9 5 9-5",
   "auto-bench": "M5 3h14v18H5z M8 8h8 M8 12h8 M8 16h4",
   agent: "M12 3.5a2 2 0 1 1 0 4 2 2 0 0 1 0-4M5.5 16a2 2 0 1 1 0 4 2 2 0 0 1 0-4M18.5 16a2 2 0 1 1 0 4 2 2 0 0 1 0-4M10.7 6.9 7 14M13.3 6.9 17 14M7.5 18h9",
-  method: "M5 8a8 8 0 0 1 14-2l2 3m0-5v5h-5 M19 16a8 8 0 0 1-14 2l-2-3m0 5v-5h5",
   platform: "m7 7-5 5 5 5m10-10 5 5-5 5M14 4l-4 16",
 };
-const STAR = "M8 1.6l1.95 3.95 4.35.63-3.15 3.07.74 4.33L8 11.53l-3.89 2.05.74-4.33L1.7 6.18l4.35-.63z";
-const LOCK = "M5.6 7.4V5.9a2.4 2.4 0 0 1 4.8 0v1.5M4.6 7.4h6.8v5.2H4.6z";
-const UNLOCK = "M6 7.4V5.3a2.5 2.5 0 0 1 4.9-.7M4.6 7.4h6.8v5.2H4.6z";
-// Hub ring: the lit arc first, then what is ready to push, on a neutral track.
-const R = 35, C = 2 * Math.PI * R;
-const litArc = total ? (C * counts.lit) / total : 0;
-const readyArc = total ? (C * counts.ready) / total : 0;
-// Desktop zoom of the tree only (titles, filters and toolbar keep their size). Phones always use 100%.
-const ZOOM = { initial: 0.8, min: 0.5, max: 1.25 };
+const zoom = { initial: 0.8, min: 0.5, max: 1.25 };
 ---
-<details class="atlas" id="atlas" open data-atlas style={`--zoom: ${ZOOM.initial}`} data-model={JSON.stringify({ medals: atlas.medals, statuses, words, zoom: ZOOM })}>
+<details class="atlas" id={prefix} open hidden={!current} data-atlas data-atlas-version={version.id}
+  style={`--zoom: ${zoom.initial}`} data-atlas-zoom={JSON.stringify(zoom)}>
   <summary class="atlas-head border-b border-gray-200 pb-2.5 dark:border-gray-800">
     <h2 class="flex items-center justify-between gap-4 text-xl font-semibold tracking-tight text-gray-950 dark:text-white">
       <span>{t("社区成就树", "Community achievement tree")}</span>
@@ -63,84 +37,54 @@ const ZOOM = { initial: 0.8, min: 0.5, max: 1.25 };
 
   <div class="atlas-frame mt-4">
     <div class="toolbar">
-      <div class="filters" role="group" aria-label={t("按勋章状态筛选", "Filter medals by state")}>
-        <button type="button" data-filter="all" aria-pressed="true">{words.all}<b>{total}</b></button>
-        {ATLAS_STATES.map((s) => (
-          <button type="button" data-filter={s} data-state={s} aria-pressed="false" title={stateHelp[s]}>
-            <svg class="glyph" viewBox="0 0 16 16" aria-hidden="true"><path d={s === "lit" ? STAR : s === "ready" ? UNLOCK : LOCK} /></svg>
-            {statuses[s]}<b>{counts[s]}</b>
-          </button>
-        ))}
-      </div>
+      <nav class="atlas-versions" aria-label={t("成就树版本", "Achievement tree versions")}>
+        {previous ? (
+          <a href={`#atlas-${previous}`} data-atlas-switch={previous} aria-label={t("上一版", "Previous version")}>‹</a>
+        ) : <button type="button" data-version-previous disabled aria-label={t("上一版", "Previous version")}>‹</button>}
+        <span data-version-label tabindex="-1" aria-current="page">{version.id.toUpperCase()}</span>
+        {next ? (
+          <a href={`#atlas-${next}`} data-atlas-switch={next} aria-label={t("下一版", "Next version")}>›</a>
+        ) : <button type="button" data-version-next disabled aria-label={t("下一版", "Next version")}>›</button>}
+      </nav>
       <div class="tools">
         <span class="pan-controls" data-pan-tools hidden>
           <button type="button" data-pan-left aria-label={t("画布向左滚动", "Scroll canvas left")}><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3.5 5.5 8l4.5 4.5" /></svg></button>
           <span>{t("横向浏览", "Pan")}</span>
           <button type="button" data-pan-right aria-label={t("画布向右滚动", "Scroll canvas right")}><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5" /></svg></button>
         </span>
-        <a class="skip" href="#quest-list">{t("跳到任务列表", "Skip to quest list")}</a>
       </div>
     </div>
 
     <div class="stage" data-stage>
-      <div class="viewport" data-scroll tabindex="0" role="region" aria-keyshortcuts="+ - 0" aria-label={t("社区成就树，从左往右浏览", "Community achievement tree, read from left to right")}>
+      <div class="viewport" data-scroll tabindex="0" role="region" aria-keyshortcuts="+ - 0"
+        aria-label={t("社区成就树，从左往右浏览", "Community achievement tree, read from left to right")}>
         <div class="canvas" data-canvas>
-          <svg class="wires" data-wires aria-hidden="true">
-            <defs><marker id="atlas-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" orient="auto" markerUnits="userSpaceOnUse"><polygon points="0,0 8,4 0,8" fill="context-stroke" /></marker></defs>
-            <g data-paths></g>
-          </svg>
+          <svg class="wires" data-wires aria-hidden="true"><g data-paths></g></svg>
 
-          <div class="hub" data-hub style={`grid-row: 1 / span ${atlas.routes.length}`}>
+          <div class="hub" data-hub style={`grid-row: 1 / span ${version.routes.length}`}>
             <span class="medal">
-              <svg class="progress" viewBox="0 0 80 80" aria-hidden="true">
-                <circle class="track" cx="40" cy="40" r={R} />
-                <circle class="arc arc-move" cx="40" cy="40" r={R} stroke-dasharray={`${readyArc} ${C}`} stroke-dashoffset={-litArc} />
-                <circle class="arc arc-done" cx="40" cy="40" r={R} stroke-dasharray={`${litArc} ${C}`} />
-              </svg>
+              <svg class="progress" viewBox="0 0 80 80" aria-hidden="true"><circle class="track" cx="40" cy="40" r="35" /></svg>
               <Logo class="brand-mark" />
             </span>
             <b>{t("RSI 社区", "RSI community")}</b>
-            <small><strong>{counts.lit}</strong> / {total}<span> {words.lit}</span></small>
           </div>
 
           <div class="branches">
-            {atlas.routes.map((route) => (
-              <section class="branch" data-domain={route.id} aria-labelledby={`atlas-heading-${route.id}`}>
+            {version.routes.map((route) => (
+              <section class="branch" data-domain={route.id} aria-labelledby={`${prefix}-heading-${route.id}`}>
                 <div class="domain" data-domain-node>
-                  <span class="domain-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={icons[route.id]} /></svg></span>
-                  <h3 id={`atlas-heading-${route.id}`} title={route.aim}>{route.title}</h3>
-                  <span class="domain-stat"><b class:list={{ lit: route.counts.lit > 0 }}>{route.counts.lit}</b> / {route.total} {words.lit}</span>
-                  <span class="meter" aria-hidden="true">
-                    {ATLAS_STATES.map((s) => route.counts[s] > 0 && <i data-state={s} style={`flex-grow:${route.counts[s]}`}></i>)}
-                  </span>
+                  {icons[route.id] && <span class="domain-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={icons[route.id]} /></svg></span>}
+                  <h3 id={`${prefix}-heading-${route.id}`}>{route.title}</h3>
                 </div>
                 <div class="lanes">
-                  {route.branches.map((branch) => {
-                    const labelId = `atlas-${route.id}-${branch.id}`;
-                    const rows = medalRows(branch.medals);
-                    const countLabel = branch.total === 0 ? t("暂无独立勋章", "No medals yet")
-                      : `${branch.lit}/${branch.total} ${words.lit}`;
-                    return (
-                      <section class:list={["lane", { "lane-direct": !branch.title }]} data-lane={branch.id} aria-labelledby={branch.title ? labelId : `atlas-heading-${route.id}`}>
-                        {branch.title && <h4 class="lane-head" id={labelId} data-lane-head>
-                          <span class="lane-name">{branch.title}</span>
-                          <span class="lane-count">{countLabel}</span>
-                        </h4>}
-                        {branch.total > 0 && <ul class="leaves" data-leaves>
-                          {branch.medals.map((m) => (
-                            <li style={`grid-column-start: ${m.column}; grid-row-start: ${rows.get(m.id)}`}>
-                              <a class="leaf" data-record={m.id} data-state={m.state} href={m.href} aria-label={`${m.name} · ${statuses[m.state]}`} title={`${m.name} · ${statuses[m.state]}\n${m.intent}`}>
-                                <span class="badge" aria-hidden="true">
-                                  <svg viewBox="0 0 16 16"><path d={m.state === "lit" ? STAR : m.state === "ready" ? UNLOCK : LOCK} /></svg>
-                                </span>
-                                <span class="leaf-title">{m.name}</span>
-                              </a>
-                            </li>
-                          ))}
-                        </ul>}
-                      </section>
-                    );
-                  })}
+                  {route.projects.map((project) => (
+                    <div class="lane lane-direct">
+                      <AchievementResearchCard project={project} locale={locale} prefix={prefix} />
+                      {project.followUp && (
+                        <AchievementResearchCard project={project.followUp} predecessor={project} locale={locale} prefix={prefix} />
+                      )}
+                    </div>
+                  ))}
                 </div>
               </section>
             ))}
@@ -150,21 +94,13 @@ const ZOOM = { initial: 0.8, min: 0.5, max: 1.25 };
     </div>
   </div>
 
-  <dialog class="dossier" data-detail aria-labelledby="atlas-detail-title">
-    <div class="dossier-inner">
-      <p class="dossier-kicker"><span class="pill" data-status></span><span data-domain-label></span></p>
-      <h3 id="atlas-detail-title" data-title></h3>
-      <button class="close" type="button" data-close autofocus aria-label={t("关闭详情", "Close details")}><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4 4 8 8M12 4l-8 8" /></svg></button>
-      <p class="dossier-summary" data-summary></p>
-      <p class="dossier-evidence"><b>{words.evidence}</b><span data-evidence></span></p>
-    <p class="dossier-note" data-related-artifacts hidden></p>
-      <p class="dossier-note" data-note hidden></p>
-      <div data-facts></div>
-      <div data-neighbors></div>
-    </div>
-  </dialog>
+  <div class="research-details" id={detailsId} data-research-details hidden role="dialog" aria-labelledby={`${detailsId}-title`}>
+    <button type="button" data-research-close aria-label={t("关闭阶段详情", "Close stage details")}>×</button>
+    <div data-research-body></div>
+  </div>
   <span class="sr-only" aria-live="polite" data-live></span>
 </details>
+
 <script>
   import { initAtlas } from "../shared/achievement-atlas-ui";
   document.querySelectorAll<HTMLDetailsElement>("[data-atlas]").forEach(initAtlas);
