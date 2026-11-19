@@ -1404,3 +1404,26 @@ Submit the run configurations, per-task scores, input, cached-input and output t
     assignee: null
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/116"
     linked_pr: null
+
+  - id: "RSI-Q056"
+    issue_number: 118
+    published_at: "2026-11-19T09:08:01Z"
+    status: "in_progress"
+    domain: "PenguinHarness"
+    exp: 50
+    target_repository: "https://github.com/Prism-Shadow/penguin-harness-paper"
+    related_issue: null
+    title: "Complete the PenguinHarness Preprint"
+    title_zh: "完善 PenguinHarness 论文预印本"
+    description: "Complete the main text of the PenguinHarness preprint and polish it to a publication-ready standard. Check the experimental tables and figures against the available benchmark records, and cite the data sources.
+
+Submit the revised LaTeX sources, figures, and compiled PDF in a pull request to `penguin-harness-paper`. Verify that the arXiv PDF builds from a clean checkout."
+    description_zh: "在现有稿件基础上补齐 PenguinHarness 论文预印本的正文，并对英文正文进行通篇润色，使其达到可发表的水准。核对实验表格及图表与现有评测记录是否一致，并标注数据来源。
+
+向 `penguin-harness-paper` 提交包含更新后 LaTeX 源码、图表和 PDF 的 PR，并验证 arXiv 版能从干净检出重新编译。"
+    references:
+      - "https://github.com/Prism-Shadow/penguin-harness-paper"
+      - "https://penguin.ooo/leaderboards/gdpevo-essential"
+    assignee: "rank-Yu"
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/118"
+    linked_pr: null
