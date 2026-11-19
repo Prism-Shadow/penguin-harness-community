@@ -887,7 +887,7 @@
       "issue_number": 88,
       "pr_number": null,
       "published_at": "2026-11-16T09:57:18Z",
-      "status": "open",
+      "status": "in_progress",
       "domain": "Evaluation",
       "exp": 200,
       "target_repository": "https://github.com/Prism-Shadow/penguin-harness",
@@ -901,7 +901,7 @@
         "https://ernie.baidu.com/zh/research/posts/ernie-evolve/",
         "https://github.com/ernie-research/ERNIE-Evolve-Results"
       ],
-      "assignee": null,
+      "assignee": "VinciJL",
       "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/88",
       "linked_pr": null
     },
@@ -910,7 +910,7 @@
       "issue_number": 89,
       "pr_number": null,
       "published_at": "2026-11-16T09:57:21Z",
-      "status": "open",
+      "status": "in_progress",
       "domain": "Evaluation",
       "exp": 200,
       "target_repository": "https://github.com/Prism-Shadow/penguin-harness",
@@ -923,7 +923,7 @@
       "references": [
         "https://ernie.baidu.com/zh/research/posts/ernie-evolve/"
       ],
-      "assignee": null,
+      "assignee": "VinciJL",
       "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/89",
       "linked_pr": null
     },
@@ -1374,6 +1374,7 @@
     "Nhckdvrl",
     "leslie520-bye",
     "Yu-Yang-Li",
+    "VinciJL",
     "Huster-LiShuangJia"
   ]
 }

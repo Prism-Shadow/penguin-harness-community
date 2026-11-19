@@ -883,7 +883,7 @@ Deliverables and acceptance criteria:
   - id: "RSI-Q040"
     issue_number: 88
     published_at: "2026-11-16T09:57:18Z"
-    status: "open"
+    status: "in_progress"
     domain: "Evaluation"
     exp: 200
     target_repository: "https://github.com/Prism-Shadow/penguin-harness"
@@ -909,14 +909,14 @@ Deliverables and acceptance criteria:
     references:
       - "https://ernie.baidu.com/zh/research/posts/ernie-evolve/"
       - "https://github.com/ernie-research/ERNIE-Evolve-Results"
-    assignee: null
+    assignee: "VinciJL"
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/88"
     linked_pr: null
 
   - id: "RSI-Q041"
     issue_number: 89
     published_at: "2026-11-16T09:57:21Z"
-    status: "open"
+    status: "in_progress"
     domain: "Evaluation"
     exp: 200
     target_repository: "https://github.com/Prism-Shadow/penguin-harness"
@@ -937,7 +937,7 @@ Deliverables and acceptance criteria:
 3. 通过初始步与多步 loss 对齐校验，提交完整的算子/训练框架补丁、RSI 实验演化树及在国产芯片单机/多机环境下的训练步耗时（step time）与 MFU 提升报告。"
     references:
       - "https://ernie.baidu.com/zh/research/posts/ernie-evolve/"
-    assignee: null
+    assignee: "VinciJL"
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/89"
     linked_pr: null
 
