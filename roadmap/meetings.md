@@ -4,21 +4,18 @@
 
 We host online Bi-weekly Meetings every two weeks (see [RFC-0004 Bi-weekly Meeting](../rfcs/RFC-0004-meeting.md)). Meeting links are posted one day in advance in the community WeChat group and Discord.
 
-## Upcoming Meeting
+## Past Meetings
 
 ### 2nd Bi-weekly Meeting (November 17, 2026, 18:00 UTC+8)
 
-The 2nd bi-weekly meeting of the AwesomeRSI community is scheduled for November 17 at 18:00 Beijing Time (UTC+8), lasting about one hour, with the following agenda:
+The 2nd bi-weekly meeting of the AwesomeRSI community took place on November 17 at 18:00 Beijing Time (UTC+8), lasting about one hour, with the following agenda:
 
-1. Walk through our newly open-sourced RSI evaluation and experiment workflow in full detail
-2. Introduce the [Community Committee](/people/) governance and finalize several concrete community research directions
-3. Sync on [community updates](/quests/) and invite contributors who have claimed tasks to share their progress
+1. Walked through our newly open-sourced RSI evaluation and experiment workflow in full detail
+2. Introduced the [Community Committee](/people/) governance and finalized several concrete community research directions
+3. Synced on [community updates](/quests/) and invited contributors who had claimed tasks to share their progress
 4. Open discussion on new research directions and ideas for building the community
 
-- **Tencent Meeting ID**: `452-772-050`
-- **Meeting Link**: [https://meeting.tencent.com/dm/DGujHhKI4M2Z](https://meeting.tencent.com/dm/DGujHhKI4M2Z)
-
-## Past Meetings
+- **Video Recording**: [https://www.bilibili.com/video/BV1thsr68E3y/](https://www.bilibili.com/video/BV1thsr68E3y/)
 
 ### 1st Bi-weekly Meeting (November 3, 2026, 18:00 UTC+8)
 

@@ -6,6 +6,7 @@ on:
       - "main"
     paths:
       - "site/**"
+      - "assets/**"
       - "scripts/community-agent-sync*"
       - "community/**"
       - "roadmap/**"
@@ -17,6 +18,7 @@ on:
       - "main"
     paths:
       - "site/**"
+      - "assets/**"
       - "scripts/community-agent-sync*"
       - "community/**"
       - "roadmap/**"
