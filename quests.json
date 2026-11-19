@@ -1296,6 +1296,29 @@
       "assignee": "rank-Yu",
       "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/118",
       "linked_pr": null
+    },
+    {
+      "id": "RSI-Q057",
+      "issue_number": 119,
+      "pr_number": null,
+      "published_at": "2026-11-19T09:32:18Z",
+      "status": "open",
+      "domain": "Benchmark",
+      "exp": 100,
+      "target_repository": "https://github.com/Prism-Shadow/penguin-harness-benchmark",
+      "recurring": false,
+      "related_issue": null,
+      "title": "Integrate ApprenticeBench",
+      "title_zh": "接入 ApprenticeBench",
+      "description": "Integrate ApprenticeBench into `penguin-harness-benchmark` following RFC-0001. Run three tasks with PenguinHarness and list each task’s ID and score in the PR.",
+      "description_zh": "按 RFC-0001 将 ApprenticeBench 接入 `penguin-harness-benchmark`。用 PenguinHarness 测试其中 3 道题，并在 PR 中列出每道题的 ID 和得分。",
+      "references": [
+        "https://apprenticebench.com/",
+        "https://github.com/Prism-Shadow/penguin-harness-community/blob/main/rfcs/RFC-0001-benchmark.zh.md"
+      ],
+      "assignee": null,
+      "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/119",
+      "linked_pr": null
     }
   ],
   "leaderboard": [
