@@ -13,26 +13,23 @@ We built the open-source [PenguinHarness Benchmark](https://github.com/Prism-Sha
 
 ## Directory Structure
 
-Each Benchmark is divided into `packages/<benchmark-id>` and an optional `data/<benchmark-id>`. The file structure of the repository is organized as follows:
+The `penguin-harness-benchmark` main repository serves as a lightweight index that stores only `packages/<benchmark-id>` metadata and task descriptions; large raw task datasets are stored in separate external Git repositories (one repository per Benchmark). The file structure of the main repository is organized as follows:
 
 ```text
 penguin-harness-benchmark/
-├── packages/
-│   └── <benchmark-id>/
-│       ├── <task-id>/
-│       │   ├── statement/
-│       │   │   └── README.md
-│       │   ├── rubric/
-│       │   │   └── README.md
-│       │   └── task_config.toml
-│       └── benchmark_config.toml
-└── data/
+└── packages/
     └── <benchmark-id>/
-        └── README.md
+        ├── <task-id>/
+        │   ├── statement/
+        │   │   └── README.md
+        │   ├── rubric/
+        │   │   └── README.md
+        │   └── task_config.toml
+        └── benchmark_config.toml
 ```
 
-- `packages/`: Holds the metadata and description files of the Benchmark, keeping packages lightweight for fast migration across environments. Lightweight tasks can be placed directly inside `statement/` (problem statement) and `rubric/` (scoring rubric), whereas larger tasks store their raw data under `data/`.
-- `data/`: Stores large raw task files (such as tasks in Harbor format) so that migrating `packages/` does not consume excessive disk space. For Harbor tasks, place the Harbor execution instructions inside `statement/` and store the Harbor task data inside `data/`.
+- `packages/`: Holds the metadata and description files of the Benchmark, keeping packages lightweight for fast migration across environments. Lightweight tasks can be placed directly inside `statement/` (problem statement) and `rubric/` (scoring rubric), whereas larger tasks store their raw data in a dedicated external data repository.
+- **External Data Repository (Optional)**: Stores large raw task files (such as Harbor tasks, Docker environments, and large datasets) in a separate Git repository per Benchmark so the index repository stays lightweight. The external data repository can be created either by the contributor or by the community maintainers. For Harbor tasks, record the Harbor execution instructions and the pinned-commit link to the external data repository inside `statement/README.md`, and store the raw Harbor task data in that external repository.
 
 Example: [penguinharness-benchmark-sec-a](https://github.com/Prism-Shadow/penguin-harness-benchmark/tree/main/packages/penguinharness-benchmark-sec-a)
 
@@ -123,7 +120,7 @@ Optional fields:
   - `disk` — Allocated disk space limit in GB (e.g., `20`; omit for unlimited).
   - `gpus` — Allocated GPU count (`0` for no GPU / CPU-only, positive integer for GPU count; omit for unlimited).
 
-4. (Optional) If the tasks include large raw datasets or sandbox environment files (such as Harbor tasks), place the raw data under `data/<benchmark-id>/` along with a `README.md` entrypoint. The internal layout of `data/<benchmark-id>/` is unrestricted as long as an Agent can run the Benchmark by following the metadata and instructions in `packages/<benchmark-id>/`.
+4. (Optional) If the tasks include large raw datasets or sandbox environment files (such as Harbor tasks), place the raw data in a dedicated external Git repository for that Benchmark (contributors may create the repository themselves or request one from community maintainers in the Issue) along with a `README.md` entrypoint. The internal layout of the external data repository is unrestricted: reference it at a pinned commit in `packages/<benchmark-id>/<task-id>/statement/README.md` (and optionally in `benchmark_config.toml`'s `references`) so that an Agent can fetch the data and run the Benchmark by following the metadata and instructions in `packages/<benchmark-id>/`.
 
 ## Training Data & GDPevo Evaluation Protocol
 
