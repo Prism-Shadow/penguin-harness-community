@@ -13,7 +13,7 @@ We built the open-source [PenguinHarness Benchmark](https://github.com/Prism-Sha
 
 ## Directory Structure
 
-The `penguin-harness-benchmark` main repository serves as a lightweight index that stores only `packages/<benchmark-id>` metadata and task descriptions; large raw task datasets are stored in separate external GitHub repositories (one repository per Benchmark). The file structure of the main repository is organized as follows:
+The `penguin-harness-benchmark` main repository serves as a lightweight index that stores only `packages/<benchmark-id>` metadata and task descriptions; large raw task datasets are stored in separate external GitHub repositories. The file structure of the main repository is organized as follows:
 
 ```text
 penguin-harness-benchmark/
@@ -29,7 +29,7 @@ penguin-harness-benchmark/
 ```
 
 - `packages/`: Holds the metadata and description files of the Benchmark, keeping packages lightweight for fast migration across environments. Lightweight tasks can be placed directly inside `statement/` (problem statement) and `rubric/` (scoring rubric), whereas larger tasks store their raw data in a dedicated external data repository.
-- **External Data Repository (Optional)**: Stores large raw task files (such as Harbor tasks, Docker environments, or large datasets). An external data repository is maintained at the level of the whole Benchmark (named after the full Benchmark and holding all of its raw data; created either by the contributor or by contacting the Community Committee). When a Benchmark has both a full set and a subset (or multiple splits), they appear as parallel `<benchmark-id>` directories under `packages/` in the main repository while sharing the same external data repository—which specific tasks and data each package uses is specified inside `packages/<benchmark-id>/` and its `statement/README.md` (with a pinned-commit link to the external data repository, data path, and execution instructions).
+- **External Data Repository**: Used when needed to store large raw task files such as Harbor tasks, Docker environments, or large datasets. An external data repository is maintained at the level of the whole Benchmark, named after the full Benchmark and holding all of its raw data, and can be created either by the contributor or by contacting the Community Committee. When a Benchmark has both a full set and a subset or multiple splits, they appear as parallel `<benchmark-id>` directories under `packages/` in the main repository while sharing the same external data repository. Which specific data each package uses and how to fetch and run it is specified directly in `packages/<benchmark-id>/` under each task's `statement/README.md` via a pinned-commit link to the external data repository.
 
 Example: [penguinharness-benchmark-sec-a](https://github.com/Prism-Shadow/penguin-harness-benchmark/tree/main/packages/penguinharness-benchmark-sec-a)
 
@@ -120,7 +120,7 @@ Optional fields:
   - `disk` — Allocated disk space limit in GB (e.g., `20`; omit for unlimited).
   - `gpus` — Allocated GPU count (`0` for no GPU / CPU-only, positive integer for GPU count; omit for unlimited).
 
-4. (Optional) If the tasks include large raw datasets or sandbox environment files (such as Harbor tasks), place the raw data in a dedicated external GitHub repository for that Benchmark (created either by the contributor or by contacting the Community Committee) along with a `README.md` entrypoint. Full sets and subsets of the same Benchmark should be maintained together in a single external data repository named after the full Benchmark, with unrestricted internal layout; which specific tasks and data a given `<benchmark-id>` uses is defined by `packages/<benchmark-id>/` and the pinned-commit references in `packages/<benchmark-id>/<task-id>/statement/README.md` (and optionally listed in `benchmark_config.toml`'s `references`) so that an Agent can fetch the required data and run the Benchmark by following the metadata and instructions in `packages/<benchmark-id>/`.
+4. If the tasks include large raw datasets or sandbox environment files, place the raw data in a dedicated external GitHub repository for that Benchmark and provide a `README.md` entrypoint. The external data repository can be created either by the contributor or by contacting the Community Committee. Full sets and subsets of the same Benchmark are maintained together in a single external data repository named after the full Benchmark, with unrestricted internal layout. Which specific data a given `<benchmark-id>` uses is specified in `packages/<benchmark-id>/<task-id>/statement/README.md` via pinned-commit references and execution instructions, and the repository URL can also be listed in `benchmark_config.toml`'s `references`, so that an Agent can fetch the required data and run the Benchmark by following the metadata and instructions in `packages/<benchmark-id>/`.
 
 ## Training Data & GDPevo Evaluation Protocol
 
