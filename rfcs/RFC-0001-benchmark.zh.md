@@ -13,7 +13,7 @@ Benchmark 是用来评估 Agent 的一组数据，不包含评估结果。Benchm
 
 ## 目录结构
 
-`penguin-harness-benchmark` 主仓库作为轻量索引仓，仅存放每个 Benchmark 的 `packages/<benchmark-id>` 元信息与描述文件；体积较大的原始任务数据则按 Benchmark 拆分到独立的外部 Git 仓库中。主仓库的文件组织格式如下：
+`penguin-harness-benchmark` 主仓库作为轻量索引仓，仅存放每个 Benchmark 的 `packages/<benchmark-id>` 元信息与描述文件；体积较大的原始任务数据则按 Benchmark 拆分到独立的外部 GitHub 仓库中。主仓库的文件组织格式如下：
 
 ```text
 penguin-harness-benchmark/
