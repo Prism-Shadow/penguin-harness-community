@@ -24,7 +24,8 @@ const icons: Record<string, string> = {
   agent: "M12 3.5a2 2 0 1 1 0 4 2 2 0 0 1 0-4M5.5 16a2 2 0 1 1 0 4 2 2 0 0 1 0-4M18.5 16a2 2 0 1 1 0 4 2 2 0 0 1 0-4M10.7 6.9 7 14M13.3 6.9 17 14M7.5 18h9",
   platform: "m7 7-5 5 5 5m10-10 5 5-5 5M14 4l-4 16",
 };
-const zoom = { initial: 0.8, min: 0.5, max: 1.25 };
+// The tree opens at 100%, or smaller when that is what fits it whole (see fitZoom).
+const zoom = { initial: 1, min: 0.5, max: 1.25 };
 ---
 <details class="atlas" id={prefix} open hidden={!current} data-atlas data-atlas-version={version.id}
   style={`--zoom: ${zoom.initial}`} data-atlas-zoom={JSON.stringify(zoom)}>
@@ -39,12 +40,12 @@ const zoom = { initial: 0.8, min: 0.5, max: 1.25 };
     <div class="toolbar">
       <nav class="atlas-versions" aria-label={t("成就树版本", "Achievement tree versions")}>
         {previous ? (
-          <a href={`#atlas-${previous}`} data-atlas-switch={previous} aria-label={t("上一版", "Previous version")}>‹</a>
-        ) : <button type="button" data-version-previous disabled aria-label={t("上一版", "Previous version")}>‹</button>}
+          <a href={`#atlas-${previous}`} data-atlas-switch={previous} aria-label={t("上一版", "Previous version")}><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3.5 5.5 8l4.5 4.5" /></svg></a>
+        ) : <button type="button" data-version-previous disabled aria-label={t("上一版", "Previous version")}><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3.5 5.5 8l4.5 4.5" /></svg></button>}
         <span data-version-label tabindex="-1" aria-current="page">{version.id.toUpperCase()}</span>
         {next ? (
-          <a href={`#atlas-${next}`} data-atlas-switch={next} aria-label={t("下一版", "Next version")}>›</a>
-        ) : <button type="button" data-version-next disabled aria-label={t("下一版", "Next version")}>›</button>}
+          <a href={`#atlas-${next}`} data-atlas-switch={next} aria-label={t("下一版", "Next version")}><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5" /></svg></a>
+        ) : <button type="button" data-version-next disabled aria-label={t("下一版", "Next version")}><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5" /></svg></button>}
       </nav>
       <ul class="research-legend" aria-label={t("阶段进度图例", "Stage progress legend")}>
         {Object.entries(researchStageLabels[locale]).map(([state, label]) => (
@@ -60,10 +61,7 @@ const zoom = { initial: 0.8, min: 0.5, max: 1.25 };
           <svg class="wires" data-wires aria-hidden="true"><g data-paths></g></svg>
 
           <div class="hub" data-hub style={`grid-row: 1 / span ${version.routes.length}`}>
-            <span class="medal">
-              <svg class="progress" viewBox="0 0 80 80" aria-hidden="true"><circle class="track" cx="40" cy="40" r="35" /></svg>
-              <Logo class="brand-mark" />
-            </span>
+            <span class="medal"><Logo class="brand-mark" /></span>
             <b>{t("RSI 社区", "RSI community")}</b>
           </div>
 
@@ -93,7 +91,7 @@ const zoom = { initial: 0.8, min: 0.5, max: 1.25 };
   </div>
 
   <div class="research-details" id={detailsId} data-research-details hidden role="dialog" aria-labelledby={`${detailsId}-title`}>
-    <button type="button" data-research-close aria-label={t("关闭阶段详情", "Close stage details")}>×</button>
+    <button type="button" data-research-close aria-label={t("关闭阶段详情", "Close stage details")}><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4 4 8 8M12 4l-8 8" /></svg></button>
     <div data-research-body></div>
   </div>
   <span class="sr-only" aria-live="polite" data-live></span>

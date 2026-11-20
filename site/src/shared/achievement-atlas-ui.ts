@@ -52,7 +52,26 @@ export function initAtlas(root: HTMLDetailsElement) {
   // Zoom only the canvas. Anchor mouse input at the pointer and keyboard input at the centre.
   const desktop = window.matchMedia("(min-width: 651px)");
   let zoom = zoomConfig.initial;
+  // Until someone zooms by hand, the tree opens at 100% or at whatever smaller scale fits it whole in the frame.
+  let userZoomed = false;
+  function fitZoom() {
+    const frame = canvas.getBoundingClientRect(), scale = scaleOf();
+    const nodes = Array.from(root.querySelectorAll<HTMLElement>("[data-research-card], [data-domain-node]"));
+    if (!nodes.length || !frame.width) return zoom;
+    const right = Math.max(...nodes.map((el) => (el.getBoundingClientRect().right - frame.left) / scale));
+    const width = right + (parseFloat(getComputedStyle(canvas).paddingRight) || 0);
+    const room = Math.min(viewport.clientWidth / width, (parseFloat(getComputedStyle(viewport).maxHeight) || Infinity) / canvas.offsetHeight);
+    return Math.max(zoomConfig.min, Math.min(zoomConfig.initial, Math.floor(room * 100) / 100));
+  }
+  function applyFit() {
+    if (userZoomed || !desktop.matches || root.hidden || !root.open) return;
+    const next = fitZoom();
+    if (Math.abs(next - zoom) < 0.005) return;
+    zoom = next;
+    root.style.setProperty("--zoom", String(next));
+  }
   function setZoom(value: number, x: number, y: number) {
+    userZoomed = true;
     const next = Math.max(zoomConfig.min, Math.min(zoomConfig.max, value));
     if (next === zoom) return false;
     const ratio = next / zoom;
@@ -96,11 +115,13 @@ export function initAtlas(root: HTMLDetailsElement) {
   });
   viewport.addEventListener("keydown", (e) => {
     if (!desktop.matches || e.target !== viewport || e.ctrlKey || e.metaKey || e.altKey) return;
-    const value = e.key === "0" ? zoomConfig.initial : e.key === "-" ? zoom / 1.2 : e.key === "+" || e.key === "=" ? zoom * 1.2 : null;
+    const value = e.key === "0" ? fitZoom() : e.key === "-" ? zoom / 1.2 : e.key === "+" || e.key === "=" ? zoom * 1.2 : null;
     if (value === null) return;
     e.preventDefault();
-    if (setZoom(value, viewport.clientWidth / 2, viewport.clientHeight / 2))
-      get("live").textContent = `${Math.round(zoom * 100)}%`;
+    const changed = setZoom(value, viewport.clientWidth / 2, viewport.clientHeight / 2);
+    // 0 returns to the fitted scale and lets it follow the window again.
+    if (e.key === "0") userZoomed = false;
+    if (changed) get("live").textContent = `${Math.round(zoom * 100)}%`;
   });
 
   // A common trunk feeds the four directions. A direction branches to its own research cards.
@@ -120,6 +141,29 @@ export function initAtlas(root: HTMLDetailsElement) {
     const pathsMarkup: string[] = [];
     const wire = (d: string, cls: string) => pathsMarkup.push(`<path class="${cls}" d="${d}"/>`);
 
+    // Every connector has the same shape: out of the parent, along one shared vertical line,
+    // and into each child with the same rounded turn. Children on one line read as siblings.
+    const near = (a: number, b: number) => Math.abs(a - b) < 0.5;
+    function fan(fromX: number, fromY: number, busX: number, ends: { x: number; y: number }[]) {
+      const [x0, y0, bx] = [point(fromX), point(fromY), point(busX)];
+      const targets = ends.map((end) => ({ x: point(end.x), y: point(end.y) }));
+      const top = Math.min(y0, ...targets.map((end) => end.y)), bottom = Math.max(y0, ...targets.map((end) => end.y));
+      const r = point(Math.max(0, Math.min(12, (bottom - top) / 2, bx - x0, ...targets.map((end) => end.x - bx))));
+      const d = targets.filter((end) => near(end.y, y0)).map((end) => `M${x0} ${y0} H${end.x}`);
+      if (bottom - top < 0.5) return d.join(" ");
+      if (near(y0, top)) d.push(`M${x0} ${y0} H${point(bx - r)} Q${bx} ${y0} ${bx} ${point(y0 + r)}`);
+      else if (near(y0, bottom)) d.push(`M${x0} ${y0} H${point(bx - r)} Q${bx} ${y0} ${bx} ${point(y0 - r)}`);
+      else if (!d.length) d.push(`M${x0} ${y0} H${bx}`);
+      d.push(`M${bx} ${point(top + r)} V${point(bottom - r)}`);
+      for (const end of targets) {
+        if (near(end.y, y0)) continue;
+        if (near(end.y, top)) d.push(`M${bx} ${point(top + r)} Q${bx} ${top} ${point(bx + r)} ${top} H${end.x}`);
+        else if (near(end.y, bottom)) d.push(`M${bx} ${point(bottom - r)} Q${bx} ${bottom} ${point(bx + r)} ${bottom} H${end.x}`);
+        else d.push(`M${bx} ${end.y} H${end.x}`);
+      }
+      return d.join(" ");
+    }
+
     const routes = branches.map((branch) => {
       const node = branch.querySelector("[data-domain-node]")!;
       const topics = Array.from(branch.querySelectorAll<HTMLElement>("[data-research-card]"), (el) => ({
@@ -137,25 +181,21 @@ export function initAtlas(root: HTMLDetailsElement) {
     hub.style.transform = "";
     hub.style.transform = `translateY(${point(middle - box(medal).center)}px)`;
     const hubRight = box(medal).right;
-    const x = point((hubRight + first.left) / 2);
-    const radius = Math.max(0, Math.min(12, first.left - x - 4, (bottom - top) / 2));
-    wire(`M${point(hubRight)} ${middle} H${x} M${x} ${point(top + radius)} V${point(bottom - radius)}`, "w-trunk");
-    wire(routes.map(({ node }, i) => {
-      const y = point(node.center), bend = i === 0 ? radius : i === routes.length - 1 ? -radius : 0;
-      return bend ? `M${x} ${point(y + bend)} Q${x} ${y} ${point(x + radius)} ${y} H${point(node.left)}`
-        : `M${x} ${y} H${point(node.left)}`;
-    }).join(" "), "w-twig");
+    wire(fan(hubRight, middle, (hubRight + first.left) / 2, routes.map(({ node }) => ({ x: node.left, y: node.center }))), "w-trunk");
 
     for (const { node, topics } of routes) {
+      const roots = topics.filter((topic) => !topics.some((source) => source.id === topic.predecessor));
+      if (roots.length) {
+        const busX = (node.right + Math.min(...roots.map((topic) => topic.left))) / 2;
+        wire(fan(node.right, node.center, busX, roots.map((topic) => ({ x: topic.left, y: topic.center }))), "w-fork");
+      }
+      // A follow-up project hangs off its prerequisite with an arrow that stops just short of the card.
       for (const topic of topics) {
-        const predecessor = topic.predecessor && topics.find((source) => source.id === topic.predecessor);
-        const source = predecessor || node;
-        const x1 = point(source.right), y1 = point(source.center);
-        const x2 = point(topic.left), y2 = point(topic.center);
-        const mid = point((x1 + x2) / 2);
-        const line = y1 === y2 ? `M${x1} ${y1} H${x2}` : `M${x1} ${y1} C${mid} ${y1} ${mid} ${y2} ${x2} ${y2}`;
-        const arrow = predecessor ? ` M${x2 - 6} ${y2 - 4} L${x2} ${y2} L${x2 - 6} ${y2 + 4}` : "";
-        wire(line + arrow, predecessor ? "w-dependency" : "w-fork");
+        const source = topics.find((candidate) => candidate.id === topic.predecessor);
+        if (!source) continue;
+        const tipX = point(topic.left - 3), tipY = point(topic.center);
+        const arrow = ` M${point(tipX - 7)} ${point(tipY - 4.5)} L${tipX} ${tipY} L${point(tipX - 7)} ${point(tipY + 4.5)}`;
+        wire(fan(source.right, source.center, (source.right + tipX) / 2, [{ x: tipX, y: tipY }]) + arrow, "w-dependency");
       }
     }
     paths.innerHTML = pathsMarkup.join("");
@@ -164,7 +204,7 @@ export function initAtlas(root: HTMLDetailsElement) {
   let queued = 0;
   const refresh = () => {
     cancelAnimationFrame(queued);
-    queued = requestAnimationFrame(() => { drawWires(); syncScrollEdges(); });
+    queued = requestAnimationFrame(() => { applyFit(); drawWires(); syncScrollEdges(); });
   };
   const observer = new ResizeObserver(refresh);
   observer.observe(viewport);
