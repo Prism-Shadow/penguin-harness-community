@@ -9,7 +9,7 @@ type Phase = {
   dataset?: Text;
   issues?: number[];
   pending?: Text;
-  reference?: { label: Text; url: string };
+  references?: { label: Text; url: string }[];
 };
 type TopicDefinition = { id: string; title: Text; phases?: Phase[] };
 type ProjectDefinition = TopicDefinition & { demoAchieved?: true; followUp?: TopicDefinition };
@@ -27,7 +27,13 @@ type VersionDefinition = {
   projects: Partial<Record<RouteId, ProjectDefinition[]>>;
 };
 
-const infraRun = "https://github.com/Prism-Shadow/penguin-harness/pull/1551#issuecomment-6997394473";
+export const researchStageLabels = {
+  zh: { planned: "未开始", active: "进行中", done: "已完成" },
+  en: { planned: "Not started", active: "In progress", done: "Complete" },
+};
+
+const infraPr = "https://github.com/Prism-Shadow/penguin-harness/pull/1551";
+const infraRun = `${infraPr}#issuecomment-6997394473`;
 const trainingPhases: Phase[] = [
   {
     label: { zh: "Bench", en: "Bench" },
@@ -57,7 +63,10 @@ const trainingPhases: Phase[] = [
       zh: "B-Comp 试跑搜索了 micro-batch 大小和训练代码改动。固定训练 60 步，计时第 21–60 步。候选、验证输出和成对复测记录供验收时复核。",
       en: "The B-Comp trial searched micro-batch sizes and training-code edits. Each run used 60 updates and timed updates 21–60. Candidate runs, verifier output, and paired reruns are available for review.",
     },
-    reference: { label: { zh: "B-Comp 试跑记录", en: "B-Comp trial records" }, url: infraRun },
+    references: [
+      { label: { zh: "实验 PR #1551", en: "Experiment PR #1551" }, url: infraPr },
+      { label: { zh: "B-Comp 试跑记录", en: "B-Comp trial records" }, url: infraRun },
+    ],
   },
   {
     label: { zh: "结果", en: "Results" },
@@ -70,7 +79,7 @@ const trainingPhases: Phase[] = [
       zh: "结果表应注明运行条件、单步耗时、训练 loss 和验证集 BPB，并能追溯到原始日志。",
       en: "Record run conditions, step time, training loss, and validation BPB in a results table linked to raw logs.",
     },
-    reference: { label: { zh: "试跑复测原始记录", en: "Raw trial measurements" }, url: infraRun },
+    references: [{ label: { zh: "试跑复测原始记录", en: "Raw trial measurements" }, url: infraRun }],
   },
   {
     label: { zh: "结果分析", en: "Analysis" },
@@ -176,9 +185,7 @@ export function researchVersions(quests: QuestItem[], locale: Locale) {
   const stageDetails = (phase: Phase, demoAchieved: boolean) => {
     const tasks = (phase.issues ?? []).map((number) => ({ number, quest: byIssue.get(number) }));
     const state = demoAchieved || (tasks.length > 0 && tasks.every(({ quest }) => quest?.status === "completed")) ? "done"
-      : phase.pending ? "planned"
-      : tasks.some(({ quest }) => quest?.status === "in_progress") ? "active"
-      : tasks.some(({ quest }) => quest?.status === "completed") ? "started"
+      : !phase.pending && tasks.some(({ quest }) => quest?.status === "in_progress" || quest?.status === "completed") ? "active"
       : "planned";
     return {
       label: resolveText(phase.label, locale),
@@ -187,7 +194,7 @@ export function researchVersions(quests: QuestItem[], locale: Locale) {
       evidence: resolveText(phase.evidence, locale),
       tasks,
       pending: phase.pending && resolveText(phase.pending, locale),
-      reference: phase.reference,
+      references: phase.references ?? [],
       state,
     };
   };

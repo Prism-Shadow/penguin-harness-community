@@ -5,48 +5,74 @@
 .atlas .atlas-versions button:disabled { opacity: 0.4; cursor: default; }
 .atlas .atlas-versions [data-version-label] { border-radius: 999px; padding: 4px 8px; background: var(--blue-tint); color: var(--blue-ink); font: 600 12px var(--mono); }
 
-.atlas .research-card {
+.atlas .research-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 14px;
+  margin: 0 0 0 auto;
+  padding: 0;
+  color: var(--muted);
+  font-size: 12px;
+  list-style: none;
+}
+.atlas .research-legend li { display: flex; align-items: center; gap: 6px; }
+.atlas .research-legend-swatch {
+  width: 13px;
+  height: 9px;
+  border: 1px solid var(--phase-line, var(--line-strong));
+  border-radius: 2px;
+  background: var(--phase-fill, var(--canvas));
+}
+
+.atlas .leaf.research-card {
   display: block;
-  width: max-content;
-  min-width: 264px;
-  max-width: 292px;
-  padding: 13px 14px;
+  width: 292px;
+  padding: 10px 14px 5px;
 }
 .atlas .research-card:hover { transform: none; border-color: var(--line); box-shadow: none; }
+.atlas .research-card[data-state="lit"]:hover { border-color: var(--gold-line); box-shadow: none; }
 .atlas .research-card[data-template-card] { border-style: dashed; }
 .atlas .research-card h4 {
   margin: 0;
-  font-size: 18px;
-  font-weight: 650;
-  line-height: 1.35;
   text-wrap: balance;
   word-break: keep-all;
   overflow-wrap: anywhere;
 }
-.atlas .research-phases { display: flex; margin-top: 8px; }
+.atlas .research-phases { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; margin-top: 2px; }
 .atlas .research-phase {
   display: grid;
-  place-items: center start;
-  width: 28px;
-  height: 28px;
+  place-items: center;
+  width: 100%;
+  min-height: 30px;
   padding: 0;
   border: 0;
   background: transparent;
 }
 .atlas .research-phase::before {
   content: "";
-  box-sizing: border-box;
-  width: 18px;
-  height: 18px;
-  border: 1px solid var(--line-strong);
-  border-radius: 4px;
-  background: var(--canvas);
+  width: 100%;
+  height: 10px;
+  border: 1px solid var(--phase-line, var(--line-strong));
+  border-inline-end-width: 0;
+  background: var(--phase-fill, var(--canvas));
 }
-.atlas .research-phase:is(:hover, [aria-expanded="true"])::before { outline: 2px solid var(--blue); outline-offset: 2px; }
-.atlas .research-phase[data-progress="started"]::before { border-color: var(--blue); background: color-mix(in srgb, var(--blue) 30%, var(--paper)); }
-.atlas .research-phase[data-progress="active"]::before { border-color: var(--blue-ink); background: var(--blue-ink); }
-.atlas .research-phase[data-progress="done"]::before { border-color: var(--gold-deep); background: var(--gold); }
-.atlas .research-state[data-progress="started"] { border-color: var(--blue-line); background: var(--blue-tint); color: var(--blue-ink); }
+.atlas .research-phase-cell:first-child .research-phase::before { border-start-start-radius: 3px; border-end-start-radius: 3px; }
+.atlas .research-phase-cell:last-child .research-phase::before { border-inline-end-width: 1px; border-start-end-radius: 3px; border-end-end-radius: 3px; }
+.atlas .research-phase:is(:hover, :focus-visible, [aria-expanded="true"])::before {
+  position: relative;
+  z-index: 1;
+  outline: 2px solid var(--blue);
+}
+.atlas .research-phase:focus-visible { outline: none; }
+.atlas :is(.research-phase, .research-legend-swatch)[data-progress="active"] {
+  --phase-line: var(--blue-ink);
+  --phase-fill: var(--blue);
+}
+.atlas :is(.research-phase, .research-legend-swatch)[data-progress="done"] {
+  --phase-line: var(--gold-deep);
+  --phase-fill: var(--gold);
+}
 .atlas .research-state[data-progress="active"] { border-color: var(--blue-ink); background: var(--blue-ink); color: var(--paper); }
 .atlas .research-state[data-progress="done"] { border-color: var(--gold-line); background: var(--gold-tint-2); color: var(--gold-ink); }
 
@@ -67,14 +93,16 @@
 }
 .atlas .research-details [data-research-close] { position: absolute; top: 9px; right: 10px; padding: 0 5px; color: var(--muted); font-size: 20px; line-height: 1; }
 .atlas .research-state { display: inline-block; padding: 2px 6px; border: 1px solid var(--line); border-radius: 5px; background: var(--canvas); color: var(--muted); font-size: 11px; font-weight: 650; }
-.atlas .research-achievement { margin-bottom: 6px; }
-.atlas .research-details h3 { margin: 6px 0 4px; font-size: 15px; font-weight: 650; }
+.atlas .research-details h3 { margin: 6px 0 4px; }
 .atlas .research-details p { margin: 0; }
-.atlas .research-detail-heading { margin-top: 8px !important; color: var(--muted); font-size: 11.5px; font-weight: 650; }
+.atlas .research-detail-heading { margin-top: 8px !important; color: var(--muted); font-size: 12px; font-weight: 650; }
 .atlas .research-tasks { display: grid; gap: 5px; margin: 10px 0 0; padding: 8px 0 0; border-top: 1px solid var(--line); list-style: none; }
 .atlas .research-tasks li { display: flex; flex-wrap: wrap; gap: 2px 6px; }
 .atlas .research-tasks a { color: var(--blue-ink); text-decoration: underline; text-underline-offset: 2px; }
 .atlas .research-tasks li span { color: var(--muted); }
 @media (pointer: coarse) {
-  .atlas .research-phase { width: 44px; height: 44px; }
+  .atlas .research-phase { min-height: 44px; }
+}
+@media (max-width: 650px) {
+  .atlas .leaf.research-card { width: clamp(206px, calc(100vw - 240px), 238px); padding-inline: 9px; }
 }

@@ -1,7 +1,7 @@
 ---
 import "../styles/achievement-atlas.css";
 import type { Locale } from "../shared/i18n";
-import type { ResearchVersion } from "../shared/achievement-research";
+import { researchStageLabels, type ResearchVersion } from "../shared/achievement-research";
 import AchievementResearchCard from "./AchievementResearchCard.astro";
 import Logo from "./Logo.astro";
 
@@ -46,13 +46,11 @@ const zoom = { initial: 0.8, min: 0.5, max: 1.25 };
           <a href={`#atlas-${next}`} data-atlas-switch={next} aria-label={t("下一版", "Next version")}>›</a>
         ) : <button type="button" data-version-next disabled aria-label={t("下一版", "Next version")}>›</button>}
       </nav>
-      <div class="tools">
-        <span class="pan-controls" data-pan-tools hidden>
-          <button type="button" data-pan-left aria-label={t("画布向左滚动", "Scroll canvas left")}><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3.5 5.5 8l4.5 4.5" /></svg></button>
-          <span>{t("横向浏览", "Pan")}</span>
-          <button type="button" data-pan-right aria-label={t("画布向右滚动", "Scroll canvas right")}><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5" /></svg></button>
-        </span>
-      </div>
+      <ul class="research-legend" aria-label={t("阶段进度图例", "Stage progress legend")}>
+        {Object.entries(researchStageLabels[locale]).map(([state, label]) => (
+          <li><span class="research-legend-swatch" data-progress={state} aria-hidden="true"></span>{label}</li>
+        ))}
+      </ul>
     </div>
 
     <div class="stage" data-stage>

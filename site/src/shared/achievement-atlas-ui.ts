@@ -6,28 +6,19 @@ export function initAtlas(root: HTMLDetailsElement) {
   const stage = get("stage"), viewport = get("scroll"), canvas = get("canvas");
   const branches = Array.from(root.querySelectorAll<HTMLElement>("[data-domain]"));
   const paths = root.querySelector<SVGGElement>("[data-paths]")!;
-  const panTools = get("pan-tools");
-  const prev = get<HTMLButtonElement>("pan-left"), next = get<HTMLButtonElement>("pan-right");
-  const reduceMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const hideResearch = bindResearchDetails(root, viewport);
 
   /* ---------- Panning ---------- */
   // Current CSS zoom of the canvas; rects are in zoomed pixels, layout (and the SVG wires) in canvas pixels.
   const scaleOf = () => canvas.getBoundingClientRect().width / canvas.offsetWidth || 1;
-  function syncPan() {
+  function syncScrollEdges() {
     const end = viewport.scrollWidth - viewport.clientWidth, bottom = viewport.scrollHeight - viewport.clientHeight;
-    panTools.hidden = end <= 1;
-    prev.disabled = viewport.scrollLeft <= 1;
-    next.disabled = viewport.scrollLeft >= end - 1;
     stage.toggleAttribute("data-more-left", viewport.scrollLeft > 1);
     stage.toggleAttribute("data-more-right", viewport.scrollLeft < end - 1);
     stage.toggleAttribute("data-more-up", viewport.scrollTop > 1);
     stage.toggleAttribute("data-more-down", viewport.scrollTop < bottom - 1);
   }
-  const pan = (dir: number) => viewport.scrollBy({ left: dir * viewport.clientWidth * 0.72, behavior: reduceMotion() ? "instant" : "smooth" });
-  prev.addEventListener("click", () => pan(-1));
-  next.addEventListener("click", () => pan(1));
-  viewport.addEventListener("scroll", syncPan, { passive: true });
+  viewport.addEventListener("scroll", syncScrollEdges, { passive: true });
 
   // Drag the canvas with a mouse; touch and trackpads already scroll natively.
   let drag: { x: number; y: number; left: number; top: number; moved: boolean } | null = null;
@@ -128,7 +119,6 @@ export function initAtlas(root: HTMLDetailsElement) {
     const point = (n: number) => Math.round(n * 10) / 10;
     const pathsMarkup: string[] = [];
     const wire = (d: string, cls: string) => pathsMarkup.push(`<path class="${cls}" d="${d}"/>`);
-    const dot = (x: number, y: number, cls: string) => pathsMarkup.push(`<circle class="${cls}" cx="${point(x)}" cy="${point(y)}" r="3.5"/>`);
 
     const routes = branches.map((branch) => {
       const node = branch.querySelector("[data-domain-node]")!;
@@ -157,19 +147,15 @@ export function initAtlas(root: HTMLDetailsElement) {
     }).join(" "), "w-twig");
 
     for (const { node, topics } of routes) {
-      dot(node.left, node.center, "w-joint");
       for (const topic of topics) {
         const predecessor = topic.predecessor && topics.find((source) => source.id === topic.predecessor);
-        if (predecessor) {
-          const x1 = point(predecessor.right), x2 = point(topic.left), y = point(topic.center);
-          const arrowStart = point(x2 - 6);
-          wire(`M${x1} ${y} H${x2} M${arrowStart} ${point(y - 4)} L${x2} ${y} L${arrowStart} ${point(y + 4)}`, "w-dependency");
-          continue;
-        }
-        const x1 = point(node.right), y1 = point(node.center);
+        const source = predecessor || node;
+        const x1 = point(source.right), y1 = point(source.center);
         const x2 = point(topic.left), y2 = point(topic.center);
         const mid = point((x1 + x2) / 2);
-        wire(`M${x1} ${y1} C${mid} ${y1} ${mid} ${y2} ${x2} ${y2}`, "w-fork");
+        const line = y1 === y2 ? `M${x1} ${y1} H${x2}` : `M${x1} ${y1} C${mid} ${y1} ${mid} ${y2} ${x2} ${y2}`;
+        const arrow = predecessor ? ` M${x2 - 6} ${y2 - 4} L${x2} ${y2} L${x2 - 6} ${y2 + 4}` : "";
+        wire(line + arrow, predecessor ? "w-dependency" : "w-fork");
       }
     }
     paths.innerHTML = pathsMarkup.join("");
@@ -178,7 +164,7 @@ export function initAtlas(root: HTMLDetailsElement) {
   let queued = 0;
   const refresh = () => {
     cancelAnimationFrame(queued);
-    queued = requestAnimationFrame(() => { drawWires(); syncPan(); });
+    queued = requestAnimationFrame(() => { drawWires(); syncScrollEdges(); });
   };
   const observer = new ResizeObserver(refresh);
   observer.observe(viewport);

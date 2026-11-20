@@ -70,6 +70,10 @@ export function bindResearchDetails(root: HTMLDetailsElement, viewport: HTMLElem
   }
   panel.addEventListener("pointerenter", () => window.clearTimeout(timer));
   panel.addEventListener("pointerleave", hideAfterLeave);
+  panel.addEventListener("click", (event) => {
+    if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+    if (event.target instanceof Element && event.target.closest("[data-quest-jump]")) hide();
+  });
   close.addEventListener("click", () => hide(true));
   document.addEventListener("pointerdown", (event) => {
     const target = event.target;
