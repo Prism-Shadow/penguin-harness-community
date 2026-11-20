@@ -479,7 +479,7 @@
     {
       "id": "RSI-Q024",
       "issue_number": 61,
-      "pr_number": null,
+      "pr_number": 37,
       "published_at": "2026-11-12T05:16:42Z",
       "status": "in_progress",
       "domain": "Benchmark",
@@ -498,7 +498,7 @@
       ],
       "assignee": "ussumer",
       "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/61",
-      "linked_pr": null
+      "linked_pr": "https://github.com/Prism-Shadow/penguin-harness-benchmark/pull/37"
     },
     {
       "id": "RSI-Q025",
