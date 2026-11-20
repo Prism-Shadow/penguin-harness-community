@@ -1,0 +1,51 @@
+---
+import type { Locale } from "../shared/i18n";
+import type { QuestItem } from "../shared/community";
+
+interface Props {
+  quest: QuestItem;
+  locale: Locale;
+}
+
+const { quest, locale } = Astro.props;
+const copy = {
+  zh: { author: "发起者", assignee: "认领人", authorShort: "发起", assigneeShort: "认领", unknown: "未记录", unclaimed: "待认领" },
+  en: { author: "Initiator", assignee: "Assignee", authorShort: "By", assigneeShort: "To", unknown: "Not recorded", unclaimed: "Unclaimed" },
+}[locale];
+
+const profileUrl = (handle: string) =>
+  handle === "github-actions[bot]"
+    ? "https://github.com/apps/github-actions"
+    : `https://github.com/${encodeURIComponent(handle)}`;
+
+const people = [
+  { role: "author", label: copy.author, shortLabel: copy.authorShort, handle: quest.author, empty: copy.unknown },
+  { role: "assignee", label: copy.assignee, shortLabel: copy.assigneeShort, handle: quest.assignee, empty: copy.unclaimed },
+];
+---
+
+<dl class="grid min-w-0 flex-1 grid-cols-2 gap-x-2 text-[11px] leading-tight">
+  {people.map((person) => (
+    <div class="flex min-w-0 items-center gap-1">
+      <dt class="shrink-0 text-gray-500 dark:text-gray-400">{person.shortLabel}</dt>
+      <dd class="min-w-0">
+        {person.handle ? (
+          <a
+            href={profileUrl(person.handle)}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-direct-external
+            data-quest-person={person.role}
+            title={`${person.label}: @${person.handle}`}
+            aria-label={`${person.label}: @${person.handle}`}
+            class="mono block truncate text-brand-600 underline decoration-brand-300 underline-offset-2 hover:text-brand-500 dark:text-brand-400 dark:decoration-brand-700"
+          >
+            @{person.handle}
+          </a>
+        ) : (
+          <span class="block truncate text-gray-400 dark:text-gray-500">{person.empty}</span>
+        )}
+      </dd>
+    </div>
+  ))}
+</dl>

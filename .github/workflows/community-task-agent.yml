@@ -1,6 +1,9 @@
 name: Quests Data
 
 on:
+  push:
+    branches: [main]
+    paths: ["scripts/community-agent-sync.mjs"]
   schedule:
     - cron: "0 */6 * * *"
   issues:

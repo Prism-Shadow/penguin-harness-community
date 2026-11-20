@@ -7,6 +7,7 @@ on:
     paths:
       - "site/**"
       - "assets/**"
+      - "scripts/community-agent-sync*"
       - "community/**"
       - "roadmap/**"
       - "workflow/**"
@@ -18,6 +19,7 @@ on:
     paths:
       - "site/**"
       - "assets/**"
+      - "scripts/community-agent-sync*"
       - "community/**"
       - "roadmap/**"
       - "workflow/**"
@@ -57,6 +59,9 @@ jobs:
           node-version: "22"
           cache: "npm"
           cache-dependency-path: site/package-lock.json
+
+      - name: Test task author sync
+        run: node --test scripts/community-agent-sync.test.mjs
 
       - name: Install dependencies
         working-directory: ./site
