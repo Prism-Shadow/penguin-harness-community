@@ -7,6 +7,7 @@
     {
       "id": "RSI-Q001",
       "issue_number": 30,
+      "author": "hiyouga",
       "pr_number": 25,
       "published_at": "2026-11-10T10:00:00Z",
       "status": "in_progress",
@@ -30,6 +31,7 @@
     {
       "id": "RSI-Q002",
       "issue_number": 31,
+      "author": "hiyouga",
       "pr_number": null,
       "published_at": "2026-11-10T10:05:00Z",
       "status": "in_progress",
@@ -54,6 +56,7 @@
     {
       "id": "RSI-Q009",
       "issue_number": 39,
+      "author": "hiyouga",
       "pr_number": 3,
       "published_at": "2026-10-10T17:57:44Z",
       "status": "completed",
@@ -74,6 +77,7 @@
     {
       "id": "RSI-Q010",
       "issue_number": 40,
+      "author": "hiyouga",
       "pr_number": 5,
       "published_at": "2026-10-19T10:56:52Z",
       "status": "completed",
@@ -96,6 +100,7 @@
     {
       "id": "RSI-Q011",
       "issue_number": 41,
+      "author": "hiyouga",
       "pr_number": 15,
       "published_at": "2026-11-04T08:17:44Z",
       "status": "completed",
@@ -116,6 +121,7 @@
     {
       "id": "RSI-Q003",
       "issue_number": 32,
+      "author": "hiyouga",
       "pr_number": 29,
       "published_at": "2026-11-10T10:10:00Z",
       "status": "in_progress",
@@ -139,6 +145,7 @@
     {
       "id": "RSI-Q004",
       "issue_number": 33,
+      "author": "hiyouga",
       "pr_number": null,
       "published_at": "2026-11-10T10:15:00Z",
       "status": "open",
@@ -161,6 +168,7 @@
     {
       "id": "RSI-Q012",
       "issue_number": 42,
+      "author": "hiyouga",
       "pr_number": 16,
       "published_at": "2026-11-02T07:25:23Z",
       "status": "completed",
@@ -183,6 +191,7 @@
     {
       "id": "RSI-Q013",
       "issue_number": 43,
+      "author": "hiyouga",
       "pr_number": 21,
       "published_at": "2026-11-03T08:28:27Z",
       "status": "completed",
@@ -205,6 +214,7 @@
     {
       "id": "RSI-Q005",
       "issue_number": 34,
+      "author": "hiyouga",
       "pr_number": null,
       "published_at": "2026-11-10T10:20:00Z",
       "status": "in_progress",
@@ -229,6 +239,7 @@
     {
       "id": "RSI-Q006",
       "issue_number": 35,
+      "author": "hiyouga",
       "pr_number": 1535,
       "published_at": "2026-11-16T13:28:14Z",
       "status": "completed",
@@ -252,6 +263,7 @@
     {
       "id": "RSI-Q007",
       "issue_number": 36,
+      "author": "hiyouga",
       "pr_number": null,
       "published_at": "2026-11-10T10:30:00Z",
       "status": "in_progress",
@@ -272,6 +284,7 @@
     {
       "id": "RSI-Q008",
       "issue_number": 37,
+      "author": "hiyouga",
       "pr_number": 21,
       "published_at": "2026-11-10T10:35:00Z",
       "status": "in_progress",
@@ -292,6 +305,7 @@
     {
       "id": "RSI-Q014",
       "issue_number": 44,
+      "author": "hiyouga",
       "pr_number": 1491,
       "published_at": "2026-11-16T19:44:47Z",
       "status": "in_progress",
@@ -312,6 +326,7 @@
     {
       "id": "RSI-Q015",
       "issue_number": 45,
+      "author": "hiyouga",
       "pr_number": null,
       "published_at": "2026-11-11T12:00:00Z",
       "status": "in_progress",
@@ -332,6 +347,7 @@
     {
       "id": "RSI-Q016",
       "issue_number": 50,
+      "author": "hiyouga",
       "pr_number": 1434,
       "published_at": "2026-11-04T08:04:12Z",
       "status": "completed",
@@ -352,6 +368,7 @@
     {
       "id": "RSI-Q017",
       "issue_number": 51,
+      "author": "hiyouga",
       "pr_number": null,
       "published_at": "2026-11-11T13:15:00Z",
       "status": "open",
@@ -372,6 +389,7 @@
     {
       "id": "RSI-Q018",
       "issue_number": 52,
+      "author": "hiyouga",
       "pr_number": null,
       "published_at": "2026-11-11T13:16:00Z",
       "status": "in_progress",
@@ -392,6 +410,7 @@
     {
       "id": "RSI-Q019",
       "issue_number": 53,
+      "author": "hiyouga",
       "pr_number": null,
       "published_at": "2026-11-11T13:17:00Z",
       "status": "in_progress",
@@ -412,6 +431,7 @@
     {
       "id": "RSI-Q020",
       "issue_number": 54,
+      "author": "hiyouga",
       "pr_number": null,
       "published_at": "2026-11-11T13:18:00Z",
       "status": "open",
@@ -432,6 +452,7 @@
     {
       "id": "RSI-Q021",
       "issue_number": 56,
+      "author": "hiyouga",
       "pr_number": 33,
       "published_at": "2026-11-11T14:30:00Z",
       "status": "in_progress",
@@ -455,6 +476,7 @@
     {
       "id": "RSI-Q023",
       "issue_number": 58,
+      "author": "hiyouga",
       "pr_number": null,
       "published_at": "2026-11-11T14:32:00Z",
       "status": "in_progress",
@@ -479,6 +501,7 @@
     {
       "id": "RSI-Q024",
       "issue_number": 61,
+      "author": "lzh368",
       "pr_number": 37,
       "published_at": "2026-11-12T05:16:42Z",
       "status": "in_progress",
@@ -503,6 +526,7 @@
     {
       "id": "RSI-Q025",
       "issue_number": 62,
+      "author": "hiyouga",
       "pr_number": null,
       "published_at": "2026-11-12T07:18:12Z",
       "status": "open",
@@ -523,6 +547,7 @@
     {
       "id": "RSI-Q026",
       "issue_number": 63,
+      "author": "hiyouga",
       "pr_number": null,
       "published_at": "2026-11-12T07:21:51Z",
       "status": "open",
@@ -543,6 +568,7 @@
     {
       "id": "RSI-Q027",
       "issue_number": 64,
+      "author": "hiyouga",
       "pr_number": 88,
       "published_at": "2026-11-19T05:41:23Z",
       "status": "completed",
@@ -567,6 +593,7 @@
     {
       "id": "RSI-Q022",
       "issue_number": 68,
+      "author": "hiyouga",
       "pr_number": null,
       "published_at": "2026-11-12T16:10:00Z",
       "status": "in_progress",
@@ -587,6 +614,7 @@
     {
       "id": "RSI-Q028",
       "issue_number": 71,
+      "author": "lzh368",
       "pr_number": 1551,
       "published_at": "2026-11-13T03:28:59Z",
       "status": "in_progress",
@@ -612,6 +640,7 @@
     {
       "id": "RSI-Q029",
       "issue_number": 72,
+      "author": "lzh368",
       "pr_number": 1553,
       "published_at": "2026-11-13T03:45:21Z",
       "status": "in_progress",
@@ -636,6 +665,7 @@
     {
       "id": "RSI-Q030",
       "issue_number": 73,
+      "author": "lzh368",
       "pr_number": 1555,
       "published_at": "2026-11-13T06:10:18Z",
       "status": "in_progress",
@@ -659,6 +689,7 @@
     {
       "id": "RSI-Q031",
       "issue_number": 74,
+      "author": "lzh368",
       "pr_number": null,
       "published_at": "2026-11-13T06:10:22Z",
       "status": "in_progress",
@@ -682,6 +713,7 @@
     {
       "id": "RSI-Q032",
       "issue_number": 75,
+      "author": "Yu-Yang-Li",
       "pr_number": 32,
       "published_at": "2026-11-13T07:55:55Z",
       "status": "in_progress",
@@ -721,6 +753,7 @@
     {
       "id": "RSI-Q033",
       "issue_number": 77,
+      "author": "Yu-Yang-Li",
       "pr_number": 27,
       "published_at": "2026-11-13T09:53:32Z",
       "status": "in_progress",
@@ -747,6 +780,7 @@
     {
       "id": "RSI-Q034",
       "issue_number": 78,
+      "author": "Saigyouji-Yuyuko1000",
       "pr_number": null,
       "published_at": "2026-11-14T17:20:42Z",
       "status": "in_progress",
@@ -767,6 +801,7 @@
     {
       "id": "RSI-Q035",
       "issue_number": 83,
+      "author": "hiyouga",
       "pr_number": null,
       "published_at": "2026-11-16T09:56:59Z",
       "status": "open",
@@ -792,6 +827,7 @@
     {
       "id": "RSI-Q036",
       "issue_number": 84,
+      "author": "hiyouga",
       "pr_number": null,
       "published_at": "2026-11-16T09:57:01Z",
       "status": "open",
@@ -816,6 +852,7 @@
     {
       "id": "RSI-Q037",
       "issue_number": 85,
+      "author": "hiyouga",
       "pr_number": null,
       "published_at": "2026-11-16T09:57:03Z",
       "status": "open",
@@ -840,6 +877,7 @@
     {
       "id": "RSI-Q038",
       "issue_number": 86,
+      "author": "hiyouga",
       "pr_number": null,
       "published_at": "2026-11-16T09:57:10Z",
       "status": "in_progress",
@@ -863,6 +901,7 @@
     {
       "id": "RSI-Q039",
       "issue_number": 87,
+      "author": "hiyouga",
       "pr_number": null,
       "published_at": "2026-11-16T09:57:16Z",
       "status": "open",
@@ -885,6 +924,7 @@
     {
       "id": "RSI-Q040",
       "issue_number": 88,
+      "author": "hiyouga",
       "pr_number": 1627,
       "published_at": "2026-11-16T09:57:18Z",
       "status": "in_progress",
@@ -908,6 +948,7 @@
     {
       "id": "RSI-Q041",
       "issue_number": 89,
+      "author": "hiyouga",
       "pr_number": null,
       "published_at": "2026-11-16T09:57:21Z",
       "status": "in_progress",
@@ -930,6 +971,7 @@
     {
       "id": "RSI-Q042",
       "issue_number": 90,
+      "author": "hiyouga",
       "pr_number": null,
       "published_at": "2026-11-16T09:57:23Z",
       "status": "open",
@@ -955,6 +997,7 @@
     {
       "id": "RSI-Q043",
       "issue_number": 91,
+      "author": "hiyouga",
       "pr_number": null,
       "published_at": "2026-11-16T09:57:31Z",
       "status": "open",
@@ -980,6 +1023,7 @@
     {
       "id": "RSI-Q044",
       "issue_number": 92,
+      "author": "hiyouga",
       "pr_number": null,
       "published_at": "2026-11-16T09:57:33Z",
       "status": "open",
@@ -1002,6 +1046,7 @@
     {
       "id": "RSI-Q045",
       "issue_number": 93,
+      "author": "hiyouga",
       "pr_number": null,
       "published_at": "2026-11-16T09:57:36Z",
       "status": "open",
@@ -1026,6 +1071,7 @@
     {
       "id": "RSI-Q046",
       "issue_number": 94,
+      "author": "hiyouga",
       "pr_number": null,
       "published_at": "2026-11-16T09:57:38Z",
       "status": "in_progress",
@@ -1048,6 +1094,7 @@
     {
       "id": "RSI-Q047",
       "issue_number": 95,
+      "author": "hiyouga",
       "pr_number": null,
       "published_at": "2026-11-16T09:57:41Z",
       "status": "open",
@@ -1072,6 +1119,7 @@
     {
       "id": "RSI-Q048",
       "issue_number": 96,
+      "author": "hiyouga",
       "pr_number": null,
       "published_at": "2026-11-16T10:01:17Z",
       "status": "open",
@@ -1095,6 +1143,7 @@
     {
       "id": "RSI-Q049",
       "issue_number": 103,
+      "author": "Saigyouji-Yuyuko1000",
       "pr_number": null,
       "published_at": "2026-11-17T09:18:47Z",
       "status": "open",
@@ -1115,6 +1164,7 @@
     {
       "id": "RSI-Q050",
       "issue_number": 108,
+      "author": "Saigyouji-Yuyuko1000",
       "pr_number": null,
       "published_at": "2026-11-18T09:19:30Z",
       "status": "in_progress",
@@ -1139,6 +1189,7 @@
     {
       "id": "RSI-Q051",
       "issue_number": 111,
+      "author": "github-actions[bot]",
       "pr_number": null,
       "published_at": "2026-11-18T12:05:44Z",
       "status": "in_progress",
@@ -1163,6 +1214,7 @@
     {
       "id": "RSI-Q052",
       "issue_number": 112,
+      "author": "Yu-Yang-Li",
       "pr_number": null,
       "published_at": "2026-11-18T16:26:35Z",
       "status": "open",
@@ -1190,6 +1242,7 @@
     {
       "id": "RSI-Q053",
       "issue_number": 113,
+      "author": "Yu-Yang-Li",
       "pr_number": null,
       "published_at": "2026-11-18T16:51:21Z",
       "status": "open",
@@ -1229,6 +1282,7 @@
     {
       "id": "RSI-Q054",
       "issue_number": 115,
+      "author": "github-actions[bot]",
       "pr_number": null,
       "published_at": "2026-11-19T06:53:32Z",
       "status": "open",
@@ -1253,6 +1307,7 @@
     {
       "id": "RSI-Q055",
       "issue_number": 116,
+      "author": "rank-Yu",
       "pr_number": null,
       "published_at": "2026-11-19T07:50:45Z",
       "status": "open",
@@ -1277,6 +1332,7 @@
     {
       "id": "RSI-Q056",
       "issue_number": 118,
+      "author": "rank-Yu",
       "pr_number": null,
       "published_at": "2026-11-19T09:08:01Z",
       "status": "in_progress",
@@ -1300,6 +1356,7 @@
     {
       "id": "RSI-Q057",
       "issue_number": 119,
+      "author": "Saigyouji-Yuyuko1000",
       "pr_number": null,
       "published_at": "2026-11-19T09:32:18Z",
       "status": "open",
@@ -1323,6 +1380,7 @@
     {
       "id": "RSI-Q058",
       "issue_number": 120,
+      "author": "lzh368",
       "pr_number": null,
       "published_at": "2026-11-19T12:11:47Z",
       "status": "open",
@@ -1347,6 +1405,7 @@
     {
       "id": "RSI-Q059",
       "issue_number": 121,
+      "author": "lzh368",
       "pr_number": null,
       "published_at": "2026-11-19T12:11:49Z",
       "status": "open",
@@ -1372,6 +1431,7 @@
     {
       "id": "RSI-Q060",
       "issue_number": 122,
+      "author": "rank-Yu",
       "pr_number": null,
       "published_at": "2026-11-19T12:16:51Z",
       "status": "in_progress",
