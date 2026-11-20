@@ -1518,7 +1518,7 @@ Submit the revised LaTeX sources, figures, and compiled PDF in a pull request to
   - id: "RSI-Q060"
     issue_number: 122
     published_at: "2026-11-19T12:16:51Z"
-    status: "open"
+    status: "in_progress"
     domain: "PenguinHarness"
     exp: 75
     target_repository: "https://github.com/Prism-Shadow/penguin-harness-paper"
@@ -1530,6 +1530,6 @@ Submit the revised LaTeX sources, figures, and compiled PDF in a pull request to
     references:
       - "https://github.com/Prism-Shadow/penguin-harness-paper"
       - "https://github.com/Prism-Shadow/penguin-harness-paper/blob/main/output/penguinharness-arxiv.pdf"
-    assignee: null
+    assignee: "kuromi9527"
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/122"
     linked_pr: null
