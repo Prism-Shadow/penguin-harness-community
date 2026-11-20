@@ -1083,7 +1083,7 @@ Deliverables and acceptance criteria:
   - id: "RSI-Q046"
     issue_number: 94
     published_at: "2026-11-16T09:57:38Z"
-    status: "open"
+    status: "in_progress"
     domain: "PenguinHarness"
     exp: 150
     target_repository: "https://github.com/Prism-Shadow/penguin-harness"
@@ -1104,7 +1104,7 @@ Deliverables and acceptance criteria:
 3. 组织级自进化（Organizational RSI）：支持 Agent 公司在项目完成后自动复盘流程瓶颈、返工原因与失败模式，并迭代更新各岗位 Prompt、Skill 与协作 SOP。"
     references:
       - "https://github.com/Prism-Shadow/penguin-harness"
-    assignee: null
+    assignee: "ACAne0320"
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/94"
     linked_pr: null
 

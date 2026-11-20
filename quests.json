@@ -1028,7 +1028,7 @@
       "issue_number": 94,
       "pr_number": null,
       "published_at": "2026-11-16T09:57:38Z",
-      "status": "open",
+      "status": "in_progress",
       "domain": "PenguinHarness",
       "exp": 150,
       "target_repository": "https://github.com/Prism-Shadow/penguin-harness",
@@ -1041,7 +1041,7 @@
       "references": [
         "https://github.com/Prism-Shadow/penguin-harness"
       ],
-      "assignee": null,
+      "assignee": "ACAne0320",
       "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/94",
       "linked_pr": null
     },
