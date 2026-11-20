@@ -62,6 +62,10 @@ jobs:
         working-directory: ./site
         run: npm ci
 
+      - name: Test Markdown rendering and quest data parsing
+        working-directory: ./site
+        run: npm test
+
       - name: Build
         working-directory: ./site
         run: npm run build

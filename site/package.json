@@ -8,6 +8,7 @@
     "node": ">=22.12.0"
   },
   "scripts": {
+    "test": "node --experimental-strip-types --test src/shared/quest-registry.test.ts src/shared/quest-markdown.test.ts",
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview"
@@ -16,9 +17,14 @@
     "@tailwindcss/vite": "^4.3.3",
     "astro": "^7.3.5",
     "katex": "^0.19.1",
+    "markdown-it": "^15.0.3",
+    "markdown-it-cjk-friendly": "^3.0.0",
     "tailwindcss": "^4.3.3"
   },
   "allowScripts": {
     "esbuild": true
+  },
+  "devDependencies": {
+    "@types/markdown-it": "^14.2.0"
   }
 }

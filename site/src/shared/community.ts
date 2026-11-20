@@ -3,6 +3,7 @@ import { resolve } from "node:path";
 import peopleYamlRaw from "../../../community/people.yaml?raw";
 import tasksYamlRaw from "../../../community/tasks.yaml?raw";
 import type { Locale } from "./i18n";
+import { parseQuestRegistry } from "./quest-registry";
 
 type Text = Record<Locale, string>;
 
@@ -82,20 +83,10 @@ function normalizeDomain(raw: string | null): QuestDomainId {
 }
 
 function parseQuestsFromYaml(content: string): QuestItem[] {
-  const taskBlocks = content.split(/\n  - id:\s*/).slice(1);
-  return taskBlocks.map((block) => {
-    const id = block.match(/^"([^"]+)"/)?.[1] ?? "";
-    const field = (name: string): string | undefined => {
-      const m = block.match(new RegExp(`^    ${name}:\\s*(.+)$`, "m"));
-      if (!m) return undefined;
-      const val = m[1].trim();
-      if (val === "null") return undefined;
-      return val.replace(/^"(.*)"$/, "$1").replace(/\\"/g, '"');
-    };
-    const refsMatch = block.match(/^    references:\s*\n((?:      -\s*[^\n]+\n?)*)/m);
-    const references: QuestReference[] = refsMatch
-      ? Array.from(refsMatch[1].matchAll(/^\s*-\s*"([^"]+)"/gm), (m) => ({ url: m[1] }))
-      : [];
+  return parseQuestRegistry(content).map((block) => {
+    const field = (name: string): string | undefined => block.fields[name];
+    const id = field("id") ?? "";
+    const references = block.references.map((url) => ({ url }));
 
     const issueNumber = Number(field("issue_number") || 0);
     const prNumberRaw = field("pr_number");
