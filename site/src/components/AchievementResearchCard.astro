@@ -1,0 +1,85 @@
+---
+import "../styles/achievement-research.css";
+import { resolveText } from "../shared/community";
+import { researchStageLabels, type ResearchProject } from "../shared/achievement-research";
+import type { Locale } from "../shared/i18n";
+
+const { project, predecessor, locale, prefix } = Astro.props as {
+  project: ResearchProject; predecessor?: ResearchProject; locale: Locale; prefix: string;
+};
+const titleId = `${prefix}-${project.id}-title`;
+const detailsId = `${prefix}-research-details`;
+const t = (zh: string, en: string) => locale === "zh" ? zh : en;
+const progress = researchStageLabels[locale];
+const taskStatuses = { open: t("待认领", "Open"), in_progress: progress.active, completed: progress.done };
+const issueBase = "https://github.com/Prism-Shadow/penguin-harness-community/issues/";
+const achieved = project.achievement === "demo-achieved";
+---
+<article class="leaf research-card" data-research-card={project.id} data-research-predecessor={predecessor?.id}
+  data-template-card={project.template || undefined} data-state={achieved ? "lit" : project.achievement === "locked" ? "locked" : undefined}
+  aria-labelledby={titleId}>
+  <h4 id={titleId}>{project.title}</h4>
+  <div class="research-phases" role="group" aria-label={t("课题阶段", "Research stages")}>
+    {project.stages.map((stage) => {
+      const status = achieved ? progress.done
+        : project.template ? t("待填写", "To be filled in")
+        : stage.state === "planned" && stage.pending ? stage.pending
+        : stage.tasks.length === 0 ? t("暂无进度记录", "No progress recorded")
+        : progress[stage.state];
+      return (
+        <div class="research-phase-cell">
+          <button type="button" class="research-phase" data-research-phase data-progress={stage.state}
+            aria-label={`${stage.label} · ${status}`} aria-haspopup="dialog"
+            aria-expanded="false" aria-controls={detailsId}></button>
+          <template data-research-template>
+            <span class="research-state" data-progress={stage.state}>{status}</span>
+            <h3 id={`${detailsId}-title`}>{stage.label}</h3>
+            {predecessor && (
+              <>
+                <p class="research-detail-heading">{t("前置课题", "Prerequisite")}</p>
+                <p>{predecessor.title}</p>
+              </>
+            )}
+            <p class="research-detail-heading">{t("本阶段工作", "Stage work")}</p>
+            <p>{stage.work}</p>
+            {stage.dataset && (
+              <>
+                <p class="research-detail-heading">{t("数据集", "Dataset")}</p>
+                <p>{stage.dataset}</p>
+              </>
+            )}
+            <p class="research-detail-heading">{t("验收产物", "Expected evidence")}</p>
+            <p>{stage.evidence}</p>
+            {achieved && stage.tasks.length > 0 && (
+              <p class="research-detail-heading">{t("关联任务实际状态", "Current status of related tasks")}</p>
+            )}
+            {(stage.references.length > 0 || stage.tasks.length > 0) && (
+              <ul class="research-tasks" aria-label={t("阶段记录与关联任务", "Stage records and related tasks")}>
+                {stage.references.map(({ label, url }) => (
+                  <li>
+                    <a href={url} target="_blank" rel="noopener noreferrer">
+                      {resolveText(label, locale)}
+                    </a>
+                  </li>
+                ))}
+                {stage.tasks.map(({ number, quest }) => (
+                  <li>
+                    {quest ? (
+                      <a href={`#quest-${number}`} data-quest-jump>
+                        #{number} {resolveText(quest.title, locale)}
+                      </a>
+                    ) : (
+                      <a href={issueBase + number} target="_blank" rel="noopener noreferrer">#{number} GitHub Issue ↗</a>
+                    )}
+                    <span>{quest ? taskStatuses[quest.status] : t("待登记", "Unregistered")}</span>
+                    {quest?.linkedPr && <a href={quest.linkedPr} target="_blank" rel="noopener noreferrer">{t("查看 PR", "View PR")}</a>}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </template>
+        </div>
+      );
+    })}
+  </div>
+</article>

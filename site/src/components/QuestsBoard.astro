@@ -1,4 +1,5 @@
 ---
+import AchievementAtlasVersions from "./AchievementAtlasVersions.astro";
 import type { Locale } from "../shared/i18n";
 import {
   QUESTS,
@@ -108,8 +109,10 @@ function tasksFor(domain: QuestDomainId, status: QuestStatus): QuestItem[] {
     </a>
   </header>
 
+  <AchievementAtlasVersions locale={locale} />
+
   <!-- Domain Sections -->
-  <div class="space-y-12">
+  <div id="quest-list" tabindex="-1" class="scroll-mt-28 space-y-12">
     {
       QUEST_DOMAINS.map((domain) => (
         <section>
@@ -165,6 +168,7 @@ function tasksFor(domain: QuestDomainId, status: QuestStatus): QuestItem[] {
                               {pageItems.map((q) => (
                                 <button
                                   type="button"
+                                  id={`quest-${q.issueNumber}`}
                                   data-quest-open={q.id}
                                   class="group block w-full max-w-full min-w-0 cursor-pointer overflow-hidden rounded-lg border border-gray-200 bg-white px-3 py-2 text-left shadow-2xs transition-colors hover:border-brand-500 dark:border-gray-800 dark:bg-gray-950 dark:hover:border-brand-500"
                                 >
@@ -394,14 +398,26 @@ function tasksFor(domain: QuestDomainId, status: QuestStatus): QuestItem[] {
 <script>
   const root = document.querySelector<HTMLElement>("[data-quests-root]");
   if (root) {
+    const setQuestPage = new Map<HTMLElement, (page: number) => void>();
+    let activeQuest: HTMLDialogElement | null = null;
+    const openQuest = (card: HTMLButtonElement, reveal = false) => {
+      const dialog = root.querySelector<HTMLDialogElement>(`[data-quest-dialog="${CSS.escape(card.dataset.questOpen!)}"]`);
+      if (!dialog || dialog.open) return dialog;
+      if (activeQuest?.open) activeQuest.close();
+      if (reveal) {
+        const column = card.closest<HTMLElement>("[data-quest-col]");
+        const page = card.closest<HTMLElement>("[data-quest-page]");
+        if (column && page) setQuestPage.get(column)?.(Number(page.dataset.questPage));
+        card.scrollIntoView({ block: "center", behavior: "instant" });
+        card.focus({ preventScroll: true });
+      }
+      dialog.showModal();
+      activeQuest = dialog;
+      return dialog;
+    };
+
     root.querySelectorAll<HTMLButtonElement>("[data-quest-open]").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const id = btn.dataset.questOpen;
-        const dialog = root.querySelector<HTMLDialogElement>(`[data-quest-dialog="${id}"]`);
-        if (dialog && !dialog.open) {
-          dialog.showModal();
-        }
-      });
+      btn.addEventListener("click", () => openQuest(btn));
     });
 
     root.querySelectorAll<HTMLDialogElement>("[data-quest-dialog]").forEach((dialog) => {
@@ -441,6 +457,7 @@ function tasksFor(domain: QuestDomainId, status: QuestStatus): QuestItem[] {
         if (prevBtn) prevBtn.disabled = page <= 1;
         if (nextBtn) nextBtn.disabled = page >= totalPages;
       };
+      setQuestPage.set(col, setPage);
 
       prevBtn?.addEventListener("click", () => {
         setPage(Number(col.dataset.page || "1") - 1);
@@ -449,5 +466,25 @@ function tasksFor(domain: QuestDomainId, status: QuestStatus): QuestItem[] {
         setPage(Number(col.dataset.page || "1") + 1);
       });
     });
+
+    function revealLinkedQuest(hash: string) {
+      if (!/^#quest-\d+$/.test(hash)) return;
+      const card = document.getElementById(hash.slice(1));
+      if (!(card instanceof HTMLButtonElement) || !card.dataset.questOpen) return;
+      return openQuest(card, true);
+    }
+
+    root.addEventListener("click", (event) => {
+      if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || !(event.target instanceof Element)) return;
+      const link = event.target.closest<HTMLAnchorElement>("a[data-quest-jump]");
+      if (link && revealLinkedQuest(link.hash)) event.preventDefault();
+    });
+    let linkedDialog: HTMLDialogElement | null | undefined;
+    function syncLinkedQuest() {
+      if (linkedDialog?.open) linkedDialog.close();
+      linkedDialog = revealLinkedQuest(location.hash);
+    }
+    window.addEventListener("hashchange", syncLinkedQuest);
+    syncLinkedQuest();
   }
 </script>

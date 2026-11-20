@@ -28,9 +28,9 @@ const icon = "h-[18px] w-[18px]";
   class="sticky top-0 z-40 border-b border-gray-200 bg-white/90 backdrop-blur-md dark:border-gray-800 dark:bg-gray-950/90"
 >
   <div class="mx-auto flex h-14 max-w-7xl items-center gap-2 px-4 sm:px-6">
-    <a href={links[0].href} class="flex shrink-0 items-center gap-2">
-      <Logo />
-      <span class="text-[15px] font-semibold tracking-tight">{SITE_NAME}</span>
+    <a href={links[0].href} class="flex min-w-0 items-center gap-2">
+      <Logo class="h-7 w-7 shrink-0" />
+      <span class="truncate text-[15px] font-semibold tracking-tight">{SITE_NAME}</span>
     </a>
 
     <nav class="ml-4 hidden items-center gap-1 lg:flex" aria-label="Primary">
@@ -47,7 +47,7 @@ const icon = "h-[18px] w-[18px]";
       }
     </nav>
 
-    <div class="ml-auto flex items-center gap-1">
+    <div class="ml-auto flex shrink-0 items-center gap-1">
       <button type="button" class:list={[toggle, "gap-1.5 px-2.5"]} title={s.lang.switch} aria-label={s.lang.switch} data-lang-toggle>
         <svg viewBox="0 0 24 24" class={icon} fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <circle cx="12" cy="12" r="10"></circle>

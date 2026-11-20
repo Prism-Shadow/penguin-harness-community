@@ -1,0 +1,103 @@
+---
+import "../styles/achievement-atlas.css";
+import type { Locale } from "../shared/i18n";
+import { researchStageLabels, type ResearchVersion } from "../shared/achievement-research";
+import AchievementResearchCard from "./AchievementResearchCard.astro";
+import Logo from "./Logo.astro";
+
+interface Props {
+  locale: Locale;
+  version: ResearchVersion;
+  versionIds: string[];
+  current: boolean;
+}
+const { locale, version, versionIds, current } = Astro.props;
+const t = (zh: string, en: string) => (locale === "zh" ? zh : en);
+const prefix = `atlas-${version.id}`;
+const detailsId = `${prefix}-research-details`;
+const index = versionIds.indexOf(version.id);
+const previous = versionIds[index - 1];
+const next = versionIds[index + 1];
+const icons: Record<string, string> = {
+  infra: "m3 7 9-5 9 5-9 5z M3 12l9 5 9-5 M3 17l9 5 9-5",
+  "auto-bench": "M5 3h14v18H5z M8 8h8 M8 12h8 M8 16h4",
+  agent: "M12 3.5a2 2 0 1 1 0 4 2 2 0 0 1 0-4M5.5 16a2 2 0 1 1 0 4 2 2 0 0 1 0-4M18.5 16a2 2 0 1 1 0 4 2 2 0 0 1 0-4M10.7 6.9 7 14M13.3 6.9 17 14M7.5 18h9",
+  platform: "m7 7-5 5 5 5m10-10 5 5-5 5M14 4l-4 16",
+};
+// The tree opens at 100%, or smaller when that is what fits it whole (see fitZoom).
+const zoom = { initial: 1, min: 0.5, max: 1.25 };
+---
+<details class="atlas" id={prefix} open hidden={!current} data-atlas data-atlas-version={version.id}
+  style={`--zoom: ${zoom.initial}`} data-atlas-zoom={JSON.stringify(zoom)}>
+  <summary class="atlas-head border-b border-gray-200 pb-2.5 dark:border-gray-800">
+    <h2 class="flex items-center justify-between gap-4 text-xl font-semibold tracking-tight text-gray-950 dark:text-white">
+      <span>{t("社区成就树", "Community achievement tree")}</span>
+      <span class="disclosure"><span class="opened">{t("收起", "Collapse")}</span><span class="closed">{t("展开", "Expand")}</span><i aria-hidden="true"></i></span>
+    </h2>
+  </summary>
+
+  <div class="atlas-frame mt-4">
+    <div class="toolbar">
+      <nav class="atlas-versions" aria-label={t("成就树版本", "Achievement tree versions")}>
+        {previous ? (
+          <a href={`#atlas-${previous}`} data-atlas-switch={previous} aria-label={t("上一版", "Previous version")}><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3.5 5.5 8l4.5 4.5" /></svg></a>
+        ) : <button type="button" data-version-previous disabled aria-label={t("上一版", "Previous version")}><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3.5 5.5 8l4.5 4.5" /></svg></button>}
+        <span data-version-label tabindex="-1" aria-current="page">{version.id.toUpperCase()}</span>
+        {next ? (
+          <a href={`#atlas-${next}`} data-atlas-switch={next} aria-label={t("下一版", "Next version")}><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5" /></svg></a>
+        ) : <button type="button" data-version-next disabled aria-label={t("下一版", "Next version")}><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5" /></svg></button>}
+      </nav>
+      <ul class="research-legend" aria-label={t("阶段进度图例", "Stage progress legend")}>
+        {Object.entries(researchStageLabels[locale]).map(([state, label]) => (
+          <li><span class="research-legend-swatch" data-progress={state} aria-hidden="true"></span>{label}</li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="stage" data-stage>
+      <div class="viewport" data-scroll tabindex="0" role="region" aria-keyshortcuts="+ - 0"
+        aria-label={t("社区成就树，从左往右浏览", "Community achievement tree, read from left to right")}>
+        <div class="canvas" data-canvas>
+          <svg class="wires" data-wires aria-hidden="true"><g data-paths></g></svg>
+
+          <div class="hub" data-hub style={`grid-row: 1 / span ${version.routes.length}`}>
+            <span class="medal"><Logo class="brand-mark" /></span>
+            <b>{t("RSI 社区", "RSI community")}</b>
+          </div>
+
+          <div class="branches">
+            {version.routes.map((route) => (
+              <section class="branch" data-domain={route.id} aria-labelledby={`${prefix}-heading-${route.id}`}>
+                <div class="domain" data-domain-node>
+                  {icons[route.id] && <span class="domain-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={icons[route.id]} /></svg></span>}
+                  <h3 id={`${prefix}-heading-${route.id}`}>{route.title}</h3>
+                </div>
+                <div class="lanes">
+                  {route.projects.map((project) => (
+                    <div class="lane lane-direct">
+                      <AchievementResearchCard project={project} locale={locale} prefix={prefix} />
+                      {project.followUp && (
+                        <AchievementResearchCard project={project.followUp} predecessor={project} locale={locale} prefix={prefix} />
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </section>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="research-details" id={detailsId} data-research-details hidden role="dialog" aria-labelledby={`${detailsId}-title`}>
+    <button type="button" data-research-close aria-label={t("关闭阶段详情", "Close stage details")}><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4 4 8 8M12 4l-8 8" /></svg></button>
+    <div data-research-body></div>
+  </div>
+  <span class="sr-only" aria-live="polite" data-live></span>
+</details>
+
+<script>
+  import { initAtlas } from "../shared/achievement-atlas-ui";
+  document.querySelectorAll<HTMLDetailsElement>("[data-atlas]").forEach(initAtlas);
+</script>
