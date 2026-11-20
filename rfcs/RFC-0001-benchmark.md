@@ -52,6 +52,7 @@ description_zh = "..."                  # Optional. Short Chinese description of
 version = "0.1.0"                       # Required. Version in standard x.y.z format
 last_update = "2026-10-29T12:00:00Z"    # Required. Last update timestamp accurate to seconds (ISO 8601)
 status = "draft"                        # Required. Status: draft when submitted, published after review
+data_url = "https://github.com/Prism-Shadow/gdpevo-essential"  # Optional. External data repository URL
 references = [                          # Optional. Array of original reference URLs (e.g., data source, paper, repo)
   "https://arxiv.org/abs/...",
   "https://github.com/..."
@@ -80,6 +81,7 @@ Optional fields:
 
 - `title_zh` — Chinese display name for the Benchmark.
 - `description_zh` — Chinese description of the Benchmark.
+- `data_url` — URL of the external repository that hosts the Benchmark's raw data.
 - `references` — List of original reference links (array of strings) recording where the Benchmark data comes from, such as the original paper, dataset homepage, or upstream repository URLs.
 - `author.email` — Contact email address of the author.
 - `author.homepage` — Author homepage link (can default to a GitHub profile URL).
@@ -120,7 +122,7 @@ Optional fields:
   - `disk` — Allocated disk space limit in GB (e.g., `20`; omit for unlimited).
   - `gpus` — Allocated GPU count (`0` for no GPU / CPU-only, positive integer for GPU count; omit for unlimited).
 
-4. If the tasks include large raw datasets or sandbox environment files, place the raw data in a dedicated external GitHub repository for that Benchmark and provide a `README.md` entrypoint. The external data repository can be created either by the contributor or by contacting the Community Committee. Full sets and subsets of the same Benchmark are maintained together in a single external data repository named after the full Benchmark, with unrestricted internal layout. Which specific data a given `<benchmark-id>` uses is specified in `packages/<benchmark-id>/<task-id>/statement/README.md` via pinned-commit references and execution instructions, and the repository URL can also be listed in `benchmark_config.toml`'s `references`, so that an Agent can fetch the required data and run the Benchmark by following the metadata and instructions in `packages/<benchmark-id>/`.
+4. If the tasks include large raw datasets or sandbox environment files, place the raw data in a dedicated external GitHub repository for that Benchmark and provide a `README.md` entrypoint. The external data repository can be created either by the contributor or by contacting the Community Committee. Full sets and subsets of the same Benchmark are maintained together in a single external data repository named after the full Benchmark, with unrestricted internal layout. The repository URL can be recorded in the optional `data_url` field in `benchmark_config.toml`. Which specific data a given `<benchmark-id>` uses is specified in `packages/<benchmark-id>/<task-id>/statement/README.md` via pinned-commit references and execution instructions, so that an Agent can fetch the required data and run the Benchmark by following the metadata and instructions in `packages/<benchmark-id>/`.
 
 ## Training Data & GDPevo Evaluation Protocol
 

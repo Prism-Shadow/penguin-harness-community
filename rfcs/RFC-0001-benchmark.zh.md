@@ -52,6 +52,7 @@ description_zh = "..."                  # 选填。Benchmark 的中文简介
 version = "0.1.0"                       # 必填。版本号，采用标准的 x.y.z 格式
 last_update = "2026-10-29T12:00:00Z"    # 必填。最后更新时间，精确到秒（ISO 8601）
 status = "draft"                        # 必填。状态：提交时为 draft，审核通过后为 published
+data_url = "https://github.com/Prism-Shadow/gdpevo-essential"  # 选填。外部数据仓库链接
 references = [                          # 选填。原始引用链接列表（如数据来源、原论文或原仓库链接）
   "https://arxiv.org/abs/...",
   "https://github.com/..."
@@ -80,6 +81,7 @@ homepage = "https://github.com/..."     # 选填。作者主页链接（默认�
 
 - `title_zh` — Benchmark 的中文显示名称。
 - `description_zh` — Benchmark 的中文描述。
+- `data_url` — 存放该 Benchmark 原始数据的外部仓库链接。
 - `references` — 原始引用链接列表（字符串数组），用于存放该 Benchmark 的数据来源、原始论文链接或上游开源仓库地址等。
 - `author.email` — 作者联系邮箱。
 - `author.homepage` — 作者主页链接（默认可填写 GitHub 主页链接）。
@@ -120,7 +122,7 @@ gpus = 0                                # 选填。GPU 数量限制（单位：�
   - `disk` — 分配的磁盘空间，单位为 GB（例如 `20`；不填代表不限制）。
   - `gpus` — 分配的 GPU 数量（`0` 表示不使用 GPU，正整数表示卡数；不填代表不限制）。
 
-4. 如果题目包含体积较大的原始数据或沙箱环境文件，请为该 Benchmark 准备一个独立的外部数据仓库，并在仓库中提供 `README.md` 说明文件。外部数据仓库既可以由贡献者自行创建，也可以联系社区委员会创建。同一个 Benchmark 的全量集与子集统一维护在同一个以该 Benchmark 完整名称命名的外部数据仓库中，仓库内部的数据组织形式不限。具体某个 `<benchmark-id>` 使用哪些数据，在 `packages/<benchmark-id>/<task-id>/statement/README.md` 中通过固定 Commit 链接与运行说明来指定，同时可在 `benchmark_config.toml` 的 `references` 中列出该仓库地址，只要 Agent 可以参考 `packages/<benchmark-id>/` 中的元信息自动拉取数据并运行该 Benchmark 即可。
+4. 如果题目包含体积较大的原始数据或沙箱环境文件，请为该 Benchmark 准备一个独立的外部数据仓库，并在仓库中提供 `README.md` 说明文件。外部数据仓库既可以由贡献者自行创建，也可以联系社区委员会创建。同一个 Benchmark 的全量集与子集统一维护在同一个以该 Benchmark 完整名称命名的外部数据仓库中，仓库内部的数据组织形式不限。仓库地址可填在 `benchmark_config.toml` 的 `data_url` 字段中。具体某个 `<benchmark-id>` 使用哪些数据，在 `packages/<benchmark-id>/<task-id>/statement/README.md` 中通过固定 Commit 链接与运行说明来指定，只要 Agent 可以参考 `packages/<benchmark-id>/` 中的元信息自动拉取数据并运行该 Benchmark 即可。
 
 ## 训练数据与 GDPevo 评估方法
 
