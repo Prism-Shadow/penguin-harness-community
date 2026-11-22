@@ -613,6 +613,7 @@ tasks:
   - id: "RSI-Q031"
     issue_number: 74
     author: "lzh368"
+    pr_number: 1690
     published_at: "2026-11-13T06:10:22Z"
     status: "in_progress"
     domain: "RSI Algorithm"
@@ -628,7 +629,7 @@ tasks:
       - "https://github.com/OSU-NLP-Group/SkillWeaver"
     assignee: "Nhckdvrl"
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/74"
-    linked_pr: null
+    linked_pr: "https://github.com/Prism-Shadow/penguin-harness/pull/1690"
 
   - id: "RSI-Q032"
     issue_number: 75
