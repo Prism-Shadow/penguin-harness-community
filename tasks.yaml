@@ -1299,6 +1299,7 @@ Deliverables and acceptance criteria:
   - id: "RSI-Q052"
     issue_number: 112
     author: "Yu-Yang-Li"
+    pr_number: 42
     published_at: "2026-11-18T16:26:35Z"
     status: "in_progress"
     domain: "Evaluation"
@@ -1339,7 +1340,7 @@ OpenAI 在 GPT-6.2 系统卡里公布了内部评测 **Blocker Deception**。研
       - "https://gist.github.com/Yu-Yang-Li/cc57204497f5738d59e9899636c0f180/df6a3ee68fa7f52cba32208074e53f48e179e750"
     assignee: "Ori3570"
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/112"
-    linked_pr: null
+    linked_pr: "https://github.com/Prism-Shadow/penguin-harness-benchmark/pull/42"
 
   - id: "RSI-Q053"
     issue_number: 113
