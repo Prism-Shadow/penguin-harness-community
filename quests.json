@@ -1024,9 +1024,9 @@
       "id": "RSI-Q044",
       "issue_number": 92,
       "author": "hiyouga",
-      "pr_number": null,
-      "published_at": "2026-11-16T09:57:33Z",
-      "status": "open",
+      "pr_number": 1650,
+      "published_at": "2026-11-21T14:30:21Z",
+      "status": "completed",
       "domain": "PenguinHarness",
       "exp": 100,
       "target_repository": "https://github.com/Prism-Shadow/penguin-harness",
@@ -1039,9 +1039,9 @@
       "references": [
         "https://github.com/Prism-Shadow/penguin-harness"
       ],
-      "assignee": null,
+      "assignee": "hiyouga",
       "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/92",
-      "linked_pr": null
+      "linked_pr": "https://github.com/Prism-Shadow/penguin-harness/pull/1650"
     },
     {
       "id": "RSI-Q045",
@@ -1578,6 +1578,11 @@
   ],
   "leaderboard": [
     {
+      "handle": "hiyouga",
+      "monthlyExp": 150,
+      "reachedAt": "2026-11-21T14:30:21Z"
+    },
+    {
       "handle": "yenanjing",
       "monthlyExp": 110,
       "reachedAt": "2026-11-19T05:41:23Z"
@@ -1586,11 +1591,6 @@
       "handle": "Saigyouji-Yuyuko1000",
       "monthlyExp": 100,
       "reachedAt": "2026-11-03T08:28:27Z"
-    },
-    {
-      "handle": "hiyouga",
-      "monthlyExp": 50,
-      "reachedAt": "2026-10-10T17:57:44Z"
     },
     {
       "handle": "rank-Yu",

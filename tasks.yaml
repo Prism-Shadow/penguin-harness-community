@@ -1069,8 +1069,9 @@ Stage 2 — Stratified Graph View Layer (Nowledge Mem Super Graph Pattern):
   - id: "RSI-Q044"
     issue_number: 92
     author: "hiyouga"
-    published_at: "2026-11-16T09:57:33Z"
-    status: "open"
+    pr_number: 1650
+    published_at: "2026-11-21T14:30:21Z"
+    status: "completed"
     domain: "PenguinHarness"
     exp: 100
     target_repository: "https://github.com/Prism-Shadow/penguin-harness"
@@ -1091,9 +1092,9 @@ Deliverables and acceptance criteria:
 3. 提供完整的端到端示例与自动化验证用例，展示 PenguinHarness 跨终端、浏览器与原生桌面应用协同完成复杂任务。"
     references:
       - "https://github.com/Prism-Shadow/penguin-harness"
-    assignee: null
+    assignee: "hiyouga"
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/92"
-    linked_pr: null
+    linked_pr: "https://github.com/Prism-Shadow/penguin-harness/pull/1650"
 
   - id: "RSI-Q045"
     issue_number: 93
