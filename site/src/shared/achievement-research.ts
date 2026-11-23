@@ -1179,50 +1179,6 @@ const appShortDramaStudio = buildAppTopic({
   },
 });
 
-const appHealthAssistant = buildAppTopic({
-  id: "app-health-assistant",
-  title: {
-    zh: "AI 个人健康档案追踪与主动提醒助手",
-    en: "AI Personal Health Records & Proactive Reminder Workbench",
-  },
-  protoState: "active",
-  protoIssues: [52, 41],
-  protoWork: {
-    zh: "结合 Personal Agent 主动提醒与长短期记忆探索（#52）及生物医学纵向重复测量分析（#41），定义个人与家庭健康管理工作台。",
-    en: "Combine Personal Agent proactive reminders and long/short-term memory (#52) with longitudinal biomedical analysis (#41) into a personal health workbench.",
-  },
-  protoEvidence: {
-    zh: "涵盖体检报告结构化、纵向指标趋势与主动健康干预的场景定义。",
-    en: "Scenario specification covering checkup report extraction, longitudinal biomarker trends, and proactive reminders.",
-  },
-  skillIssues: [52],
-  skillWork: {
-    zh: "封装体检 PDF/OCR 指标抽取、跨年度异常指标纵向对比、饮食运动打卡记忆沉淀及定时用药/复查主动提醒 Skill。",
-    en: "Package Skills for checkup PDF/OCR extraction, multi-year biomarker trend analysis, diet/exercise memory logging, and scheduled medication/checkup reminders.",
-  },
-  skillEvidence: {
-    zh: "具备本地隐私保护、长短期健康记忆与定时触发能力的健康助手工具链。",
-    en: "Privacy-preserving health assistant toolchain with persistent health memory and scheduled proactive triggers.",
-  },
-  uiWork: {
-    zh: "在 penguin-harness-apps 实现健康助手工作台：提供关键生理指标趋势图表、异常项解读卡片、每日健康打卡日历与提醒配置面板。",
-    en: "Implement the Health Assistant Workbench in penguin-harness-apps with biomarker trend charts, anomaly explanations, daily logs, and reminder settings.",
-  },
-  uiEvidence: {
-    zh: "可视化的 AI 个人健康助手工作台插件。",
-    en: "Visual AI Personal Health Assistant workbench plugin.",
-  },
-  evalIssues: [52, 90],
-  evalWork: {
-    zh: "在长周期记忆基准（#90）与多轮健康咨询场景（#52）下验证跨会话病史记忆准确率与主动提醒及时性。",
-    en: "Validate cross-session health history recall and reminder accuracy on long-horizon memory benchmarks (#90) and consultation scenarios (#52).",
-  },
-  evalEvidence: {
-    zh: "脱敏体检纵向追踪演示案例与长周期健康记忆评测报告。",
-    en: "Anonymized longitudinal health tracking demo and long-term memory evaluation report.",
-  },
-});
-
 const appEcommerceStrategy = buildAppTopic({
   id: "app-ecommerce-strategy-workbench",
   title: {
@@ -1394,7 +1350,6 @@ const versions: VersionDefinition[] = [
         appSuperAgentTaskTree,
         appOverleafPaper,
         appShortDramaStudio,
-        appHealthAssistant,
         appEcommerceStrategy,
         appMarketResearchQuant,
         appDigitalSecretaryPoster,
