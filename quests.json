@@ -1549,6 +1549,56 @@
       "assignee": null,
       "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/126",
       "linked_pr": null
+    },
+    {
+      "id": "RSI-Q064",
+      "issue_number": 127,
+      "author": "lzh368",
+      "pr_number": null,
+      "published_at": "2026-11-23T08:26:39Z",
+      "status": "open",
+      "domain": "PenguinHarness",
+      "exp": 100,
+      "target_repository": "https://github.com/Prism-Shadow/penguin-harness-plugins",
+      "recurring": false,
+      "related_issue": null,
+      "title": "Build an AI Short Drama Storyboard and Video Workbench",
+      "title_zh": "开发 AI 短剧分镜与视频生成工作台",
+      "description": "Bring script import, storyboard editing, per-shot rendering, and final video export into one PenguinHarness workbench.\n\n**Deliverables and acceptance criteria**\n\n1. Import a one-episode script and create an editable storyboard. Each shot records its characters, scene, and video prompt and links to its generated clip.\n2. Integrate one live video generation provider. Render each shot after user confirmation and allow a failed shot to be retried. Editing and rerendering one shot preserves all remaining clips and their order.\n3. Preview the clips in storyboard order and export a playable MP4. Reproduce the Cardboard House workflow or an original sample of similar scope, recording a single-shot rerender and the final export.\n4. Submit the implementation to `penguin-harness-apps` and the registration PR to `penguin-harness-plugins`. Link the implementation PR, reproduction steps, and acceptance evidence from the registration PR. Verify that the installed workbench can be added to an Agent and opened from the App Center.",
+      "description_zh": "将短剧制作流程接入 PenguinHarness，让用户在同一工作台完成剧本导入、分镜编辑、逐镜生成和成片导出。\n\n**交付与验收要求**\n\n1. 导入一份单集剧本，生成可编辑的分镜列表。每镜至少包含角色、场景和视频提示词，并能关联到生成的片段。\n2. 接入一个实际的视频生成服务。用户确认后可逐镜生成，生成失败的镜头可单独重试。修改并重做一个镜头后，其余已生成片段及排列顺序保持原样。\n3. 按分镜顺序预览并导出可播放的 MP4。用《纸箱小屋》的流程或同等规模的原创样例跑通，记录一次单镜头重做及最终导出结果。\n4. 在 `penguin-harness-apps` 提交源码，在 `penguin-harness-plugins` 提交插件登记 PR。登记 PR 附源码 PR、复跑步骤和验收记录，并验证从插件市场安装后可添加到 Agent、从应用中心打开。",
+      "references": [
+        "https://dshbook.penguin.ooo/chapter8/",
+        "https://github.com/zenstory-ai/drama-skills",
+        "https://github.com/Prism-Shadow/penguin-harness-apps"
+      ],
+      "assignee": null,
+      "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/127",
+      "linked_pr": null
+    },
+    {
+      "id": "RSI-Q065",
+      "issue_number": 128,
+      "author": "lzh368",
+      "pr_number": null,
+      "published_at": "2026-11-23T08:26:40Z",
+      "status": "open",
+      "domain": "PenguinHarness",
+      "exp": 100,
+      "target_repository": "https://github.com/Prism-Shadow/penguin-harness-plugins",
+      "recurring": false,
+      "related_issue": "https://github.com/Prism-Shadow/penguin-harness-community/issues/94",
+      "title": "Build a Super Agent Task Tree and Dependency Board",
+      "title_zh": "开发 Super Agent 任务树与依赖看板",
+      "description": "Show assignments, execution states, and prerequisites in a Super Agent board so project members can locate blockers.\n\n**Deliverables and acceptance criteria**\n\n1. Use live team run data to show task names, owners, execution states, and prerequisites. Selecting a task reveals its blockers and available deliverables.\n2. Run four parallel analyses followed by a summary task that depends on all four. The summary shows a waiting state until all prerequisites are delivered, then becomes runnable.\n3. Reopen the board and verify its owners, relationships, and states against the current run. Supply a reproducible example and a recording of the state transition.\n4. Submit the implementation to `penguin-harness-apps` and the registration PR to `penguin-harness-plugins`. Link the implementation PR, reproduction steps, and acceptance evidence from the registration PR. Verify that the installed workbench can be added to an Agent and opened from the App Center.",
+      "description_zh": "把 Super Agent 的任务分派、执行状态和前置依赖呈现在一个看板上，让项目成员能定位阻塞项。\n\n**交付与验收要求**\n\n1. 接入真实团队运行数据，显示任务名称、负责人、执行状态和前置依赖。点击任务可查看它正在等待的任务及已有交付。\n2. 运行四项并行分析和一项依赖全部分析的汇总任务。任一前置任务尚未交付时，汇总任务显示「等待依赖」。全部交付后，汇总任务更新为可执行。\n3. 重新打开看板，核对任务负责人、依赖关系和状态与当前运行记录一致。提交可复跑案例及覆盖状态变化的录屏。\n4. 在 `penguin-harness-apps` 提交源码，在 `penguin-harness-plugins` 提交插件登记 PR。登记 PR 附源码 PR、复跑步骤和验收记录，并验证从插件市场安装后可添加到 Agent、从应用中心打开。",
+      "references": [
+        "https://dshbook.penguin.ooo/chapter11/",
+        "https://github.com/Prism-Shadow/penguin-harness-community/issues/94",
+        "https://github.com/Prism-Shadow/penguin-harness-apps"
+      ],
+      "assignee": null,
+      "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/128",
+      "linked_pr": null
     }
   ],
   "leaderboard": [
