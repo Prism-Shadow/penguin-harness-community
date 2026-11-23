@@ -1045,8 +1045,8 @@ function buildAppTopic(config: {
 const appSuperAgentTaskTree = buildAppTopic({
   id: "app-super-agent-task-tree",
   title: {
-    zh: "Super Agent 任务树与 DAG 依赖看板工作台",
-    en: "Super Agent Task Tree & DAG Dependency Board Workbench",
+    zh: "Super Agent 任务树与依赖看板",
+    en: "Super Agent Task Tree and Dependency Board",
   },
   protoState: "done",
   protoIssues: [50],
@@ -1094,8 +1094,8 @@ const appSuperAgentTaskTree = buildAppTopic({
 const appOverleafPaper = buildAppTopic({
   id: "app-overleaf-paper-workbench",
   title: {
-    zh: "Overleaf 科研论文协同撰写与审稿工作台",
-    en: "Overleaf Scientific Paper Co-Writing & Review Workbench",
+    zh: "面向 Overleaf 的论文审阅工作台",
+    en: "Overleaf Paper Review Workbench",
   },
   protoState: "active",
   protoIssues: [118, 68],
@@ -1139,51 +1139,51 @@ const appOverleafPaper = buildAppTopic({
 const appShortDramaStudio = buildAppTopic({
   id: "app-short-drama-studio",
   title: {
-    zh: "AI 短剧剧本拆解与分镜视频生成工作台",
-    en: "AI Short Drama Script Breakdown & Storyboard Video Studio",
+    zh: "AI 短剧分镜与视频生成工作台",
+    en: "AI Short Drama Storyboard and Video Workbench",
   },
   protoState: "done",
   protoRefs: [{ label: { zh: "dshbook 第 8 章《让 dsh 制作短剧》", en: "dshbook Ch.8 Short Drama workflow" }, url: `${REPO.dshbookRepo}/blob/main/book/chapter8.md` }],
   protoWork: {
-    zh: "基于 dshbook 第 8 章验证通过的四步短剧流水线（剧本 story.md → 角色/场景设定 assets.md → 分镜脚本 storyboard.md → 视频提示词 prompts.md），定义可视化工作台。",
-    en: "Adapt dshbook Ch.8's verified 4-stage pipeline (story.md → character/scene assets.md → storyboard.md → video prompts.md) into a visual studio.",
+    zh: "参考《DeepSeek Harness 实战指南》第 8 章和 drama-skills，定义导入单集剧本、生成包含角色/场景/视频提示词的可编辑分镜、逐镜生成视频并导出 MP4 的工作台流程。",
+    en: "Based on dshbook Ch.8 and drama-skills, define a workbench flow to import a single-episode script, generate an editable storyboard, render clips per shot, and export MP4.",
   },
   protoEvidence: {
-    zh: "dshbook 第 8 章完整短剧生成案例与角色/场景资产一致性规范。",
-    en: "Complete short drama case study and character/scene consistency specification from dshbook Ch.8.",
+    zh: "dshbook 第 8 章《纸箱小屋》完整短剧生成流程与 drama-skills 分镜资产规范。",
+    en: "Complete Cardboard Cabin short drama workflow from dshbook Ch.8 and drama-skills asset specification.",
   },
   skillWork: {
-    zh: "封装剧本冲突扩写、角色外貌锚点锁定、景别/运镜分镜拆解及多模态视频生成（如 SeedDance / 万相 API）批量调用 Skill。",
-    en: "Package Skills for script expansion, character visual anchor locking, camera movement storyboarding, and batch video generation API calls.",
+    zh: "复用并封装 drama-skills 与视频生成服务接口，支持单集剧本拆解为角色、场景与视频提示词，并支持单镜头独立重生成。",
+    en: "Integrate drama-skills and a video generation provider to break scripts into characters, scenes, and prompts with single-shot regeneration.",
   },
   skillEvidence: {
-    zh: "支持角色跨镜头一致性保持的短剧分镜与视频合成工具链。",
-    en: "Short drama storyboarding and video synthesis toolchain with cross-shot character consistency.",
+    zh: "支持修改并重生成单个镜头且保留其余已生成镜头的短剧分镜与视频生成工具链。",
+    en: "Short drama storyboarding and video generation toolchain supporting single-shot regeneration while preserving remaining clips.",
   },
   uiWork: {
-    zh: "在 penguin-harness-apps 构建短剧创作工作台：包含角色/场景设定卡管理、分镜时间轴看板、单镜头重抽卡与成片拼接预览。",
-    en: "Build the Short Drama Studio in penguin-harness-apps featuring character/scene cards, a storyboard timeline, per-shot rerolls, and video assembly preview.",
+    zh: "在 penguin-harness-apps 构建短剧创作工作台：支持导入示例剧本、编辑分镜列表、确认后逐镜生成视频、单镜头重做及按序预览导出 MP4。",
+    en: "Build the Short Drama Workbench in penguin-harness-apps with script import, editable storyboard, per-shot regeneration, ordered preview, and MP4 export.",
   },
   uiEvidence: {
-    zh: "可从应用中心启动的 AI 短剧分镜与视频生成工作台插件。",
-    en: "An AI short drama storyboard and video studio workbench plugin launchable from the App Center.",
+    zh: "可从 PenguinHarness 应用中心安装并运行的 AI 短剧分镜与视频生成工作台插件。",
+    en: "An installable AI Short Drama Storyboard and Video Workbench plugin in the PenguinHarness App Center.",
   },
   evalIssues: [96],
   evalWork: {
-    zh: "对接 TuringBench（#96）的视频分镜连贯性与拟人度评测，交付多集短剧端到端生成样片。",
-    en: "Evaluate storyboard coherence and realism against TuringBench (#96) and deliver multi-episode short drama samples.",
+    zh: "用《纸箱小屋》流程或同等规模原创样例跑通单镜头重生成与 MP4 导出，并可结合 TuringBench（#96）评估成片连贯性。",
+    en: "Verify single-shot regeneration and MP4 export on the Cardboard Cabin flow or an equivalent sample, alongside TuringBench (#96) coherence checks.",
   },
   evalEvidence: {
-    zh: "短剧成片案例包与 TuringBench 视觉叙事连贯性评分记录。",
-    en: "Short drama sample bundle and TuringBench visual narrative coherence scores.",
+    zh: "工作台源码 PR、插件登记 PR、可复跑样例说明及从应用中心安装到导出 MP4 的完整演示记录。",
+    en: "Workbench source PR, plugin registry PR, reproducible sample guide, and a recording from App Center installation through MP4 export.",
   },
 });
 
 const appEcommerceStrategy = buildAppTopic({
   id: "app-ecommerce-strategy-workbench",
   title: {
-    zh: "AI 电商选品分析与营销策略工作台",
-    en: "AI E-Commerce Product Selection & Marketing Strategy Workbench",
+    zh: "AI 电商选品与策略分析工作台",
+    en: "AI E-Commerce Selection and Strategy Workbench",
   },
   protoState: "active",
   protoIssues: [53],
@@ -1226,8 +1226,8 @@ const appEcommerceStrategy = buildAppTopic({
 const appMarketResearchQuant = buildAppTopic({
   id: "app-market-research-quant",
   title: {
-    zh: "AI 市场投研与量化回测工作台（dshbook 案例）",
-    en: "AI Market Research & Quantitative Backtesting Workbench (dshbook Case)",
+    zh: "市场投研与策略回测工作台",
+    en: "Market Research and Strategy Backtesting Workbench",
   },
   protoState: "done",
   protoRefs: [{ label: { zh: "dshbook 第 10 章《构建市场投研助手》", en: "dshbook Ch.10 Market Research Assistant" }, url: `${REPO.dshbookRepo}/blob/main/book/chapter10.md` }],
