@@ -15,7 +15,7 @@
 
 ## Evaluation PR Merge Criteria
 
-- **Reproducible setup.** Submit the configuration and results according to RFC-0002. For models whose weights change over time, record the specific version in `model_name` in `meta_info.yaml`, such as `deepseek-flash-1017`. In the PR description, include the benchmark version, test scope, run budget, key settings, and reproduction commands.
+- **Reproducible setup.** In the PR description, include the benchmark version, test scope, run budget, key settings, and reproduction commands.
 - **Comparable conditions.** When comparing runs, use the same test tasks and grading rules. Explain any differences in the setups and how they affect the conclusions. If training or tuning is involved, document the data splits and hold the test tasks out of training and tuning.
 - **Complete run records.** Record every task in the declared test scope for each attempt in `attempt-<n>.yaml`. Include agent failures and timeouts, score them according to the rubric, and explain how they were handled. If infrastructure errors leave missing results, document the cause and complete the records before aggregating.
 - **Verifiable summaries.** Check the scores, duration, token usage, and cost in `summary.yaml` against `attempt-<n>.yaml`. Report duration in milliseconds and cost in USD using MMSP model list prices. State which phases and runs the summary covers. For a single attempt, set `score_std: null`. The `pass@k` field is optional.
@@ -26,6 +26,7 @@
   - `GDPevo-essential` comprises six independent sub-benchmarks: `court-clerk-operations`, `coverage-review`, `engineering-portfolio-analytics`, `financial-control`, `portfolio-management`, and `service-ticket-resolution`.
   - Because each sub-benchmark is trained and evaluated independently (never combined into a single joint training run), **each sub-benchmark must be submitted as its own separate `<experiment-id>` folder** (see [penguin-harness-benchmark#18](https://github.com/Prism-Shadow/penguin-harness-benchmark/pull/18)), and then aggregated across the six sub-benchmarks via [RFC-0005 Leaderboard](../rfcs/RFC-0005-leaderboard.md).
 - **Recommended Setup for General Benchmarks**: For general Benchmarks (such as `penguinharness-benchmark-sec-a` through `sec-e`), we recommend running 3 repeated attempts (`n_attempt: 3`) with **DeepSeek Flash** and reporting `score_mean`, `score_std`, and optionally `pass@k`.
+- **Model Version Requirement**: When using models such as `deepseek-flash`, always include the specific version suffix in `model_name` inside `meta_info.yaml` (for example, `deepseek-flash-1017`).
 
 ## Format Examples
 
@@ -59,13 +60,11 @@ Closes #<issue-number>
 ### Results Summary
 - **Experiment ID**: `<experiment-id>`
 - **Model**: `deepseek/deepseek-flash-1017`
-- **Test Phase (`test`) Score**: `<score_mean>` (include `± <score_std>` for multiple attempts), `pass@k` (optional): `<pass@k>` (`n_attempt: <N>`)
+- **Test Phase (`test`) Score**: `<score_mean> ± <score_std>`, `pass@k` (optional): `<pass@k>` (`n_attempt: 3`)
 - **Single-Experiment Cost / Duration**: `$<cost>` / `<duration_ms> ms`
-- **Reproduction and Records**: <benchmark version, test scope, run budget, key settings, reproduction commands, per-task records, and handling of failures>
-- **Comparison Setup (if applicable)**: <links to comparison runs, shared evaluation conditions, and configuration differences>
 
 ### Checklist
 - [x] Directory layout and YAML fields conform to RFC-0002 Evaluation
 - [x] `train-<n>` / `val-<n>` phases have numeric suffixes, `test/` has no numeric suffix, and `status: "draft"` is set in `meta_info.yaml`
-- [x] Recorded the model version as specified in RFC-0002 and checked summaries and MMSP pricing against the per-task records
+- [x] `model_name` includes the explicit version suffix (e.g., `deepseek-flash-1017`) and cost is calculated using MMSP model list prices
 ```

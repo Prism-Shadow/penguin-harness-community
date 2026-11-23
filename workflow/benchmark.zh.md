@@ -10,7 +10,7 @@
 1. **学习 RFC 文件结构**：先阅读 [RFC-0001 Benchmark](../rfcs/RFC-0001-benchmark.zh.md)，了解 `packages/<benchmark-id>/`、`<task-id>/`、`benchmark_config.toml` 以及大体积原始数据存放在独立外部仓库的规范。
 2. **提出 Issue**：在 [PenguinHarness Benchmark Issues](https://github.com/Prism-Shadow/penguin-harness-benchmark/issues) 中搜索是否已有对应 Benchmark 的 Issue；若没有，则新建一个 Issue 说明要整理的 Benchmark 来源与题目规模。若包含大体积原始数据，可使用自建仓库，也可联系社区委员会创建外部数据仓库。
 3. **Issue 评论区占坑**：在目标 Issue 评论区留言认领，占坑是可选步骤，主要用于防止多人同时整理同一个 Benchmark 撞车。
-4. **提交 PR**：按 RFC-0001 完成转换与自测，并将 `benchmark_config.toml` 的 `status` 设为 `"draft"`。若使用外部数据，在题目的 `statement/README.md` 中用固定提交链接引用数据，并提供获取与运行说明。外部数据仓库地址也可填入 `data_url`。提交 `packages/<benchmark-id>/` 的 PR 并关联 Issue。
+4. **提交 PR**：按 `RFC-0001` 完成 Benchmark 转换与自测，提交时将 `benchmark_config.toml` 的 `status` 设为 `"draft"`；若包含大体积原始数据，将其推入对应的独立外部数据仓库并在 `statement/README.md` 中通过固定 Commit 引用，随后向 `penguin-harness-benchmark` 提交 `packages/<benchmark-id>/` 的 Pull Request 并关联 Issue。
 5. **Maintainer 审核合并**：按 [Benchmark PR 合入标准](#benchmark-pr-合入标准)审核，通过后将 `status` 更新为 `"published"` 并合并入库。
 
 ## Benchmark PR 合入标准
@@ -22,7 +22,7 @@
 
 ## 推荐验证指导与参考样例
 
-- **推荐验证模型与指标**。完成 Benchmark 整理后，推荐使用 **DeepSeek Flash** 模型重复运行 $k = 3$ 次，检查任务执行和评分的一致性，可选报告 **`pass@k`**。
+- **推荐验证模型与指标**：完成 Benchmark 整理后，推荐使用 **DeepSeek Flash** 模型重复运行 $k = 3$ 次来验证题目是否可解、评分器是否稳定且具备区分度，可选报告 **`pass@k`**。
 - **记录模型版本号**：若一并提交基线验证结果，使用 `deepseek-flash` 这类模型时必须在 `model_name` 中注明具体版本号（例如 `deepseek-flash-1017`）。
 - **参考样例**：
   - 通用评测基准样例：[`penguinharness-benchmark-sec-a`](https://github.com/Prism-Shadow/penguin-harness-benchmark/tree/main/packages/penguinharness-benchmark-sec-a)（Data Analysis Bench 子集）至 [`penguinharness-benchmark-sec-e`](https://github.com/Prism-Shadow/penguin-harness-benchmark/tree/main/packages/penguinharness-benchmark-sec-e)（Terminal-Bench 子集）。
@@ -43,8 +43,8 @@
 
 ### 整理计划
 - [ ] 整理 `packages/<benchmark-id>/benchmark_config.toml` 与各题 `<task-id>/`
-- [ ] 如包含大体积原始数据，将其整理至独立外部仓库，并在题目说明中引用固定提交
-- [ ] 检查所有纳入题目能加载，用代表性题目验证执行与评分流程
+- [ ] 如包含大体积原始任务数据，将其整理至独立外部数据仓库，可自行创建或联系社区委员会创建
+- [ ] 使用 `deepseek-flash-1017` 验证题目可正常执行并完成计分
 ```
 
 ### 2. Issue 评论占坑示例（可选）
@@ -62,14 +62,10 @@ Closes #<issue-number>
 
 ### 变更内容
 - 新增 `packages/<benchmark-id>/`，包含 `benchmark_config.toml` 及 <N> 道题目的 `statement/`、`rubric/` 和 `task_config.toml`
-- （可选）原始任务数据仓库：<外部数据仓库链接及固定提交>
-
-### 验证方式
-- **来源与范围**：<来源、许可、版本、纳入范围和改动>
-- **运行与评分**：<全量加载检查结果、抽测题目、环境、命令、评分正反例和结果记录>
+- （可选）原始任务数据仓库：<外部数据仓库链接及固定 Commit>
 
 ### 自查清单
 - [x] 目录结构与字段符合 RFC-0001 Benchmark 规范
 - [x] `benchmark_config.toml` 中 `status` 已设为 `"draft"`
-- [x] 已确认所有纳入题目可加载，跑通代表性题目并核对评分结果
+- [x] 已使用 `deepseek-flash-1017` 验证题目可正常执行并完成评分
 ```

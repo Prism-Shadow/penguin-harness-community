@@ -9,8 +9,8 @@
 
 1. **Learn the RFC File Structure**: Read [RFC-0001 Benchmark](../rfcs/RFC-0001-benchmark.md) to understand the required layout of `packages/<benchmark-id>/`, `<task-id>/`, `benchmark_config.toml`, and storing large raw task data in a dedicated external repository.
 2. **Open an Issue**: Check [PenguinHarness Benchmark Issues](https://github.com/Prism-Shadow/penguin-harness-benchmark/issues) for an existing Issue for the Benchmark, or open a new Issue describing the upstream source and number of tasks. If the Benchmark has large raw data, you may use your own repository or contact the Community Committee to create one.
-3. **Claim in Issue Comments**: Leave a comment on the Issue to claim the work. Claiming is optional and primarily prevents duplicate effort.
-4. **Submit a PR**: Organize and test the Benchmark files according to RFC-0001 and set `status = "draft"` in `benchmark_config.toml`. For external data, link to a pinned commit in each task's `statement/README.md` and explain how to fetch and run it. You can also put the data repository URL in `data_url`. Open a PR for `packages/<benchmark-id>/` linked to the Issue.
+3. **Claim in Issue Comments**: Leave a comment on the Issue to claim the work; claiming is optional and primarily prevents duplicate effort.
+4. **Submit a PR**: Organize the Benchmark files according to `RFC-0001` with `status = "draft"` in `benchmark_config.toml`. If large raw data is required, push it to the dedicated external data repository and reference it at a pinned commit in `statement/README.md`, then open a Pull Request for `packages/<benchmark-id>/` linked to the Issue.
 5. **Maintainer Review & Merge**: Review the PR against the [Benchmark PR merge criteria](#benchmark-pr-merge-criteria), then set `status` to `"published"` and merge once approved.
 
 ## Benchmark PR Merge Criteria
@@ -22,7 +22,7 @@
 
 ## Recommended Verification & Examples
 
-- **Recommended Model & Metric.** After organizing a Benchmark, we recommend running $k = 3$ attempts with **DeepSeek Flash** to check task execution and scoring consistency. You can also report **`pass@k`**.
+- **Recommended Model & Metric**: After organizing a Benchmark, we recommend running $k = 3$ repeated attempts with the **DeepSeek Flash** model to verify that tasks are solvable, discriminative, and graded deterministically, optionally reporting **`pass@k`**.
 - **Model Version Suffix**: If you also submit baseline evaluation records using models like `deepseek-flash`, always include the explicit version suffix in `model_name` (e.g., `deepseek-flash-1017`).
 - **Reference Examples**:
   - General evaluation benchmarks: [`penguinharness-benchmark-sec-a`](https://github.com/Prism-Shadow/penguin-harness-benchmark/tree/main/packages/penguinharness-benchmark-sec-a) (Data Analysis Bench subset) through [`penguinharness-benchmark-sec-e`](https://github.com/Prism-Shadow/penguin-harness-benchmark/tree/main/packages/penguinharness-benchmark-sec-e) (Terminal-Bench subset).
@@ -43,8 +43,8 @@
 
 ### Plan
 - [ ] Prepare `packages/<benchmark-id>/benchmark_config.toml` and `<task-id>/` directories
-- [ ] If the Benchmark has large raw data, put it in a dedicated external repository and link to a pinned commit in the task instructions
-- [ ] Check that all submitted tasks load and verify execution and grading on representative tasks
+- [ ] If applicable, place raw task files in a dedicated external data repository, either self-hosted or created by contacting the Community Committee
+- [ ] Verify tasks with `deepseek-flash-1017` to ensure tasks run and score properly
 ```
 
 ### 2. Issue Claim Comment Example (Optional)
@@ -64,12 +64,8 @@ Closes #<issue-number>
 - Added `packages/<benchmark-id>/` with `benchmark_config.toml` and <N> tasks (`statement/`, `rubric/`, `task_config.toml`)
 - (Optional) Raw task data repository: <external data repository URL and pinned commit>
 
-### Verification
-- **Sources and scope**: <sources, licenses, versions, included tasks, and changes>
-- **Execution and grading**: <load check results for all tasks, tasks run end to end, environment, commands, passing and failing examples, and run records>
-
 ### Checklist
 - [x] Directory layout and manifest fields conform to RFC-0001 Benchmark
 - [x] `status` in `benchmark_config.toml` is set to `"draft"`
-- [x] Confirmed all submitted tasks load, ran representative tasks, and checked grading results
+- [x] Verified tasks with `deepseek-flash-1017`
 ```
