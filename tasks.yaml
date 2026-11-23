@@ -1755,6 +1755,187 @@ Save outputs and grades by problem and run so an interrupted run can resume from
     linked_pr: null
 
   - id: "RSI-Q064"
+    issue_number: 127
+    author: "lzh368"
+    published_at: "2026-11-23T08:26:39Z"
+    status: "open"
+    domain: "PenguinHarness"
+    exp: 100
+    target_repository: "https://github.com/Prism-Shadow/penguin-harness-plugins"
+    related_issue: null
+    title: "Build an AI Short Drama Storyboard and Video Workbench"
+    title_zh: "开发 AI 短剧分镜与视频生成工作台"
+    description: "Integrate an AI short-drama creation application into PenguinHarness as an App Center workbench plugin, covering AI script-to-storyboard breakdown, character/scene consistency management, per-shot video generation, and final MP4 export (modeled on DSH Chapter 8 and `drama-skills`).
+
+**Deliverables and acceptance criteria**
+
+1. **AI script breakdown & editable storyboard**: Import a single-episode script and invoke the PenguinHarness Agent / LLM with the `drama-skills` workflow to automatically extract character profiles (with visual consistency anchors), scene descriptions, and a shot-by-shot storyboard table. Each shot records its characters, scene, camera/action notes, and video generation prompt, all editable by the user and linked to its generated clip.
+2. **Live video generation & single-shot non-destructive rerendering**: Integrate at least one live video generation provider (text-to-video or image-to-video). Support rendering shots after user confirmation and retrying failed shots independently. Modifying a single shot’s prompt and rerendering it must preserve all other generated clips and their timeline sequence without full-episode regeneration.
+3. **Timeline preview & playable MP4 export**: Preview generated clips in storyboard order and export a merged, playable MP4 video. Reproduce the *Cardboard House* (《纸箱小屋》) workflow from DSH Chapter 8 or an original short-drama episode of equivalent scope, recording a single-shot prompt edit + rerender and the final MP4 export.
+4. **Plugin packaging & App Center integration**: Submit the application source to `penguin-harness-apps` and the plugin registration PR to `penguin-harness-plugins`. Attach the implementation PR link, reproduction guide, and acceptance evidence, and verify that the plugin can be installed from the Marketplace, added to an Agent, and launched from the App Center."
+    description_zh: "将 AI 短剧创作应用集成到 PenguinHarness 应用中心插件中，在同一工作台内打通 AI 剧本拆解、角色与场景一致性管理、分镜提示词编辑、逐镜视频生成与成片 MP4 导出全流程（参考 DSH 第 8 章《纸箱小屋》与 `drama-skills`）。
+
+**交付与验收要求**
+
+1. **AI 剧本拆解与可编辑分镜表**：支持导入单集剧本，调用 PenguinHarness Agent / 大模型并结合 `drama-skills` 自动拆解生成角色设定卡（含外貌一致性描述）、场景设定与分镜列表。每个镜头至少包含出场角色、所属场景、运镜/画面描述与视频生成提示词，支持用户手动微调并与生成的视频片段关联。
+2. **接入真实视频生成服务与单镜头无损重做**：接入至少一个实际可用的视频生成模型服务（文生视频或图生视频），支持用户确认后逐镜生成及失败镜头单独重试。修改单个镜头的提示词并重新生成后，其余已生成镜头片段及时间轴排列顺序保持原样，无需整集重跑。
+3. **按序预览与成片 MP4 导出**：支持按分镜时间轴顺序预览全部片段并合成为可播放的 MP4 成片。使用 DSH 第 8 章《纸箱小屋》剧本或同等规模的原创短剧样例跑通全流程，提交包含「单镜头修改重做 + 最终导出 MP4」的复跑记录。
+4. **插件封装与应用中心集成**：在 `penguin-harness-apps` 提交应用源码 PR，在 `penguin-harness-plugins` 提交插件登记 PR。登记 PR 需附源码 PR 链接、复跑步骤与验收证据，并验证从插件市场安装后可挂载到 Agent 并从应用中心直接打开使用。"
+    references:
+      - "https://dshbook.penguin.ooo/chapter8/"
+      - "https://github.com/Prism-Shadow/deepseek-harness-book/tree/main/demo/chapter8-drama-design"
+      - "https://github.com/zenstory-ai/drama-skills"
+      - "https://github.com/Prism-Shadow/penguin-harness-apps"
+    assignee: null
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/127"
+    linked_pr: null
+
+  - id: "RSI-Q065"
+    issue_number: 128
+    author: "lzh368"
+    published_at: "2026-11-23T08:26:40Z"
+    status: "open"
+    domain: "PenguinHarness"
+    exp: 100
+    target_repository: "https://github.com/Prism-Shadow/penguin-harness-plugins"
+    related_issue: "https://github.com/Prism-Shadow/penguin-harness-community/issues/94"
+    title: "Build a Super Agent Task Tree and Dependency Board"
+    title_zh: "开发 Super Agent 任务树与依赖看板"
+    description: "Integrate a visual Super Agent (AgentTeams) orchestration and dependency board into PenguinHarness as an App Center workbench plugin, combining a live sub-agent activity stream with an interactive task dependency DAG so users can monitor parallel execution and pinpoint blockers (modeled on DSH Chapter 11 and Issue #94).
+
+**Deliverables and acceptance criteria**
+
+1. **Split-pane live AgentTeams stream & interactive dependency DAG**: Connect to real PenguinHarness multi-agent team execution data (such as live sub-agent tool streams or `.agent-teams/*/team.json` runtime records; frontend-only static mocks or timer animations are not accepted) and present a split-pane workbench:
+   - **Left pane (Sub-Agent Activity Stream)**: Real-time status cards and execution stream for each sub-agent (owner, current action/tool call, status badge, and latest output).
+   - **Right pane (Task Tree & Dependency DAG Board)**: Interactive directed acyclic graph (DAG) showing task nodes, assigned sub-agents, execution states (`pending`, `waiting_on_dependencies`, `in_progress`, `completed`, `failed`), and directed prerequisite edges (`dependsOn` / `dependencies`). Clicking or hovering a task node highlights its upstream blockers and reveals its prerequisite deliverables and logs in a detail panel/drawer.
+2. **Parallel fan-out and fan-in dependency gating (DSH Chapter 11 workflow)**: Run a real multi-agent workflow with four parallel analysis tasks followed by one synthesis task that depends on all four (`dependsOn` / `dependencies`). While any prerequisite task remains incomplete, the synthesis node must explicitly display a `Waiting on dependencies` state and identify the unfinished upstream tasks; once all four prerequisites deliver their artifacts, the synthesis task automatically transitions to runnable/running and completes.
+3. **State persistence & consistency verification**: Close and reopen the workbench to verify that task owners, dependency edges, execution states, and delivered artifacts remain strictly consistent with the underlying team run records. Provide a reproducible multi-agent case and a screen recording capturing the live state transitions.
+4. **Plugin packaging & App Center integration**: Submit the application source to `penguin-harness-apps` and the plugin registration PR to `penguin-harness-plugins`. Attach the implementation PR link, reproduction guide, and acceptance evidence, and verify that the plugin can be installed from the Marketplace, added to an Agent, and launched from the App Center."
+    description_zh: "将 Super Agent（AgentTeams）多智能体任务协同与依赖看板集成到 PenguinHarness 应用中心插件中，通过「左侧子代理实时活动流 + 右侧可视化任务依赖 DAG 拓扑图」直观呈现多 Agent 任务分派、实时状态流转与前置阻塞关系（参考 DSH 第 11 章与 Issue #94）。
+
+**交付与验收要求**
+
+1. **双栏联动界面（子代理实时活动流 + 可视化任务依赖 DAG）**：接入真实的 PenguinHarness 多 Agent 团队运行数据（如子代理实时工具调用流或 `.agent-teams/*/team.json` 真实运行记录，不接受纯前端静态 Mock 或定时器动画），构建双栏协同看板：
+   - **左侧面板（AgentTeams 实时活动流）**：展示各子代理（Sub-Agent）的实时运行状态、当前执行的工具/动作摘要及最新输出流；
+   - **右侧面板（任务树与依赖 DAG 拓扑看板）**：以有向无环图（DAG）展示任务节点、负责子代理、执行状态（待执行、等待前置依赖、进行中、已完成、失败）及前置依赖连线（`dependsOn` / `dependencies`）。点击或悬停任务节点可高亮其上游阻塞项，并在详情面板/抽屉中查看前置任务的已交付产物与运行日志。
+2. **四路并行分析与汇总依赖门控验证（DSH 第 11 章工作流）**：运行包含四项并行子代理分析任务及一项依赖全部四项结果的汇总任务的真实多代理协同流程。任一前置任务未完成交付时，汇总任务节点必须明确显示「等待前置依赖」状态并标出未完成项；当四项前置任务全部交付后，汇总任务自动解锁为可执行并完成汇总产出。
+3. **状态持久化与一致性核验**：关闭并重新打开看板，核对任务负责人、DAG 依赖连线、任务状态及交付产物与底层运行记录完全一致。提交可复跑的多代理协同案例及完整覆盖状态跃迁过程的录屏。
+4. **插件封装与应用中心集成**：在 `penguin-harness-apps` 提交应用源码 PR，在 `penguin-harness-plugins` 提交插件登记 PR。登记 PR 需附源码 PR 链接、复跑步骤与验收证据，并验证从插件市场安装后可挂载到 Agent 并从应用中心直接打开使用。"
+    references:
+      - "https://dshbook.penguin.ooo/chapter11/"
+      - "https://github.com/Prism-Shadow/deepseek-harness-book/tree/main/demo/chapter11-agentteams-repo-review"
+      - "https://github.com/Prism-Shadow/penguin-harness-community/issues/94"
+      - "https://github.com/Prism-Shadow/penguin-harness-apps"
+    assignee: null
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/128"
+    linked_pr: null
+
+  - id: "RSI-Q066"
+    issue_number: 129
+    author: "lzh368"
+    published_at: "2026-11-23T08:26:41Z"
+    status: "open"
+    domain: "PenguinHarness"
+    exp: 100
+    target_repository: "https://github.com/Prism-Shadow/penguin-harness-plugins"
+    related_issue: "https://github.com/Prism-Shadow/penguin-harness-community/issues/118"
+    title: "Build an Overleaf-Compatible Paper Writing and Compilation Workbench"
+    title_zh: "开发兼容 Overleaf 的论文写作与编译工作台"
+    description: "Integrate an Overleaf-compatible AI scientific paper writing, review, and LaTeX compilation workbench into PenguinHarness as an App Center plugin, enabling users to seamlessly import/export Overleaf multi-file LaTeX projects, draft and polish sections with AI, apply structured AI review edits via source diffs, and compile live PDFs in one place (associated with Issue #118 and `penguin-harness-paper`).
+
+**Deliverables and acceptance criteria**
+
+1. **Overleaf project compatibility & live multi-file LaTeX PDF compilation**: Support full round-trip import and export of standard Overleaf project ZIP archives and manage multi-file LaTeX manuscripts (multiple `.tex` files, figures, tables, and `.bib` bibliography) directly inside the workbench. Integrate a LaTeX compilation pipeline (e.g., Tectonic or TeX Live) to render a side-by-side PDF preview and surface structured compile logs/errors mapped to exact `.tex` files and line numbers.
+2. **AI-assisted academic writing, citation formatting & figure integration**: Connect to the PenguinHarness Agent / LLM to assist with drafting and polishing LaTeX sections, formatting BibTeX references, and integrating experiment figures/tables into the manuscript (supporting multi-file academic manuscripts such as `penguin-harness-paper`), presenting proposed edits as an interactive source diff before insertion.
+3. **Structured AI paper review with source navigation & one-click diff application**: Provide an AI manuscript review mode that outputs structured review findings (category/severity, diagnosis, target `.tex` file and passage, and concrete revision suggestion). Clicking any review finding navigates directly to the corresponding LaTeX source passage, allowing the user to preview the diff, accept/apply or reject the revision with one click, and recompile the PDF.
+4. **End-to-end verification & plugin delivery**: Verify with a complete multi-file sample paper (containing multiple `.tex` files, figures, and a `.bib` file), demonstrating Overleaf ZIP import, AI writing/review, finding-to-source navigation, diff application, live PDF recompilation, and re-exporting a valid Overleaf project ZIP. Submit the application source to `penguin-harness-apps` and the plugin registration PR to `penguin-harness-plugins`. Attach the implementation PR link, reproduction guide, and acceptance evidence, and verify that the plugin can be installed from the Marketplace, added to an Agent, and launched from the App Center."
+    description_zh: "将兼容 Overleaf 的 AI 科研论文写作、审阅与 LaTeX 编译工作台集成到 PenguinHarness 应用中心插件中，让用户直接在同一工作台内无损导入/导出 Overleaf 多文件 LaTeX 工程、调用 AI 辅助撰写/润色章节与插入实验图表、执行结构化 AI 审稿批注与一键 Diff 修订，并实时编译预览 PDF（关联 Issue #118 与 `penguin-harness-paper`）。
+
+**交付与验收要求**
+
+1. **Overleaf 工程无损兼容与多文件 LaTeX 实时 PDF 编译**：完整兼容标准 Overleaf 项目 ZIP 包的导入与导出往返，支持在工作台内直接管理包含多个 `.tex` 源文件、图片、表格及 `.bib` 参考文献的 LaTeX 论文工程。内置或接入 LaTeX 编译流水线（如 Tectonic 或 TeX Live），支持源码与编译后 PDF 双栏同步预览，并将编译错误或警告精准定位到对应 `.tex` 文件与行号。
+2. **AI 辅助论文撰写、润色与实验图表编排**：接入 PenguinHarness Agent / 大模型，支持针对指定章节进行学术化草拟、润色改写、BibTeX 引用整理及实验图表插入编排（支持如 `penguin-harness-paper` 的多文件学术论文写作流程），所有 AI 改写建议均支持源码 Diff 对比预览。
+3. **结构化 AI 审稿批注、源码跳转与一键修订**：提供 AI 论文审阅模式，生成结构化审阅意见（含问题类别/严重度、具体诊断、目标 `.tex` 文件与原文段落、修改建议代码）。点击任一审阅意见可直接定位高亮对应 LaTeX 源码位置，支持用户一键采纳应用（或拒绝）修改 Diff 并重新编译生成更新后的 PDF。
+4. **全流程验证与插件封装交付**：提供包含多 `.tex` 文件、图表与 `.bib` 的完整论文样例，演示导入 Overleaf 项目包、AI 润色/审阅、批注跳源码、一键应用修订、PDF 重编译及导出 ZIP 在 Overleaf 中的兼容编译。在 `penguin-harness-apps` 提交应用源码 PR，在 `penguin-harness-plugins` 提交插件登记 PR。登记 PR 需附源码 PR 链接、复跑步骤与验收证据，并验证从插件市场安装后可挂载到 Agent 并从应用中心直接打开使用。"
+    references:
+      - "https://github.com/overleaf/overleaf"
+      - "https://github.com/Prism-Shadow/penguin-harness-paper"
+      - "https://github.com/Prism-Shadow/penguin-harness-community/issues/118"
+      - "https://github.com/Prism-Shadow/penguin-harness-apps"
+    assignee: null
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/129"
+    linked_pr: null
+
+  - id: "RSI-Q067"
+    issue_number: 130
+    author: "lzh368"
+    published_at: "2026-11-23T08:26:42Z"
+    status: "open"
+    domain: "PenguinHarness"
+    exp: 100
+    target_repository: "https://github.com/Prism-Shadow/penguin-harness-plugins"
+    related_issue: "https://github.com/Prism-Shadow/penguin-harness-community/issues/53"
+    title: "Build an AI E-Commerce Product Selection and Strategy Workbench"
+    title_zh: "开发 AI 电商选品与策略分析工作台"
+    description: "Integrate an AI e-commerce product selection and promotional strategy workbench into PenguinHarness as an App Center plugin, combining unit-economics & promotion margin simulation with Agent/LLM-driven review pain-point mining, candidate product ranking, and traceable marketing strategy generation (related to Issue #53).
+
+**Deliverables and acceptance criteria**
+
+1. **Product operations & review dataset ingestion with validation**: Import structured product operations tables (product ID, category, sale price, unit cost, sales volume, inventory, return/conversion metrics) alongside customer review / competitor data. Automatically validate required fields and pinpoint the exact row and column for missing or anomalous values.
+2. **Multi-product comparison & promotion margin simulator**: Compare candidate products across sales volume, inventory pressure, unit gross profit, and gross margin. Provide an interactive discount/promotion simulator that calculates pre- and post-promotion unit gross profit, gross margin, and break-even sales volume lift under explicit calculation assumptions.
+3. **AI review pain-point clustering, product selection & marketing copy generation**: Connect to the PenguinHarness Agent / LLM to analyze customer reviews and operational metrics—automatically clustering buyer pain points and competitor weaknesses, generating ranked product selection & promotional recommendations, and drafting targeted selling-point copy. Every AI insight and recommendation must explicitly cite the underlying metrics, product rows, and review evidence.
+4. **End-to-end verification & plugin delivery**: Supply a fixed sample dataset (product operations table + review corpus) and expected unit-economics verification results, and export a complete AI product selection & promotion strategy report with traceable data citations. Submit the application source to `penguin-harness-apps` and the plugin registration PR to `penguin-harness-plugins`. Attach the implementation PR link, reproduction guide, and acceptance evidence, and verify that the plugin can be installed from the Marketplace, added to an Agent, and launched from the App Center."
+    description_zh: "将 AI 电商选品与营销策略分析应用集成到 PenguinHarness 应用中心插件中，将「商品毛利与促销盈亏试算」与「Agent/大模型驱动的评论痛点聚类、智能选品对比推荐、高转化卖点文案与促销策略生成」深度结合，并确保每条 AI 建议均可追溯到具体商品指标与评论证据（关联 Issue #53）。
+
+**交付与验收要求**
+
+1. **商品经营数据与评论语料导入校验**：支持导入结构化商品经营表（商品标识、品类、售价、单位成本、销量、库存、转化/退货指标等）及配套的用户评价/竞品文本数据。自动校验必填字段与数值合法性，存在缺失或异常值时能精准定位到具体行号与字段。
+2. **多维商品经营对比与促销毛利试算器**：支持横向对比候选商品的销量、库存周转压力、单位毛利与毛利率；输入目标促销折扣或促销价后，自动计算并对比促销前后的单位毛利、毛利率及保本销量增幅阈值，并清晰注明计算口径。
+3. **AI 评论痛点挖掘、智能选品决策与营销文案生成**：接入 PenguinHarness Agent / 大模型，结合商品经营指标与用户评论自动完成差评/痛点聚类分析、候选主推款优劣势对比推荐、促销定价策略推演及高转化商品卖点文案生成。AI 输出的每项分析结论与策略建议必须显式引用对应的商品指标、原始数据行或评论证据，杜绝无根据编造。
+4. **全流程核验与插件封装交付**：提供固定测试样表（含经营表与评论样本）、毛利试算预期核对结果，并支持导出一份数据可溯源的 AI 选品与促销策略报告。在 `penguin-harness-apps` 提交应用源码 PR，在 `penguin-harness-plugins` 提交插件登记 PR。登记 PR 需附源码 PR 链接、复跑步骤与验收证据，并验证从插件市场安装后可挂载到 Agent 并从应用中心直接打开使用。"
+    references:
+      - "https://github.com/Prism-Shadow/penguin-harness-community/issues/53"
+      - "https://github.com/Prism-Shadow/penguin-harness-apps"
+    assignee: null
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/130"
+    linked_pr: null
+
+  - id: "RSI-Q068"
+    issue_number: 131
+    author: "lzh368"
+    published_at: "2026-11-23T08:26:43Z"
+    status: "open"
+    domain: "PenguinHarness"
+    exp: 100
+    target_repository: "https://github.com/Prism-Shadow/penguin-harness-plugins"
+    related_issue: null
+    title: "Build an AI Market Research and Strategy Backtesting Workbench"
+    title_zh: "开发 AI 市场投研与策略回测工作台"
+    description: "Integrate an AI financial market research and quantitative strategy backtesting application into PenguinHarness as an App Center workbench plugin, combining natural-language/Agent-assisted strategy configuration, lookahead-free historical backtesting, visual signal/equity charts, and AI-synthesized research reports with full data traceability (modeled on DSH Chapter 10).
+
+**Deliverables and acceptance criteria**
+
+1. **Historical market data ingestion & AI-assisted strategy configuration**: Import historical OHLCV market data with explicit source and cutoff date metadata. Allow users to configure the backtest date range, moving-average / technical indicator periods, post-signal execution timing, and transaction cost assumptions either through interactive controls or via natural-language strategy prompts interpreted by the PenguinHarness Agent / LLM.
+2. **Lookahead-free backtesting & benchmark comparison**: Execute historical backtests strictly without lookahead bias (every simulated fill must reference a market price strictly after signal confirmation) and compare the strategy against a benchmark under identical data, date range, and initial capital. Render interactive K-line and buy/sell signal charts, simulated trade logs, equity and drawdown curves, cumulative return, annualized return, and maximum drawdown.
+3. **DSH Chapter 10 reproduction & AI-generated verifiable research report**: Reproduce the dual-moving-average case from DSH Chapter 10 on a fixed historical dataset (e.g., CSI All Share 20/60-day SMA strategy, explicitly stating whether T+1 open or T+1 close execution is used), and use the Agent / LLM to automatically generate a structured investment research and backtest review report (covering regime summary, key signal/trade attribution, and drawdown analysis) where every cited date, trade, and metric traces directly to the backtest ledger.
+4. **End-to-end verification & plugin delivery**: Provide the fixed historical dataset, strategy parameters, expected backtest metrics, and exported AI research report so reviewers can independently verify key dates and metrics. Submit the application source to `penguin-harness-apps` and the plugin registration PR to `penguin-harness-plugins`. Attach the implementation PR link, reproduction guide, and acceptance evidence, and verify that the plugin can be installed from the Marketplace, added to an Agent, and launched from the App Center."
+    description_zh: "将 AI 市场投研与量化策略回测应用集成到 PenguinHarness 应用中心插件中，支持通过自然语言/Agent 辅助配置量化规则、在无未来函数前提下执行历史行情回测与基准对比、可视化展示 K 线买卖信号与净值回撤曲线，并由 AI 自动生成数据严格可溯源的投研复盘报告（参考 DSH 第 10 章）。
+
+**交付与验收要求**
+
+1. **历史行情导入与 AI 辅助策略参数配置**：支持导入带数据来源和截止日期的 OHLCV 历史行情数据；支持用户通过界面控件或自然语言指令（由 PenguinHarness Agent / 大模型解析生成策略配置）设定回测区间、双均线/技术指标周期、信号确认后的成交时点及交易成本假设。
+2. **无未来函数回测引擎与基准可视化对比**：在同一历史行情、时间区间与初始资金下严格按无未来函数口径执行策略回测与基准（Benchmark）对比，每笔模拟成交必须可核对到信号确认之后的行情数据。可视化呈现 K 线与买卖信号标记、模拟成交明细表、策略与基准净值曲线、回撤曲线，以及累计收益率、年化收益与最大回撤等核心指标。
+3. **DSH 第 10 章案例复跑与 AI 可溯源投研报告生成**：使用固定历史行情完整复跑 DSH 第 10 章的双均线策略案例（如中证全指 20/60 日均线策略，明确注明采用 T+1 开盘或 T+1 收盘成交口径），并调用 Agent / 大模型基于回测结果与行情特征自动生成结构化投研复盘报告（含区间行情特征、关键买卖信号归因、最大回撤成因分析等）。报告中引用的所有关键日期、成交记录与收益指标必须与回测账本严格一致且可溯源核对。
+4. **全流程核验与插件封装交付**：提交固定输入历史数据、策略参数配置、预期指标结果与导出的 AI 投研报告，供验收人独立复跑核对。在 `penguin-harness-apps` 提交应用源码 PR，在 `penguin-harness-plugins` 提交插件登记 PR。登记 PR 需附源码 PR 链接、复跑步骤与验收证据，并验证从插件市场安装后可挂载到 Agent 并从应用中心直接打开使用。"
+    references:
+      - "https://dshbook.penguin.ooo/chapter10/"
+      - "https://github.com/Prism-Shadow/deepseek-harness-book/tree/main/demo/chapter10-a-share-research"
+      - "https://github.com/Prism-Shadow/penguin-harness-apps"
+    assignee: null
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/131"
+    linked_pr: null
+
+  - id: "RSI-Q069"
     issue_number: 132
     author: "github-actions[bot]"
     published_at: "2026-11-23T09:15:15Z"
