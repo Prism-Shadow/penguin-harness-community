@@ -60,7 +60,8 @@ export function initAtlas(root: HTMLDetailsElement) {
     if (!nodes.length || !frame.width) return zoom;
     const right = Math.max(...nodes.map((el) => (el.getBoundingClientRect().right - frame.left) / scale));
     const width = right + (parseFloat(getComputedStyle(canvas).paddingRight) || 0);
-    const room = Math.min(viewport.clientWidth / width, (parseFloat(getComputedStyle(viewport).maxHeight) || Infinity) / canvas.offsetHeight);
+    const heightFit = Math.max(0.8, (parseFloat(getComputedStyle(viewport).maxHeight) || Infinity) / canvas.offsetHeight);
+    const room = Math.min(viewport.clientWidth / width, heightFit);
     return Math.max(zoomConfig.min, Math.min(zoomConfig.initial, Math.floor(room * 100) / 100));
   }
   function applyFit() {
@@ -218,7 +219,7 @@ export function initAtlas(root: HTMLDetailsElement) {
     const hash = location.hash.slice(1);
     let heading = document.getElementById(hash);
     if (!heading && root.dataset.atlasVersion === "v1") {
-      const legacy = hash.match(/^atlas-heading-(infra|auto-bench|agent|platform)$/);
+      const legacy = hash.match(/^atlas-heading-(infra|auto-bench|agent|platform|apps)$/);
       if (legacy) heading = document.getElementById(`atlas-v1-heading-${legacy[1]}`);
       else if (hash.startsWith("atlas-infra-")) heading = document.getElementById("atlas-v1-heading-infra");
     }

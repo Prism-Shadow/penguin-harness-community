@@ -14,9 +14,10 @@ const progress = researchStageLabels[locale];
 const taskStatuses = { open: t("待认领", "Open"), in_progress: progress.active, completed: progress.done };
 const issueBase = "https://github.com/Prism-Shadow/penguin-harness-community/issues/";
 const achieved = project.achievement === "demo-achieved";
+const allDone = achieved || (!project.template && project.stages.every((stage) => stage.state === "done"));
 ---
 <article class="leaf research-card" data-research-card={project.id} data-research-predecessor={predecessor?.id}
-  data-template-card={project.template || undefined} data-state={achieved ? "lit" : project.achievement === "locked" ? "locked" : undefined}
+  data-template-card={project.template || undefined} data-state={allDone ? "lit" : project.achievement === "locked" ? "locked" : undefined}
   aria-labelledby={titleId}>
   <h4 id={titleId}>{project.title}</h4>
   <div class="research-phases" role="group" aria-label={t("课题阶段", "Research stages")}>
@@ -24,7 +25,7 @@ const achieved = project.achievement === "demo-achieved";
       const status = achieved ? progress.done
         : project.template ? t("待填写", "To be filled in")
         : stage.state === "planned" && stage.pending ? stage.pending
-        : stage.tasks.length === 0 ? t("暂无进度记录", "No progress recorded")
+        : stage.state === "planned" && stage.tasks.length === 0 && stage.references.length === 0 ? t("暂无进度记录", "No progress recorded")
         : progress[stage.state];
       return (
         <div class="research-phase-cell">
