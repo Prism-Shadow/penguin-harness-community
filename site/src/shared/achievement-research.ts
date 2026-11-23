@@ -13,7 +13,7 @@ type Phase = {
   state?: StageState;
   references?: { label: Text; url: string }[];
 };
-type TopicDefinition = { id: string; title: Text; phases?: Phase[] };
+type TopicDefinition = { id: string; title: Record<Locale, string | readonly string[]>; phases?: Phase[] };
 type ProjectDefinition = TopicDefinition & { demoAchieved?: true; followUp?: TopicDefinition };
 type Achievement = "demo-achieved" | "unlocked" | "locked";
 
@@ -150,7 +150,7 @@ const trainingPhases: Phase[] = [
 const autoResearch: TopicDefinition = {
   id: "autoresearch-a100",
   title: {
-    zh: "面向 NVIDIA GPU 的 AutoResearch 预训练性能优化",
+    zh: ["面向 NVIDIA GPU 的 ", "AutoResearch 预训练性能优化"],
     en: "AutoResearch Pretraining Performance Tuning for NVIDIA GPUs",
   },
   phases: trainingPhases,
@@ -159,7 +159,7 @@ const autoResearch: TopicDefinition = {
 const speedrun: TopicDefinition = {
   id: "nanogpt-speedrun-transfer",
   title: {
-    zh: "面向 NanoGPT Speedrun 的预训练速度纪录冲击",
+    zh: ["面向 NanoGPT Speedrun 的", "预训练速度纪录冲击"],
     en: "Chasing a Pretraining Speed Record on NanoGPT Speedrun",
   },
   phases: [
@@ -209,7 +209,7 @@ const ascendPr = `${REPO.harness}/pull/1627`;
 const ascendInference: TopicDefinition = {
   id: "ascend-inference-mtp",
   title: {
-    zh: "面向昇腾芯片的 Qwen3.8 推理性能优化",
+    zh: ["面向昇腾芯片的 ", "Qwen3.8 推理性能优化"],
     en: "Optimizing Qwen3.8 Inference on Ascend Chips",
   },
   phases: [
@@ -273,7 +273,7 @@ const ascendInference: TopicDefinition = {
 const solExecBenchErnie: TopicDefinition = {
   id: "sol-execbench-ernie-evolve",
   title: {
-    zh: "用自进化算法自动编写高性能 GPU 算子",
+    zh: ["用自进化算法", "自动编写高性能 GPU 算子"],
     en: "Writing High-Performance GPU Kernels through Self-Evolution",
   },
   phases: [
@@ -338,7 +338,7 @@ const honestyPr = `${REPO.bench}/pull/42`;
 const autoBenchJudgeAlignment: TopicDefinition = {
   id: "auto-bench-judge-alignment",
   title: {
-    zh: "从原始数据自动生成评测基准（Auto Bench）",
+    zh: ["从原始数据自动生成", "评测基准（Auto Bench）"],
     en: "Generating Evaluation Benchmarks from Raw Data with Auto Bench",
   },
   phases: [
@@ -403,7 +403,7 @@ const autoBenchJudgeAlignment: TopicDefinition = {
 const turingBenchWritingRealism: TopicDefinition = {
   id: "turingbench-writing-realism",
   title: {
-    zh: "AI 写作与生成产物的「去 AI 味」评测",
+    zh: ["AI 写作与生成产物的", "「去 AI 味」评测"],
     en: "Evaluating Naturalness in AI Writing and Generated Content",
   },
   phases: [
@@ -461,7 +461,7 @@ const turingBenchWritingRealism: TopicDefinition = {
 const agentBlockerHonesty: TopicDefinition = {
   id: "agent-blocker-honesty",
   title: {
-    zh: "解决智能体遇到工具故障时谎报完成的问题",
+    zh: ["解决智能体遇到工具故障时", "谎报完成的问题"],
     en: "Preventing False Completion Reports after Agent Tool Failures",
   },
   phases: [
@@ -528,7 +528,7 @@ const compactionUiPr = `${REPO.harness}/pull/1591`;
 const contextCompactionHandoff: TopicDefinition = {
   id: "context-compaction-handoff",
   title: {
-    zh: "解决智能体在长任务压缩上下文时的「失忆」问题",
+    zh: ["解决智能体在长任务", "压缩上下文时的「失忆」问题"],
     en: "Preserving Context When Agents Compact Long Tasks",
   },
   phases: [
@@ -591,7 +591,7 @@ const sweCoworkPr = `${REPO.bench}/pull/36`;
 const companyModeCoordination: TopicDefinition = {
   id: "company-mode-coordination",
   title: {
-    zh: "多智能体「公司模式」的分工协同与防刷屏优化",
+    zh: ["多智能体「公司模式」的", "分工协同与防刷屏优化"],
     en: "Improving Coordination and Reducing Chat Noise in Company Mode",
   },
   phases: [
@@ -658,7 +658,7 @@ const codexGdpevoPr = `${REPO.bench}/pull/29`;
 const gdpevoSkillEvolution: TopicDefinition = {
   id: "gdpevo-skill-evolution",
   title: {
-    zh: "四种主流 Skill 自进化算法的提分效果与成本横评",
+    zh: ["四种主流 Skill 自进化算法的", "提分效果与成本横评"],
     en: "Comparing Score Gains and Costs of Four Skill Evolution Methods",
   },
   phases: [
@@ -721,7 +721,7 @@ const gdpevoSkillEvolution: TopicDefinition = {
 const gdpevoOntologyTransfer: TopicDefinition = {
   id: "gdpevo-ontology-codex-transfer",
   title: {
-    zh: "让自进化经验跨 Agent 框架复用与知识沉淀",
+    zh: ["让自进化经验跨 Agent 框架", "复用与知识沉淀"],
     en: "Capturing and Reusing Self-Evolution Experience Across Agent Frameworks",
   },
   phases: [
@@ -784,7 +784,7 @@ const hleBenchPr = `${REPO.bench}/pull/27`;
 const hleDiamondSkillOpt: TopicDefinition = {
   id: "hle-diamond-skillopt",
   title: {
-    zh: "用多轮自进化攻克高难科学推理题（HLE）",
+    zh: ["用多轮自进化攻克", "高难科学推理题（HLE）"],
     en: "Applying Iterative Self-Evolution to Hard Scientific Reasoning on HLE",
   },
   phases: [
@@ -852,7 +852,7 @@ const rrsiEvalPr = `${REPO.bench}/pull/31`;
 const rrsiCrossBenchTransfer: TopicDefinition = {
   id: "rrsi-cross-bench-transfer",
   title: {
-    zh: "防止自进化提示词越改越臃肿的「瘦身」优化",
+    zh: ["防止自进化提示词", "越改越臃肿的「瘦身」优化"],
     en: "Keeping Self-Evolving Prompts Compact",
   },
   phases: [
@@ -918,7 +918,7 @@ const harnessCompPr = `${REPO.bench}/pull/21`;
 const multiDomainHarnessComparison: TopicDefinition = {
   id: "multi-domain-harness-comparison",
   title: {
-    zh: "同一大模型在四大主流 Agent 框架下的能力横评",
+    zh: ["同一大模型在四大主流", " Agent 框架下的能力横评"],
     en: "Comparing Four Agent Frameworks with the Same Base Model",
   },
   phases: [
@@ -1355,6 +1355,14 @@ const appDigitalSecretaryPoster = buildAppTopic({
 });
 
 /* ---------- Versions (V1 & V2) ---------- */
+const publishedAppProjects = [
+  appSuperAgentTaskTree,
+  appOverleafPaper,
+  appShortDramaStudio,
+  appEcommerceStrategy,
+  appMarketResearchQuant,
+];
+
 const versions: VersionDefinition[] = [
   {
     id: "v1",
@@ -1363,7 +1371,7 @@ const versions: VersionDefinition[] = [
       "auto-bench": [turingBenchWritingRealism],
       agent: [agentBlockerHonesty],
       platform: [gdpevoSkillEvolution],
-      apps: [appSuperAgentTaskTree],
+      apps: publishedAppProjects,
     },
   },
   {
@@ -1391,12 +1399,8 @@ const versions: VersionDefinition[] = [
         multiDomainHarnessComparison,
       ],
       apps: [
-        appSuperAgentTaskTree,
-        appOverleafPaper,
-        appShortDramaStudio,
+        ...publishedAppProjects,
         appHealthAssistant,
-        appEcommerceStrategy,
-        appMarketResearchQuant,
         appDigitalSecretaryPoster,
       ],
     },
@@ -1426,13 +1430,18 @@ export function researchVersions(quests: QuestItem[], locale: Locale) {
       state,
     };
   };
-  const topicDetails = (topic: TopicDefinition, achievement?: Achievement) => ({
-    id: topic.id,
-    title: resolveText(topic.title, locale),
-    template: topic.phases === undefined,
-    achievement,
-    stages: (topic.phases ?? blankPhases).map((phase) => stageDetails(phase, achievement === "demo-achieved")),
-  });
+  const topicDetails = (topic: TopicDefinition, achievement?: Achievement) => {
+    const title = topic.title[locale] || topic.title[locale === "zh" ? "en" : "zh"];
+    const titleParts = typeof title === "string" ? undefined : title;
+    return {
+      id: topic.id,
+      title: typeof title === "string" ? title : title.join(""),
+      titleParts,
+      template: topic.phases === undefined,
+      achievement,
+      stages: (topic.phases ?? blankPhases).map((phase) => stageDetails(phase, achievement === "demo-achieved")),
+    };
+  };
   return versions.map((version) => ({
     id: version.id,
     preview: version.preview,

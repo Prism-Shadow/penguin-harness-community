@@ -19,7 +19,9 @@ const allDone = achieved || (!project.template && project.stages.every((stage) =
 <article class="leaf research-card" data-research-card={project.id} data-research-predecessor={predecessor?.id}
   data-template-card={project.template || undefined} data-state={allDone ? "lit" : project.achievement === "locked" ? "locked" : undefined}
   aria-labelledby={titleId}>
-  <h4 id={titleId}>{project.title}</h4>
+  <h4 id={titleId} aria-label={project.titleParts ? project.title : undefined}>{project.titleParts
+    ? project.titleParts.map((part) => <span class="research-title-part">{part}</span>)
+    : project.title}</h4>
   <div class="research-phases" role="group" aria-label={t("课题阶段", "Research stages")}>
     {project.stages.map((stage) => {
       const status = achieved ? progress.done
