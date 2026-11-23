@@ -464,8 +464,8 @@ const turingBenchWritingRealism: TopicDefinition = {
 const agentBlockerHonesty: TopicDefinition = {
   id: "agent-blocker-honesty",
   title: {
-    zh: "工具故障时的智能体谎报完成评测",
-    en: "Agent False Completion After Tool Failures",
+    zh: ["解决智能体", "遇到", "工具故障时", "谎报完成", "的问题"],
+    en: "Preventing False Completion Reports after Agent Tool Failures",
   },
   phases: [
     {
@@ -531,8 +531,8 @@ const compactionUiPr = `${REPO.harness}/pull/1591`;
 const contextCompactionHandoff: TopicDefinition = {
   id: "context-compaction-handoff",
   title: {
-    zh: "长任务上下文压缩的信息保留",
-    en: "Information Retention After Context Compaction",
+    zh: ["解决智能体在", "长任务", "压缩上下文时的", "「失忆」问题"],
+    en: "Preserving Context When Agents Compact Long Tasks",
   },
   phases: [
     {
@@ -661,8 +661,8 @@ const codexGdpevoPr = `${REPO.bench}/pull/29`;
 const gdpevoSkillEvolution: TopicDefinition = {
   id: "gdpevo-skill-evolution",
   title: {
-    zh: "四种 Skill 自进化算法对比",
-    en: "Comparing Four Skill Evolution Methods",
+    zh: ["四种主流 Skill 自进化算法的", "提分效果与成本横评"],
+    en: "Comparing Score Gains and Costs of Four Skill Evolution Methods",
   },
   phases: [
     {
@@ -1052,7 +1052,7 @@ const appSuperAgentTaskTree = buildAppTopic({
   implementationIssue: 128,
   title: {
     zh: ["Super Agent 任务树与", "依赖看板"],
-    en: ["Super Agent Task Tree and", "Dependency Board"],
+    en: ["Super Agent Task Tree and ", "Dependency Board"],
   },
   protoState: "done",
   protoIssues: [50],
@@ -1102,7 +1102,7 @@ const appOverleafPaper = buildAppTopic({
   implementationIssue: 129,
   title: {
     zh: ["接入 Overleaf 的", "AI 论文写作与编译工作台"],
-    en: ["Overleaf-Integrated AI Paper", "Writing and Compilation Workbench"],
+    en: ["Overleaf-Integrated AI Paper ", "Writing and Compilation Workbench"],
   },
   protoIssues: [118, 122, 68],
   protoWork: {
@@ -1146,7 +1146,7 @@ const appShortDramaStudio = buildAppTopic({
   implementationIssue: 127,
   title: {
     zh: ["AI 短剧分镜与", "视频生成工作台"],
-    en: ["AI Short Drama Storyboard", "and Video Workbench"],
+    en: ["AI Short Drama Storyboard ", "and Video Workbench"],
   },
   protoState: "done",
   protoRefs: [
@@ -1193,7 +1193,7 @@ const appEcommerceStrategy = buildAppTopic({
   implementationIssue: 130,
   title: {
     zh: ["AI 电商选品与", "策略分析工作台"],
-    en: ["AI E-Commerce Selection", "and Strategy Workbench"],
+    en: ["AI E-Commerce Selection ", "and Strategy Workbench"],
   },
   protoIssues: [53],
   protoWork: {
@@ -1237,7 +1237,7 @@ const appMarketResearchQuant = buildAppTopic({
   implementationIssue: 131,
   title: {
     zh: ["AI 市场投研与", "策略回测工作台"],
-    en: ["AI Market Research and", "Strategy Backtesting Workbench"],
+    en: ["AI Market Research and ", "Strategy Backtesting Workbench"],
   },
   protoState: "done",
   protoRefs: [{ label: { zh: "dshbook 第 10 章《构建市场投研助手》", en: "dshbook Ch.10 Market Research Assistant" }, url: `${REPO.dshbook}/chapter10/` }],
