@@ -41,8 +41,7 @@
 .atlas .research-card[data-template-card] { border-style: dashed; }
 .atlas .research-card h4 {
   margin: 0;
-  text-wrap: pretty;
-  word-break: keep-all;
+  text-wrap: balance;
   overflow-wrap: anywhere;
 }
 /* Five stages separated by gaps. Each button keeps a 30px target while the bar itself takes 8px of layout. */
@@ -109,5 +108,5 @@
   .atlas .research-phase { min-height: 44px; margin-block: -12px; }
 }
 @media (max-width: 650px) {
-  .atlas .leaf.research-card { width: clamp(206px, calc(100vw - 240px), 238px); padding-inline: 10px; }
+  .atlas .leaf.research-card { width: 246px; padding-inline: 10px; }
 }

@@ -159,8 +159,8 @@ const autoResearch: TopicDefinition = {
 const speedrun: TopicDefinition = {
   id: "nanogpt-speedrun-transfer",
   title: {
-    zh: "AutoResearch 预训练优化向 NanoGPT Speedrun 的跨负载迁移评测",
-    en: "Cross-Workload Transfer of AutoResearch Optimizations to NanoGPT Speedrun",
+    zh: "面向 NanoGPT Speedrun 的预训练速度纪录冲击",
+    en: "Chasing a Pretraining Speed Record on NanoGPT Speedrun",
   },
   phases: [
     {
@@ -209,8 +209,8 @@ const ascendPr = `${REPO.harness}/pull/1627`;
 const ascendInference: TopicDefinition = {
   id: "ascend-inference-mtp",
   title: {
-    zh: "昇腾 950PR 上 Qwen3.8-27B 推理投机解码步数与服务模式对照评测",
-    en: "MTP Speculative Decoding Steps & Serving Mode Evaluation for Qwen3.8-27B on Ascend 950PR",
+    zh: "面向昇腾芯片的 Qwen3.8 推理性能优化",
+    en: "Optimizing Qwen3.8 Inference on Ascend Chips",
   },
   phases: [
     {
@@ -273,8 +273,8 @@ const ascendInference: TopicDefinition = {
 const solExecBenchErnie: TopicDefinition = {
   id: "sol-execbench-ernie-evolve",
   title: {
-    zh: "SOL-ExecBench 生产算子基准上 ERNIE Evolve 双层进化循环的算子生成性能评测",
-    en: "Operator Generation Performance of ERNIE Evolve Dual-Loop Evolution on SOL-ExecBench",
+    zh: "用自进化算法自动编写高性能 GPU 算子",
+    en: "Writing High-Performance GPU Kernels through Self-Evolution",
   },
   phases: [
     {
@@ -338,8 +338,8 @@ const honestyPr = `${REPO.bench}/pull/42`;
 const autoBenchJudgeAlignment: TopicDefinition = {
   id: "auto-bench-judge-alignment",
   title: {
-    zh: "基于 TableQA 与写作拟人度样本的自动判分器与人类专家裁决一致性评测",
-    en: "Automated Judge vs. Human Expert Agreement on TableQA and Writing Realism Samples",
+    zh: "从原始数据自动生成评测基准（Auto Bench）",
+    en: "Generating Evaluation Benchmarks from Raw Data with Auto Bench",
   },
   phases: [
     {
@@ -403,8 +403,8 @@ const autoBenchJudgeAlignment: TopicDefinition = {
 const turingBenchWritingRealism: TopicDefinition = {
   id: "turingbench-writing-realism",
   title: {
-    zh: "TuringBench 多模态生成与长文去 AI 味场景下的成对盲测判分稳定性评测",
-    en: "Pairwise Blind Judge Stability on TuringBench Multimodal & De-AI Writing Tasks",
+    zh: "AI 写作与生成产物的「去 AI 味」评测",
+    en: "Evaluating Naturalness in AI Writing and Generated Content",
   },
   phases: [
     {
@@ -461,8 +461,8 @@ const turingBenchWritingRealism: TopicDefinition = {
 const agentBlockerHonesty: TopicDefinition = {
   id: "agent-blocker-honesty",
   title: {
-    zh: "工具缺失与故障场景下 Harness 汇报规则对智能体隐瞒阻碍的抑制效果评测",
-    en: "Effect of Harness Reporting Rules on Suppressing Agent Blocker Deception under Tool Failures",
+    zh: "解决智能体遇到工具故障时谎报完成的问题",
+    en: "Preventing False Completion Reports after Agent Tool Failures",
   },
   phases: [
     {
@@ -528,8 +528,8 @@ const compactionUiPr = `${REPO.harness}/pull/1591`;
 const contextCompactionHandoff: TopicDefinition = {
   id: "context-compaction-handoff",
   title: {
-    zh: "长程多轮任务中「交接文件＋轨迹行级检索」与纯摘要的上下文压缩信息保留对比",
-    en: "Context Compaction Retention: Handoff Files + Trace Line Lookup vs. Pure Summary",
+    zh: "解决智能体在长任务压缩上下文时的「失忆」问题",
+    en: "Preserving Context When Agents Compact Long Tasks",
   },
   phases: [
     {
@@ -591,8 +591,8 @@ const sweCoworkPr = `${REPO.bench}/pull/36`;
 const companyModeCoordination: TopicDefinition = {
   id: "company-mode-coordination",
   title: {
-    zh: "多智能体公司模式（Company Mode）沟通规范约束对频道信噪比与协同交付效率的影响评测",
-    en: "Impact of Company Mode Communication Norms on Channel Signal-to-Noise and Team Delivery",
+    zh: "多智能体「公司模式」的分工协同与防刷屏优化",
+    en: "Improving Coordination and Reducing Chat Noise in Company Mode",
   },
   phases: [
     {
@@ -658,8 +658,8 @@ const codexGdpevoPr = `${REPO.bench}/pull/29`;
 const gdpevoSkillEvolution: TopicDefinition = {
   id: "gdpevo-skill-evolution",
   title: {
-    zh: "GDPEVO Essential 多步业务场景下四种 Skill 自进化算法的任务得分与成本对照评测",
-    en: "Task Score and Cost Comparison of Four Skill Self-Evolution Algorithms on GDPEVO Essential",
+    zh: "四种主流 Skill 自进化算法的提分效果与成本横评",
+    en: "Comparing Score Gains and Costs of Four Skill Evolution Methods",
   },
   phases: [
     {
@@ -721,8 +721,8 @@ const gdpevoSkillEvolution: TopicDefinition = {
 const gdpevoOntologyTransfer: TopicDefinition = {
   id: "gdpevo-ontology-codex-transfer",
   title: {
-    zh: "GDPEVO Essential 上本体自进化插件（Ontology RSI）与跨 Harness 框架迁移对照评测",
-    en: "Ontology RSI Plugin & Cross-Harness Transfer Evaluation on GDPEVO Essential",
+    zh: "让自进化经验跨 Agent 框架复用与知识沉淀",
+    en: "Capturing and Reusing Self-Evolution Experience Across Agent Frameworks",
   },
   phases: [
     {
@@ -784,8 +784,8 @@ const hleBenchPr = `${REPO.bench}/pull/27`;
 const hleDiamondSkillOpt: TopicDefinition = {
   id: "hle-diamond-skillopt",
   title: {
-    zh: "HLE-Diamond 高难科学推理题上多轮 SkillOpt 进化对冻结测试集的泛化效应评测",
-    en: "Generalization of Multi-Round SkillOpt Evolution on HLE-Diamond Scientific Reasoning",
+    zh: "用多轮自进化攻克高难科学推理题（HLE）",
+    en: "Applying Iterative Self-Evolution to Hard Scientific Reasoning on HLE",
   },
   phases: [
     {
@@ -852,8 +852,8 @@ const rrsiEvalPr = `${REPO.bench}/pull/31`;
 const rrsiCrossBenchTransfer: TopicDefinition = {
   id: "rrsi-cross-bench-transfer",
   title: {
-    zh: "正则化自进化（RRSI）从终端任务向软件工程任务的跨基准泛化与 Token 压缩评测",
-    en: "Cross-Benchmark Generalization and Token Compression of Regularized RSI (Terminal-Bench to SWE-bench)",
+    zh: "防止自进化提示词越改越臃肿的「瘦身」优化",
+    en: "Keeping Self-Evolving Prompts Compact",
   },
   phases: [
     {
@@ -918,8 +918,8 @@ const harnessCompPr = `${REPO.bench}/pull/21`;
 const multiDomainHarnessComparison: TopicDefinition = {
   id: "multi-domain-harness-comparison",
   title: {
-    zh: "多领域基准（Sec A–E）上同一基座模型跨四种 Agent Harness 框架的能力与成本基准对比",
-    en: "Capability and Cost Comparison of One Base Model across Four Agent Harnesses on Sec A–E",
+    zh: "同一大模型在四大主流 Agent 框架下的能力横评",
+    en: "Comparing Four Agent Frameworks with the Same Base Model",
   },
   phases: [
     {
@@ -989,6 +989,7 @@ function buildAppTopic(config: {
   skillState?: StageState;
   uiWork: Text;
   uiEvidence: Text;
+  implementationIssue?: number;
   evalWork: Text;
   evalEvidence: Text;
   evalIssues?: number[];
@@ -1016,9 +1017,10 @@ function buildAppTopic(config: {
       },
       {
         label: L.appUi,
-        pending: P.dev,
+        pending: config.implementationIssue ? undefined : P.dev,
         work: config.uiWork,
         evidence: config.uiEvidence,
+        issues: config.implementationIssue ? [config.implementationIssue] : undefined,
         references: [{ label: { zh: "应用工作台仓库 penguin-harness-apps", en: "Workbench repo penguin-harness-apps" }, url: REPO.apps }],
       },
       {
@@ -1044,6 +1046,7 @@ function buildAppTopic(config: {
 
 const appSuperAgentTaskTree = buildAppTopic({
   id: "app-super-agent-task-tree",
+  implementationIssue: 128,
   title: {
     zh: "Super Agent 任务树与依赖看板",
     en: "Super Agent Task Tree and Dependency Board",
@@ -1093,6 +1096,7 @@ const appSuperAgentTaskTree = buildAppTopic({
 
 const appOverleafPaper = buildAppTopic({
   id: "app-overleaf-paper-workbench",
+  implementationIssue: 129,
   title: {
     zh: "面向 Overleaf 的论文审阅工作台",
     en: "Overleaf Paper Review Workbench",
@@ -1134,6 +1138,7 @@ const appOverleafPaper = buildAppTopic({
 
 const appShortDramaStudio = buildAppTopic({
   id: "app-short-drama-studio",
+  implementationIssue: 127,
   title: {
     zh: "AI 短剧分镜与视频生成工作台",
     en: "AI Short Drama Storyboard and Video Workbench",
@@ -1221,6 +1226,7 @@ const appHealthAssistant = buildAppTopic({
 
 const appEcommerceStrategy = buildAppTopic({
   id: "app-ecommerce-strategy-workbench",
+  implementationIssue: 130,
   title: {
     zh: "AI 电商选品与策略分析工作台",
     en: "AI E-Commerce Selection and Strategy Workbench",
@@ -1262,6 +1268,7 @@ const appEcommerceStrategy = buildAppTopic({
 
 const appMarketResearchQuant = buildAppTopic({
   id: "app-market-research-quant",
+  implementationIssue: 131,
   title: {
     zh: "市场投研与策略回测工作台",
     en: "Market Research and Strategy Backtesting Workbench",
@@ -1305,8 +1312,8 @@ const appMarketResearchQuant = buildAppTopic({
 const appDigitalSecretaryPoster = buildAppTopic({
   id: "app-digital-secretary-design",
   title: {
-    zh: "飞书数字秘书与自进化视觉设计工作台（dshbook 案例）",
-    en: "Feishu Digital Secretary & Self-Evolving Visual Design Workbench (dshbook Case)",
+    zh: "飞书数字秘书与自进化视觉设计工作台",
+    en: "Feishu Digital Secretary & Self-Evolving Visual Design Workbench",
   },
   protoState: "done",
   protoRefs: [
@@ -1353,7 +1360,7 @@ const versions: VersionDefinition[] = [
     id: "v1",
     projects: {
       infra: [autoResearch, ascendInference],
-      "auto-bench": [autoBenchJudgeAlignment],
+      "auto-bench": [turingBenchWritingRealism],
       agent: [agentBlockerHonesty],
       platform: [gdpevoSkillEvolution],
       apps: [appSuperAgentTaskTree],
@@ -1369,8 +1376,8 @@ const versions: VersionDefinition[] = [
         solExecBenchErnie,
       ],
       "auto-bench": [
-        autoBenchJudgeAlignment,
         turingBenchWritingRealism,
+        autoBenchJudgeAlignment,
       ],
       agent: [
         agentBlockerHonesty,

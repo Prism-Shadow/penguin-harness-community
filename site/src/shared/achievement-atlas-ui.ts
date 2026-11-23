@@ -125,7 +125,7 @@ export function initAtlas(root: HTMLDetailsElement) {
     if (changed) get("live").textContent = `${Math.round(zoom * 100)}%`;
   });
 
-  // A common trunk feeds the four directions. A direction branches to its own research cards.
+  // A common trunk feeds all directions. A direction branches to its own research cards.
   function drawWires() {
     const frame = canvas.getBoundingClientRect();
     if (root.hidden || !root.open || !frame.width || !branches.length) return;
@@ -175,8 +175,9 @@ export function initAtlas(root: HTMLDetailsElement) {
       return { node: box(node), topics };
     });
     const first = routes[0].node;
-    const last = routes[routes.length - 1].node;
-    const top = point(first.center), bottom = point(last.center), middle = point((top + bottom) / 2);
+    const upperMiddle = routes[Math.floor((routes.length - 1) / 2)].node;
+    const lowerMiddle = routes[Math.floor(routes.length / 2)].node;
+    const middle = point((upperMiddle.center + lowerMiddle.center) / 2);
     const hub = get("hub");
     const medal = hub.querySelector(".medal")!;
     hub.style.transform = "";
