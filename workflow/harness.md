@@ -12,13 +12,13 @@
 3. **Submit a PR**: Implement the change, run tests and checks, and open a Pull Request in [PenguinHarness](https://github.com/Prism-Shadow/penguin-harness) linked to the Issue.
 4. **Maintainer Review & Merge**: Maintainers review the PR against the [PenguinHarness PR merge criteria](#penguinharness-pr-merge-criteria) before merging.
 
-Before submitting a plugin, ask your Agent in a PenguinHarness session to use the [penguin-plugin skill](https://github.com/Prism-Shadow/penguin-harness/blob/main/plugins/agent-development/skills/penguin-plugin/SKILL.md) to check the plugin structure, run the relevant tests, and tell you where to open the PR.
+Before submitting a plugin, you can ask your Agent in a PenguinHarness session to use the [penguin-plugin skill](https://github.com/Prism-Shadow/penguin-harness/blob/main/plugins/agent-development/skills/penguin-plugin/SKILL.md) to check the plugin structure, run the relevant tests, and tell you where to open the PR.
 
 ## PenguinHarness PR Merge Criteria
 
 - **Clear scope.** Keep each PR focused on one change. Explain the problem it solves and what users will see. Include the full issue URL when applicable.
-- **Complete verification records.** Record the checks you ran and their results. For a fix, give the reproduction steps and how you verified it. For a feature, explain how to verify it and include relevant tests. Required CI checks should pass.
-- **Docs and changelog.** Add matching English and Chinese changelog entries. Update documentation for changes to usage, interfaces, or configuration, and explain any migration steps.
+- **Complete verification records.** Record the checks you ran and their results. For a fix, give the reproduction steps and how you verified it. For a feature, explain how to verify it and include relevant tests. Required CI checks must pass.
+- **Docs and changelog.** Add matching English and Chinese changelog entries under `changelog/unreleased/`. Update documentation for changes to usage, interfaces, or configuration, and explain any migration steps.
 
 Write the PR title and description in English and follow the [PenguinHarness PR template](https://github.com/Prism-Shadow/penguin-harness/blob/main/.github/PULL_REQUEST_TEMPLATE.md).
 
@@ -53,4 +53,9 @@ Closes <full Issue URL, if applicable>
 
 ## Verification
 <List the checks or reproduction steps you ran and their results.>
+
+## Checklist
+- [ ] Added English and Chinese changelog entries under `changelog/unreleased/`.
+- [ ] Updated documentation where the change affects documented behavior.
+- [ ] Confirmed the diff, logs, and screenshots contain no API keys, tokens, or other credentials.
 ```

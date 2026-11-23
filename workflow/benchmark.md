@@ -16,8 +16,8 @@
 ## Benchmark PR Merge Criteria
 
 - **Traceable sources.** Provide the sources and licenses for the tasks and data. For an upstream benchmark, state the version, which tasks are included, and any changes to the tasks or grading rules.
-- **Runnable tasks.** Follow RFC-0001 for the layout and configuration. With the documented dependencies and environment, run representative tasks from loading through execution and grading.
-- **Meaningful grading.** Check that the rubric measures what each task asks for. Verify scores on outputs that meet the task requirements and outputs that fail them. If the benchmark includes training and test sets, explain the split and check for task overlap or answer leakage.
+- **Runnable tasks.** Check the directories, configuration, and data paths for all submitted tasks. Confirm that they follow RFC-0001 and load successfully. With the documented dependencies and environment, run representative tasks through loading, execution, and grading.
+- **Meaningful grading.** Check that the rubric measures what each task asks for. Confirm expected scores on passing outputs, such as reference solutions, and failing outputs, such as empty or incorrect results. If the benchmark includes training and test sets, explain the split and check for task overlap or answer leakage.
 - **Verifiable results.** Include the tasks or subset used for verification, the runtime environment, reproduction commands, and grading records so maintainers can check what was verified and how it scored.
 
 ## Recommended Verification & Examples
@@ -44,7 +44,7 @@
 ### Plan
 - [ ] Prepare `packages/<benchmark-id>/benchmark_config.toml` and `<task-id>/` directories
 - [ ] Prepare `data/<benchmark-id>/` raw task files (if applicable)
-- [ ] Verify execution and grading on representative tasks
+- [ ] Check that all submitted tasks load and verify execution and grading on representative tasks
 ```
 
 ### 2. Issue Claim Comment Example (Optional)
@@ -66,10 +66,10 @@ Closes #<issue-number>
 
 ### Verification
 - **Sources and scope**: <sources, licenses, versions, included tasks, and changes>
-- **Execution and grading**: <tasks tested, environment, commands, scoring examples, and run records>
+- **Execution and grading**: <load check results for all tasks, tasks run end to end, environment, commands, passing and failing examples, and run records>
 
 ### Checklist
 - [x] Directory layout and manifest fields conform to RFC-0001 Benchmark
 - [x] `status` in `benchmark_config.toml` is set to `"draft"`
-- [x] Ran representative tasks and checked the grading results
+- [x] Confirmed all submitted tasks load, ran representative tasks, and checked grading results
 ```

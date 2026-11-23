@@ -15,10 +15,10 @@
 
 ## Evaluation PR 合入标准
 
-- **配置可复现**。按 RFC-0002 提交实验配置与结果，写明 Benchmark 版本、测试子集、模型和 Harness 版本、算法配置及运行预算，并提供复现命令。
+- **配置可复现**。按 RFC-0002 提交实验配置与结果。使用会更新权重的模型时，在 `meta_info.yaml` 的 `model_name` 中注明具体版本，例如 `deepseek-flash-1017`。在 PR 说明中补充 Benchmark 版本、测试范围、运行预算、关键配置和复现命令。
 - **评测口径一致**。涉及对比时，使用相同的测试题目和评分规则，说明各组配置的差异及其对结论的影响。涉及训练或调参时，说明数据划分，确保测试题目独立于训练和调参。
-- **运行记录完整**。提交各次试验的逐题结果，记录失败和超时，说明如何计分。如有排除的运行或题目，注明数量和原因。
-- **汇总结果可复核**。根据逐题记录核对汇总分数、耗时、Token 和费用，说明统计范围、单位和计费口径。
+- **运行记录完整**。每次试验都在 `attempt-<n>.yaml` 中记录事先声明的测试范围内的全部题目。Agent 失败或超时按评分规则计入并说明。若环境故障导致结果缺失，说明原因并补齐结果后再汇总。
+- **汇总结果可复核**。用 `attempt-<n>.yaml` 核对 `summary.yaml` 的分数、耗时、Token 和费用。耗时以毫秒计，费用以美元计并按 MMSP 模型目录价核算。说明汇总覆盖的阶段与运行范围。单次试验填写 `score_std: null`，`pass@k` 选填。
 
 ## 推荐实验指导与例子
 
@@ -26,7 +26,6 @@
   - `GDPevo-essential` 分为六个独立的子基准（Sub-benchmark）：`court-clerk-operations`、`coverage-review`、`engineering-portfolio-analytics`、`financial-control`、`portfolio-management`、`service-ticket-resolution`。
   - 因为不同子基准需分别独立训练和评估（不能合并在一起训练），**每个子基准必须拆分为独立的 `<experiment-id>` 文件夹提交**（参考 [penguin-harness-benchmark#18](https://github.com/Prism-Shadow/penguin-harness-benchmark/pull/18)），再通过 [RFC-0005 Leaderboard](../rfcs/RFC-0005-leaderboard.zh.md) 将六个子基准的结果平均汇总。
 - **通用 Benchmark 推荐配置**：对于常规 Benchmark（如 `penguinharness-benchmark-sec-a` 至 `sec-e`），推荐使用 **DeepSeek Flash** 模型运行 3 次重复实验（`n_attempt: 3`），同时记录 `score_mean`、`score_std`，可选报告 `pass@k`。
-- **模型版本号要求**：若使用 `deepseek-flash` 这类模型，必须在 `meta_info.yaml` 的 `model_name` 字段中写明具体版本号，例如填写 `deepseek-flash-1017`。
 
 ## 格式示例
 
@@ -60,13 +59,13 @@ Closes #<issue-number>
 ### 实验结果摘要
 - **Experiment ID**: `<experiment-id>`
 - **Model**: `deepseek/deepseek-flash-1017`
-- **测试集 (`test`) 平均分**: `<score_mean> ± <score_std>`（如适用），`pass@k`（选填）: `<pass@k>`（`n_attempt: <N>`）
+- **测试集 (`test`) 平均分**: `<score_mean>`（多次试验附 `± <score_std>`），`pass@k`（选填）: `<pass@k>`（`n_attempt: <N>`）
 - **单次实验成本 / 耗时**: `$<cost>` / `<duration_ms> ms`
-- **复现与核对**: <测试子集、复现命令、逐题记录位置、失败及超时的处理方式>
+- **复现与核对**: <Benchmark 版本、测试范围、运行预算、关键配置、复现命令、逐题记录及失败处理>
 - **对比设置（如适用）**: <对照实验链接、相同的评测条件及配置差异>
 
 ### 自查清单
 - [x] 目录结构与 YAML 字段符合 RFC-0002 Evaluation 规范
 - [x] `train-<n>` / `val-<n>` 后均跟数字，包含 `test/` 测试阶段（后不跟数字），且 `meta_info.yaml` 中 `status` 已设为 `"draft"`
-- [x] `model_name` 已包含具体版本号（如 `deepseek-flash-1017`），费用成本已按 MMSP 模型目录价核算
+- [x] 已按 RFC-0002 记录模型版本，并用逐题记录核对汇总与 MMSP 计费
 ```

@@ -17,8 +17,8 @@
 ## PenguinHarness PR 合入标准
 
 - **改动范围明确**。每个 PR 聚焦一项改动，说明解决的问题和用户会看到的变化。有对应 Issue 时，附上完整链接。
-- **验证记录完整**。写明实际运行的检查及结果。修复问题时附复现步骤和修复后的验证结果。新增功能时说明如何验证，并补上相关测试。仓库要求的 CI 检查应通过。
-- **文档与变更日志齐全**。按主仓库要求补齐中英文变更日志。涉及使用方式、接口或配置变更时，同步更新文档，并说明适用的迁移步骤。
+- **验证记录完整**。写明实际运行的检查及结果。修复问题时附复现步骤和修复后的验证结果。新增功能时说明如何验证，并补上相关测试。仓库要求的 CI 检查必须通过。
+- **文档与变更日志齐全**。在 `changelog/unreleased/` 下补齐成对的中英文变更日志。涉及使用方式、接口或配置变更时，同步更新文档，并说明适用的迁移步骤。
 
 PR 标题和正文用英文，按 [主仓 PR 模板](https://github.com/Prism-Shadow/penguin-harness/blob/main/.github/PULL_REQUEST_TEMPLATE.md)填写。
 
@@ -53,4 +53,9 @@ Closes <full Issue URL, if applicable>
 
 ## Verification
 <List the checks or reproduction steps you ran and their results.>
+
+## Checklist
+- [ ] Added English and Chinese changelog entries under `changelog/unreleased/`.
+- [ ] Updated documentation where the change affects documented behavior.
+- [ ] Confirmed the diff, logs, and screenshots contain no API keys, tokens, or other credentials.
 ```
