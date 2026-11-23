@@ -153,8 +153,8 @@
 .atlas .hub > small { position: absolute; left: 50%; transform: translateX(-50%); white-space: nowrap; text-align: center; }
 /* Titles step up from the community to the research projects, which carry the content. */
 .atlas :is(.hub > b, .domain h3, .research-card h4, .research-details h3) { letter-spacing: normal; }
-.atlas .hub > b { font-size: 13px; font-weight: 600; line-height: 1.4; }
-.atlas .domain h3 { font-size: 14px; font-weight: 600; line-height: 1.4; }
+.atlas .hub > b { font-size: 15px; font-weight: 600; line-height: 1.4; }
+.atlas .domain h3 { font-size: 15px; font-weight: 600; line-height: 1.4; }
 .atlas .research-card h4 { font-size: 15px; font-weight: 650; line-height: 1.5; }
 .atlas .research-details h3 { font-size: 16px; font-weight: 650; line-height: 1.4; }
 .atlas .hub > b { top: calc(100% + 10px); }
