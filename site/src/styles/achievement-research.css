@@ -32,7 +32,7 @@
 
 .atlas .leaf.research-card {
   display: block;
-  width: 312px;
+  width: 324px;
   padding: 12px 14px;
   box-shadow: var(--card-shadow);
 }
@@ -44,7 +44,7 @@
   text-wrap: balance;
   overflow-wrap: anywhere;
 }
-.atlas .research-title-part { display: block; }
+.atlas .research-title-part { display: inline-block; max-inline-size: 100%; white-space: pre-wrap; }
 /* A continuous bar with five independent hit areas. */
 .atlas .research-phases { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; margin-top: 10px; }
 .atlas .research-phase {

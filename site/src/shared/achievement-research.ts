@@ -464,7 +464,7 @@ const turingBenchWritingRealism: TopicDefinition = {
 const agentBlockerHonesty: TopicDefinition = {
   id: "agent-blocker-honesty",
   title: {
-    zh: ["解决智能体遇到工具故障时", "谎报完成的问题"],
+    zh: ["解决智能体", "遇到", "工具故障时", "谎报完成", "的问题"],
     en: "Preventing False Completion Reports after Agent Tool Failures",
   },
   phases: [
@@ -531,7 +531,7 @@ const compactionUiPr = `${REPO.harness}/pull/1591`;
 const contextCompactionHandoff: TopicDefinition = {
   id: "context-compaction-handoff",
   title: {
-    zh: ["解决智能体在长任务压缩", "上下文时的「失忆」问题"],
+    zh: ["解决智能体在", "长任务", "压缩上下文时的", "「失忆」问题"],
     en: "Preserving Context When Agents Compact Long Tasks",
   },
   phases: [
@@ -724,7 +724,7 @@ const gdpevoSkillEvolution: TopicDefinition = {
 const gdpevoOntologyTransfer: TopicDefinition = {
   id: "gdpevo-ontology-codex-transfer",
   title: {
-    zh: ["让自进化经验跨 Agent 框架", "复用与知识沉淀"],
+    zh: ["让自进化经验", "跨 Agent 框架", "复用", "与知识沉淀"],
     en: "Capturing and Reusing Self-Evolution Experience Across Agent Frameworks",
   },
   phases: [
