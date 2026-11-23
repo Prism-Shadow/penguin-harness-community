@@ -48,7 +48,7 @@ const L = {
   analysis: { zh: "结果分析", en: "Analysis" },
   report: { zh: "报告", en: "Report" },
   appProto: { zh: "场景与原型", en: "Scenario & prototype" },
-  appSkill: { zh: "Skill 与工具链", en: "Skills & toolchain" },
+  appSkill: { zh: "核心能力实现", en: "Core capabilities" },
   appUi: { zh: "工作台插件", en: "Workbench UI" },
   appMarket: { zh: "插件市场集成", en: "Marketplace" },
   appEval: { zh: "案例与评测验收", en: "Case & evaluation" },
