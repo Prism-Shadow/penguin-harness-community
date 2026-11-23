@@ -1025,8 +1025,8 @@ function buildAppTopic(config: {
         label: L.appMarket,
         pending: P.register,
         work: {
-          zh: "在官方插件索引仓库 penguin-harness-plugins 注册插件元数据与入口，支持从 PenguinHarness 应用中心一键安装打开。",
-          en: "Register plugin manifest and entry point in penguin-harness-plugins for one-click launch from the PenguinHarness App Center.",
+          zh: "在 penguin-harness-plugins 登记可安装包。通过插件市场安装后，将工作台添加到 Agent，并从应用中心打开。",
+          en: "Register the installable package in penguin-harness-plugins. Install it from the marketplace, add the workbench to an Agent, and open it from the App Center.",
         },
         evidence: { zh: "合入 penguin-harness-plugins 的插件注册 PR。", en: "A merged plugin registration PR in penguin-harness-plugins." },
         references: [{ label: { zh: "官方插件市场 penguin-harness-plugins", en: "Plugin registry penguin-harness-plugins" }, url: REPO.plugins }],
@@ -1051,7 +1051,7 @@ const appSuperAgentTaskTree = buildAppTopic({
   protoState: "done",
   protoIssues: [50],
   protoRefs: [
-    { label: { zh: "dshbook 第 11 章 AgentTeams 原型", en: "dshbook Ch.11 AgentTeams prototype" }, url: `${REPO.dshbookRepo}/blob/main/book/chapter11.md` },
+    { label: { zh: "dshbook 第 11 章 AgentTeams 原型", en: "dshbook Ch.11 AgentTeams prototype" }, url: `${REPO.dshbook}/chapter11/` },
     { label: { zh: "Company Mode 沟通规范 PR #1434", en: "Company Mode norms PR #1434" }, url: companyPr },
   ],
   protoWork: {
@@ -1073,8 +1073,8 @@ const appSuperAgentTaskTree = buildAppTopic({
     en: "Super Agent orchestration toolchain supporting task tree decomposition, parallel dispatch, and dependency scheduling.",
   },
   uiWork: {
-    zh: "在 penguin-harness-apps 实现「Super Agent 任务树看板」插件，支持 DAG 依赖图悬停高亮、点击节点固定查看子代理实时工具流与产物。",
-    en: "Build the Super Agent Task Tree Workbench in penguin-harness-apps with interactive DAG highlighting, node pinning, and live subagent tool streams.",
+    zh: "接入真实团队运行状态，显示任务、负责人、当前进度和前置依赖。点击汇总任务可查看它正在等待哪些任务。",
+    en: "Use live team state to display tasks, owners, progress, and prerequisites. Selecting the summary task reveals what it is waiting for.",
   },
   uiEvidence: {
     zh: "可交互的 Super Agent 任务树与 DAG 依赖看板前端工作台。",
@@ -1082,12 +1082,12 @@ const appSuperAgentTaskTree = buildAppTopic({
   },
   evalIssues: [51, 108],
   evalWork: {
-    zh: "结合多智能体真实项目案例（#51）与 SWE-CoWork 协同基准（#108 / PR #36）完成看板端到端协同验收。",
-    en: "Validate end-to-end multi-agent workflows on real project cases (#51) and the SWE-CoWork benchmark (#108 / PR #36).",
+    zh: "复现四项并行分析加一项汇总的案例。四项前置任务都交付后，核对汇总任务是否由等待变为可执行。",
+    en: "Reproduce four parallel analyses followed by a summary. Check that the summary becomes runnable once all four prerequisites are delivered.",
   },
   evalEvidence: {
-    zh: "多子代理并行审查与软件开发任务的端到端演示录屏及评测记录。",
-    en: "End-to-end walkthrough and evaluation records on parallel code review and software engineering tasks.",
+    zh: "可复跑的团队任务样例和展示状态变化的录屏。",
+    en: "A reproducible team-task fixture and a recording of its status changes.",
   },
 });
 
@@ -1097,38 +1097,34 @@ const appOverleafPaper = buildAppTopic({
     zh: "面向 Overleaf 的论文审阅工作台",
     en: "Overleaf Paper Review Workbench",
   },
-  protoState: "active",
-  protoIssues: [118, 68],
-  protoRefs: [{ label: { zh: "Typst/学术排版插件参考", en: "Typst academic plugin reference" }, url: REPO.plugins }],
+  protoIssues: [118, 122],
   protoWork: {
-    zh: "围绕学术论文全流程（大纲规划、实验图表汇总、LaTeX/Typst 源码编写、去 AI 味润色与模拟审稿），定义科研写作工作台交互规范。",
-    en: "Define the scientific writing workbench workflow covering outlining, experiment table/figure synthesis, LaTeX/Typst editing, de-AI polishing, and mock peer review.",
+    zh: "以社区论文项目为例，梳理导入 LaTeX 源文件、检查 PDF 和定位审阅意见的流程。",
+    en: "Use a community paper project to define the LaTeX import, PDF review, and source-linked feedback workflow.",
   },
   protoEvidence: {
-    zh: "结合社区论文撰写任务（#118、#122）与写作质量基准（#68）的科研工作台原型设计。",
-    en: "Workbench specification grounded in community paper tasks (#118, #122) and writing quality benchmarks (#68).",
+    zh: "一份含章节、图表和参考文献的样稿。",
+    en: "A sample paper project with sections, figures, and references.",
   },
-  skillIssues: [68],
   skillWork: {
-    zh: "封装 BibTeX 文献真实性核查、实验 JSON/CSV 自动转三线表與 TikZ/PGFPlots 绘图、去 AI 味学术润色及 Reviewer 挑刺 Skill。",
-    en: "Package Skills for BibTeX citation verification, automated LaTeX booktabs/plots from experiment JSON/CSV, academic de-AI polishing, and reviewer critique.",
+    zh: "解析 LaTeX 项目结构，编译 PDF，将审阅意见关联到具体文件和段落。",
+    en: "Parse the LaTeX project, compile its PDF, and attach review findings to specific files and passages.",
   },
   skillEvidence: {
-    zh: "科研写作与审稿检查专属 Skill 工具包及 Overleaf Git/API 同步脚本。",
-    en: "Academic writing and review Skill suite with Overleaf Git/API synchronization scripts.",
+    zh: "可复用的编译流程和带源文位置的审阅记录。",
+    en: "A reusable build workflow and review records with source locations.",
   },
   uiWork: {
-    zh: "在 penguin-harness-apps 实现左栏章节/实验数据资产、中栏 LaTeX/PDF 双栏实时编译预览、右栏 Agent 审稿批注与润色对比的科研工作台。",
-    en: "Implement a 3-pane workbench in penguin-harness-apps with section/data assets, side-by-side LaTeX & PDF preview, and Agent review annotations.",
+    zh: "导入 Overleaf 导出的项目压缩包，提供 PDF 预览、意见到源文的跳转和项目导出。",
+    en: "Import a project archive exported from Overleaf and provide PDF preview, source navigation from review findings, and project export.",
   },
   uiEvidence: {
-    zh: "支持 Overleaf 项目双向同步与实时编译预览的论文写作工作台插件。",
-    en: "Paper writing workbench plugin with bidirectional Overleaf sync and live PDF compilation preview.",
+    zh: "可安装的论文审阅工作台插件。",
+    en: "An installable paper review workbench.",
   },
-  evalIssues: [118, 122, 68],
   evalWork: {
-    zh: "以 PenguinHarness 技术报告/预印本（#118、#122）与去 AI 味盲测基准（#68）验证论文成稿效率与引用准确率。",
-    en: "Validate drafting efficiency and citation accuracy on PenguinHarness technical reports (#118, #122) and the de-AI writing benchmark (#68).",
+    zh: "用一份样稿跑通导入、编译、定位审阅意见和导出。检查导出后的项目能否再次编译。",
+    en: "Import and compile a sample paper, navigate from a review finding to its source, and export the project. Verify that the exported project compiles.",
   },
   evalEvidence: {
     zh: "完整产出的 LaTeX 论文项目案例与去 AI 味盲测通过率报告。",
@@ -1143,7 +1139,10 @@ const appShortDramaStudio = buildAppTopic({
     en: "AI Short Drama Storyboard and Video Workbench",
   },
   protoState: "done",
-  protoRefs: [{ label: { zh: "dshbook 第 8 章《让 dsh 制作短剧》", en: "dshbook Ch.8 Short Drama workflow" }, url: `${REPO.dshbookRepo}/blob/main/book/chapter8.md` }],
+  protoRefs: [
+    { label: { zh: "dshbook 第 8 章《让 dsh 制作短剧》", en: "dshbook Ch.8 Short Drama workflow" }, url: `${REPO.dshbook}/chapter8/` },
+    { label: { zh: "drama-skills 技能集", en: "drama-skills toolkit" }, url: "https://github.com/zenstory-ai/drama-skills" },
+  ],
   protoWork: {
     zh: "参考《DeepSeek Harness 实战指南》第 8 章和 drama-skills，定义导入单集剧本、生成包含角色/场景/视频提示词的可编辑分镜、逐镜生成视频并导出 MP4 的工作台流程。",
     en: "Based on dshbook Ch.8 and drama-skills, define a workbench flow to import a single-episode script, generate an editable storyboard, render clips per shot, and export MP4.",
@@ -1170,12 +1169,53 @@ const appShortDramaStudio = buildAppTopic({
   },
   evalIssues: [96],
   evalWork: {
-    zh: "用《纸箱小屋》流程或同等规模原创样例跑通单镜头重生成与 MP4 导出，并可结合 TuringBench（#96）评估成片连贯性。",
-    en: "Verify single-shot regeneration and MP4 export on the Cardboard Cabin flow or an equivalent sample, alongside TuringBench (#96) coherence checks.",
+    zh: "用《纸箱小屋》流程或同等规模原创样例跑通单镜头重生成与 MP4 导出，核对其余已生成镜头保持原样。TuringBench（#96）可用于后续评估成片连贯性。",
+    en: "Verify single-shot regeneration and MP4 export on the Cardboard Cabin flow or an equivalent sample and check that the remaining clips are preserved. TuringBench (#96) can support later continuity evaluation.",
   },
   evalEvidence: {
     zh: "工作台源码 PR、插件登记 PR、可复跑样例说明及从应用中心安装到导出 MP4 的完整演示记录。",
     en: "Workbench source PR, plugin registry PR, reproducible sample guide, and a recording from App Center installation through MP4 export.",
+  },
+});
+
+const appHealthAssistant = buildAppTopic({
+  id: "app-health-assistant",
+  title: {
+    zh: "AI 健康档案与复查提醒助手",
+    en: "AI Health Records & Follow-Up Assistant",
+  },
+  protoIssues: [52],
+  protoWork: {
+    zh: "围绕多次体检资料难以核对、复查日期容易遗漏的场景，定义个人健康档案流程。",
+    en: "Define a personal health records workflow for comparing checkups and tracking follow-up dates.",
+  },
+  protoEvidence: {
+    zh: "一组模拟体检报告及一份包含复查安排的示例档案。",
+    en: "A set of synthetic checkup reports and a sample record with follow-up dates.",
+  },
+  skillWork: {
+    zh: "抽取体检日期、指标、单位及原文位置。由用户核对抽取结果、确认可比较的记录并设置复查提醒。",
+    en: "Extract checkup dates, values, units, and source locations. Let users verify the extraction, confirm comparable records, and schedule follow-up reminders.",
+  },
+  skillEvidence: {
+    zh: "每条指标记录可追溯到报告原文，用户确认后可生成提醒。",
+    en: "Each measurement links to its source report, and reminders are scheduled after user confirmation.",
+  },
+  uiWork: {
+    zh: "在 PenguinHarness 应用中心提供档案工作台，支持导入报告、核对指标、查看同口径的历史记录和管理提醒。",
+    en: "Build a PenguinHarness App Center workbench for report import, measurement review, comparable history, and reminder management.",
+  },
+  uiEvidence: {
+    zh: "可安装的健康档案工作台插件。",
+    en: "An installable health records workbench plugin.",
+  },
+  evalWork: {
+    zh: "用两份模拟体检报告跑通导入、纠正抽取结果、核对历史和设置复查提醒。",
+    en: "Use two synthetic checkup reports to verify import, extraction corrections, history review, and follow-up reminders.",
+  },
+  evalEvidence: {
+    zh: "可复跑的演示案例及指标溯源、提醒触发记录。",
+    en: "A reproducible demo with measurement provenance and reminder delivery records.",
   },
 });
 
@@ -1185,41 +1225,38 @@ const appEcommerceStrategy = buildAppTopic({
     zh: "AI 电商选品与策略分析工作台",
     en: "AI E-Commerce Selection and Strategy Workbench",
   },
-  protoState: "active",
   protoIssues: [53],
   protoWork: {
-    zh: "对接 Agent Team 商业营收基准（#53），定义涵盖市场选品、竞品价格/差评监控、卖点提炼、商品详情页生成与大促投放复盘的电商策略工作台。",
-    en: "Aligned with the Agent Team commercial revenue benchmark (#53), define an e-commerce workbench for product selection, competitor review mining, copy generation, and ROI analysis.",
+    zh: "以小店选品和促销决策为例，约定销量、售价、成本及库存等输入字段。",
+    en: "Use small-store product selection and promotion planning as the scenario, with sales, prices, costs, and inventory as inputs.",
   },
   protoEvidence: {
-    zh: "电商多智能体分工（市场调研员、视觉文案、定价策略师、投放分析师）与数据看板规范。",
-    en: "Multi-agent e-commerce role specification (market researcher, copywriter, pricing strategist, ad analyst) and dashboard schema.",
+    zh: "一份脱敏商品经营表和一项真实的选品或促销决策样例。",
+    en: "A de-identified product operations table and a concrete product selection or promotion scenario.",
   },
-  skillIssues: [53],
   skillWork: {
-    zh: "封装竞品评论痛点聚类、价格弹性与毛利测算、高转化主图/详情页多模态素材生成及活动湊单 ROI 模拟 Skill。",
-    en: "Package Skills for competitor review clustering, margin/elasticity modeling, high-conversion listing generation, and promotion ROI simulation.",
+    zh: "校验导入字段，计算商品毛利和促销后的毛利，并保留指标与原始数据行的关联。",
+    en: "Validate imported fields, calculate product and post-promotion margins, and keep each metric linked to its input rows.",
   },
   skillEvidence: {
-    zh: "电商选品、定价、素材生成与数据分析全链路 Skill 组件。",
-    en: "End-to-end e-commerce Skills covering product research, pricing, creative generation, and ROI analytics.",
+    zh: "带可核对计算口径的商品对照表。",
+    en: "A product comparison table with verifiable calculations.",
   },
   uiWork: {
-    zh: "在 penguin-harness-apps 实现电商策略工作台：集成选品对比矩阵、竞品痛点雷达图、商品详情页画布预览与促销利润模拟器。",
-    en: "Build the E-Commerce Strategy Workbench in penguin-harness-apps with product comparison matrices, pain-point radar charts, listing canvas preview, and margin simulators.",
+    zh: "导入经营表，比较候选商品、试算促销价格，查看并导出带数据依据的策略建议。",
+    en: "Import a product table, compare candidates, simulate promotion prices, and view or export recommendations linked to the data.",
   },
   uiEvidence: {
     zh: "面向电商运营场景的 AI 策略工作台插件。",
     en: "AI E-Commerce Strategy Workbench plugin for store operations.",
   },
-  evalIssues: [53],
   evalWork: {
-    zh: "结合商业营收与店铺运营模拟基准（#53），评测策略工作台在选品命中率、转化文案质量与利润率优化上的表现。",
-    en: "Evaluate product selection hit rate, listing conversion quality, and profit optimization on the commercial simulation benchmark (#53).",
+    zh: "用固定经营样表核对毛利计算，并从一条选品或促销建议追溯到相关指标和原始商品行。",
+    en: "Use a fixed sample table to check margins and trace a product or promotion recommendation back to its metrics and source rows.",
   },
   evalEvidence: {
-    zh: "真实品类选品与营销策划案例包及商业基准评测得分。",
-    en: "Category selection and marketing campaign case study plus commercial benchmark scores.",
+    zh: "经营样表、预期计算结果和一份可复跑的策略报告。",
+    en: "Sample business data, expected calculations, and a reproducible strategy report.",
   },
 });
 
@@ -1230,38 +1267,38 @@ const appMarketResearchQuant = buildAppTopic({
     en: "Market Research and Strategy Backtesting Workbench",
   },
   protoState: "done",
-  protoRefs: [{ label: { zh: "dshbook 第 10 章《构建市场投研助手》", en: "dshbook Ch.10 Market Research Assistant" }, url: `${REPO.dshbookRepo}/blob/main/book/chapter10.md` }],
+  protoRefs: [{ label: { zh: "dshbook 第 10 章《构建市场投研助手》", en: "dshbook Ch.10 Market Research Assistant" }, url: `${REPO.dshbook}/chapter10/` }],
   protoWork: {
-    zh: "基于 dshbook 第 10 章验证通过的投研流水线（指数成分股筛选 → 信号规则定义 → 历史回测净值曲线 → 盘中异动监控 → 收盘日报看板），定义投研工作台。",
-    en: "Adapt dshbook Ch.10's verified pipeline (index constituent screening → signal rules → historical backtest NAV curve → intraday anomaly monitor → daily report dashboard).",
+    zh: "参考 dshbook 第 10 章的指数双均线信号、历史回测、市场日报和个股对比，定义投研工作台。",
+    en: "Use the index moving-average signals, historical backtest, daily market report, and stock comparison in dshbook Ch.10 as workbench examples.",
   },
   protoEvidence: {
-    zh: "dshbook 第 10 章净值曲线、回撤统计与收盘总览看板（10-4-03-stock-analysis-overview-v4.png）原型。",
-    en: "NAV curve, drawdown statistics, and daily market overview dashboard prototype from dshbook Ch.10.",
+    zh: "书中已有策略与基准的净值曲线、回撤统计和注明行情截止时间的个股对比报告。",
+    en: "The chapter includes strategy and benchmark equity curves, drawdown figures, and a stock comparison report with data cutoffs.",
   },
   skillWork: {
-    zh: "封装行情与财报数据拉取、无未来函数信号回测、夏普率/最大回撤指标计算及盘后复盘摘要生成 Skill。",
-    en: "Package Skills for market/financial data ingestion, lookahead-free signal backtesting, Sharpe/drawdown calculation, and post-market report generation.",
+    zh: "导入带来源及截止日期的历史行情，按用户选定的规则计算信号、累计收益和最大回撤。用信号出现之后的行情模拟成交。",
+    en: "Import historical prices with source and cutoff metadata. Compute signals, cumulative return, and maximum drawdown for a selected rule, with simulated fills after the signal.",
   },
   skillEvidence: {
-    zh: "可复现的量化信号回测脚本与定时行情异动扫描工具链。",
-    en: "Reproducible quantitative signal backtesting scripts and scheduled anomaly scanning toolchain.",
+    zh: "可用固定行情数据复跑的信号清单、回测脚本和指标汇总。",
+    en: "A signal ledger, backtest script, and metric summary reproducible from a fixed price dataset.",
   },
   uiWork: {
-    zh: "在 penguin-harness-apps 实现投研工作台：支持股票池条件筛选、策略净值与基准对比曲线、盘中异动提醒流与日报一键导出。",
-    en: "Build the Market Research Workbench in penguin-harness-apps with stock screeners, strategy vs. benchmark NAV charts, anomaly feeds, and daily report export.",
+    zh: "提供行情导入、回测规则配置、策略与基准对比图和报告导出。",
+    en: "Provide price-data import, backtest rule configuration, strategy and benchmark charts, and report export.",
   },
   uiEvidence: {
     zh: "可交互的 AI 市场投研与量化回测工作台插件。",
     en: "Interactive AI market research and quantitative backtesting workbench plugin.",
   },
   evalWork: {
-    zh: "在多段历史行情区间上校验回测数值准确性、无数据泄露约束及投研日报数据溯源准确率。",
-    en: "Verify backtest numerical accuracy, zero-lookahead constraints, and daily report data provenance across historical market regimes.",
+    zh: "用同一份历史行情复跑双均线样例，核对信号和成交日期、净值与最大回撤。报告须注明行情来源、截止日期与交易成本假设。",
+    en: "Rerun the moving-average example from the same historical data and check signal and fill dates, equity, and maximum drawdown. Document data sources, cutoff dates, and transaction-cost assumptions.",
   },
   evalEvidence: {
-    zh: "端到端指数增强/信号回测案例与数据一致性核验报告。",
-    en: "End-to-end signal backtesting case study and data consistency audit report.",
+    zh: "可复跑的回测样例、策略与基准对照报告。",
+    en: "A reproducible backtest example and a comparison report for the strategy and benchmark.",
   },
 });
 
@@ -1350,6 +1387,7 @@ const versions: VersionDefinition[] = [
         appSuperAgentTaskTree,
         appOverleafPaper,
         appShortDramaStudio,
+        appHealthAssistant,
         appEcommerceStrategy,
         appMarketResearchQuant,
         appDigitalSecretaryPoster,
