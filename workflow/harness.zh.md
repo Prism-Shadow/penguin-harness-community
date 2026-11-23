@@ -47,9 +47,11 @@ PR 标题和正文用英文，按 [主仓 PR 模板](https://github.com/Prism-Sh
 **标题**：`feat: <简要描述变更内容>`（或 `fix: <简要描述修复内容>`）
 
 ```markdown
-## What this changes
-<!-- 简述本次 PR 完成的功能或修复点，以及改动原因。有对应 Issue 时，填写 Closes <完整 Issue URL>。 -->
+Closes <完整 Issue 链接>
 
-## Verification
-<!-- 列出实际运行的检查或复现步骤及结果。 -->
+### 变更内容
+- 简述本次 PR 完成的功能或修复点
+
+### 验证方式
+- 列出实际运行的检查或复现步骤及结果
 ```
