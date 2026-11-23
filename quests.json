@@ -1549,54 +1549,6 @@
       "assignee": null,
       "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/126",
       "linked_pr": null
-    },
-    {
-      "id": "RSI-Q064",
-      "issue_number": 130,
-      "author": "lzh368",
-      "pr_number": null,
-      "published_at": "2026-11-23T08:26:42Z",
-      "status": "open",
-      "domain": "PenguinHarness",
-      "exp": 100,
-      "target_repository": "https://github.com/Prism-Shadow/penguin-harness-plugins",
-      "recurring": false,
-      "related_issue": "https://github.com/Prism-Shadow/penguin-harness-community/issues/53",
-      "title": "Build an AI E-Commerce Product Selection and Strategy Workbench",
-      "title_zh": "开发 AI 电商选品与策略分析工作台",
-      "description": "Help operators compare candidate products, model promotions, and trace recommendations to product data.\n\n**Deliverables and acceptance criteria**\n\n1. Import a fixed product operations table with product IDs, sale prices, unit costs, sales volumes, and inventory. Identify the row and field for missing or invalid values.\n2. Compare product sales, inventory, and profit per unit. For a proposed discount, show per-unit gross profit and gross margin before and after the promotion and state the calculation assumptions.\n3. Check the calculations against expected results from the fixed sample and deliver a selection or promotion report. Recommendations must be traceable to metrics and source product rows.\n4. Submit the implementation to `penguin-harness-apps` and the registration PR to `penguin-harness-plugins`. Link the implementation PR, reproduction steps, and acceptance evidence from the registration PR. Verify that the installed workbench can be added to an Agent and opened from the App Center.",
-      "description_zh": "支持运营人员基于商品经营数据比较候选商品、试算促销方案，并核对建议的依据。\n\n**交付与验收要求**\n\n1. 导入一份固定的商品经营表，包含商品标识、售价、单位成本、销量和库存。缺少必填字段或数值异常时，能指出对应行和字段。\n2. 对比候选商品的销量、库存和单位毛利。输入促销价后，展示同一商品促销前后的单位毛利与毛利率，并注明计算口径。\n3. 用固定样表和预期结果核对计算，至少交付一份选品或促销分析报告。报告中的建议能追溯到对应指标和原始商品行。\n4. 在 `penguin-harness-apps` 提交源码，在 `penguin-harness-plugins` 提交插件登记 PR。登记 PR 附源码 PR、复跑步骤和验收记录，并验证从插件市场安装后可添加到 Agent、从应用中心打开。",
-      "references": [
-        "https://github.com/Prism-Shadow/penguin-harness-community/issues/53",
-        "https://github.com/Prism-Shadow/penguin-harness-apps"
-      ],
-      "assignee": null,
-      "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/130",
-      "linked_pr": null
-    },
-    {
-      "id": "RSI-Q065",
-      "issue_number": 131,
-      "author": "lzh368",
-      "pr_number": null,
-      "published_at": "2026-11-23T08:26:43Z",
-      "status": "open",
-      "domain": "PenguinHarness",
-      "exp": 100,
-      "target_repository": "https://github.com/Prism-Shadow/penguin-harness-plugins",
-      "recurring": false,
-      "related_issue": null,
-      "title": "Build a Market Research and Strategy Backtesting Workbench",
-      "title_zh": "开发市场投研与策略回测工作台",
-      "description": "Use fixed historical market data to rerun a rule, compare it with a benchmark, and export a verifiable research report.\n\n**Deliverables and acceptance criteria**\n\n1. Import historical prices with their source and cutoff date. Configure the backtest interval, moving-average periods, fill timing after signal confirmation, and transaction cost assumptions.\n2. Compare the strategy and benchmark on matching data, intervals, and initial capital. Report signals, simulated fills, equity curves, cumulative return, and maximum drawdown. Each fill traces to a market observation after its signal.\n3. Reproduce the two-moving-average case in DSH Chapter 10. Provide the fixed input data or version, parameters, expected results, and report so reviewers can independently verify key dates and metrics.\n4. Submit the implementation to `penguin-harness-apps` and the registration PR to `penguin-harness-plugins`. Link the implementation PR, reproduction steps, and acceptance evidence from the registration PR. Verify that the installed workbench can be added to an Agent and opened from the App Center.",
-      "description_zh": "支持用户用固定历史行情复跑一项规则，对比策略与基准，并导出可核验的研究报告。\n\n**交付与验收要求**\n\n1. 导入带来源和截止日期的历史行情。工作台能选择回测区间，配置双均线周期、信号确认后的成交时点和交易成本假设。\n2. 在同一数据、区间和初始资金下对比策略与基准。输出信号与模拟成交记录、净值曲线、累计收益和最大回撤。每笔模拟成交都能核对到信号之后的行情。\n3. 用固定历史行情复跑 DSH 第 10 章的双均线案例。提交输入数据或固定版本、参数、预期结果和导出报告，供验收人独立复跑核对关键日期和指标。\n4. 在 `penguin-harness-apps` 提交源码，在 `penguin-harness-plugins` 提交插件登记 PR。登记 PR 附源码 PR、复跑步骤和验收记录，并验证从插件市场安装后可添加到 Agent、从应用中心打开。",
-      "references": [
-        "https://dshbook.penguin.ooo/chapter10/",
-        "https://github.com/Prism-Shadow/penguin-harness-apps"
-      ],
-      "assignee": null,
-      "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/131",
-      "linked_pr": null
     }
   ],
   "leaderboard": [
