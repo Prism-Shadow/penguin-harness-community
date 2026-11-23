@@ -13,7 +13,12 @@ type Phase = {
   state?: StageState;
   references?: { label: Text; url: string }[];
 };
-type TopicDefinition = { id: string; title: Record<Locale, string | readonly string[]>; phases?: Phase[] };
+type TopicDefinition = {
+  id: string;
+  title: Record<Locale, string | readonly string[]>;
+  twoLineTitle?: true;
+  phases?: Phase[];
+};
 type ProjectDefinition = TopicDefinition & { followUp?: TopicDefinition };
 type Achievement = "unlocked" | "locked";
 
@@ -464,9 +469,10 @@ const turingBenchWritingRealism: TopicDefinition = {
 const agentBlockerHonesty: TopicDefinition = {
   id: "agent-blocker-honesty",
   title: {
-    zh: ["解决智能体", "遇到", "工具故障时", "谎报完成", "的问题"],
+    zh: ["解决智能体遇到工具故障", "时谎报完成的问题"],
     en: "Preventing False Completion Reports after Agent Tool Failures",
   },
+  twoLineTitle: true,
   phases: [
     {
       label: L.bench,
@@ -531,9 +537,10 @@ const compactionUiPr = `${REPO.harness}/pull/1591`;
 const contextCompactionHandoff: TopicDefinition = {
   id: "context-compaction-handoff",
   title: {
-    zh: ["解决智能体在", "长任务", "压缩上下文时的", "「失忆」问题"],
+    zh: ["解决智能体在长任务", "压缩上下文时的「失忆」问题"],
     en: "Preserving Context When Agents Compact Long Tasks",
   },
+  twoLineTitle: true,
   phases: [
     {
       label: L.bench,
@@ -664,6 +671,7 @@ const gdpevoSkillEvolution: TopicDefinition = {
     zh: ["四种主流 Skill 自进化算法的", "提分效果与成本横评"],
     en: "Comparing Score Gains and Costs of Four Skill Evolution Methods",
   },
+  twoLineTitle: true,
   phases: [
     {
       label: L.bench,
@@ -1423,6 +1431,7 @@ export function researchVersions(quests: QuestItem[], locale: Locale) {
       id: topic.id,
       title: typeof title === "string" ? title : title.join(""),
       titleParts,
+      twoLineTitle: titleParts && topic.twoLineTitle,
       template: topic.phases === undefined,
       achievement,
       stages,
