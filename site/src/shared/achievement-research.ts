@@ -464,8 +464,8 @@ const turingBenchWritingRealism: TopicDefinition = {
 const agentBlockerHonesty: TopicDefinition = {
   id: "agent-blocker-honesty",
   title: {
-    zh: ["解决智能体", "遇到", "工具故障时", "谎报完成", "的问题"],
-    en: "Preventing False Completion Reports after Agent Tool Failures",
+    zh: "工具故障时的智能体谎报完成评测",
+    en: "Agent False Completion After Tool Failures",
   },
   phases: [
     {
@@ -531,8 +531,8 @@ const compactionUiPr = `${REPO.harness}/pull/1591`;
 const contextCompactionHandoff: TopicDefinition = {
   id: "context-compaction-handoff",
   title: {
-    zh: ["解决智能体在", "长任务", "压缩上下文时的", "「失忆」问题"],
-    en: "Preserving Context When Agents Compact Long Tasks",
+    zh: "长任务上下文压缩的信息保留",
+    en: "Information Retention After Context Compaction",
   },
   phases: [
     {
@@ -661,8 +661,8 @@ const codexGdpevoPr = `${REPO.bench}/pull/29`;
 const gdpevoSkillEvolution: TopicDefinition = {
   id: "gdpevo-skill-evolution",
   title: {
-    zh: ["四种主流 Skill 自进化算法的", "提分效果与成本横评"],
-    en: "Comparing Score Gains and Costs of Four Skill Evolution Methods",
+    zh: "四种 Skill 自进化算法对比",
+    en: "Comparing Four Skill Evolution Methods",
   },
   phases: [
     {
