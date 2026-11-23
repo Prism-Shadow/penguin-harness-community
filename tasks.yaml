@@ -1758,7 +1758,7 @@ Save outputs and grades by problem and run so an interrupted run can resume from
     issue_number: 127
     author: "lzh368"
     published_at: "2026-11-23T08:26:39Z"
-    status: "open"
+    status: "in_progress"
     domain: "PenguinHarness"
     exp: 100
     target_repository: "https://github.com/Prism-Shadow/penguin-harness-plugins"
@@ -1786,7 +1786,7 @@ Save outputs and grades by problem and run so an interrupted run can resume from
       - "https://github.com/Prism-Shadow/deepseek-harness-book/tree/main/demo/chapter8-drama-design"
       - "https://github.com/zenstory-ai/drama-skills"
       - "https://github.com/Prism-Shadow/penguin-harness-apps"
-    assignee: null
+    assignee: "lzh368"
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/127"
     linked_pr: null
 
