@@ -7,10 +7,10 @@
 
 ## 提交流程
 
-1. **学习 RFC 文件结构**：先阅读 [RFC-0001 Benchmark](../rfcs/RFC-0001-benchmark.zh.md)，了解 `packages/<benchmark-id>/`、`<task-id>/`（`statement/`、`rubric/`、`task_config.toml`）、`benchmark_config.toml` 以及可选 `data/<benchmark-id>/` 的组织规范。
-2. **提出 Issue**：在 [PenguinHarness Benchmark Issues](https://github.com/Prism-Shadow/penguin-harness-benchmark/issues) 中搜索是否已有对应 Benchmark 的 Issue；若没有，则新建一个 Issue 说明要整理的 Benchmark 来源与题目规模。
-3. **Issue 评论区占坑（可选）**：在目标 Issue 评论区留言认领（占坑是可选步骤，主要是为了防止多人同时整理同一个 Benchmark 撞车）。
-4. **提交 PR**：按 `RFC-0001` 完成 Benchmark 转换与自测（提交时 `benchmark_config.toml` 的 `status` 设为 `"draft"`），提交 Pull Request 并关联 Issue。
+1. **学习 RFC 文件结构**：先阅读 [RFC-0001 Benchmark](../rfcs/RFC-0001-benchmark.zh.md)，了解 `packages/<benchmark-id>/`、`<task-id>/`、`benchmark_config.toml` 以及大体积原始数据存放在独立外部仓库的规范。
+2. **提出 Issue**：在 [PenguinHarness Benchmark Issues](https://github.com/Prism-Shadow/penguin-harness-benchmark/issues) 中搜索是否已有对应 Benchmark 的 Issue；若没有，则新建一个 Issue 说明要整理的 Benchmark 来源与题目规模。若包含大体积原始数据，可使用自建仓库，也可联系社区委员会创建外部数据仓库。
+3. **Issue 评论区占坑**：在目标 Issue 评论区留言认领，占坑是可选步骤，主要用于防止多人同时整理同一个 Benchmark 撞车。
+4. **提交 PR**：按 RFC-0001 完成转换与自测，并将 `benchmark_config.toml` 的 `status` 设为 `"draft"`。若使用外部数据，在题目的 `statement/README.md` 中用固定提交链接引用数据，并提供获取与运行说明。外部数据仓库地址也可填入 `data_url`。提交 `packages/<benchmark-id>/` 的 PR 并关联 Issue。
 5. **Maintainer 审核合并**：按 [Benchmark PR 合入标准](#benchmark-pr-合入标准)审核，通过后将 `status` 更新为 `"published"` 并合并入库。
 
 ## Benchmark PR 合入标准
@@ -43,7 +43,7 @@
 
 ### 整理计划
 - [ ] 整理 `packages/<benchmark-id>/benchmark_config.toml` 与各题 `<task-id>/`
-- [ ] 整理 `data/<benchmark-id>/` 原始数据（如需要）
+- [ ] 如包含大体积原始数据，将其整理至独立外部仓库，并在题目说明中引用固定提交
 - [ ] 检查所有纳入题目能加载，用代表性题目验证执行与评分流程
 ```
 
@@ -62,7 +62,7 @@ Closes #<issue-number>
 
 ### 变更内容
 - 新增 `packages/<benchmark-id>/`，包含 `benchmark_config.toml` 及 <N> 道题目的 `statement/`、`rubric/` 和 `task_config.toml`
-- （可选）新增 `data/<benchmark-id>/` 存放原始任务数据
+- （可选）原始任务数据仓库：<外部数据仓库链接及固定提交>
 
 ### 验证方式
 - **来源与范围**：<来源、许可、版本、纳入范围和改动>

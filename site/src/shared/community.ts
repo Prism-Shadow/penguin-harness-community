@@ -3,6 +3,7 @@ import { resolve } from "node:path";
 import peopleYamlRaw from "../../../community/people.yaml?raw";
 import tasksYamlRaw from "../../../community/tasks.yaml?raw";
 import type { Locale } from "./i18n";
+import { parseQuestRegistry } from "./quest-registry";
 
 type Text = Record<Locale, string>;
 
@@ -44,6 +45,7 @@ export const TARGET_REPOSITORIES = [
   "https://github.com/Prism-Shadow/penguin-harness-benchmark",
   "https://github.com/Prism-Shadow/penguin-harness-plugins",
   "https://github.com/Prism-Shadow/awesome-rsi",
+  "https://github.com/Prism-Shadow/penguin-harness-paper",
 ] as const;
 
 export type TargetRepositoryUrl = (typeof TARGET_REPOSITORIES)[number];
@@ -55,6 +57,7 @@ export interface QuestReference {
 export interface QuestItem {
   id: string;
   issueNumber: number;
+  author?: string;
   prNumber?: number;
   publishedAt: string;
   status: QuestStatus;
@@ -81,22 +84,13 @@ function normalizeDomain(raw: string | null): QuestDomainId {
 }
 
 function parseQuestsFromYaml(content: string): QuestItem[] {
-  const taskBlocks = content.split(/\n  - id:\s*/).slice(1);
-  return taskBlocks.map((block) => {
-    const id = block.match(/^"([^"]+)"/)?.[1] ?? "";
-    const field = (name: string): string | undefined => {
-      const m = block.match(new RegExp(`^    ${name}:\\s*(.+)$`, "m"));
-      if (!m) return undefined;
-      const val = m[1].trim();
-      if (val === "null") return undefined;
-      return val.replace(/^"(.*)"$/, "$1").replace(/\\"/g, '"');
-    };
-    const refsMatch = block.match(/^    references:\s*\n((?:      -\s*[^\n]+\n?)*)/m);
-    const references: QuestReference[] = refsMatch
-      ? Array.from(refsMatch[1].matchAll(/^\s*-\s*"([^"]+)"/gm), (m) => ({ url: m[1] }))
-      : [];
+  return parseQuestRegistry(content).map((block) => {
+    const field = (name: string): string | undefined => block.fields[name];
+    const id = field("id") ?? "";
+    const references = block.references.map((url) => ({ url }));
 
     const issueNumber = Number(field("issue_number") || 0);
+    const author = field("author");
     const prNumberRaw = field("pr_number");
     const prNumber = prNumberRaw ? Number(prNumberRaw) : undefined;
     const status = (field("status") as QuestStatus) || "open";
@@ -116,6 +110,7 @@ function parseQuestsFromYaml(content: string): QuestItem[] {
     return {
       id,
       issueNumber,
+      ...(author ? { author } : {}),
       ...(prNumber ? { prNumber } : {}),
       publishedAt: field("published_at") || "",
       status,

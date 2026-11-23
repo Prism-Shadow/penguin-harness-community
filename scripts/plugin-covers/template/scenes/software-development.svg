@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" width="900" height="520">
+  <!-- Series A, software-development: an editor of indented code with the changed line marked,
+       and in front of it a card of three passing checks. -->
+
+  <!-- editor -->
+  <rect class="ln f12" x="40" y="30" width="580" height="440" rx="22" />
+  <path class="ln" d="M40 94H620" />
+  <circle class="ln" cx="78" cy="62" r="6" />
+  <circle class="ln" cx="102" cy="62" r="6" />
+  <circle class="ln" cx="126" cy="62" r="6" />
+  <rect class="f22" x="56" y="250" width="548" height="44" rx="8" />
+  <path class="ln" d="M86 142h200M126 186h250M166 230h160M166 272h260M126 316h120M86 360h160M86 404h90" />
+
+  <!-- checks -->
+  <rect class="paper card" x="520" y="220" width="340" height="250" rx="18" />
+  <g class="acc">
+    <circle cx="570" cy="282" r="20" />
+    <circle cx="570" cy="345" r="20" />
+    <circle cx="570" cy="408" r="20" />
+  </g>
+  <path class="ink-ln" d="M561 282l7 7 12-13M561 345l7 7 12-13M561 408l7 7 12-13" />
+  <path class="ink-ln" d="M610 282h200M610 345h160M610 408h186" />
+</svg>

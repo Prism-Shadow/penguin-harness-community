@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Plugin cover</title>
+    <!--
+      One template for every plugin cover (1600x900, 16:9).
+
+      Art data comes from window.__ART__ (render.mjs injects it with addInitScript) or from
+      ?art=<url-encoded JSON> for a manual preview. The art data names only the hue; every colour
+      comes from PALETTE below. Shape:
+
+        { id, series: "A"|"B"|"C"|"D", hue: "blue"|...|"slate",
+          font:   { url: "file:///.../face.woff2", name: "Mona Sans Variable" },
+          logo:   "data:image/svg+xml;base64,...",
+          icon:   "<inner markup of plugins/<id>/icon.svg>" | null,         // null: no motif
+          motif:  { x, y, size },                       // top-left of the 24-unit box, in px
+          scene:  { svg: "<svg viewBox width height>...</svg>", at: [cx, cy],
+                    fit: [w, h], scale },               // A, D scene; B diagram
+          lettering: { text: "RSI" | "Open\nSkill", left, right, maxCap,
+                       maxBlock, lineGap, centerY },                         // B
+          shot:   { url, crop: { x, y, w, h }, scale, offset: [x, y], pad }, // C
+          window: { left, top, width, height } }          // C
+
+      `fit` scales the scene so its drawn content (getBBox) fills a w x h box centred on `at`;
+      strokes stay at --lw (non-scaling-stroke).
+
+      With { mode: "icon", iconSvg: "<the whole icon.svg>" } the page draws only the plugin's
+      icon, 256x256 on a transparent ground in the cover's field colour (the market's icon.png).
+
+      When the page is done it sets window.__COVER_READY__ = true and window.__COVER_REPORT__
+      (which face rendered, the field colour as sRGB hex, the scene box); on failure
+      window.__COVER_ERROR__.
+    -->
+    <style id="cover-font"></style>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background: #000;
+      }
+      #cover {
+        --lw: 4px;
+        position: relative;
+        width: 1600px;
+        height: 900px;
+        overflow: hidden;
+        background: var(--field);
+        font-family: "Cover Grotesk", system-ui, sans-serif;
+      }
+      #cover > * {
+        position: absolute;
+      }
+      body.icon-mode {
+        background: transparent;
+      }
+      #icon {
+        display: block;
+        width: 256px;
+        height: 256px;
+      }
+      #icon > svg {
+        display: block;
+        width: 256px;
+        height: 256px;
+      }
+
+      /* Backdrop motif: the plugin's own icon in the line colour, bleeding off right and bottom. */
+      .motif {
+        overflow: visible;
+        opacity: var(--motif-opacity);
+      }
+      .motif * {
+        fill: none;
+        stroke: var(--line);
+        stroke-width: 0.9;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .scene {
+        overflow: visible;
+      }
+
+      /* Brand mark: same place on every cover. */
+      .brand {
+        box-sizing: border-box;
+        left: 40px;
+        bottom: 40px;
+        width: 56px;
+        height: 56px;
+        border-radius: 14px;
+        background: #fff;
+        display: grid;
+        place-items: center;
+      }
+      .brand.bordered {
+        border: 2px solid var(--ink);
+      }
+      .brand img {
+        display: block;
+        width: 40px;
+        height: 40px;
+      }
+
+      /* Series C window: the only chrome is a 44 px strip with three dots. */
+      .window {
+        box-sizing: border-box;
+        background: #fff;
+        background-clip: padding-box;
+        border: 1px solid rgb(255 255 255 / 0.5);
+        border-radius: 18px;
+        box-shadow: 0 30px 60px rgb(0 0 0 / 0.22);
+        overflow: hidden;
+      }
+      .window .strip {
+        height: 44px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding-left: 20px;
+        background: #fff;
+      }
+      .window .strip i {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--accent);
+      }
+      .window .shot {
+        position: relative;
+        overflow: hidden;
+      }
+      .window .crop {
+        position: absolute;
+        left: 0;
+        top: 0;
+        overflow: hidden;
+      }
+      .window .crop img {
+        position: absolute;
+        display: block;
+        max-width: none;
+      }
+
+      /* Scene vocabulary shared by every SVG partial. "Line" is white, or the deep ink on a light field. */
+      svg .ln {
+        fill: none;
+        stroke: var(--line);
+        stroke-width: var(--lw);
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      svg .dash {
+        stroke-dasharray: 14 16;
+      }
+      svg .f12 {
+        fill: color-mix(in srgb, var(--line) 12%, transparent);
+      }
+      svg .f16 {
+        fill: color-mix(in srgb, var(--line) 16%, transparent);
+      }
+      svg .f22 {
+        fill: color-mix(in srgb, var(--line) 22%, transparent);
+      }
+      svg .lt {
+        fill: var(--line);
+      }
+      svg .paper {
+        fill: #fff;
+      }
+      svg .card {
+        filter: drop-shadow(0 14px 20px rgb(0 0 0 / 0.14));
+      }
+      svg .ink {
+        fill: var(--ink);
+      }
+      svg .acc {
+        fill: var(--accent);
+      }
+      svg .ink-ln,
+      svg .acc-ln {
+        fill: none;
+        stroke-width: var(--lw);
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      svg .ink-ln {
+        stroke: var(--ink);
+      }
+      svg .acc-ln {
+        stroke: var(--accent);
+      }
+      svg .txt {
+        font-family: "Cover Grotesk", system-ui, sans-serif;
+        font-weight: 800;
+      }
+      .scene .ln,
+      .scene .ink-ln,
+      .scene .acc-ln {
+        vector-effect: non-scaling-stroke;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="cover"></div>
+    <div id="icon" hidden></div>
+    <script>
+      (() => {
+        const W = 1600;
+        const H = 900;
+        const STRIP = 44;
+
+        // The one palette table. field / light accent / deep ink per hue; `line` is what draws on
+        // the field (white unless the field is too light for it), `motif` the backdrop opacity,
+        // `tileBorder` outlines the white logo tile where it would melt into the field.
+        const PALETTE = {
+          blue: { field: "oklch(54% 0.12 255)", accent: "oklch(88% 0.06 255)", ink: "oklch(34% 0.09 255)" },
+          violet: { field: "oklch(54% 0.12 295)", accent: "oklch(88% 0.06 295)", ink: "oklch(34% 0.09 295)" },
+          pink: { field: "oklch(54% 0.12 350)", accent: "oklch(88% 0.06 350)", ink: "oklch(34% 0.09 350)" },
+          red: { field: "oklch(58% 0.15 25)", accent: "oklch(88% 0.06 25)", ink: "oklch(34% 0.09 25)" },
+          orange: { field: "oklch(66% 0.15 50)", accent: "oklch(88% 0.06 50)", ink: "oklch(34% 0.09 50)" },
+          amber: {
+            field: "oklch(76% 0.14 82)",
+            accent: "oklch(88% 0.06 82)",
+            ink: "oklch(34% 0.09 82)",
+            line: "ink",
+            motif: 0.11,
+            tileBorder: true,
+          },
+          green: { field: "oklch(54% 0.12 150)", accent: "oklch(88% 0.06 150)", ink: "oklch(34% 0.09 150)" },
+          teal: { field: "oklch(54% 0.12 190)", accent: "oklch(88% 0.06 190)", ink: "oklch(34% 0.09 190)" },
+          slate: { field: "oklch(52% 0.03 250)", accent: "oklch(88% 0.015 250)", ink: "oklch(32% 0.03 250)" },
+        };
+        const MOTIF_OPACITY = 0.07;
+
+        function palette(hue) {
+          const p = PALETTE[hue];
+          if (!p) throw new Error(`unknown hue: ${hue} (add it to PALETTE)`);
+          return {
+            ...p,
+            line: p.line === "ink" ? p.ink : "#fff",
+            motif: p.motif ?? MOTIF_OPACITY,
+            tileBorder: Boolean(p.tileBorder),
+          };
+        }
+
+        // The colour as the page paints it, in 8-bit sRGB.
+        function toHex(css) {
+          const ctx = document.createElement("canvas").getContext("2d");
+          ctx.fillStyle = css;
+          ctx.fillRect(0, 0, 1, 1);
+          const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
+          return `#${[r, g, b].map((v) => v.toString(16).padStart(2, "0")).join("")}`;
+        }
+
+        function readArt() {
+          if (window.__ART__) return window.__ART__;
+          const q = new URLSearchParams(location.search).get("art");
+          if (q) return JSON.parse(q);
+          throw new Error("no art data: inject window.__ART__ or pass ?art=<json>");
+        }
+
+        const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+
+        function el(html) {
+          const t = document.createElement("template");
+          t.innerHTML = html.trim();
+          return t.content.firstElementChild;
+        }
+
+        function px(node, box) {
+          for (const [k, v] of Object.entries(box)) node.style[k] = `${v}px`;
+        }
+
+        // Places an SVG partial centred on `at` (default: the cover's centre). With `fit`, its drawn
+        // content is scaled to fill a w x h box; otherwise its own width/height (times `scale`).
+        function placeScene(cover, scene) {
+          const node = el(scene.svg);
+          node.classList.add("scene");
+          cover.append(node);
+          let w = Number(node.getAttribute("width"));
+          let h = Number(node.getAttribute("height"));
+          if (scene.fit) {
+            const b = node.getBBox();
+            const k = Math.min(scene.fit[0] / b.width, scene.fit[1] / b.height) * (scene.scale ?? 1);
+            node.setAttribute("viewBox", `${b.x} ${b.y} ${b.width} ${b.height}`);
+            w = b.width * k;
+            h = b.height * k;
+          } else if (scene.scale) {
+            w *= scene.scale;
+            h *= scene.scale;
+          }
+          node.setAttribute("width", String(w));
+          node.setAttribute("height", String(h));
+          const [cx, cy] = scene.at ?? [W / 2, H / 2];
+          px(node, { left: cx - w / 2, top: cy - h / 2 });
+          return { x: Math.round(cx - w / 2), y: Math.round(cy - h / 2), w: Math.round(w), h: Math.round(h) };
+        }
+
+        function placeMotif(cover, art) {
+          if (!art.icon) return;
+          const m = art.motif ?? { x: 760, y: 240, size: 1100 };
+          const node = el(`<svg class="motif" viewBox="0 0 24 24" width="${m.size}" height="${m.size}">${art.icon}</svg>`);
+          cover.append(node);
+          px(node, { left: m.x, top: m.y });
+        }
+
+        // Cap height of the face that actually renders, as a fraction of the font size.
+        function capRatio(family) {
+          const ctx = document.createElement("canvas").getContext("2d");
+          ctx.font = `800 1000px ${family}`;
+          return ctx.measureText("H").actualBoundingBoxAscent / 1000;
+        }
+
+        // Series B: the acronym at up to maxCap tall, scaled down so its widest line fits
+        // [left, right], the block's cap heights centred on centerY; white (the line colour) at
+        // 16 %. A "\n" in the text stacks lines (a long name such as Open/Skill); a stack is at
+        // most maxBlock tall, its lines `lineGap` cap heights apart, left-aligned.
+        function placeLettering(cover, spec, family) {
+          const lines = String(spec.text).split("\n");
+          const node = el(
+            `<svg class="letters" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">` +
+              lines.map((line) => `<text class="txt" x="0" y="0" fill-opacity="0.16" style="fill: var(--line)">${esc(line)}</text>`).join("") +
+              `</svg>`,
+          );
+          cover.append(node);
+          px(node, { left: 0, top: 0 });
+          const texts = [...node.querySelectorAll("text")];
+          const ratio = capRatio(family);
+          const gap = spec.lineGap ?? 0.36;
+          const apply = (size) => {
+            for (const text of texts) {
+              text.setAttribute("font-size", size.toFixed(1));
+              text.setAttribute("letter-spacing", (-0.04 * size).toFixed(1));
+            }
+          };
+          const n = lines.length;
+          const capLimit = n === 1 ? spec.maxCap : Math.min(spec.maxCap, (spec.maxBlock ?? 600) / (n + (n - 1) * gap));
+          let size = capLimit / ratio;
+          apply(size);
+          const avail = spec.right - spec.left;
+          const widest = () => Math.max(...texts.map((text) => text.getBBox().width));
+          if (widest() > avail) {
+            size *= avail / widest();
+            apply(size);
+          }
+          const cap = size * ratio;
+          const pitch = cap * (1 + gap);
+          const top = spec.centerY - (cap + (n - 1) * pitch) / 2;
+          texts.forEach((text, i) => {
+            const box = text.getBBox();
+            text.setAttribute("x", (spec.left - box.x).toFixed(1));
+            text.setAttribute("y", (top + cap + i * pitch).toFixed(1));
+          });
+          const boxes = texts.map((text) => text.getBBox());
+          return {
+            fontSize: Math.round(size),
+            cap: Math.round(cap),
+            lines: n,
+            x: Math.round(Math.min(...boxes.map((b) => b.x))),
+            right: Math.round(Math.max(...boxes.map((b) => b.x + b.width))),
+          };
+        }
+
+        async function placeWindow(cover, art) {
+          const win = art.window;
+          const shot = art.shot;
+          const node = el(`<div class="window"><div class="strip"><i></i><i></i><i></i></div><div class="shot"><div class="crop"><img alt=""></div></div></div>`);
+          cover.append(node);
+          px(node, { left: win.left, top: win.top, width: win.width, height: win.height });
+          const area = node.querySelector(".shot");
+          area.style.height = `${win.height - 2 - STRIP}px`;
+          area.style.background = shot.pad ?? "#fff";
+          const s = shot.scale;
+          const c = shot.crop;
+          const crop = node.querySelector(".crop");
+          px(crop, { width: c.w * s, height: c.h * s });
+          if (shot.offset) px(crop, { left: shot.offset[0], top: shot.offset[1] });
+          const img = crop.querySelector("img");
+          img.src = shot.url;
+          await img.decode();
+          px(img, { width: img.naturalWidth * s, left: -c.x * s, top: -c.y * s });
+          return { natural: [img.naturalWidth, img.naturalHeight], shown: [Math.round(c.w * s), Math.round(c.h * s)], scale: s };
+        }
+
+        // The plugin's icon alone, in the field colour, for icon.png.
+        function buildIcon(art, pal) {
+          if (!art.iconSvg) throw new Error("icon mode needs iconSvg");
+          // Both roots go transparent, or the screenshot keeps their black ground.
+          document.documentElement.style.background = "transparent";
+          document.body.classList.add("icon-mode");
+          document.getElementById("cover").hidden = true;
+          const box = document.getElementById("icon");
+          box.hidden = false;
+          box.innerHTML = art.iconSvg;
+          const svg = box.querySelector("svg");
+          if (!svg) throw new Error("iconSvg holds no <svg>");
+          svg.removeAttribute("width");
+          svg.removeAttribute("height");
+          svg.style.color = pal.field;
+          window.__COVER_REPORT__ = { id: art.id, mode: "icon", hue: art.hue, tone: toHex(pal.field) };
+          window.__COVER_READY__ = true;
+        }
+
+        async function build() {
+          const art = readArt();
+          const cover = document.getElementById("cover");
+          const pal = palette(art.hue);
+          if (art.mode === "icon") return buildIcon(art, pal);
+          cover.style.setProperty("--field", pal.field);
+          cover.style.setProperty("--accent", pal.accent);
+          cover.style.setProperty("--ink", pal.ink);
+          cover.style.setProperty("--line", pal.line);
+          cover.style.setProperty("--motif-opacity", String(pal.motif));
+          const report = { id: art.id, series: art.series, hue: art.hue, tone: toHex(pal.field) };
+
+          // Load the face first: text sizes feed the scene fit and the lettering layout.
+          let loaded = [];
+          if (art.font?.url) {
+            document.getElementById("cover-font").textContent =
+              `@font-face { font-family: "Cover Grotesk"; src: url("${art.font.url}") format("woff2"); font-weight: 200 900; font-style: normal; }`;
+            try {
+              loaded = await document.fonts.load('800 100px "Cover Grotesk"', "RSIOPv123$_");
+            } catch (e) {
+              report.fontError = String(e);
+            }
+          }
+          await document.fonts.ready;
+          report.font = loaded.length > 0 ? art.font.name : "system-ui (fallback)";
+          report.fontLoaded = loaded.length > 0;
+          const family = loaded.length > 0 ? '"Cover Grotesk"' : "system-ui";
+
+          placeMotif(cover, art);
+          if (art.series === "B" && art.lettering) report.lettering = placeLettering(cover, art.lettering, family);
+          if (art.series === "C") report.shot = await placeWindow(cover, art);
+          else if (art.scene) report.scene = placeScene(cover, art.scene);
+
+          const brand = el(`<div class="brand${pal.tileBorder ? " bordered" : ""}"><img alt=""></div>`);
+          cover.append(brand);
+          if (art.logo) {
+            const logo = brand.querySelector("img");
+            logo.src = art.logo;
+            await logo.decode();
+          }
+
+          window.__COVER_REPORT__ = report;
+          window.__COVER_READY__ = true;
+        }
+
+        build().catch((e) => {
+          window.__COVER_ERROR__ = String((e && e.stack) || e);
+        });
+      })();
+    </script>
+  </body>
+</html>

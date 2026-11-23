@@ -19,7 +19,7 @@ const COPY = {
     wechat: "微信群",
     discord: "Discord",
     meetingNextDate: "11-17",
-    meetingNextText: "第二次双周会预告（18:00 · 腾讯会议 452-772-050）",
+    meetingNextText: "第二次双周会回顾",
     meetingNotes: "双周会 →",
     event1Date: "11-07",
     event1Text: "五道口原点社区 PyTorch Meetup：RSI 实操 Workshop",
@@ -37,7 +37,7 @@ const COPY = {
     wechat: "WeChat",
     discord: "Discord",
     meetingNextDate: "11-17",
-    meetingNextText: "2nd Bi-weekly Meeting (18:00 UTC+8 · Tencent Meeting 452-772-050)",
+    meetingNextText: "2nd Bi-weekly Meeting",
     meetingNotes: "Meetings →",
     event1Date: "11-07",
     event1Text: "PyTorch Meetup @ Wudaokou: RSI Workshop",
@@ -135,6 +135,15 @@ const COPY = {
         <div class="flex items-center gap-2 overflow-hidden whitespace-nowrap">
           <span class="mono shrink-0 text-xs text-brand-600 dark:text-brand-400">{COPY.meetingNextDate}</span>
           <span class="truncate">{COPY.meetingNextText}</span>
+          <a
+            href="https://www.bilibili.com/video/BV1thsr68E3y/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="shrink-0 text-brand-600 hover:underline dark:text-brand-400"
+          >
+            {COPY.meeting1Video}
+          </a>
+          <span class="shrink-0 text-gray-300 dark:text-gray-700">·</span>
           <a
             href={href("/roadmap/meetings/")}
             class="shrink-0 text-brand-600 hover:underline dark:text-brand-400"

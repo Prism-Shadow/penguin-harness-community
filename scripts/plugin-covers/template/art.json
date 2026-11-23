@@ -1,0 +1,98 @@
+{
+  "$comment": "The art map: one entry per plugin folder (assets/plugins/<id>/; the id is the plugin's directory in the harness's plugins/). Colours live in cover.html's PALETTE, so a cover names only its hue (blue violet pink red orange amber green teal slate). series: A drawn scene, B RSI lettering + diagram, C real UI in a window, D sandbox emblem on slate. scene: template/scenes/<scene>.svg; A and D scenes are fitted to defaults.sceneFit (their drawn content fills that box, strokes stay 4 px); a cover may set fit, at or scale. B: lettering fits [left, right] at up to maxCap tall (a \\n stacks lines, at most maxBlock tall), the diagram fits diagram.fit around diagram.at. C: shot.src is relative to this file, crop in source pixels, scale applies to the 1600x900 master (the 1280 WebP shows it at 0.8x that), offset places the crop inside the window, pad fills the rest. seriesMotif: false drops the icon motif for a series (B: the acronym is the backdrop); a cover's own motif: true/false wins.",
+  "defaults": {
+    "motif": { "x": 760, "y": 240, "size": 1100 },
+    "sceneFit": [960, 558],
+    "window": { "left": 640, "top": 220, "width": 1040, "height": 740 },
+    "lettering": { "left": 80, "right": 910, "maxCap": 420, "maxBlock": 600, "centerY": 450 },
+    "diagram": { "at": [1200, 450], "fit": [460, 460] },
+    "seriesMotif": { "B": false }
+  },
+  "covers": {
+    "a2ui": {
+      "series": "C",
+      "hue": "violet",
+      "window": { "top": 130, "height": 830 },
+      "shot": {
+        "src": "../../../assets/blog-assets/penguinharness-0-2-14-a2ui-widgets-zh.png",
+        "crop": { "x": 64, "y": 380, "w": 593, "h": 430 },
+        "scale": 1.75,
+        "offset": [0, 32],
+        "pad": "#f3f4f5"
+      }
+    },
+    "ace-rsi-toolkit": { "series": "B", "hue": "blue", "lettering": "ACE", "scene": "rsi-loop" },
+    "agent-company": {
+      "series": "C",
+      "hue": "amber",
+      "shot": {
+        "src": "../../../assets/blog-assets/agent-company-org-chart-zh.png",
+        "crop": { "x": 1124, "y": 400, "w": 1387, "h": 928 },
+        "scale": 0.75,
+        "offset": [0, 0],
+        "pad": "#fafbfc"
+      }
+    },
+    "agent-development": { "series": "A", "hue": "blue", "scene": "agent-development" },
+    "agent-evaluation": { "series": "A", "hue": "teal", "scene": "agent-evaluation" },
+    "ape-rsi-toolkit": { "series": "B", "hue": "orange", "lettering": "APE", "scene": "rsi-loop" },
+    "awm-rsi-toolkit": { "series": "B", "hue": "teal", "lettering": "AWM", "scene": "rsi-loop" },
+    "browser-automation": {
+      "series": "C",
+      "hue": "blue",
+      "window": { "left": 600, "top": 130, "width": 1040, "height": 830 },
+      "shot": {
+        "src": "../../../assets/blog-assets/penguinharness-0-2-14-browser-zh.png",
+        "crop": { "x": 1442, "y": 104, "w": 1438, "h": 1100 },
+        "scale": 0.72,
+        "offset": [0, 0],
+        "pad": "#ffffff"
+      }
+    },
+    "continual-learning": { "series": "A", "hue": "violet", "scene": "continual-learning" },
+    "data-analysis": { "series": "A", "hue": "green", "scene": "data-analysis" },
+    "default-rsi-toolkit": { "series": "B", "hue": "pink", "lettering": "RSI", "scene": "rsi-loop" },
+    "goal": { "series": "A", "hue": "green", "scene": "goal" },
+    "humanizer": { "series": "A", "hue": "pink", "scene": "humanizer" },
+    "model-development": { "series": "A", "hue": "orange", "scene": "model-development" },
+    "openskill-rsi-toolkit": { "series": "B", "hue": "green", "lettering": "Open\nSkill", "scene": "rsi-loop" },
+    "opro-rsi-toolkit": { "series": "B", "hue": "red", "lettering": "OPRO", "scene": "rsi-loop" },
+    "penguin-support": {
+      "series": "C",
+      "hue": "teal",
+      "window": { "left": 280, "top": 198, "width": 1040, "height": 503 },
+      "shot": {
+        "src": "../../../assets/blog-assets/penguinharness-0-2-16-support-en.jpg",
+        "crop": { "x": 123, "y": 242, "w": 710, "h": 322 },
+        "scale": 1.42,
+        "offset": [15, 0],
+        "pad": "#ffffff"
+      }
+    },
+    "rrsi-rsi-toolkit": { "series": "B", "hue": "violet", "lettering": "RRSI", "scene": "rsi-loop" },
+    "sandbox-bwrap": { "series": "D", "hue": "slate", "scene": "sandbox-bwrap" },
+    "sandbox-dsh": { "series": "D", "hue": "slate", "scene": "sandbox-dsh" },
+    "sandbox-seatbelt": { "series": "D", "hue": "slate", "scene": "sandbox-seatbelt" },
+    "sandbox-wsl": { "series": "D", "hue": "slate", "scene": "sandbox-wsl" },
+    "skill-porting": { "series": "A", "hue": "blue", "scene": "skill-porting" },
+    "skilladam-rsi-toolkit": { "series": "B", "hue": "amber", "lettering": "Skill\nAdam", "scene": "rsi-loop" },
+    "skillopt-rsi-toolkit": { "series": "B", "hue": "pink", "lettering": "Skill\nOpt", "scene": "rsi-loop" },
+    "software-development": { "series": "A", "hue": "violet", "scene": "software-development" },
+    "trace-lookup": { "series": "A", "hue": "amber", "scene": "trace-lookup" },
+    "trace-rsi-toolkit": { "series": "B", "hue": "red", "lettering": "TRACE", "scene": "rsi-loop" },
+    "use-bento-slides": {
+      "series": "C",
+      "hue": "orange",
+      "window": { "left": 360, "top": 120, "width": 1240, "height": 840 },
+      "shot": {
+        "src": "../../../assets/plugins/use-bento-slides/shot-2.webp",
+        "crop": { "x": 222, "y": 60, "w": 1378, "h": 933 },
+        "scale": 0.9,
+        "offset": [0, 0],
+        "pad": "#f5f6fa"
+      }
+    },
+    "use-claude-code": { "series": "A", "hue": "teal", "scene": "use-claude-code" },
+    "use-firecrawl": { "series": "A", "hue": "red", "scene": "use-firecrawl" }
+  }
+}

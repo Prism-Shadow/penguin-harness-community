@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" width="900" height="520">
+  <!-- Series A, agent-development: a requirement card, a dashed arrow, and the agent it becomes:
+       the plugin's package cube, drawn large, with a spark where it is being put together. -->
+
+  <!-- the requirement: a title bar, four lines and a button -->
+  <rect class="paper card" x="40" y="100" width="260" height="320" rx="18" />
+  <rect class="ink" x="74" y="138" width="132" height="16" rx="8" />
+  <path class="ink-ln" d="M74 196h190M74 234h162M74 272h190M74 310h118" />
+  <rect class="acc" x="74" y="352" width="96" height="32" rx="16" />
+
+  <!-- dashed arrow -->
+  <path class="ln dash" d="M330 260H462" />
+  <path class="ln" d="M446 242l20 18-20 18" />
+
+  <!-- the cube: three faces in three fills, its edges, and the strap of the icon -->
+  <path class="f22" d="M680 90L830 175 680 260 530 175Z" />
+  <path class="f12" d="M530 175L680 260V430L530 345Z" />
+  <path class="f16" d="M830 175L680 260V430L830 345Z" />
+  <path class="ln" d="M680 90L830 175V345L680 430 530 345V175ZM530 175L680 260 830 175M680 260V430M605 132.5L755 217.5" />
+
+  <!-- spark -->
+  <path class="lt" d="M842 52l7 19 19 7-19 7-7 19-7-19-19-7 19-7z" />
+</svg>

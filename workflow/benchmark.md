@@ -7,10 +7,10 @@
 
 ## Submission Workflow
 
-1. **Learn the RFC File Structure**: Read [RFC-0001 Benchmark](../rfcs/RFC-0001-benchmark.md) to understand the required layout of `packages/<benchmark-id>/`, `<task-id>/` (`statement/`, `rubric/`, `task_config.toml`), `benchmark_config.toml`, and the optional `data/<benchmark-id>/` directory.
-2. **Open an Issue**: Check [PenguinHarness Benchmark Issues](https://github.com/Prism-Shadow/penguin-harness-benchmark/issues) for an existing Issue for the Benchmark, or open a new Issue describing the upstream source and number of tasks.
-3. **Claim in Issue Comments (Optional)**: Leave a comment on the Issue to claim the work (claiming is optional and primarily prevents duplicate effort).
-4. **Submit a PR**: Organize the Benchmark files according to `RFC-0001` (with `status = "draft"` in `benchmark_config.toml`) and open a Pull Request linked to the Issue.
+1. **Learn the RFC File Structure**: Read [RFC-0001 Benchmark](../rfcs/RFC-0001-benchmark.md) to understand the required layout of `packages/<benchmark-id>/`, `<task-id>/`, `benchmark_config.toml`, and storing large raw task data in a dedicated external repository.
+2. **Open an Issue**: Check [PenguinHarness Benchmark Issues](https://github.com/Prism-Shadow/penguin-harness-benchmark/issues) for an existing Issue for the Benchmark, or open a new Issue describing the upstream source and number of tasks. If the Benchmark has large raw data, you may use your own repository or contact the Community Committee to create one.
+3. **Claim in Issue Comments**: Leave a comment on the Issue to claim the work. Claiming is optional and primarily prevents duplicate effort.
+4. **Submit a PR**: Organize and test the Benchmark files according to RFC-0001 and set `status = "draft"` in `benchmark_config.toml`. For external data, link to a pinned commit in each task's `statement/README.md` and explain how to fetch and run it. You can also put the data repository URL in `data_url`. Open a PR for `packages/<benchmark-id>/` linked to the Issue.
 5. **Maintainer Review & Merge**: Review the PR against the [Benchmark PR merge criteria](#benchmark-pr-merge-criteria), then set `status` to `"published"` and merge once approved.
 
 ## Benchmark PR Merge Criteria
@@ -43,7 +43,7 @@
 
 ### Plan
 - [ ] Prepare `packages/<benchmark-id>/benchmark_config.toml` and `<task-id>/` directories
-- [ ] Prepare `data/<benchmark-id>/` raw task files (if applicable)
+- [ ] If the Benchmark has large raw data, put it in a dedicated external repository and link to a pinned commit in the task instructions
 - [ ] Check that all submitted tasks load and verify execution and grading on representative tasks
 ```
 
@@ -62,7 +62,7 @@ Closes #<issue-number>
 
 ### Summary
 - Added `packages/<benchmark-id>/` with `benchmark_config.toml` and <N> tasks (`statement/`, `rubric/`, `task_config.toml`)
-- (Optional) Added `data/<benchmark-id>/` for raw task data
+- (Optional) Raw task data repository: <external data repository URL and pinned commit>
 
 ### Verification
 - **Sources and scope**: <sources, licenses, versions, included tasks, and changes>

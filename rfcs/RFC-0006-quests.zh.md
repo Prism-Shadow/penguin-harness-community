@@ -131,7 +131,7 @@ Reply in the comments below with one of the following slash commands (automatica
 | `### Domain` | 必填 | 取值必须为 `Benchmark`、`Evaluation`、`RSI Algorithm`、`PenguinHarness`、`Awesome RSI` 之一。 |
 | `### Status` | 必填 | 取值必须为 `open`、`in_progress`、`completed` 之一。 |
 | `### EXP` | 必填 | 正整数（默认 `50`），代表任务验收合入后授予的经验值。 |
-| `### Target Repository` | 必填 | 最终提交 PR 的目标仓库 URL，取值必须为以下五个官方仓库之一：<br>1. `https://github.com/Prism-Shadow/penguin-harness`<br>2. `https://github.com/Prism-Shadow/penguin-harness-community`<br>3. `https://github.com/Prism-Shadow/penguin-harness-benchmark`<br>4. `https://github.com/Prism-Shadow/penguin-harness-plugins`<br>5. `https://github.com/Prism-Shadow/awesome-rsi` |
+| `### Target Repository` | 必填 | 最终提交 PR 的目标仓库 URL，取值必须为下列官方仓库之一。<br>1. `https://github.com/Prism-Shadow/penguin-harness`<br>2. `https://github.com/Prism-Shadow/penguin-harness-community`<br>3. `https://github.com/Prism-Shadow/penguin-harness-benchmark`<br>4. `https://github.com/Prism-Shadow/penguin-harness-plugins`<br>5. `https://github.com/Prism-Shadow/awesome-rsi`<br>6. `https://github.com/Prism-Shadow/penguin-harness-paper` |
 | `### Recurring Task` | 选填 | 常驻任务标识（`true` / `false`，默认 `false`）。当标记为 `true` 的常驻任务被认领且当前不再存在 `open` 状态的同名实例时，`Quests Data` 工作流会自动克隆创建一个新的 `open` 任务 Issue。 |
 | `### Assignee` | `in_progress` / `completed` 必填 | 认领人 GitHub 用户名（以 `@` 开头，如 `@hiyouga`）；`open` 状态为 `_No response_`。 |
 | `### Pull Request` | `completed` 必填 | 提交至目标仓库的 Pull Request 纯链接；未提交时为 `_No response_`。 |

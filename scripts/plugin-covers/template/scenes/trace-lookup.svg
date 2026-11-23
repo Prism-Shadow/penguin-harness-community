@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" width="900" height="520">
+  <!-- Series A, trace-lookup: a long record of turns, one row marked, and a lens over that row
+       showing it larger. Lens centre (560, 300). -->
+  <defs>
+    <clipPath id="tl-lens"><circle cx="560" cy="300" r="112" /></clipPath>
+  </defs>
+
+  <!-- the record -->
+  <rect class="paper card" x="120" y="20" width="420" height="440" rx="18" />
+  <rect class="acc" x="142" y="276" width="376" height="48" rx="10" />
+  <g class="acc">
+    <circle cx="170" cy="60" r="14" />
+    <circle cx="170" cy="120" r="14" />
+    <circle cx="170" cy="180" r="14" />
+    <circle cx="170" cy="240" r="14" />
+    <circle cx="170" cy="360" r="14" />
+    <circle cx="170" cy="420" r="14" />
+  </g>
+  <circle class="ink" cx="170" cy="300" r="14" />
+  <path class="ink-ln" d="M200 60h240M200 120h180M200 180h260M200 240h200M200 300h220M200 360h150M200 420h230" />
+
+  <!-- the lens: paper inside, the marked row drawn larger -->
+  <circle class="paper" cx="560" cy="300" r="112" />
+  <g clip-path="url(#tl-lens)">
+    <rect class="acc" x="430" y="266" width="300" height="68" rx="14" />
+    <circle class="ink" cx="478" cy="300" r="20" />
+    <path class="ink-ln" d="M518 300h220" style="stroke-width: 7px" />
+  </g>
+  <circle class="ln" cx="560" cy="300" r="112" style="stroke-width: 10px" />
+  <path class="ln" d="M640 380L740 480" style="stroke-width: 26px" />
+</svg>

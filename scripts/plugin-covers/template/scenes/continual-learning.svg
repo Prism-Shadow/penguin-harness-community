@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" width="900" height="520">
+  <!-- Series A, continual-learning: a long run of conversation turns flows into an open notebook;
+       the page on the right gains a new, marked line and an arrow rises from it. -->
+
+  <!-- turns, alternating sides -->
+  <g class="ln f12">
+    <rect x="40" y="70" width="210" height="52" rx="26" />
+    <rect x="120" y="142" width="170" height="52" rx="26" />
+    <rect x="40" y="214" width="230" height="52" rx="26" />
+    <rect x="100" y="286" width="190" height="52" rx="26" />
+    <rect x="40" y="358" width="180" height="52" rx="26" />
+  </g>
+
+  <!-- dashed arrow -->
+  <path class="ln dash" d="M320 240C380 240 400 260 452 260" />
+  <path class="ln" d="M436 242l20 18-20 18" />
+
+  <!-- the notebook -->
+  <path class="paper card" d="M680 160C628 140 560 140 500 160V410C560 390 628 390 680 410Z" />
+  <path class="paper card" d="M680 160C732 140 800 140 860 160V410C800 390 732 390 680 410Z" />
+  <path class="ink-ln" d="M680 160V410" />
+  <path class="ink-ln" d="M532 210h116M532 250h116M532 290h86M532 330h104" />
+  <rect class="acc" x="700" y="274" width="140" height="32" rx="8" />
+  <path class="ink-ln" d="M712 210h116M712 250h96M712 290h116M712 330h70" />
+
+  <!-- rising arrow -->
+  <path class="ln" d="M770 120V48M744 74l26-26 26 26" />
+</svg>

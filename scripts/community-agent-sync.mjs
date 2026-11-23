@@ -205,6 +205,7 @@ function parseTasksYaml(content) {
     return {
       id,
       issue_number: field("issue_number") ? Number(field("issue_number")) : null,
+      author: field("author"),
       pr_number: field("pr_number") ? Number(field("pr_number")) : null,
       published_at: field("published_at") || "",
       status: field("status"),
@@ -253,6 +254,7 @@ function serializeTasksYaml(tasks, maxConcurrent = 2) {
   for (const t of tasks) {
     lines.push(`  - id: "${esc(t.id)}"`);
     lines.push(`    issue_number: ${t.issue_number}`);
+    lines.push(`    author: ${t.author ? `"${esc(t.author)}"` : "null"}`);
     if (t.pr_number) {
       lines.push(`    pr_number: ${t.pr_number}`);
     }
@@ -431,6 +433,8 @@ async function syncFromGitHubIssues(baseTasks, maxConcurrent) {
     const updatedTask = {
       id,
       issue_number: issue.number,
+      // Authorship comes from GitHub metadata, independently of claim commands.
+      author: author || null,
       pr_number: prNumber,
       published_at: publishedAt,
       status,
@@ -531,6 +535,7 @@ async function syncFromGitHubIssues(baseTasks, maxConcurrent) {
               ...clonedDraft,
               id: newId,
               issue_number: created.number,
+              author: created.user?.login || null,
               published_at: created.created_at || new Date().toISOString(),
               issue_url: created.html_url || `https://github.com/${REPO}/issues/${created.number}`,
             });

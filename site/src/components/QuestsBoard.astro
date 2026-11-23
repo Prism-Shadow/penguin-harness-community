@@ -1,5 +1,6 @@
 ---
 import type { Locale } from "../shared/i18n";
+import { renderQuestDescription } from "../shared/quest-markdown";
 import {
   QUESTS,
   QUEST_DOMAINS,
@@ -9,6 +10,7 @@ import {
   type QuestItem,
   type QuestStatus,
 } from "../shared/community";
+import QuestPeople from "./QuestPeople.astro";
 
 interface Props {
   locale: Locale;
@@ -163,38 +165,48 @@ function tasksFor(domain: QuestDomainId, status: QuestStatus): QuestItem[] {
                               }`}
                             >
                               {pageItems.map((q) => (
-                                <button
-                                  type="button"
-                                  data-quest-open={q.id}
-                                  class="group block w-full max-w-full min-w-0 cursor-pointer overflow-hidden rounded-lg border border-gray-200 bg-white px-3 py-2 text-left shadow-2xs transition-colors hover:border-brand-500 dark:border-gray-800 dark:bg-gray-950 dark:hover:border-brand-500"
+                                <div
+                                  data-quest-card={q.id}
+                                  class="group min-w-0 overflow-hidden rounded-lg border border-gray-200 bg-white px-3 py-2 shadow-2xs transition-colors hover:border-brand-500 focus-within:border-brand-500 dark:border-gray-800 dark:bg-gray-950 dark:hover:border-brand-500"
                                 >
-                                  <div class="flex min-w-0 items-center justify-between gap-2">
-                                    <span class="min-w-0 flex-1 truncate text-xs font-medium text-gray-950 group-hover:text-brand-600 dark:text-gray-100 dark:group-hover:text-brand-400">
-                                      {resolveText(q.title, locale)}
-                                    </span>
-                                    <div class="flex shrink-0 items-center gap-1">
-                                      {q.recurring && (
-                                        <span class="rounded bg-amber-50 px-1.5 py-0.5 text-[10px] font-medium leading-none text-amber-700 ring-1 ring-inset ring-amber-600/20 dark:bg-amber-950/70 dark:text-amber-300 dark:ring-amber-400/30">
-                                          {COPY.recurringBadge}
-                                        </span>
-                                      )}
-                                      <span class="mono shrink-0 rounded bg-brand-50 px-1.5 py-0.5 text-[11px] font-semibold leading-none text-brand-700 ring-1 ring-inset ring-brand-600/20 dark:bg-brand-950/80 dark:text-brand-300 dark:ring-brand-400/30">
-                                        +{q.exp} EXP
+                                  <button
+                                    type="button"
+                                    data-quest-open={q.id}
+                                    class="block w-full max-w-full min-w-0 cursor-pointer text-left"
+                                  >
+                                    <div class="flex min-w-0 items-center justify-between gap-2">
+                                      <span class="min-w-0 flex-1 truncate text-xs font-medium text-gray-950 group-hover:text-brand-600 dark:text-gray-100 dark:group-hover:text-brand-400">
+                                        {resolveText(q.title, locale)}
                                       </span>
+                                      <div class="flex shrink-0 items-center gap-1">
+                                        {q.recurring && (
+                                          <span class="rounded bg-amber-50 px-1.5 py-0.5 text-[10px] font-medium leading-none text-amber-700 ring-1 ring-inset ring-amber-600/20 dark:bg-amber-950/70 dark:text-amber-300 dark:ring-amber-400/30">
+                                            {COPY.recurringBadge}
+                                          </span>
+                                        )}
+                                        <span class="mono shrink-0 rounded bg-brand-50 px-1.5 py-0.5 text-[11px] font-semibold leading-none text-brand-700 ring-1 ring-inset ring-brand-600/20 dark:bg-brand-950/80 dark:text-brand-300 dark:ring-brand-400/30">
+                                          +{q.exp} EXP
+                                        </span>
+                                      </div>
                                     </div>
-                                  </div>
+                                  </button>
 
-                                  <div class="mt-1 flex min-w-0 items-center justify-between gap-2 text-[11px] leading-tight text-gray-500 dark:text-gray-400">
-                                    <span class="mono min-w-0 flex-1 truncate">
+                                  <div class="mt-1 flex min-w-0 items-center gap-1.5 text-[11px] leading-tight text-gray-500 dark:text-gray-400">
+                                    <span class="mono shrink-0 whitespace-nowrap">
                                       #{q.issueNumber}
-                                      {q.prNumber ? ` · PR #${q.prNumber}` : ""} ·{" "}
-                                      {q.assignee ? `@${q.assignee}` : COPY.unclaimed}
+                                      {q.prNumber ? ` · PR #${q.prNumber}` : ""}
                                     </span>
-                                    <span class="shrink-0 text-brand-600 group-hover:underline dark:text-brand-400">
+                                    <span aria-hidden="true">·</span>
+                                    <QuestPeople quest={q} locale={locale} />
+                                    <button
+                                      type="button"
+                                      data-quest-open={q.id}
+                                      class="shrink-0 cursor-pointer text-brand-600 hover:underline dark:text-brand-400"
+                                    >
                                       {COPY.details} →
-                                    </span>
+                                    </button>
                                   </div>
-                                </button>
+                                </div>
                               ))}
                             </div>
                           );
@@ -242,7 +254,7 @@ function tasksFor(domain: QuestDomainId, status: QuestStatus): QuestItem[] {
         class="site-leave m-auto w-[calc(100%-2rem)] max-w-lg text-left"
       >
         <div class="site-leave-body">
-          <div class="flex items-start justify-between gap-3">
+          <div class="flex flex-col items-start justify-between gap-3 sm:flex-row">
             <h2 class="text-lg font-semibold tracking-tight text-gray-950 dark:text-white">
               {resolveText(q.title, locale)}
             </h2>
@@ -266,9 +278,10 @@ function tasksFor(domain: QuestDomainId, status: QuestStatus): QuestItem[] {
             </div>
           </div>
 
-            <p class="mt-3 text-sm leading-relaxed text-gray-600 dark:text-gray-300">
-              {resolveText(q.description, locale)}
-            </p>
+            <div
+              class="quest-description md-body mt-3 text-sm text-gray-600 dark:text-gray-300"
+              set:html={renderQuestDescription(resolveText(q.description, locale))}
+            />
 
             <div class="mt-4">
               <div class="text-xs font-medium text-gray-500 dark:text-gray-400">
@@ -390,6 +403,24 @@ function tasksFor(domain: QuestDomainId, status: QuestStatus): QuestItem[] {
     ))
   }
 </div>
+
+<style>
+  .quest-description > :global(:first-child) {
+    margin-top: 0;
+  }
+
+  .quest-description :global(pre) {
+    max-width: 100%;
+    overflow-x: auto;
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    background: var(--color-gray-50);
+  }
+
+  :global(.dark) .quest-description :global(pre) {
+    background: var(--color-gray-900);
+  }
+</style>
 
 <script>
   const root = document.querySelector<HTMLElement>("[data-quests-root]");

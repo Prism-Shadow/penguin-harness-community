@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" width="900" height="520">
+  <!-- Series A, goal: a three-ring target with an arrow in the centre, inside an open loop
+       arrow with three ticks numbered 1 2 3. Centre (450, 262). -->
+  <defs>
+    <clipPath id="g-core"><circle cx="450" cy="262" r="50" /></clipPath>
+  </defs>
+
+  <!-- open loop: 310 degrees clockwise, the gap at the upper right where the arrow's tail sits -->
+  <path class="ln" d="M642.1 172.4A212 212 0 1 1 504.9 57.2" />
+  <path class="ln" d="M483.9 66L504.9 57.2 491.1 39" />
+
+  <!-- ticks and their numbers -->
+  <path class="ln" d="M591.4 403.4L608.4 420.4M308.6 403.4L291.6 420.4M308.6 120.6L291.6 103.6" />
+  <g class="txt lt" font-size="40" text-anchor="middle" dominant-baseline="central">
+    <text x="632" y="444">1</text>
+    <text x="268" y="444">2</text>
+    <text x="268" y="80">3</text>
+  </g>
+
+  <!-- target -->
+  <circle class="ln f12" cx="450" cy="262" r="150" />
+  <circle class="ln f12" cx="450" cy="262" r="100" />
+  <circle class="paper" cx="450" cy="262" r="50" />
+  <circle class="acc" cx="450" cy="262" r="24" />
+
+  <!-- arrow: shaft from the centre to the upper right, fletching at its tail -->
+  <path class="ln" d="M450 262L580 132" />
+  <path class="ink-ln" d="M450 262L580 132" clip-path="url(#g-core)" style="stroke-width: 5px" />
+  <path class="ln" d="M589.9 141.9L567.3 144.7 570.1 122.1M578.6 153.2L556 156 558.8 133.4" />
+  <circle class="ink" cx="450" cy="262" r="6" />
+</svg>
