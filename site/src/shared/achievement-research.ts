@@ -980,7 +980,7 @@ const multiDomainHarnessComparison: TopicDefinition = {
 /* ---------- 5. Vertical App Center Plugins (垂域应用中心插件) ---------- */
 function buildAppTopic(config: {
   id: string;
-  title: Text;
+  title: TopicDefinition["title"];
   protoWork: Text;
   protoEvidence: Text;
   protoIssues?: number[];
@@ -1051,8 +1051,8 @@ const appSuperAgentTaskTree = buildAppTopic({
   id: "app-super-agent-task-tree",
   implementationIssue: 128,
   title: {
-    zh: "Super Agent 任务树与依赖看板",
-    en: "Super Agent Task Tree and Dependency Board",
+    zh: ["Super Agent 任务树与", "依赖看板"],
+    en: ["Super Agent Task Tree and", "Dependency Board"],
   },
   protoState: "done",
   protoIssues: [50],
@@ -1079,8 +1079,8 @@ const appSuperAgentTaskTree = buildAppTopic({
     en: "Super Agent orchestration toolchain supporting task tree decomposition, parallel dispatch, and dependency scheduling.",
   },
   uiWork: {
-    zh: "接入真实团队运行状态，显示任务、负责人、当前进度和前置依赖。点击汇总任务可查看它正在等待哪些任务。",
-    en: "Use live team state to display tasks, owners, progress, and prerequisites. Selecting the summary task reveals what it is waiting for.",
+    zh: "接入真实多 Agent 运行状态，构建「左侧 AgentTeams 子代理实时活动流 + 右侧任务树与依赖 DAG 拓扑图」双栏看板，点击或悬停节点可查看上游阻塞项与已交付产物。",
+    en: "Connect live multi-agent state to a split-pane board with a sub-agent activity stream on the left and an interactive task dependency DAG on the right, highlighting blockers and deliverables on click/hover.",
   },
   uiEvidence: {
     zh: "可交互的 Super Agent 任务树与 DAG 依赖看板前端工作台。",
@@ -1101,41 +1101,43 @@ const appOverleafPaper = buildAppTopic({
   id: "app-overleaf-paper-workbench",
   implementationIssue: 129,
   title: {
-    zh: "接入 Overleaf 的 AI 论文写作与编译工作台",
-    en: "Overleaf-Integrated AI Paper Writing and Compilation Workbench",
+    zh: ["接入 Overleaf 的", "AI 论文写作与编译工作台"],
+    en: ["Overleaf-Integrated AI Paper", "Writing and Compilation Workbench"],
   },
-  protoIssues: [118, 122],
+  protoIssues: [118, 122, 68],
   protoWork: {
-    zh: "以社区论文项目为例，梳理导入 LaTeX 源文件、检查 PDF 和定位审阅意见的流程。",
-    en: "Use a community paper project to define the LaTeX import, PDF review, and source-linked feedback workflow.",
+    zh: "围绕社区多文件 LaTeX 论文工程（#118、#122），定义对接 Overleaf、AI 章节撰写润色、实验图表插入、结构化审稿批注与实时 PDF 编译的工作台流程。",
+    en: "Grounded in multi-file LaTeX paper projects (#118, #122), define the workflow for Overleaf integration, AI drafting/polishing, figure integration, structured review findings, and live PDF compilation.",
   },
   protoEvidence: {
-    zh: "一份含章节、图表和参考文献的样稿。",
-    en: "A sample paper project with sections, figures, and references.",
+    zh: "包含多 .tex 章节、图表与 .bib 参考文献的完整论文样稿及工作台交互规范。",
+    en: "A multi-file LaTeX sample project with sections, figures, and .bib references plus the workbench specification.",
   },
+  skillIssues: [68],
   skillWork: {
-    zh: "解析 LaTeX 项目结构，编译 PDF，将审阅意见关联到具体文件和段落。",
-    en: "Parse the LaTeX project, compile its PDF, and attach review findings to specific files and passages.",
+    zh: "封装多文件 LaTeX 编译与错误行号映射、AI 章节学术化润色与 BibTeX 整理、以及绑定到具体源文件与段落的结构化 AI 审稿批注。",
+    en: "Package multi-file LaTeX compilation with line-mapped diagnostics, AI section polishing and BibTeX formatting, and structured AI review findings linked to source files and passages.",
   },
   skillEvidence: {
-    zh: "可复用的编译流程和带源文位置的审阅记录。",
-    en: "A reusable build workflow and review records with source locations.",
+    zh: "可复用的 LaTeX 编译流水线、AI 润色 Diff 生成器及带源文定位的审阅记录。",
+    en: "A reusable LaTeX build pipeline, AI diff generator, and review records with source locations.",
   },
   uiWork: {
-    zh: "导入 Overleaf 导出的项目压缩包，提供 PDF 预览、意见到源文的跳转和项目导出。",
-    en: "Import a project archive exported from Overleaf and provide PDF preview, source navigation from review findings, and project export.",
+    zh: "对接 Overleaf 工程（支持同步或标准 ZIP 往返），提供源码与编译 PDF 双栏同步预览、AI 撰写润色 Diff 对比、点击审稿意见跳转源码及一键应用修订。",
+    en: "Connect Overleaf projects with side-by-side LaTeX & live PDF preview, AI drafting diffs, source navigation from review findings, and one-click revision application.",
   },
   uiEvidence: {
-    zh: "可安装的论文审阅工作台插件。",
-    en: "An installable paper review workbench.",
+    zh: "可安装的接入 Overleaf 的 AI 论文写作与编译工作台插件。",
+    en: "An installable Overleaf-integrated AI paper writing and compilation workbench plugin.",
   },
+  evalIssues: [118, 122, 68],
   evalWork: {
-    zh: "用一份样稿跑通导入、编译、定位审阅意见和导出。检查导出后的项目能否再次编译。",
-    en: "Import and compile a sample paper, navigate from a review finding to its source, and export the project. Verify that the exported project compiles.",
+    zh: "用多文件 LaTeX 论文样稿跑通 AI 润色/审阅、批注跳转源码、一键应用 Diff、PDF 重编译及与 Overleaf 的兼容往返验证。",
+    en: "Verify AI polishing/review, finding-to-source navigation, one-click diff application, live PDF recompilation, and Overleaf round-trip compatibility on a multi-file sample paper.",
   },
   evalEvidence: {
-    zh: "完整产出的 LaTeX 论文项目案例与去 AI 味盲测通过率报告。",
-    en: "A complete LaTeX paper case study and blind de-AI writing evaluation report.",
+    zh: "完整产出的 LaTeX 论文项目案例、演录记录与去 AI 味盲测通过率报告。",
+    en: "A complete LaTeX paper case study, walkthrough recording, and blind de-AI writing evaluation report.",
   },
 });
 
@@ -1143,8 +1145,8 @@ const appShortDramaStudio = buildAppTopic({
   id: "app-short-drama-studio",
   implementationIssue: 127,
   title: {
-    zh: "AI 短剧分镜与视频生成工作台",
-    en: "AI Short Drama Storyboard and Video Workbench",
+    zh: ["AI 短剧分镜与", "视频生成工作台"],
+    en: ["AI Short Drama Storyboard", "and Video Workbench"],
   },
   protoState: "done",
   protoRefs: [
@@ -1186,86 +1188,47 @@ const appShortDramaStudio = buildAppTopic({
   },
 });
 
-const appHealthAssistant = buildAppTopic({
-  id: "app-health-assistant",
-  title: {
-    zh: "AI 健康档案与复查提醒助手",
-    en: "AI Health Records & Follow-Up Assistant",
-  },
-  protoIssues: [52],
-  protoWork: {
-    zh: "围绕多次体检资料难以核对、复查日期容易遗漏的场景，定义个人健康档案流程。",
-    en: "Define a personal health records workflow for comparing checkups and tracking follow-up dates.",
-  },
-  protoEvidence: {
-    zh: "一组模拟体检报告及一份包含复查安排的示例档案。",
-    en: "A set of synthetic checkup reports and a sample record with follow-up dates.",
-  },
-  skillWork: {
-    zh: "抽取体检日期、指标、单位及原文位置。由用户核对抽取结果、确认可比较的记录并设置复查提醒。",
-    en: "Extract checkup dates, values, units, and source locations. Let users verify the extraction, confirm comparable records, and schedule follow-up reminders.",
-  },
-  skillEvidence: {
-    zh: "每条指标记录可追溯到报告原文，用户确认后可生成提醒。",
-    en: "Each measurement links to its source report, and reminders are scheduled after user confirmation.",
-  },
-  uiWork: {
-    zh: "在 PenguinHarness 应用中心提供档案工作台，支持导入报告、核对指标、查看同口径的历史记录和管理提醒。",
-    en: "Build a PenguinHarness App Center workbench for report import, measurement review, comparable history, and reminder management.",
-  },
-  uiEvidence: {
-    zh: "可安装的健康档案工作台插件。",
-    en: "An installable health records workbench plugin.",
-  },
-  evalWork: {
-    zh: "用两份模拟体检报告跑通导入、纠正抽取结果、核对历史和设置复查提醒。",
-    en: "Use two synthetic checkup reports to verify import, extraction corrections, history review, and follow-up reminders.",
-  },
-  evalEvidence: {
-    zh: "可复跑的演示案例及指标溯源、提醒触发记录。",
-    en: "A reproducible demo with measurement provenance and reminder delivery records.",
-  },
-});
-
 const appEcommerceStrategy = buildAppTopic({
   id: "app-ecommerce-strategy-workbench",
   implementationIssue: 130,
   title: {
-    zh: "AI 电商选品与策略分析工作台",
-    en: "AI E-Commerce Selection and Strategy Workbench",
+    zh: ["AI 电商选品与", "策略分析工作台"],
+    en: ["AI E-Commerce Selection", "and Strategy Workbench"],
   },
   protoIssues: [53],
   protoWork: {
-    zh: "以小店选品和促销决策为例，约定销量、售价、成本及库存等输入字段。",
-    en: "Use small-store product selection and promotion planning as the scenario, with sales, prices, costs, and inventory as inputs.",
+    zh: "关联商业营收基准（#53），围绕商品经营表（售价、成本、销量、库存、转化）与用户评论语料，定义智能选品、评论痛点挖掘与促销策略推演流程。",
+    en: "Aligned with the commercial revenue benchmark (#53), define the workflow for product selection, customer review pain-point mining, and promotion strategy simulation.",
   },
   protoEvidence: {
-    zh: "一份脱敏商品经营表和一项真实的选品或促销决策样例。",
-    en: "A de-identified product operations table and a concrete product selection or promotion scenario.",
+    zh: "包含商品经营数据与用户评价语料的测试样表及选品促销分析规范。",
+    en: "A sample dataset combining product operations metrics and customer reviews plus the strategy analysis specification.",
   },
+  skillIssues: [53],
   skillWork: {
-    zh: "校验导入字段，计算商品毛利和促销后的毛利，并保留指标与原始数据行的关联。",
-    en: "Validate imported fields, calculate product and post-promotion margins, and keep each metric linked to its input rows.",
+    zh: "校验经营字段并试算促销前后单位毛利与保本销量增幅；调用 Agent/大模型完成评论痛点聚类、选品排序推荐与高转化卖点文案生成，且结论关联原始数据行与评论证据。",
+    en: "Validate operational metrics and simulate promotion margins/break-even lift; invoke the Agent/LLM for review pain-point clustering, candidate ranking, and selling-point copy with row/review provenance.",
   },
   skillEvidence: {
-    zh: "带可核对计算口径的商品对照表。",
-    en: "A product comparison table with verifiable calculations.",
+    zh: "带可核对计算口径的商品毛利试算器与评论痛点聚类/策略生成工具链。",
+    en: "A margin simulator with verifiable calculations and an AI review clustering & strategy generation toolchain.",
   },
   uiWork: {
-    zh: "导入经营表，比较候选商品、试算促销价格，查看并导出带数据依据的策略建议。",
-    en: "Import a product table, compare candidates, simulate promotion prices, and view or export recommendations linked to the data.",
+    zh: "导入经营表与评论样本，对比候选商品、试算促销折扣利润，调用 AI 生成并导出带数据与评论溯源依据的选品及营销策略报告。",
+    en: "Import product tables and reviews, compare candidates, simulate promotion discounts, and generate/export AI selection and marketing reports with traceable citations.",
   },
   uiEvidence: {
-    zh: "面向电商运营场景的 AI 策略工作台插件。",
-    en: "AI E-Commerce Strategy Workbench plugin for store operations.",
+    zh: "面向电商运营场景的 AI 选品与策略分析工作台插件。",
+    en: "AI E-Commerce Selection and Strategy Workbench plugin for store operations.",
   },
+  evalIssues: [53],
   evalWork: {
-    zh: "用固定经营样表核对毛利计算，并从一条选品或促销建议追溯到相关指标和原始商品行。",
-    en: "Use a fixed sample table to check margins and trace a product or promotion recommendation back to its metrics and source rows.",
+    zh: "用固定经营样表与评论样本核对毛利试算结果，并验证 AI 选品推荐、痛点分析与促销建议均能追溯到具体商品指标、原始数据行或评论证据。",
+    en: "Check margin calculations on the fixed sample dataset and verify that every AI product selection, pain-point, and promotion recommendation traces back to specific metrics, rows, and reviews.",
   },
   evalEvidence: {
-    zh: "经营样表、预期计算结果和一份可复跑的策略报告。",
-    en: "Sample business data, expected calculations, and a reproducible strategy report.",
+    zh: "经营与评论样表、预期试算结果及一份数据可溯源的 AI 选品与促销策略报告。",
+    en: "Sample operations & review dataset, expected calculations, and a traceable AI selection & promotion strategy report.",
   },
 });
 
@@ -1273,42 +1236,42 @@ const appMarketResearchQuant = buildAppTopic({
   id: "app-market-research-quant",
   implementationIssue: 131,
   title: {
-    zh: "AI 市场投研与策略回测工作台",
-    en: "AI Market Research and Strategy Backtesting Workbench",
+    zh: ["AI 市场投研与", "策略回测工作台"],
+    en: ["AI Market Research and", "Strategy Backtesting Workbench"],
   },
   protoState: "done",
   protoRefs: [{ label: { zh: "dshbook 第 10 章《构建市场投研助手》", en: "dshbook Ch.10 Market Research Assistant" }, url: `${REPO.dshbook}/chapter10/` }],
   protoWork: {
-    zh: "参考 dshbook 第 10 章的指数双均线信号、历史回测、市场日报和个股对比，定义投研工作台。",
-    en: "Use the index moving-average signals, historical backtest, daily market report, and stock comparison in dshbook Ch.10 as workbench examples.",
+    zh: "参考 dshbook 第 10 章的指数双均线信号、无未来函数历史回测、市场日报与个股对比，定义 AI 市场投研与策略回测工作台。",
+    en: "Use the index moving-average signals, lookahead-free historical backtest, daily market report, and stock comparison in dshbook Ch.10 to define the AI market research workbench.",
   },
   protoEvidence: {
-    zh: "书中已有策略与基准的净值曲线、回撤统计和注明行情截止时间的个股对比报告。",
-    en: "The chapter includes strategy and benchmark equity curves, drawdown figures, and a stock comparison report with data cutoffs.",
+    zh: "书中已有策略与基准的净值曲线、回撤统计和注明行情截止时间的投研对比报告。",
+    en: "The chapter includes strategy and benchmark equity curves, drawdown figures, and a research report with data cutoffs.",
   },
   skillWork: {
-    zh: "导入带来源及截止日期的历史行情，按用户选定的规则计算信号、累计收益和最大回撤。用信号出现之后的行情模拟成交。",
-    en: "Import historical prices with source and cutoff metadata. Compute signals, cumulative return, and maximum drawdown for a selected rule, with simulated fills after the signal.",
+    zh: "支持通过自然语言/Agent 辅助配置量化规则，导入带来源及截止日期的 OHLCV 历史行情，按无未来函数口径计算信号、模拟成交、累计收益与最大回撤，并由 AI 生成数据可溯源的投研复盘报告。",
+    en: "Support natural-language/Agent-assisted strategy configuration, import OHLCV data with source/cutoff metadata, run lookahead-free backtests, and synthesize traceable AI research reports.",
   },
   skillEvidence: {
-    zh: "可用固定行情数据复跑的信号清单、回测脚本和指标汇总。",
-    en: "A signal ledger, backtest script, and metric summary reproducible from a fixed price dataset.",
+    zh: "可用固定行情数据复跑的信号与成交账本、无未来函数回测脚本及 AI 投研报告生成工具链。",
+    en: "A reproducible signal/fill ledger, lookahead-free backtest script, and AI research report generation toolchain.",
   },
   uiWork: {
-    zh: "提供行情导入、回测规则配置、策略与基准对比图和报告导出。",
-    en: "Provide price-data import, backtest rule configuration, strategy and benchmark charts, and report export.",
+    zh: "提供历史行情导入、自然语言/控件策略参数配置、K 线买卖信号与策略/基准净值回撤对比图，以及 AI 可溯源投研复盘报告生成与导出。",
+    en: "Provide historical price import, natural-language/UI strategy configuration, K-line buy/sell signal and equity/drawdown comparison charts, and traceable AI research report export.",
   },
   uiEvidence: {
-    zh: "可交互的 AI 市场投研与量化回测工作台插件。",
-    en: "Interactive AI market research and quantitative backtesting workbench plugin.",
+    zh: "可交互的 AI 市场投研与策略回测工作台插件。",
+    en: "Interactive AI market research and strategy backtesting workbench plugin.",
   },
   evalWork: {
-    zh: "用同一份历史行情复跑双均线样例，核对信号和成交日期、净值与最大回撤。报告须注明行情来源、截止日期与交易成本假设。",
-    en: "Rerun the moving-average example from the same historical data and check signal and fill dates, equity, and maximum drawdown. Document data sources, cutoff dates, and transaction-cost assumptions.",
+    zh: "用固定历史行情复跑 dshbook 第 10 章双均线案例（注明 T+1 开盘或收盘成交口径），核对信号与成交日期、净值与最大回撤，并验证导出的 AI 投研报告中所有日期与指标均可溯源至回测账本。",
+    en: "Reproduce the dshbook Ch.10 dual-moving-average case on fixed historical data, verify signal/fill dates, equity, and drawdown, and confirm all dates and metrics in the AI report trace to the backtest ledger.",
   },
   evalEvidence: {
-    zh: "可复跑的回测样例、策略与基准对照报告。",
-    en: "A reproducible backtest example and a comparison report for the strategy and benchmark.",
+    zh: "固定输入数据与参数、预期指标结果及数据可溯源的 AI 投研复盘报告。",
+    en: "Fixed input data and parameters, expected metrics, and a traceable AI backtest research report.",
   },
 });
 
@@ -1406,7 +1369,6 @@ const versions: VersionDefinition[] = [
       ],
       apps: [
         ...publishedAppProjects,
-        appHealthAssistant,
         appDigitalSecretaryPoster,
       ],
     },
