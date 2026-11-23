@@ -2,15 +2,15 @@
 
 [English](algorithm.md)
 
-- 提交入口：内置插件代码提交至 [PenguinHarness](https://github.com/Prism-Shadow/penguin-harness)。第三方插件发布后，按[插件索引提交指南](https://github.com/Prism-Shadow/penguin-harness-plugins/blob/main/CONTRIBUTING.md)提交收录条目。
+- 默认提交仓库：[PenguinHarness Plugins](https://github.com/Prism-Shadow/penguin-harness-plugins)。插件包发布后，按[插件索引提交指南](https://github.com/Prism-Shadow/penguin-harness-plugins/blob/main/CONTRIBUTING.md)提交收录条目。
 - 插件格式：[PenguinHarness 插件文档](https://github.com/Prism-Shadow/penguin-harness/blob/main/packages/docs/content/plugins.zh.md)
 
 ## 提交流程
 
 1. **确认插件格式**：按目标 PenguinHarness 版本的插件文档打包，并遵循 [RFC-0003 的算法与数据解耦原则](../rfcs/RFC-0003-plugin.zh.md#设计原则算法与数据解耦)。
-2. **提出 Issue**：查找已有任务，或在对应项目仓库新建 Issue，说明计划实现或复现的 RSI 算法、论文来源与插件组件构成。
+2. **提出 Issue**：查找已有任务，或在 [PenguinHarness Plugins](https://github.com/Prism-Shadow/penguin-harness-plugins/issues) 新建 Issue，说明计划实现或复现的 RSI 算法、论文来源与插件组件构成。
 3. **Issue 评论区占坑（可选）**：在 Issue 评论区留言认领（占坑是可选步骤，主要用于防止多人同时开发同一个 RSI 算法插件撞车）。
-4. **提交 PR**：完成插件开发与效果测试后，按提交入口选择仓库，并在 PR 中关联对应 Issue。
+4. **提交 PR**：完成插件开发与效果测试后，发布可安装的插件包，再向 PenguinHarness Plugins 提交收录条目并关联对应 Issue。任务明确要求随 PenguinHarness 内置时，按[参与 PenguinHarness](harness.zh.md)的流程向框架主仓库提交代码 PR。
 5. **Maintainer 审核合并**：按[算法 PR 合入标准](#算法-pr-合入标准)逐项审核，通过后合入。
 
 ## 算法 PR 合入标准
@@ -51,15 +51,16 @@
 
 ### 3. PR 示例
 
-下面是插件实现 PR 的示例。索引条目按插件索引提交指南填写。
+下面是插件收录 PR 的正文示例。索引条目的格式见上方的插件索引提交指南。
 
-**标题**：`feat(plugin): add <plugin-id>`
+**标题**：`feat(plugin): add <package-name>@<version>`
 
 ```markdown
 Closes <完整 Issue URL，如适用>
 
-### 变更内容
-- 新增 `<plugin-id>/` 插件包，实现 <RSI 算法名称>（算法与具体数据解耦）
+### 收录内容
+- 收录 `<package-name>@<version>`，实现 <RSI 算法名称>
+- **插件源码**：<对应插件版本的源码链接>
 - **方法对应关系**：<论文或上游链接> → <核心机制及对应实现位置>；<与原方法的差异，如有>
 - 提供插件的安装说明和调用示例
 

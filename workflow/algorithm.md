@@ -2,15 +2,15 @@
 
 [中文版](algorithm.zh.md)
 
-- Where to submit: Open built-in plugin code PRs in [PenguinHarness](https://github.com/Prism-Shadow/penguin-harness). For a third-party plugin, publish it first, then submit an entry using the [plugin index submission guide](https://github.com/Prism-Shadow/penguin-harness-plugins/blob/main/CONTRIBUTING.md).
+- Default submission repository: [PenguinHarness Plugins](https://github.com/Prism-Shadow/penguin-harness-plugins). After publishing the package, submit an entry using the [plugin index submission guide](https://github.com/Prism-Shadow/penguin-harness-plugins/blob/main/CONTRIBUTING.md).
 - Plugin format: [PenguinHarness plugin documentation](https://github.com/Prism-Shadow/penguin-harness/blob/main/packages/docs/content/plugins.en.md)
 
 ## Submission Workflow
 
 1. **Check the Plugin Format**: Follow the plugin documentation for the target PenguinHarness version and the [decoupling principle in RFC-0003](../rfcs/RFC-0003-plugin.md#design-principle-decoupling-algorithm-from-data).
-2. **Find or Open an Issue**: Look for an existing task or open an Issue in the relevant project repository. Describe the RSI algorithm, paper reference, and planned plugin components.
+2. **Find or Open an Issue**: Look for an existing task or open an Issue in [PenguinHarness Plugins](https://github.com/Prism-Shadow/penguin-harness-plugins/issues). Describe the RSI algorithm, paper reference, and planned plugin components.
 3. **Claim in Issue Comments (Optional)**: Leave a comment on the Issue to claim the plugin implementation (claiming is optional and prevents duplicate effort on the same algorithm).
-4. **Submit a PR**: Implement and test the plugin, then open a PR in the appropriate repository and link the related Issue.
+4. **Submit a PR**: Implement and test the plugin, publish an installable package, then submit its index entry to PenguinHarness Plugins and link the related Issue. If the task explicitly calls for a built-in plugin, follow the [PenguinHarness contribution workflow](harness.md) and open the code PR in the main repository.
 5. **Maintainer Review & Merge**: Merge the PR once it meets all [algorithm PR merge criteria](#algorithm-pr-merge-criteria).
 
 ## Algorithm PR Merge Criteria
@@ -51,15 +51,16 @@ I would like to claim this RSI algorithm plugin and plan to submit a PR by YYYY-
 
 ### 3. PR Example
 
-This example is for a plugin implementation PR. For an index entry, follow the plugin index submission guide above.
+This example shows the description for a plugin listing PR. Follow the plugin index submission guide above for the entry format.
 
-**Title**: `feat(plugin): add <plugin-id>`
+**Title**: `feat(plugin): add <package-name>@<version>`
 
 ```markdown
 Closes <full Issue URL, if applicable>
 
 ### Summary
-- Added `<plugin-id>/` implementing <RSI Algorithm Name> (decoupled from specific datasets)
+- Lists `<package-name>@<version>`, which implements <RSI Algorithm Name>
+- **Plugin source**: <link to the source for this release>
 - **Method mapping**: <paper or upstream link> → <core mechanisms and implementation paths>; <deviations, if any>
 - Provided installation instructions and an example that runs the plugin
 
