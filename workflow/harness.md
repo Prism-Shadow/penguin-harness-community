@@ -48,14 +48,8 @@ I would like to work on this Issue and plan to submit a PR by YYYY-MM-DD.
 
 ```markdown
 ## What this changes
-<Describe the change and why it is needed.>
-Closes <full Issue URL, if applicable>
+<!-- Summarize the change and why it is needed. Add Closes <full Issue URL> if applicable. -->
 
 ## Verification
-<List the checks or reproduction steps you ran and their results.>
-
-## Checklist
-- [ ] Added English and Chinese changelog entries under `changelog/unreleased/`.
-- [ ] Updated documentation where the change affects documented behavior.
-- [ ] Confirmed the diff, logs, and screenshots contain no API keys, tokens, or other credentials.
+<!-- List the checks or reproduction steps you ran and their results. -->
 ```

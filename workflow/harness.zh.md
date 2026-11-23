@@ -48,14 +48,8 @@ PR 标题和正文用英文，按 [主仓 PR 模板](https://github.com/Prism-Sh
 
 ```markdown
 ## What this changes
-<Describe the change and why it is needed.>
-Closes <full Issue URL, if applicable>
+<!-- 简述本次 PR 完成的功能或修复点，以及改动原因。有对应 Issue 时，填写 Closes <完整 Issue URL>。 -->
 
 ## Verification
-<List the checks or reproduction steps you ran and their results.>
-
-## Checklist
-- [ ] Added English and Chinese changelog entries under `changelog/unreleased/`.
-- [ ] Updated documentation where the change affects documented behavior.
-- [ ] Confirmed the diff, logs, and screenshots contain no API keys, tokens, or other credentials.
+<!-- 列出实际运行的检查或复现步骤及结果。 -->
 ```
