@@ -1101,8 +1101,8 @@ const appOverleafPaper = buildAppTopic({
   id: "app-overleaf-paper-workbench",
   implementationIssue: 129,
   title: {
-    zh: "面向 Overleaf 的论文审阅工作台",
-    en: "Overleaf Paper Review Workbench",
+    zh: "接入 Overleaf 的 AI 论文写作与编译工作台",
+    en: "Overleaf-Integrated AI Paper Writing and Compilation Workbench",
   },
   protoIssues: [118, 122],
   protoWork: {
@@ -1273,8 +1273,8 @@ const appMarketResearchQuant = buildAppTopic({
   id: "app-market-research-quant",
   implementationIssue: 131,
   title: {
-    zh: "市场投研与策略回测工作台",
-    en: "Market Research and Strategy Backtesting Workbench",
+    zh: "AI 市场投研与策略回测工作台",
+    en: "AI Market Research and Strategy Backtesting Workbench",
   },
   protoState: "done",
   protoRefs: [{ label: { zh: "dshbook 第 10 章《构建市场投研助手》", en: "dshbook Ch.10 Market Research Assistant" }, url: `${REPO.dshbook}/chapter10/` }],
