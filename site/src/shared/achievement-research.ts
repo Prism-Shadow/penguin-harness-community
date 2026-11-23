@@ -60,6 +60,7 @@ const P = {
   dev: { zh: "待开发", en: "Pending development" },
   register: { zh: "待注册", en: "Pending registration" },
   benchAcceptance: { zh: "待基准验收", en: "Awaiting benchmark acceptance" },
+  previousStage: { zh: "等待前序阶段", en: "Awaiting a previous stage" },
 };
 
 const REPO = {
@@ -211,7 +212,7 @@ const ascendPr = `${REPO.harness}/pull/1627`;
 const ascendInference: TopicDefinition = {
   id: "ascend-inference-mtp",
   title: {
-    zh: ["面向昇腾芯片的 ", "Qwen3.8 推理性能优化"],
+    zh: "面向昇腾芯片的 Qwen3.8 推理性能优化",
     en: "Optimizing Qwen3.8 Inference on Ascend Chips",
   },
   phases: [
@@ -275,7 +276,7 @@ const ascendInference: TopicDefinition = {
 const solExecBenchErnie: TopicDefinition = {
   id: "sol-execbench-ernie-evolve",
   title: {
-    zh: ["用自进化算法", "自动编写高性能 GPU 算子"],
+    zh: "用自进化算法自动编写高性能 GPU 算子",
     en: "Writing High-Performance GPU Kernels through Self-Evolution",
   },
   phases: [
@@ -405,7 +406,7 @@ const autoBenchJudgeAlignment: TopicDefinition = {
 const turingBenchWritingRealism: TopicDefinition = {
   id: "turingbench-writing-realism",
   title: {
-    zh: ["AI 写作与生成产物的", "「去 AI 味」评测"],
+    zh: "AI 写作与生成产物的「去 AI 味」评测",
     en: "Evaluating Naturalness in AI Writing and Generated Content",
   },
   phases: [
@@ -530,7 +531,7 @@ const compactionUiPr = `${REPO.harness}/pull/1591`;
 const contextCompactionHandoff: TopicDefinition = {
   id: "context-compaction-handoff",
   title: {
-    zh: ["解决智能体在长任务", "压缩上下文时的「失忆」问题"],
+    zh: ["解决智能体在长任务压缩", "上下文时的「失忆」问题"],
     en: "Preserving Context When Agents Compact Long Tasks",
   },
   phases: [
@@ -920,8 +921,8 @@ const harnessCompPr = `${REPO.bench}/pull/21`;
 const multiDomainHarnessComparison: TopicDefinition = {
   id: "multi-domain-harness-comparison",
   title: {
-    zh: ["同一大模型在四大主流", " Agent 框架下的能力横评"],
-    en: "Comparing Four Agent Frameworks with the Same Base Model",
+    zh: "同一模型在不同harness中的对比测试",
+    en: "Comparing the Same Model Across Harnesses",
   },
   phases: [
     {
@@ -1446,6 +1447,14 @@ export function researchVersions(quests: QuestItem[], locale: Locale) {
       for (const stage of outcomes) {
         stage.state = "planned";
         stage.pending = resolveText(P.benchAcceptance, locale);
+      }
+    }
+    const firstPending = stages.findIndex((stage) => stage.state === "planned");
+    if (firstPending !== -1) {
+      for (const stage of stages.slice(firstPending + 1)) {
+        if (stage.state === "planned") continue;
+        stage.state = "planned";
+        stage.pending = resolveText(P.previousStage, locale);
       }
     }
     return {

@@ -19,7 +19,7 @@
 }
 .atlas .research-legend li { display: flex; align-items: center; gap: 6px; }
 
-/* One segment shape for the bar and its legend: a filled pill, outlined only once it has a state. */
+/* Shared fill and height for the bar segments and legend. */
 .atlas .research-phase::before,
 .atlas .research-legend-swatch {
   box-sizing: border-box;
@@ -44,9 +44,9 @@
   text-wrap: balance;
   overflow-wrap: anywhere;
 }
-.atlas .research-title-part { display: inline-block; max-inline-size: 100%; white-space: pre-wrap; }
-/* Five stages separated by gaps. Each button keeps a 30px target while the bar itself takes 8px of layout. */
-.atlas .research-phases { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; column-gap: 3px; margin-top: 10px; }
+.atlas .research-title-part { display: block; }
+/* A continuous bar with five independent hit areas. */
+.atlas .research-phases { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; margin-top: 10px; }
 .atlas .research-phase {
   display: grid;
   place-items: center;
@@ -61,9 +61,13 @@
   content: "";
   position: relative;
   width: 100%;
-  transition: height 0.15s;
+  border-radius: 0;
+  box-shadow: none;
 }
-.atlas .research-phase:is(:hover, :focus-visible, [aria-expanded="true"])::before { height: 12px; }
+.atlas .research-phase-cell:first-child .research-phase::before { border-radius: 4px 0 0 4px; }
+.atlas .research-phase-cell:last-child .research-phase::before { border-radius: 0 4px 4px 0; }
+.atlas .research-phase-cell:not(:last-child) .research-phase::before { border-inline-end: 1px solid var(--line-strong); }
+.atlas .research-phase:hover::before { box-shadow: inset 0 0 0 1px var(--phase-line, var(--line-strong)); }
 .atlas .research-phase:is(:focus-visible, [aria-expanded="true"])::before { outline: 2px solid var(--blue); outline-offset: 1px; }
 .atlas .research-phase:focus-visible { outline: none; }
 .atlas :is(.research-phase, .research-legend-swatch)[data-progress="active"] {
