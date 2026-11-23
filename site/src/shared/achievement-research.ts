@@ -1109,13 +1109,13 @@ const appOverleafPaper = buildAppTopic({
   id: "app-overleaf-paper-workbench",
   implementationIssue: 129,
   title: {
-    zh: ["接入 Overleaf 的", "AI 论文写作与编译工作台"],
-    en: ["Overleaf-Integrated AI Paper ", "Writing and Compilation Workbench"],
+    zh: ["兼容 Overleaf 的", "论文写作与编译工作台"],
+    en: ["Overleaf-Compatible Paper ", "Writing and Compilation Workbench"],
   },
   protoIssues: [118, 122, 68],
   protoWork: {
-    zh: "围绕社区多文件 LaTeX 论文工程（#118、#122），定义对接 Overleaf、AI 章节撰写润色、实验图表插入、结构化审稿批注与实时 PDF 编译的工作台流程。",
-    en: "Grounded in multi-file LaTeX paper projects (#118, #122), define the workflow for Overleaf integration, AI drafting/polishing, figure integration, structured review findings, and live PDF compilation.",
+    zh: "围绕社区多文件 LaTeX 论文工程（#118、#122），定义兼容 Overleaf 工程导入导出、AI 章节撰写润色、实验图表插入、结构化审稿批注与实时 PDF 编译的工作台流程。",
+    en: "Grounded in multi-file LaTeX paper projects (#118, #122), define the workflow for Overleaf project round-trip compatibility, AI drafting/polishing, figure integration, structured review findings, and live PDF compilation.",
   },
   protoEvidence: {
     zh: "包含多 .tex 章节、图表与 .bib 参考文献的完整论文样稿及工作台交互规范。",
@@ -1131,12 +1131,12 @@ const appOverleafPaper = buildAppTopic({
     en: "A reusable LaTeX build pipeline, AI diff generator, and review records with source locations.",
   },
   uiWork: {
-    zh: "对接 Overleaf 工程（支持同步或标准 ZIP 往返），提供源码与编译 PDF 双栏同步预览、AI 撰写润色 Diff 对比、点击审稿意见跳转源码及一键应用修订。",
-    en: "Connect Overleaf projects with side-by-side LaTeX & live PDF preview, AI drafting diffs, source navigation from review findings, and one-click revision application.",
+    zh: "无损导入导出 Overleaf 标准项目 ZIP 包，提供源码与编译 PDF 双栏同步预览、AI 撰写润色 Diff 对比、点击审稿意见跳转源码及一键应用修订。",
+    en: "Support lossless Overleaf project ZIP import/export with side-by-side LaTeX & live PDF preview, AI drafting diffs, source navigation from review findings, and one-click revision application.",
   },
   uiEvidence: {
-    zh: "可安装的接入 Overleaf 的 AI 论文写作与编译工作台插件。",
-    en: "An installable Overleaf-integrated AI paper writing and compilation workbench plugin.",
+    zh: "可安装的兼容 Overleaf 的论文写作与编译工作台插件。",
+    en: "An installable Overleaf-compatible paper writing and compilation workbench plugin.",
   },
   evalIssues: [118, 122, 68],
   evalWork: {
