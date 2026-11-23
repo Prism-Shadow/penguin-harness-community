@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" width="900" height="520">
+  <!-- Series A, humanizer: a page of prose with two passages marked as rewritten, and a pencil
+       finishing the last line. -->
+
+  <rect class="paper card" x="110" y="30" width="460" height="460" rx="18" />
+  <rect class="acc" x="138" y="146" width="380" height="34" rx="8" />
+  <rect class="acc" x="138" y="286" width="300" height="34" rx="8" />
+  <path class="ink-ln" d="M156 93h360M156 163h330M156 233h356M156 303h250M156 373h346M156 438h236" />
+
+  <!-- pencil, tip at the end of the last line -->
+  <g transform="translate(410 440) rotate(-50)">
+    <path class="acc card" d="M0 0L62-28H330V28H62Z" />
+    <path class="paper" d="M62-28H330V28H62Z" />
+    <path class="ink-ln" d="M0 0L62-28H330V28H62ZM62-28V28M330-28V28M62 0H330" />
+    <path class="ink" d="M0 0L20-9V9Z" />
+    <rect class="acc" x="330" y="-28" width="34" height="56" />
+    <path class="ink-ln" d="M330-28h34v56h-34M364-28h28a14 14 0 0 1 14 14v28a14 14 0 0 1-14 14h-28" />
+  </g>
+</svg>

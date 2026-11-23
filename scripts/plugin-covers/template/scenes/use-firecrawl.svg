@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" width="900" height="520">
+  <!-- Series A, use-firecrawl: a busy web page goes through the plugin's flame and comes out as
+       a clean markdown page (a heading sign, a title bar, bullets). -->
+
+  <!-- web page -->
+  <rect class="ln f12" x="30" y="80" width="280" height="360" rx="20" />
+  <path class="ln" d="M30 132H310" />
+  <circle class="ln" cx="62" cy="106" r="6" />
+  <circle class="ln" cx="84" cy="106" r="6" />
+  <rect class="f22" x="56" y="156" width="228" height="104" rx="10" />
+  <rect class="f22" x="56" y="372" width="90" height="40" rx="10" />
+  <rect class="f22" x="162" y="372" width="122" height="40" rx="10" />
+  <path class="ln" d="M56 292h228M56 324h168" />
+
+  <!-- the flame: the icon's own outline at 10x, centred on (450, 260) -->
+  <path class="ln dash" d="M318 260H364M536 260H582" />
+  <g transform="translate(330 140) scale(10)">
+    <path
+      class="paper card"
+      d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"
+    />
+  </g>
+
+  <!-- markdown page -->
+  <rect class="paper card" x="590" y="80" width="280" height="360" rx="20" />
+  <text class="txt ink" x="622" y="150" font-size="56" dominant-baseline="central">#</text>
+  <rect class="ink" x="666" y="142" width="150" height="16" rx="8" />
+  <path class="acc-ln" d="M622 214h216M622 250h176" />
+  <g class="ink">
+    <circle cx="628" cy="308" r="7" />
+    <circle cx="628" cy="346" r="7" />
+    <circle cx="628" cy="384" r="7" />
+  </g>
+  <path class="ink-ln" d="M652 308h160M652 346h186M652 384h120" />
+</svg>

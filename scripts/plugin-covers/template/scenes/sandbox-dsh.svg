@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" width="900" height="520">
+  <!-- Series D, sandbox-dsh: the shield holding two chain links (the adaptor joining the harness
+       to the DSH backend chain), and the `$ _` prompt chip under it. -->
+  <path class="ln f12" d="M450 24L612 86V196C612 296 546 360 450 396 354 360 288 296 288 196V86Z" />
+
+  <g transform="rotate(-45 450 205)">
+    <rect class="ln f16" x="340" y="175" width="140" height="60" rx="30" />
+    <rect class="ln f16" x="420" y="175" width="140" height="60" rx="30" />
+  </g>
+
+  <rect class="paper card" x="370" y="428" width="160" height="60" rx="30" />
+  <text class="txt ink" x="450" y="459" font-size="32" text-anchor="middle" dominant-baseline="central" letter-spacing="2">$ _</text>
+</svg>

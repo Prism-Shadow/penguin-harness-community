@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 460" width="460" height="460">
+  <!-- Series B, every RSI toolkit: three ascending steps labelled v1 v2 v3 inside an open loop
+       arrow. No scores, no numbers that read as results. Centre (230, 230). -->
+  <!-- knock the lettering out behind the diagram: a flat field-coloured disc, no extra tone -->
+  <circle cx="230" cy="230" r="196" style="fill: var(--field)" />
+  <path class="ln" d="M414.2 163A196 196 0 1 1 297 45.8" />
+  <path class="ln" d="M273.1 53.1L297 45.8 283.3 24.9" />
+
+  <rect class="paper" x="100" y="228" width="76" height="92" rx="10" />
+  <rect class="paper" x="192" y="168" width="76" height="152" rx="10" />
+  <rect class="paper" x="284" y="108" width="76" height="212" rx="10" />
+
+  <g class="txt ink" font-size="34" text-anchor="middle">
+    <text x="138" y="274">v1</text>
+    <text x="230" y="214">v2</text>
+    <text x="322" y="154">v3</text>
+  </g>
+</svg>
