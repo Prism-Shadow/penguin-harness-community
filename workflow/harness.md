@@ -47,9 +47,11 @@ I would like to work on this Issue and plan to submit a PR by YYYY-MM-DD.
 **Title**: `feat: <short description>` (or `fix: <short description>`)
 
 ```markdown
-## What this changes
-<!-- Summarize the change and why it is needed. Add Closes <full Issue URL> if applicable. -->
+Closes #<issue-number>
 
-## Verification
-<!-- List the checks or reproduction steps you ran and their results. -->
+### Summary
+- Summarize the feature or fix implemented in this PR
+
+### Verification
+- [x] Passed project unit tests, type checks, and build verification
 ```
