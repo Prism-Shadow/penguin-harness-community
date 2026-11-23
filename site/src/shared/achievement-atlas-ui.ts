@@ -139,6 +139,11 @@ export function initAtlas(root: HTMLDetailsElement) {
       };
     };
     const point = (n: number) => Math.round(n * 10) / 10;
+    const middleCenter = (nodes: { center: number }[]) => {
+      const upper = nodes[Math.floor((nodes.length - 1) / 2)];
+      const lower = nodes[Math.floor(nodes.length / 2)];
+      return point((upper.center + lower.center) / 2);
+    };
     const pathsMarkup: string[] = [];
     const wire = (d: string, cls: string) => pathsMarkup.push(`<path class="${cls}" d="${d}"/>`);
 
@@ -166,18 +171,21 @@ export function initAtlas(root: HTMLDetailsElement) {
     }
 
     const routes = branches.map((branch) => {
-      const node = branch.querySelector("[data-domain-node]")!;
+      const node = branch.querySelector<HTMLElement>("[data-domain-node]")!;
       const topics = Array.from(branch.querySelectorAll<HTMLElement>("[data-research-card]"), (el) => ({
         ...box(el),
         id: el.dataset.researchCard,
         predecessor: el.dataset.researchPredecessor,
       }));
-      return { node: box(node), topics };
+      const roots = topics.filter((topic) => !topics.some((source) => source.id === topic.predecessor));
+      node.style.transform = "";
+      if (roots.length) {
+        node.style.transform = `translateY(${point(middleCenter(roots) - box(node).center)}px)`;
+      }
+      return { node: box(node), topics, roots };
     });
     const first = routes[0].node;
-    const upperMiddle = routes[Math.floor((routes.length - 1) / 2)].node;
-    const lowerMiddle = routes[Math.floor(routes.length / 2)].node;
-    const middle = point((upperMiddle.center + lowerMiddle.center) / 2);
+    const middle = middleCenter(routes.map(({ node }) => node));
     const hub = get("hub");
     const medal = hub.querySelector(".medal")!;
     hub.style.transform = "";
@@ -185,8 +193,7 @@ export function initAtlas(root: HTMLDetailsElement) {
     const hubRight = box(medal).right;
     wire(fan(hubRight, middle, (hubRight + first.left) / 2, routes.map(({ node }) => ({ x: node.left, y: node.center }))), "w-trunk");
 
-    for (const { node, topics } of routes) {
-      const roots = topics.filter((topic) => !topics.some((source) => source.id === topic.predecessor));
+    for (const { node, topics, roots } of routes) {
       if (roots.length) {
         const busX = (node.right + Math.min(...roots.map((topic) => topic.left))) / 2;
         wire(fan(node.right, node.center, busX, roots.map((topic) => ({ x: topic.left, y: topic.center }))), "w-fork");

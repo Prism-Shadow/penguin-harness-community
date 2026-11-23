@@ -14,8 +14,8 @@ type Phase = {
   references?: { label: Text; url: string }[];
 };
 type TopicDefinition = { id: string; title: Record<Locale, string | readonly string[]>; phases?: Phase[] };
-type ProjectDefinition = TopicDefinition & { demoAchieved?: true; followUp?: TopicDefinition };
-type Achievement = "demo-achieved" | "unlocked" | "locked";
+type ProjectDefinition = TopicDefinition & { followUp?: TopicDefinition };
+type Achievement = "unlocked" | "locked";
 
 const routeTitles = {
   infra: { zh: "InfraRSI", en: "InfraRSI" },
@@ -59,6 +59,7 @@ const P = {
   submit: { zh: "待提交", en: "Pending submission" },
   dev: { zh: "待开发", en: "Pending development" },
   register: { zh: "待注册", en: "Pending registration" },
+  benchAcceptance: { zh: "待基准验收", en: "Awaiting benchmark acceptance" },
 };
 
 const REPO = {
@@ -102,6 +103,7 @@ const trainingPhases: Phase[] = [
       zh: "B-Comp 试跑搜索了 micro-batch 大小和训练代码改动。固定训练 60 步，计时第 21–60 步。候选、验证输出和成对复测记录供验收时复核。",
       en: "The B-Comp trial searched micro-batch sizes and training-code edits. Each run used 60 updates and timed updates 21–60. Candidate runs, verifier output, and paired reruns are available for review.",
     },
+    issues: [121],
     references: [
       { label: { zh: "实验 PR #1551", en: "Experiment PR #1551" }, url: infraPr },
       { label: { zh: "B-Comp 试跑记录", en: "B-Comp trial records" }, url: infraRun },
@@ -1367,10 +1369,13 @@ const versions: VersionDefinition[] = [
   {
     id: "v1",
     projects: {
-      infra: [autoResearch, ascendInference],
+      infra: [autoResearch, ascendInference, solExecBenchErnie],
       "auto-bench": [turingBenchWritingRealism],
-      agent: [agentBlockerHonesty],
-      platform: [gdpevoSkillEvolution],
+      agent: [agentBlockerHonesty, contextCompactionHandoff],
+      platform: [
+        { ...gdpevoSkillEvolution, followUp: gdpevoOntologyTransfer },
+        multiDomainHarnessComparison,
+      ],
       apps: publishedAppProjects,
     },
   },
@@ -1379,7 +1384,7 @@ const versions: VersionDefinition[] = [
     preview: true,
     projects: {
       infra: [
-        { ...autoResearch, demoAchieved: true, followUp: speedrun },
+        { ...autoResearch, followUp: speedrun },
         ascendInference,
         solExecBenchErnie,
       ],
@@ -1412,13 +1417,13 @@ const blankPhases = trainingPhases.map(({ label }) => ({ label, work: empty, evi
 
 export function researchVersions(quests: QuestItem[], locale: Locale) {
   const byIssue = new Map(quests.map((q) => [q.issueNumber, q]));
-  const stageDetails = (phase: Phase, demoAchieved: boolean) => {
+  const stageDetails = (phase: Phase) => {
     const tasks = (phase.issues ?? []).map((number) => ({ number, quest: byIssue.get(number) }));
-    const state: StageState = demoAchieved ? "done"
-      : phase.state ? phase.state
-      : tasks.length > 0 && tasks.every(({ quest }) => quest?.status === "completed") ? "done"
-      : !phase.pending && tasks.some(({ quest }) => quest?.status === "in_progress" || quest?.status === "completed") ? "active"
-      : "planned";
+    const state: StageState = phase.state ?? (
+      tasks.length > 0 && tasks.every(({ quest }) => quest?.status === "completed") ? "done"
+        : tasks.some(({ quest }) => quest) ? "active"
+        : "planned"
+    );
     return {
       label: resolveText(phase.label, locale),
       work: resolveText(phase.work, locale),
@@ -1433,13 +1438,23 @@ export function researchVersions(quests: QuestItem[], locale: Locale) {
   const topicDetails = (topic: TopicDefinition, achievement?: Achievement) => {
     const title = topic.title[locale] || topic.title[locale === "zh" ? "en" : "zh"];
     const titleParts = typeof title === "string" ? undefined : title;
+    const phases = topic.phases ?? blankPhases;
+    const stages = phases.map(stageDetails);
+    const [bench, run, ...outcomes] = stages;
+    if (phases[0]?.label === L.bench && bench.state !== "done") {
+      if (run.state === "done") run.state = "active";
+      for (const stage of outcomes) {
+        stage.state = "planned";
+        stage.pending = resolveText(P.benchAcceptance, locale);
+      }
+    }
     return {
       id: topic.id,
       title: typeof title === "string" ? title : title.join(""),
       titleParts,
       template: topic.phases === undefined,
       achievement,
-      stages: (topic.phases ?? blankPhases).map((phase) => stageDetails(phase, achievement === "demo-achieved")),
+      stages,
     };
   };
   return versions.map((version) => ({
@@ -1449,12 +1464,11 @@ export function researchVersions(quests: QuestItem[], locale: Locale) {
       id,
       title: resolveText(routeTitles[id], locale),
       projects: (version.projects[id] ?? []).map((project) => {
-        const demoAchieved = version.preview && project.demoAchieved;
-        const resolved = topicDetails(project, demoAchieved ? "demo-achieved" : undefined);
-        const completed = Boolean(demoAchieved) || (!resolved.template && resolved.stages.every((s) => s.state === "done"));
+        const resolved = topicDetails(project);
+        const completed = !resolved.template && resolved.stages.every((stage) => stage.state === "done");
         return {
           ...resolved,
-          followUp: version.preview && project.followUp
+          followUp: project.followUp
             ? topicDetails(project.followUp, completed ? "unlocked" : "locked")
             : undefined,
         };

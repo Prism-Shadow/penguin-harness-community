@@ -13,8 +13,7 @@ const t = (zh: string, en: string) => locale === "zh" ? zh : en;
 const progress = researchStageLabels[locale];
 const taskStatuses = { open: t("待认领", "Open"), in_progress: progress.active, completed: progress.done };
 const issueBase = "https://github.com/Prism-Shadow/penguin-harness-community/issues/";
-const achieved = project.achievement === "demo-achieved";
-const allDone = achieved || (!project.template && project.stages.every((stage) => stage.state === "done"));
+const allDone = !project.template && project.stages.every((stage) => stage.state === "done");
 ---
 <article class="leaf research-card" data-research-card={project.id} data-research-predecessor={predecessor?.id}
   data-template-card={project.template || undefined} data-state={allDone ? "lit" : project.achievement === "locked" ? "locked" : undefined}
@@ -24,8 +23,7 @@ const allDone = achieved || (!project.template && project.stages.every((stage) =
     : project.title}</h4>
   <div class="research-phases" role="group" aria-label={t("课题阶段", "Research stages")}>
     {project.stages.map((stage) => {
-      const status = achieved ? progress.done
-        : project.template ? t("待填写", "To be filled in")
+      const status = project.template ? t("待填写", "To be filled in")
         : stage.state === "planned" && stage.pending ? stage.pending
         : stage.state === "planned" && stage.tasks.length === 0 && stage.references.length === 0 ? t("暂无进度记录", "No progress recorded")
         : progress[stage.state];
@@ -53,9 +51,6 @@ const allDone = achieved || (!project.template && project.stages.every((stage) =
             )}
             <p class="research-detail-heading">{t("验收产物", "Expected evidence")}</p>
             <p>{stage.evidence}</p>
-            {achieved && stage.tasks.length > 0 && (
-              <p class="research-detail-heading">{t("关联任务实际状态", "Current status of related tasks")}</p>
-            )}
             {(stage.references.length > 0 || stage.tasks.length > 0) && (
               <ul class="research-tasks" aria-label={t("阶段记录与关联任务", "Stage records and related tasks")}>
                 {stage.references.map(({ label, url }) => (
