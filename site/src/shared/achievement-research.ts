@@ -488,6 +488,7 @@ const agentBlockerHonesty: TopicDefinition = {
 };
 
 const companyPr = `${REPO.harness}/pull/1434`;
+const companyNextSpecPr = `${REPO.harness}/pull/1556`;
 const sweCoworkPr = `${REPO.bench}/pull/36`;
 const companyModeCoordination: TopicDefinition = {
   id: "company-mode-coordination",
@@ -512,12 +513,15 @@ const companyModeCoordination: TopicDefinition = {
     {
       label: L.algo,
       work: {
-        zh: "优化 Company Mode 沟通规范（#50 / PR #1434，结论先行、禁刷屏与自我 @）并持续演进 Super Agent 协同架构（#94，支持任务树拆解、里程碑并行调度与通知去重路由）。",
-        en: "Optimize Company Mode communication norms (#50 / PR #1434) and evolve the Super Agent coordination architecture (#94, supporting task-tree decomposition, milestone parallel scheduling, and notification deduplication).",
+        zh: "优化 Company Mode 沟通规范（#50 / PR #1434，结论先行、禁刷屏与自我 @）并持续演进 Super Agent 协同架构（#94 / PR #1556，支持任务树拆解、里程碑并行调度与通知去重路由）。",
+        en: "Optimize Company Mode communication norms (#50 / PR #1434) and evolve the Super Agent coordination architecture (#94 / PR #1556, supporting task-tree decomposition, milestone parallel scheduling, and notification deduplication).",
       },
-      evidence: { zh: "PR #1434 已合入的沟通手册补丁与 Super Agent 任务树并行调度实现（#94）。", en: "Merged communication handbook patch in PR #1434 and Super Agent parallel task-tree scheduler (#94)." },
+      evidence: { zh: "PR #1434 已合入的沟通手册补丁与 Super Agent 协同架构规范及任务树调度实现（#94 / PR #1556）。", en: "Merged communication handbook patch in PR #1434 and Super Agent architecture spec & task-tree scheduler (#94 / PR #1556)." },
       issues: [50, 94],
-      references: [{ label: { zh: "沟通规范优化 PR #1434", en: "Communication norms PR #1434" }, url: companyPr }],
+      references: [
+        { label: { zh: "沟通规范优化 PR #1434", en: "Communication norms PR #1434" }, url: companyPr },
+        { label: { zh: "下一代 Company Mode 规范与原型 PR #1556", en: "Next-gen Company Mode spec & prototype PR #1556" }, url: companyNextSpecPr },
+      ],
     },
     {
       label: L.run,
@@ -617,15 +621,15 @@ const gdpevoOntologyTransfer: TopicDefinition = {
       label: L.run,
       state: "active",
       work: {
-        zh: "在相同基准上对比 PenguinHarness（含 ontology-rsi-toolkit #37 / PR #28，三轮均分 67.78±0.78）、Codex（#32 / PR #29）以及 Claude Code、DeepSeek Harness 与 Pi（#116）的自进化提分幅度与单次测试成本。",
-        en: "Compare self-evolution score gains and test costs across PenguinHarness (including ontology-rsi-toolkit #37 / PR #28 at 67.78±0.78), Codex (#32 / PR #29), Claude Code, DeepSeek Harness, and Pi (#116).",
+        zh: "在相同 GDPEVO Essential 基准与模型配置下，以 PenguinHarness 四种 RSI 算法评测结果（#42 / PR #16）为参照基线，对比 Codex（#32 / PR #29）以及 Claude Code、DeepSeek Harness 与 Pi（#116）在 Default、OpenSkill、SkillAdam、SkillOpt、TRACE 等算法下的自进化提分幅度与单次测试成本。",
+        en: "Using PenguinHarness's GDPEVO Essential evolution results (#42 / PR #16) as reference, compare self-evolution score gains and per-test costs across Codex (#32 / PR #29), Claude Code, DeepSeek Harness, and Pi (#116).",
       },
       evidence: { zh: "多 Harness 自进化轨迹、提分效率—成本对照表与跨框架进化评测报告。", en: "Multi-harness evolution trajectories, efficiency-cost comparison tables, and cross-harness evaluation report." },
-      issues: [32, 116, 37],
+      issues: [32, 116, 42],
       references: [
         { label: { zh: "Codex 自进化评测 PR #29", en: "Codex evolution evaluation PR #29" }, url: codexGdpevoPr },
-        { label: { zh: "Ontology 评测 PR #28", en: "Ontology evaluation PR #28" }, url: ontologyEvalPr },
-        { label: { zh: "Ontology 插件 PR #21", en: "Ontology plugin PR #21" }, url: ontologyPluginPr },
+        { label: { zh: "PenguinHarness 基线评测 PR #16", en: "PenguinHarness baseline evaluation PR #16" }, url: gdpevoEvalPr },
+        { label: { zh: "公开榜单仓库 penguin-harness-leaderboard", en: "Public leaderboard repo penguin-harness-leaderboard" }, url: REPO.leaderboard },
       ],
     },
   ],
@@ -754,6 +758,14 @@ const multiDomainHarnessComparison: TopicDefinition = {
   ],
 };
 
+const tbenchBenchPr = `${REPO.bench}/pull/33`;
+const swebenchBenchPr = `${REPO.bench}/pull/25`;
+const rrsiMarketPr = `${REPO.plugins}/pull/43`;
+const dgmPluginPr = `${REPO.harness}/pull/1553`;
+const reflexionPluginPr = `${REPO.harness}/pull/1555`;
+const skillweaverPluginPr = `${REPO.harness}/pull/1690`;
+const rsiagentPluginPr = `${REPO.plugins}/pull/20`;
+
 const metaHarnessReproduction: TopicDefinition = {
   id: "meta-harness-reproduction",
   title: {
@@ -763,38 +775,64 @@ const metaHarnessReproduction: TopicDefinition = {
   phases: [
     {
       label: L.bench,
-      state: "planned",
-      pending: P.confirm,
+      pending: P.accept,
       work: {
-        zh: "以斯坦福 Meta-Harness（arXiv:2603.28052）等外部 RSI 算法原论文采用的评测基准与任务集为参照，固定训练/测试划分、基线配置与自动判分口径。",
-        en: "Align evaluation benchmarks and task subsets used in external RSI papers (featured example: Stanford Meta-Harness, arXiv:2603.28052) with pinned train/test splits and scoring protocols.",
+        zh: "对齐外部 RSI 算法原论文采用的评测基准与任务集——核心包括斯坦福 Meta-Harness（arXiv:2603.28052）与 RRSI 原论文使用的 Terminal-Bench 2.0 / 2.1（#56，已提基准 PR #33 与固定子集 PR #30）及 SWE-bench Verified（#30，已提基准 PR #25），同时复用 GDPEVO Essential（#40 / PR #5）作为通用业务评测基准。",
+        en: "Align evaluation benchmarks used by external RSI papers—centered on Terminal-Bench 2.0 / 2.1 (#56, benchmark PR #33 & subset PR #30, used by Stanford Meta-Harness arXiv:2603.28052 and RRSI) and SWE-bench Verified (#30, benchmark PR #25), alongside GDPEVO Essential (#40 / PR #5).",
       },
-      evidence: { zh: "与原论文实验设定一致的基准划分与基线复跑脚本。", en: "Benchmark splits and baseline reproduction scripts aligned with the original papers." },
+      dataset: {
+        zh: "Meta-Harness 原论文核心智能体基准为 Terminal-Bench 2.0（89 道 Docker 化真实终端任务，原论文实验产物仓 stanford-iris-lab/meta-harness-tbench2-artifact），辅以在线文本分类（LawBench / Symptom2Disease / USPTO-50k）与数学检索推理；社区 #56 已提交 Terminal-Bench 2.0 & 2.1 接入 PR #33（待审校合入）。",
+        en: "Meta-Harness's primary agentic benchmark is Terminal-Bench 2.0 (89 Dockerized terminal tasks; artifact repo stanford-iris-lab/meta-harness-tbench2-artifact), alongside text classification and math retrieval; community issue #56 has submitted Terminal-Bench 2.0 & 2.1 integration PR #33 (open for review).",
+      },
+      evidence: {
+        zh: "PR #33（Terminal-Bench 2.0/2.1）、PR #25（SWE-bench Verified）与 PR #30 提交的与原论文设定对齐的基准包及判分入口。",
+        en: "Benchmark packages and scoring entry points aligned with original paper settings in PR #33 (Terminal-Bench 2.0/2.1), PR #25 (SWE-bench Verified), and PR #30.",
+      },
+      issues: [56, 30],
+      references: [
+        { label: { zh: "Terminal-Bench 2.0/2.1 基准 PR #33（在审）", en: "Terminal-Bench 2.0/2.1 benchmark PR #33 (open)" }, url: tbenchBenchPr },
+        { label: { zh: "SWE-bench Verified 基准 PR #25（在审）", en: "SWE-bench Verified benchmark PR #25 (open)" }, url: swebenchBenchPr },
+        { label: { zh: "Meta-Harness TerminalBench-2 原论文实验仓", en: "Meta-Harness TerminalBench-2 paper artifact repo" }, url: "https://github.com/stanford-iris-lab/meta-harness-tbench2-artifact" },
+      ],
     },
     {
       label: L.algo,
       work: {
-        zh: "在 PenguinHarness 中复现并集成外部前沿 RSI 算法——以斯坦福 Meta-Harness（#58，基于历史候选源码、得分与执行轨迹的 Proposer Agent 外层元搜索）为典型案例，同步覆盖 RRSI（#35）、Darwin Gödel Machine（#72）、Reflexion（#73）、SkillWeaver（#74）与 RSIAgent（#34）。",
-        en: "Reproduce and integrate external RSI algorithms in PenguinHarness—highlighted by Stanford Meta-Harness (#58, Proposer Agent outer meta-search over candidate code, scores, and execution traces) alongside RRSI (#35), Darwin Gödel Machine (#72), Reflexion (#73), SkillWeaver (#74), and RSIAgent (#34).",
+        zh: "在 PenguinHarness 中复现并集成外部前沿 RSI 算法：（1）已合入发布：RRSI（#35 / 主仓 PR #1535 + 插件仓 PR #43）及 ACE / APE / AWM / OPRO 基线包；（2）已提 PR 在审：Darwin Gödel Machine（#72 / PR #1553）、Reflexion（#73 / PR #1555）、SkillWeaver（#74 / PR #1690）、RSIAgent（#34 / 插件仓 PR #20）与本体演化 ontology-rsi-toolkit（#37 / 插件仓 PR #21）；（3）已认领开发中：斯坦福 Meta-Harness（#58，基于历史候选源码、得分与执行轨迹的 Proposer Agent 外层元搜索，认领者已先提交配套基准 PR #33，算法本体迁移中）。",
+        en: "Reproduce and integrate external RSI algorithms in PenguinHarness: (1) Merged & released: RRSI (#35 / PR #1535 + plugins PR #43) alongside ACE/APE/AWM/OPRO; (2) PR open for review: Darwin Gödel Machine (#72 / PR #1553), Reflexion (#73 / PR #1555), SkillWeaver (#74 / PR #1690), RSIAgent (#34 / plugins PR #20), and ontology-rsi-toolkit (#37 / plugins PR #21); (3) Claimed & in development: Stanford Meta-Harness (#58, Proposer Agent outer meta-search; assignee submitted companion benchmark PR #33 while algorithm plugin is in progress).",
       },
-      evidence: { zh: "合入插件仓或主干的 Meta-Harness（#58）等 RSI 算法复现插件与配置说明。", en: "Merged RSI algorithm reproduction plugins (such as Meta-Harness #58) and configuration guides." },
-      issues: [58, 35, 72, 73, 74, 34],
+      evidence: {
+        zh: "已合入 penguin-harness-rsi-platform / penguin-harness-plugins 的 RRSI（PR #1535 / PR #43）等算法包，以及在审的 DGM（PR #1553）、Reflexion（PR #1555）、SkillWeaver（PR #1690）、RSIAgent（PR #20）、Ontology（PR #21）和开发中的 Meta-Harness（#58）。",
+        en: "Merged RRSI (PR #1535 / PR #43) toolkits in penguin-harness-rsi-platform & penguin-harness-plugins, open PRs for DGM (PR #1553), Reflexion (PR #1555), SkillWeaver (PR #1690), RSIAgent (PR #20), Ontology (PR #21), and in-progress Meta-Harness (#58).",
+      },
+      issues: [58, 35, 72, 73, 74, 34, 37],
       references: [
         { label: { zh: "斯坦福 Meta-Harness 原论文 arXiv:2603.28052", en: "Stanford Meta-Harness paper arXiv:2603.28052" }, url: "https://arxiv.org/abs/2603.28052" },
-        { label: { zh: "RRSI 复现插件 PR #1535", en: "RRSI reproduction plugin PR #1535" }, url: rrsiPluginPr },
+        { label: { zh: "RRSI 已合入主仓 PR #1535", en: "Merged RRSI core PR #1535" }, url: rrsiPluginPr },
+        { label: { zh: "RRSI 已合入插件商城 PR #43", en: "Merged RRSI marketplace PR #43" }, url: rrsiMarketPr },
+        { label: { zh: "DGM 复现 PR #1553（在审）", en: "DGM reproduction PR #1553 (open)" }, url: dgmPluginPr },
+        { label: { zh: "Reflexion 复现 PR #1555（在审）", en: "Reflexion reproduction PR #1555 (open)" }, url: reflexionPluginPr },
+        { label: { zh: "SkillWeaver 复现 PR #1690（在审）", en: "SkillWeaver reproduction PR #1690 (open)" }, url: skillweaverPluginPr },
+        { label: { zh: "RSIAgent 插件 PR #20（在审）", en: "RSIAgent plugin PR #20 (open)" }, url: rsiagentPluginPr },
+        { label: { zh: "Ontology 插件 PR #21（在审）", en: "Ontology plugin PR #21 (open)" }, url: ontologyPluginPr },
       ],
     },
     {
       label: L.run,
       state: "planned",
-      pending: P.previousStage,
+      pending: P.benchAcceptance,
       work: {
-        zh: "在对齐的基准上运行 PenguinHarness 复现版 Meta-Harness（#58）等算法，与原论文报告指标及官方 RSI 算法工具包（penguin-harness-rsi-platform）进行对比实验，检验提分幅度、收敛步数与复现准确度。",
-        en: "Run reproduced RSI algorithms (such as Meta-Harness #58) on aligned benchmarks and compare score gains, convergence steps, and reproduction accuracy against the original papers and official RSI toolkits.",
+        zh: "在对齐的原论文基准上检验各复现算法的提分幅度与复现准确度：其中 RRSI（#35）已在 Terminal-Bench 2.1 + SWE-bench Verified 上完成 400 条评测（PR #31，训练分 83.33→91.67、测试 Token 降 38.69%），ontology-rsi-toolkit（#37）已在 GDPEVO Essential 上完成三轮评测（PR #28，均分 67.78±0.78）；待 Terminal-Bench 2.0（#56 / PR #33）与 Meta-Harness（#58）、DGM（#72）、Reflexion（#73）、SkillWeaver（#74）、RSIAgent（#34）合入后开展完整对照实验。",
+        en: "Verify score gains and reproduction accuracy on aligned benchmarks: RRSI (#35) completed 400 runs on Terminal-Bench 2.1 + SWE-bench Verified (PR #31, train 83.33→91.67, test tokens -38.69%) and ontology-rsi-toolkit (#37) completed 3 rounds on GDPEVO Essential (PR #28, 67.78±0.78); full comparisons for Meta-Harness (#58) on Terminal-Bench 2.0 (#56 / PR #33) and DGM/Reflexion/SkillWeaver/RSIAgent await benchmark and plugin merge.",
       },
-      evidence: { zh: "复现版 vs 原论文报告指标及官方算法对比表、演化轨迹日志与实验报告。", en: "Comparison tables against original paper metrics and official toolkits, evolution traces, and experiment report." },
-      issues: [58, 35],
+      evidence: {
+        zh: "RRSI 复现评测记录（PR #31）、Ontology 评测记录（PR #28），以及 Meta-Harness（#58）等复现算法相对原论文指标与官方算法工具包（penguin-harness-rsi-platform）的对比实验报告。",
+        en: "RRSI reproduction evaluation (PR #31), Ontology evaluation (PR #28), and full comparison reports against original paper metrics and official toolkits in penguin-harness-rsi-platform.",
+      },
+      issues: [58, 35, 72, 73, 74, 34, 37],
       references: [
+        { label: { zh: "RRSI 跨基准复现评测 PR #31（在审）", en: "RRSI reproduction evaluation PR #31 (open)" }, url: rrsiEvalPr },
+        { label: { zh: "Ontology GDPEVO 评测 PR #28（在审）", en: "Ontology GDPEVO evaluation PR #28 (open)" }, url: ontologyEvalPr },
         { label: { zh: "自进化工作台与算法仓 penguin-harness-rsi-platform", en: "RSI platform & toolkit repo penguin-harness-rsi-platform" }, url: REPO.rsiPlatform },
       ],
     },
@@ -1207,7 +1245,7 @@ export function researchVersions(quests: QuestItem[], locale: Locale) {
     const tasks = (phase.issues ?? []).map((number) => ({ number, quest: byIssue.get(number) }));
     const state: StageState = phase.state ?? (
       tasks.length > 0 && tasks.every(({ quest }) => quest?.status === "completed") ? "done"
-        : tasks.some(({ quest }) => quest) ? "active"
+        : tasks.some(({ quest }) => quest?.status === "in_progress" || quest?.status === "completed") ? "active"
         : "planned"
     );
     return {
