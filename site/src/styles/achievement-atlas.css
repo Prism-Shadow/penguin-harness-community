@@ -31,7 +31,7 @@
   /* layout */
   --pad-x: 20px;
   --pad-y: 30px;
-  --hub-w: 114px;
+  --hub-w: 116px;
   --trunk-gap: 36px;
   --domain-w: 206px;
   --fork-gap: 84px;
@@ -53,7 +53,7 @@
   background: var(--paper);
   box-shadow: 0 1px 2px rgb(16 24 40 / 0.04), 0 12px 32px -24px rgb(16 24 40 / 0.35);
 }
-.atlas:lang(en) { --hub-w: 114px; --trunk-gap: 46px; --category-w: 156px; }
+.atlas:lang(en) { --hub-w: 116px; --trunk-gap: 46px; --category-w: 156px; }
 .dark .atlas {
   --paper: #0d0d0d;
   --canvas: #050505;
@@ -147,15 +147,14 @@
 
 /* ---------- Hub ---------- */
 .atlas .hub { grid-column: 1; justify-self: center; display: grid; justify-items: center; }
-.atlas .medal { position: relative; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; width: 114px; height: 114px; padding: 14px 10px; border-radius: 50%; background: var(--paper); box-shadow: 0 0 0 1px var(--line), var(--card-shadow); text-align: center; }
+.atlas .medal { position: relative; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; width: 116px; height: 116px; padding: 12px 10px; border-radius: 50%; background: var(--paper); box-shadow: 0 0 0 1px var(--line), var(--card-shadow); text-align: center; }
 .atlas .brand-mark { width: 32px; height: 32px; flex: none; }
-/* Titles step up from the community to the research projects, which carry the content. */
+/* Node titles share a unified font size and weight across hub, domains and research cards. */
 .atlas :is(.hub b, .domain h3, .research-card h4, .research-details h3) { letter-spacing: normal; }
-.atlas .hub b { font-size: 13.5px; font-weight: 600; line-height: 1.2; }
-.atlas:lang(en) .medal { gap: 5px; }
-.atlas:lang(en) .hub b { font-size: 11px; line-height: 1.2; }
-.atlas .domain h3 { font-size: 15px; font-weight: 600; line-height: 1.4; }
-.atlas .research-card h4 { font-size: 15px; font-weight: 650; line-height: 1.5; }
+.atlas :is(.hub b, .domain h3, .research-card h4) { font-size: 15px; font-weight: 600; }
+.atlas .hub b { line-height: 1.25; }
+.atlas .domain h3 { line-height: 1.4; }
+.atlas .research-card h4 { line-height: 1.5; }
 .atlas .research-details h3 { font-size: 16px; font-weight: 650; line-height: 1.4; }
 
 /* ---------- Branches ---------- */
@@ -276,11 +275,9 @@
   .atlas .filters button { min-height: 30px; padding: 3px 9px; gap: 5px; font-size: 12px; }
   .atlas .medal { width: 72px; height: 72px; gap: 4px; padding: 6px; }
   .atlas .brand-mark { width: 22px; height: 22px; }
-  .atlas .hub b,
-  .atlas:lang(en) .hub b { font-size: 11px; line-height: 1.15; }
+  .atlas :is(.hub b, .domain h3, .research-card h4) { font-size: 13.5px; }
+  .atlas .hub b { line-height: 1.15; }
   .atlas .domain { grid-template-columns: 20px minmax(0, 1fr); column-gap: 6px; min-height: 58px; padding: 10px 7px; }
-  .atlas .domain h3 { font-size: 13px; }
-  .atlas .research-card h4 { font-size: 14px; }
   .atlas .domain-icon { width: 20px; height: 20px; border-radius: 6px; }
   .atlas .domain-icon svg { width: 14px; height: 14px; }
   .atlas .lane-head { padding-inline: 10px; font-size: 12px; }
