@@ -140,8 +140,8 @@ const autoResearch: TopicDefinition = {
 const speedrun: TopicDefinition = {
   id: "nanogpt-speedrun-transfer",
   title: {
-    zh: ["面向 NanoGPT Speedrun 的", "预训练速度纪录冲击"],
-    en: "Chasing a Pretraining Speed Record on NanoGPT Speedrun",
+    zh: "NanoGPT Speedrun 预训练速度优化实验",
+    en: "Pretraining Speed Optimization on NanoGPT Speedrun",
   },
   phases: [
     {
@@ -172,7 +172,7 @@ const speedrun: TopicDefinition = {
         zh: "在相同硬件和赛道规则下对照官方基线与 InfraRSI 演化版本，记录达到目标验证精度的端到端耗时（Time-to-Target）与稳态吞吐。",
         en: "Compare the official Speedrun baseline against the InfraRSI evolved variant on identical hardware, recording time-to-target and steady-state throughput.",
       },
-      evidence: { zh: "迁移补丁、两组训练日志及可评审的 Speedrun 速度纪录冲击实验报告。", en: "Transfer patches, paired training logs, and a reviewable Speedrun experiment report." },
+      evidence: { zh: "迁移补丁、两组训练日志及可评审的 Speedrun 预训练速度优化实验报告。", en: "Transfer patches, paired training logs, and a reviewable Speedrun optimization experiment report." },
       issues: [84],
     },
   ],
@@ -276,8 +276,8 @@ const honestyPr = `${REPO.bench}/pull/42`;
 const autoBenchJudgeAlignment: TopicDefinition = {
   id: "auto-bench-judge-alignment",
   title: {
-    zh: ["从原始数据自动生成", "评测基准（Auto Bench）"],
-    en: "Generating Evaluation Benchmarks from Raw Data with Auto Bench",
+    zh: "从原始数据自动生成评测基准实验",
+    en: "Automated Benchmark Generation and Judge Calibration",
   },
   phases: [
     {
@@ -453,8 +453,8 @@ const personalAgentComputerUse: TopicDefinition = {
 const agentBlockerHonesty: TopicDefinition = {
   id: "agent-blocker-honesty",
   title: {
-    zh: "解决智能体工具故障时谎报完成的问题",
-    en: "Preventing False Completion Reports after Agent Tool Failures",
+    zh: "Agent 工具故障如实汇报能力评测",
+    en: "Evaluating Agent Honesty Under Tool Failures",
   },
   phases: [
     {
@@ -639,8 +639,8 @@ const hleBenchPr = `${REPO.bench}/pull/27`;
 const hleDiamondSkillOpt: TopicDefinition = {
   id: "hle-diamond-skillopt",
   title: {
-    zh: ["用多轮自进化攻克", "高难科学推理题（HLE）"],
-    en: "Applying Iterative Self-Evolution to Hard Scientific Reasoning on HLE",
+    zh: "HLE 高难科学推理多轮自进化实验",
+    en: "Multi-Round Self-Evolution on HLE Scientific Reasoning",
   },
   phases: [
     {
@@ -679,8 +679,8 @@ const rrsiEvalPr = `${REPO.bench}/pull/31`;
 const rrsiCrossBenchTransfer: TopicDefinition = {
   id: "rrsi-cross-bench-transfer",
   title: {
-    zh: ["防止自进化提示词", "越改越臃肿的「瘦身」优化"],
-    en: "Keeping Self-Evolving Prompts Compact",
+    zh: "自进化提示词精简与跨基准迁移实验",
+    en: "Prompt Regularization and Cross-Benchmark Transfer Experiment",
   },
   phases: [
     {
@@ -696,7 +696,6 @@ const rrsiCrossBenchTransfer: TopicDefinition = {
     },
     {
       label: L.algo,
-      state: "done",
       work: {
         zh: "在 PenguinHarness 中集成正则化自进化算法 rrsi-rsi-toolkit（#35 / PR #1535，含 L0 修改预算、过拟合审查器与无增益组件剪枝）。",
         en: "Integrate the regularized self-evolution plugin rrsi-rsi-toolkit (#35 / PR #1535, featuring L0 modification budgets, overfitting critic, and pruning).",
@@ -886,7 +885,7 @@ const appSuperAgentTaskTree = buildAppTopic({
   id: "app-super-agent-task-tree",
   issues: [128],
   title: {
-    zh: ["Super Agent 任务树与", "依赖看板"],
+    zh: "Super Agent 任务树与依赖看板",
     en: ["Super Agent Task Tree and ", "Dependency Board"],
   },
   protoRefs: [
@@ -976,7 +975,7 @@ const appShortDramaStudio = buildAppTopic({
   id: "app-short-drama-studio",
   issues: [127],
   title: {
-    zh: ["AI 短剧分镜与", "视频生成工作台"],
+    zh: "AI 短剧分镜与视频生成工作台",
     en: ["AI Short Drama Storyboard ", "and Video Workbench"],
   },
   protoRefs: [
@@ -1021,7 +1020,7 @@ const appEcommerceStrategy = buildAppTopic({
   id: "app-ecommerce-strategy-workbench",
   issues: [130],
   title: {
-    zh: ["AI 电商选品与", "策略分析工作台"],
+    zh: "AI 电商选品与策略分析工作台",
     en: ["AI E-Commerce Selection ", "and Strategy Workbench"],
   },
   protoWork: {
@@ -1062,7 +1061,7 @@ const appMarketResearchQuant = buildAppTopic({
   id: "app-market-research-quant",
   issues: [131],
   title: {
-    zh: ["AI 市场投研与", "策略回测工作台"],
+    zh: "AI 市场投研与策略回测工作台",
     en: ["AI Market Research and ", "Strategy Backtesting Workbench"],
   },
   protoRefs: [{ label: { zh: "dshbook 第 10 章《构建市场投研助手》", en: "dshbook Ch.10 Market Research Assistant" }, url: `${REPO.dshbook}/chapter10/` }],
@@ -1144,44 +1143,44 @@ const appHealthAssistant = buildAppTopic({
 const appDigitalSecretaryPoster = buildAppTopic({
   id: "app-digital-secretary-design",
   title: {
-    zh: "飞书数字秘书与自进化视觉设计工作台",
-    en: "Feishu Digital Secretary & Self-Evolving Visual Design Workbench",
+    zh: "AI 海报与概念图设计工作台",
+    en: ["AI Poster and Concept ", "Diagram Workbench"],
   },
   protoRefs: [
-    { label: { zh: "dshbook 第 6 章《飞书里的数字秘书》", en: "dshbook Ch.6 Feishu Digital Secretary" }, url: `${REPO.dshbookRepo}/blob/main/book/chapter6.md` },
-    { label: { zh: "dshbook 第 13 章《通过自进化画出概念图》", en: "dshbook Ch.13 Self-Evolving Concept Diagrams" }, url: `${REPO.dshbookRepo}/blob/main/book/chapter13.md` },
+    { label: { zh: "dshbook 第 7 章《制作活动海报》", en: "dshbook Ch.7 Event Poster Design" }, url: `${REPO.dshbook}/chapter7/` },
+    { label: { zh: "dshbook 第 13 章《通过自进化画出概念图》", en: "dshbook Ch.13 Self-Evolving Concept Diagrams" }, url: `${REPO.dshbook}/chapter13/` },
   ],
   protoWork: {
-    zh: "融合 dshbook 第 5/6 章日常办公与飞书数字秘书、第 7/13 章活动海报与概念图自进化绘制案例，定义智能办公与视觉设计工作台。",
-    en: "Combine dshbook Ch.5/6 office & Feishu digital secretary workflows with Ch.7/13 poster layout & self-evolving SVG concept diagram generation.",
+    zh: "参考 dshbook 第 7 章活动海报排版与第 13 章概念图多轮绘制案例，定义从文字需求或论文方法描述生成可编辑海报与架构概念图的工作台流程。",
+    en: "Based on dshbook Ch.7 poster layout and Ch.13 iterative concept diagram workflows, define a workbench flow from text briefs or method descriptions to editable posters and architecture diagrams.",
   },
   protoEvidence: {
-    zh: "dshbook 飞书远程会话联动、表格清洗复盘及 SVG「生成→视觉自检→多轮进化」闭环原型。",
-    en: "Feishu remote session integration, spreadsheet cleaning, and SVG generation → visual critique → multi-round evolution prototypes from dshbook.",
+    zh: "dshbook 活动海报版式模板与 SVG 概念图「生成→视觉自检→多轮迭代」原型。",
+    en: "Poster layout templates and SVG generation → visual check → multi-round refinement prototypes from dshbook.",
   },
   skillWork: {
-    zh: "封装多文档要点提炼、Excel 报表校验、飞书待办/日程同步，以及带视觉评分器的海报/科研架构图多轮自进化生成 Skill。",
-    en: "Package Skills for multi-document synthesis, Excel auditing, Feishu task/calendar sync, and vision-critiqued multi-round poster/diagram evolution.",
+    zh: "封装版式构图规划、SVG/HTML 矢量画布生成及基于视觉反馈的多轮排版修订 Skill，支持局部元素调整与高分辨率导出。",
+    en: "Package Skills for layout planning, SVG/HTML vector canvas generation, and vision-guided iterative layout refinement with element-level editing and high-resolution export.",
   },
   skillEvidence: {
-    zh: "办公自动化处理与视觉概念图自进化 Skill 工具链。",
-    en: "Office automation and self-evolving visual diagram Skill toolchain.",
+    zh: "支持多轮视觉自检与局部重绘的海报及概念图生成工具链。",
+    en: "Poster and concept diagram generation toolchain supporting multi-round visual checks and local redrawing.",
   },
   uiWork: {
-    zh: "在 penguin-harness-apps 实现办公与设计双视图工作台并在 penguin-harness-plugins 登记：支持报表/文档批处理看板、飞书消息任务流及概念图/海报多轮进化对比画布。",
-    en: "Implement a dual-view workbench in penguin-harness-apps and register it in penguin-harness-plugins with batch document/spreadsheet boards, Feishu task streams, and multi-round diagram/poster evolution canvases.",
+    zh: "在 penguin-harness-apps 实现海报与概念图设计工作台并在 penguin-harness-plugins 登记：提供需求与风格配置面板、多轮演化版本对比画布、源码/图层微调及 PNG/SVG/PDF 导出。",
+    en: "Build the Poster and Concept Diagram Workbench in penguin-harness-apps and register it in penguin-harness-plugins with brief/style controls, multi-round comparison canvas, layer/source tweaking, and PNG/SVG/PDF export.",
   },
   uiEvidence: {
-    zh: "可从应用中心安装的数字秘书与自进化视觉设计工作台插件。",
-    en: "Installable digital secretary and self-evolving visual design workbench plugin in the App Center.",
+    zh: "可从应用中心安装的 AI 海报与概念图设计工作台插件。",
+    en: "Installable AI Poster and Concept Diagram Workbench plugin in the App Center.",
   },
   evalWork: {
-    zh: "基于综合办公样表与概念图多轮自进化评分曲线，验证文档报表处理准确率与视觉排版迭代增益。",
-    en: "Validate document/spreadsheet processing accuracy on office samples and visual layout gains across self-evolution rounds.",
+    zh: "用活动海报与科研架构图样例跑通多轮视觉自检迭代与局部修改，核对文字可读性、对齐规范与导出产物完整性。",
+    en: "Verify multi-round visual refinement and local editing on event poster and architecture diagram samples, checking text legibility, alignment, and export fidelity.",
   },
   evalEvidence: {
-    zh: "办公自动化与概念图多轮进化端到端案例包。",
-    en: "End-to-end case bundle for office automation and multi-round concept diagram evolution.",
+    zh: "海报与概念图多轮迭代样例、版本对比截图及完整演示录屏。",
+    en: "Multi-round poster and concept diagram samples, version comparison snapshots, and walkthrough recording.",
   },
 });
 
@@ -1273,9 +1272,10 @@ export function researchVersions(quests: QuestItem[], locale: Locale) {
     const phases = topic.phases ?? blankPhases;
     const stages = phases.map(stageDetails);
     const bench = stages[0];
-    const lastStage = stages[stages.length - 1];
-    if (phases[0]?.label === L.bench && bench.state !== "done" && lastStage && lastStage.state === "done") {
-      lastStage.state = "active";
+    if (phases[0]?.label === L.bench && bench.state !== "done") {
+      for (const stage of stages.slice(1)) {
+        if (stage.state === "done") stage.state = "active";
+      }
     }
     return {
       id: topic.id,
