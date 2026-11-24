@@ -843,6 +843,7 @@ const metaHarnessReproduction: TopicDefinition = {
 function buildAppTopic(config: {
   id: string;
   title: TopicDefinition["title"];
+  issues?: number[];
   protoWork: Text;
   protoEvidence: Text;
   protoRefs?: { label: Text; url: string }[];
@@ -864,8 +865,9 @@ function buildAppTopic(config: {
     phases: [
       {
         label: L.dev,
-        state: "planned",
+        state: config.issues?.length ? undefined : "planned",
         pending: P.dev,
+        issues: config.issues,
         work: {
           zh: `${config.protoWork.zh} ${config.skillWork.zh} ${config.uiWork.zh}`,
           en: `${config.protoWork.en} ${config.skillWork.en} ${config.uiWork.en}`,
@@ -882,6 +884,7 @@ function buildAppTopic(config: {
 
 const appSuperAgentTaskTree = buildAppTopic({
   id: "app-super-agent-task-tree",
+  issues: [128],
   title: {
     zh: ["Super Agent 任务树与", "依赖看板"],
     en: ["Super Agent Task Tree and ", "Dependency Board"],
@@ -926,6 +929,7 @@ const appSuperAgentTaskTree = buildAppTopic({
 
 const appOverleafPaper = buildAppTopic({
   id: "app-overleaf-paper-workbench",
+  issues: [129],
   title: {
     zh: "兼容 LaTeX 的论文写作与编译工作台",
     en: "LaTeX-Compatible Paper Writing and Compilation Workbench",
@@ -970,6 +974,7 @@ const appOverleafPaper = buildAppTopic({
 
 const appShortDramaStudio = buildAppTopic({
   id: "app-short-drama-studio",
+  issues: [127],
   title: {
     zh: ["AI 短剧分镜与", "视频生成工作台"],
     en: ["AI Short Drama Storyboard ", "and Video Workbench"],
@@ -1014,6 +1019,7 @@ const appShortDramaStudio = buildAppTopic({
 
 const appEcommerceStrategy = buildAppTopic({
   id: "app-ecommerce-strategy-workbench",
+  issues: [130],
   title: {
     zh: ["AI 电商选品与", "策略分析工作台"],
     en: ["AI E-Commerce Selection ", "and Strategy Workbench"],
@@ -1054,6 +1060,7 @@ const appEcommerceStrategy = buildAppTopic({
 
 const appMarketResearchQuant = buildAppTopic({
   id: "app-market-research-quant",
+  issues: [131],
   title: {
     zh: ["AI 市场投研与", "策略回测工作台"],
     en: ["AI Market Research and ", "Strategy Backtesting Workbench"],
@@ -1095,6 +1102,7 @@ const appMarketResearchQuant = buildAppTopic({
 
 const appHealthAssistant = buildAppTopic({
   id: "app-health-assistant",
+  issues: [133],
   title: {
     zh: "AI 健康助手工作台",
     en: "AI Health Assistant Workbench",
