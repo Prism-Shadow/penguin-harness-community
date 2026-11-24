@@ -54,6 +54,16 @@ export function initAtlas(root: HTMLDetailsElement) {
   let zoom = zoomConfig.initial;
   // Until someone zooms by hand, the tree opens at 100% or at whatever smaller scale fits it whole in the frame.
   let userZoomed = false;
+  const initialDpr = window.devicePixelRatio || 1;
+  function syncCanvasSize() {
+    if (!desktop.matches) {
+      canvas.style.marginRight = "";
+      canvas.style.marginBottom = "";
+      return;
+    }
+    canvas.style.marginRight = `${Math.round(canvas.offsetWidth * (zoom - 1))}px`;
+    canvas.style.marginBottom = `${Math.round(canvas.offsetHeight * (zoom - 1))}px`;
+  }
   function fitZoom() {
     const frame = canvas.getBoundingClientRect(), scale = scaleOf();
     const nodes = Array.from(root.querySelectorAll<HTMLElement>("[data-research-card], [data-domain-node]"));
@@ -65,11 +75,17 @@ export function initAtlas(root: HTMLDetailsElement) {
     return Math.max(zoomConfig.min, Math.min(zoomConfig.initial, Math.floor(room * 100) / 100));
   }
   function applyFit() {
-    if (userZoomed || !desktop.matches || root.hidden || !root.open) return;
+    if (Math.abs((window.devicePixelRatio || 1) - initialDpr) > 0.01) userZoomed = true;
+    if (userZoomed || !desktop.matches || root.hidden || !root.open) {
+      syncCanvasSize();
+      return;
+    }
     const next = fitZoom();
-    if (Math.abs(next - zoom) < 0.005) return;
-    zoom = next;
-    root.style.setProperty("--zoom", String(next));
+    if (Math.abs(next - zoom) >= 0.005) {
+      zoom = next;
+      root.style.setProperty("--zoom", String(next));
+    }
+    syncCanvasSize();
   }
   function setZoom(value: number, x: number, y: number) {
     userZoomed = true;
@@ -81,6 +97,7 @@ export function initAtlas(root: HTMLDetailsElement) {
     zoom = next;
     hideResearch();
     root.style.setProperty("--zoom", String(next));
+    syncCanvasSize();
     viewport.scrollTo(left, top);
     refresh();
     return true;

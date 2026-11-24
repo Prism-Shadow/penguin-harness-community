@@ -267,7 +267,7 @@
 /* ---------- Desktop: a fixed-height frame that pans in 2D; the tree inside can be zoomed ---------- */
 @media (min-width: 651px) {
   .atlas .viewport { max-height: clamp(420px, calc(100svh - 300px), 720px); overflow: auto; overscroll-behavior-y: auto; }
-  .atlas .canvas { zoom: var(--zoom, 1); }
+  .atlas .canvas { min-width: calc(100% / var(--zoom, 1)); transform: scale(var(--zoom, 1)); transform-origin: 0 0; }
 }
 
 /* ---------- Narrow screens: keep the horizontal canvas, tighten the grid ---------- */
