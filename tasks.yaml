@@ -1423,8 +1423,8 @@ Use the fixed [Train package](https://github.com/Yu-Yang-Li/penguin-harness-benc
     issue_number: 115
     author: "github-actions[bot]"
     pr_number: 91
-    published_at: "2026-11-19T06:53:32Z"
-    status: "in_progress"
+    published_at: "2026-11-24T03:50:51Z"
+    status: "completed"
     domain: "Awesome RSI"
     exp: 10
     target_repository: "https://github.com/Prism-Shadow/awesome-rsi"

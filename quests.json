@@ -1284,8 +1284,8 @@
       "issue_number": 115,
       "author": "github-actions[bot]",
       "pr_number": 91,
-      "published_at": "2026-11-19T06:53:32Z",
-      "status": "in_progress",
+      "published_at": "2026-11-24T03:50:51Z",
+      "status": "completed",
       "domain": "Awesome RSI",
       "exp": 10,
       "target_repository": "https://github.com/Prism-Shadow/awesome-rsi",
@@ -1584,8 +1584,8 @@
     },
     {
       "handle": "yenanjing",
-      "monthlyExp": 110,
-      "reachedAt": "2026-11-19T05:41:23Z"
+      "monthlyExp": 120,
+      "reachedAt": "2026-11-24T03:50:51Z"
     },
     {
       "handle": "Saigyouji-Yuyuko1000",
