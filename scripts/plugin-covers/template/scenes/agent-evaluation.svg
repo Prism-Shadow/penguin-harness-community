@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" width="900" height="520">
+  <!-- Series A, agent-evaluation: a card of three cases (two checked, one still open) beside a
+       gauge with ticks and a needle. No numbers on the dial. Gauge centre (650, 380). -->
+
+  <!-- cases -->
+  <rect class="paper card" x="40" y="70" width="340" height="380" rx="18" />
+  <rect class="acc" x="74" y="112" width="44" height="44" rx="11" />
+  <path class="ink-ln" d="M84 134l9 9 16-17" />
+  <path class="ink-ln" d="M142 124h200" />
+  <rect class="acc" x="142" y="140" width="120" height="8" rx="4" />
+
+  <rect class="acc" x="74" y="228" width="44" height="44" rx="11" />
+  <path class="ink-ln" d="M84 250l9 9 16-17" />
+  <path class="ink-ln" d="M142 240h176" />
+  <rect class="acc" x="142" y="256" width="140" height="8" rx="4" />
+
+  <rect class="acc-ln" x="76" y="346" width="40" height="40" rx="10" />
+  <path class="ink-ln" d="M142 356h190" />
+  <rect class="acc" x="142" y="372" width="96" height="8" rx="4" />
+
+  <!-- gauge: half disc, ticks, the measured arc, the needle -->
+  <path class="ln f12" d="M460 380A190 190 0 0 1 840 380Z" />
+  <path
+    class="ln"
+    d="M500 380h-22M520.1 305l-19.1-11M575 250.1l-11-19.1M650 230v-22M725 250.1l11-19.1M779.9 305l19.1-11M800 380h22"
+  />
+  <path class="ln" d="M530 380A120 120 0 0 1 718.8 281.7" style="stroke-width: 12px" />
+  <path class="ln" d="M650 380L736 257" />
+  <circle class="paper" cx="650" cy="380" r="24" />
+  <circle class="ink" cx="650" cy="380" r="8" />
+</svg>

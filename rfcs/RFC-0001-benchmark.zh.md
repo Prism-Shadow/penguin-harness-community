@@ -13,26 +13,23 @@ Benchmark 是用来评估 Agent 的一组数据，不包含评估结果。Benchm
 
 ## 目录结构
 
-每个 Benchmark 分为 `packages/<benchmark-id>` 和可选的 `data/<benchmark-id>` 两部分，仓库的文件组织格式如下：
+`penguin-harness-benchmark` 主仓库作为轻量索引仓，仅存放每个 Benchmark 的 `packages/<benchmark-id>` 元信息与描述文件；体积较大的原始任务数据则按 Benchmark 拆分到独立的外部 GitHub 仓库中。主仓库的文件组织格式如下：
 
 ```text
 penguin-harness-benchmark/
-├── packages/
-│   └── <benchmark-id>/
-│       ├── <task-id>/
-│       │   ├── statement/
-│       │   │   └── README.md
-│       │   ├── rubric/
-│       │   │   └── README.md
-│       │   └── task_config.toml
-│       └── benchmark_config.toml
-└── data/
+└── packages/
     └── <benchmark-id>/
-        └── README.md
+        ├── <task-id>/
+        │   ├── statement/
+        │   │   └── README.md
+        │   ├── rubric/
+        │   │   └── README.md
+        │   └── task_config.toml
+        └── benchmark_config.toml
 ```
 
-- `packages/`：承载 Benchmark 的元信息和描述文件，轻量且便于在不同环境间快速迁移。如果任务体量较小，可以直接放在 `statement/`（题干）和 `rubric/`（评分标准）中；对于体量较大的任务，则将原始数据放到 `data/` 文件夹中。
-- `data/`：存放体积较大的原始数据文件（例如 Harbor 格式的任务），避免迁移 `packages/` 时占用过多磁盘空间。如果是 Harbor 格式的任务，将 Harbor 的运行方式写入 `statement/` 中，并将 Harbor 的数据存放在 `data/` 下。
+- `packages/`：承载 Benchmark 的元信息和描述文件，轻量且便于在不同环境间快速迁移。如果任务体量较小，可以直接放在 `statement/`（题干）和 `rubric/`（评分标准）中；对于体量较大的任务，则将原始数据放到独立的外部数据仓库中。
+- **外部数据仓库**：按需使用，存放 Harbor 格式的任务、Docker 环境或大型数据集等体积较大的原始数据文件。外部数据仓库以完整的 Benchmark 为单位进行维护，仓库以该 Benchmark 的完整名称命名并统一存放其全量数据，既可以由贡献者自行创建，也可以联系社区委员会创建。当同一个 Benchmark 衍生出全量集与子集等多个版本时，主仓库 `packages/` 下会对应多个并列的 `<benchmark-id>` 文件夹，它们的原始数据共用同一个外部数据仓库，具体使用其中的哪些数据以及如何获取和运行，直接在 `packages/<benchmark-id>/` 各题的 `statement/README.md` 中通过固定 Commit 的外部数据仓库链接来说明。
 
 示例：[penguinharness-benchmark-sec-a](https://github.com/Prism-Shadow/penguin-harness-benchmark/tree/main/packages/penguinharness-benchmark-sec-a)
 
@@ -55,6 +52,7 @@ description_zh = "..."                  # 选填。Benchmark 的中文简介
 version = "0.1.0"                       # 必填。版本号，采用标准的 x.y.z 格式
 last_update = "2026-10-29T12:00:00Z"    # 必填。最后更新时间，精确到秒（ISO 8601）
 status = "draft"                        # 必填。状态：提交时为 draft，审核通过后为 published
+data_url = "https://github.com/Prism-Shadow/gdpevo-essential"  # 选填。外部数据仓库链接
 references = [                          # 选填。原始引用链接列表（如数据来源、原论文或原仓库链接）
   "https://arxiv.org/abs/...",
   "https://github.com/..."
@@ -83,6 +81,7 @@ homepage = "https://github.com/..."     # 选填。作者主页链接（默认�
 
 - `title_zh` — Benchmark 的中文显示名称。
 - `description_zh` — Benchmark 的中文描述。
+- `data_url` — 存放该 Benchmark 原始数据的外部仓库链接。
 - `references` — 原始引用链接列表（字符串数组），用于存放该 Benchmark 的数据来源、原始论文链接或上游开源仓库地址等。
 - `author.email` — 作者联系邮箱。
 - `author.homepage` — 作者主页链接（默认可填写 GitHub 主页链接）。
@@ -123,7 +122,7 @@ gpus = 0                                # 选填。GPU 数量限制（单位：�
   - `disk` — 分配的磁盘空间，单位为 GB（例如 `20`；不填代表不限制）。
   - `gpus` — 分配的 GPU 数量（`0` 表示不使用 GPU，正整数表示卡数；不填代表不限制）。
 
-4. （可选）如果题目包含体积较大的原始数据或沙箱环境文件（如 Harbor 任务），请将原始数据归纳到 `data/<benchmark-id>/` 文件夹中，并提供 `README.md` 说明文件。`data/<benchmark-id>/` 内部的数据组织形式不限，只要 Agent 可以参考 `packages/<benchmark-id>/` 中的元信息运行该 Benchmark 即可。
+4. 如果题目包含体积较大的原始数据或沙箱环境文件，请为该 Benchmark 准备一个独立的外部数据仓库，并在仓库中提供 `README.md` 说明文件。外部数据仓库既可以由贡献者自行创建，也可以联系社区委员会创建。同一个 Benchmark 的全量集与子集统一维护在同一个以该 Benchmark 完整名称命名的外部数据仓库中，仓库内部的数据组织形式不限。仓库地址可填在 `benchmark_config.toml` 的 `data_url` 字段中。具体某个 `<benchmark-id>` 使用哪些数据，在 `packages/<benchmark-id>/<task-id>/statement/README.md` 中通过固定 Commit 链接与运行说明来指定，只要 Agent 可以参考 `packages/<benchmark-id>/` 中的元信息自动拉取数据并运行该 Benchmark 即可。
 
 ## 训练数据与 GDPevo 评估方法
 

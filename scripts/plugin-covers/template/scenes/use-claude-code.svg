@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" width="900" height="520">
+  <!-- Series A, use-claude-code: a dark terminal on this side, a locked dashed line, and the
+       remote host on the other side. -->
+
+  <!-- terminal: a prompt sign and a cursor, then output lines -->
+  <rect class="ink card" x="40" y="90" width="420" height="330" rx="18" />
+  <g class="acc">
+    <circle cx="78" cy="124" r="7" />
+    <circle cx="102" cy="124" r="7" />
+    <circle cx="126" cy="124" r="7" />
+  </g>
+  <path class="ln" d="M78 180l22 20-22 20" style="stroke-width: 6px" />
+  <rect class="lt" x="120" y="210" width="40" height="12" rx="3" />
+  <path class="acc-ln" d="M78 272h300M78 312h240M78 352h280" />
+
+  <!-- the line, with a padlock on it -->
+  <path class="ln dash" d="M460 255H620" />
+  <path class="ln" d="M524 243V227A16 16 0 0 1 556 227V243" />
+  <rect class="paper card" x="512" y="241" width="56" height="46" rx="9" />
+  <circle class="ink" cx="540" cy="261" r="6" />
+  <path class="ink-ln" d="M540 265v10" />
+
+  <!-- the remote host: three units -->
+  <g class="ln f12">
+    <rect x="620" y="90" width="240" height="98" rx="16" />
+    <rect x="620" y="206" width="240" height="98" rx="16" />
+    <rect x="620" y="322" width="240" height="98" rx="16" />
+  </g>
+  <g class="lt">
+    <circle cx="662" cy="139" r="9" />
+    <circle cx="662" cy="255" r="9" />
+    <circle cx="662" cy="371" r="9" />
+  </g>
+  <path class="ln" d="M706 126h118M706 152h118M706 242h118M706 268h118M706 358h118M706 384h118" />
+</svg>

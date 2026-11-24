@@ -13,26 +13,23 @@ We built the open-source [PenguinHarness Benchmark](https://github.com/Prism-Sha
 
 ## Directory Structure
 
-Each Benchmark is divided into `packages/<benchmark-id>` and an optional `data/<benchmark-id>`. The file structure of the repository is organized as follows:
+The `penguin-harness-benchmark` main repository serves as a lightweight index that stores only `packages/<benchmark-id>` metadata and task descriptions; large raw task datasets are stored in separate external GitHub repositories. The file structure of the main repository is organized as follows:
 
 ```text
 penguin-harness-benchmark/
-├── packages/
-│   └── <benchmark-id>/
-│       ├── <task-id>/
-│       │   ├── statement/
-│       │   │   └── README.md
-│       │   ├── rubric/
-│       │   │   └── README.md
-│       │   └── task_config.toml
-│       └── benchmark_config.toml
-└── data/
+└── packages/
     └── <benchmark-id>/
-        └── README.md
+        ├── <task-id>/
+        │   ├── statement/
+        │   │   └── README.md
+        │   ├── rubric/
+        │   │   └── README.md
+        │   └── task_config.toml
+        └── benchmark_config.toml
 ```
 
-- `packages/`: Holds the metadata and description files of the Benchmark, keeping packages lightweight for fast migration across environments. Lightweight tasks can be placed directly inside `statement/` (problem statement) and `rubric/` (scoring rubric), whereas larger tasks store their raw data under `data/`.
-- `data/`: Stores large raw task files (such as tasks in Harbor format) so that migrating `packages/` does not consume excessive disk space. For Harbor tasks, place the Harbor execution instructions inside `statement/` and store the Harbor task data inside `data/`.
+- `packages/`: Holds the metadata and description files of the Benchmark, keeping packages lightweight for fast migration across environments. Lightweight tasks can be placed directly inside `statement/` (problem statement) and `rubric/` (scoring rubric), whereas larger tasks store their raw data in a dedicated external data repository.
+- **External Data Repository**: Used when needed to store large raw task files such as Harbor tasks, Docker environments, or large datasets. An external data repository is maintained at the level of the whole Benchmark, named after the full Benchmark and holding all of its raw data, and can be created either by the contributor or by contacting the Community Committee. When a Benchmark has both a full set and a subset or multiple splits, they appear as parallel `<benchmark-id>` directories under `packages/` in the main repository while sharing the same external data repository. Which specific data each package uses and how to fetch and run it is specified directly in `packages/<benchmark-id>/` under each task's `statement/README.md` via a pinned-commit link to the external data repository.
 
 Example: [penguinharness-benchmark-sec-a](https://github.com/Prism-Shadow/penguin-harness-benchmark/tree/main/packages/penguinharness-benchmark-sec-a)
 
@@ -55,6 +52,7 @@ description_zh = "..."                  # Optional. Short Chinese description of
 version = "0.1.0"                       # Required. Version in standard x.y.z format
 last_update = "2026-10-29T12:00:00Z"    # Required. Last update timestamp accurate to seconds (ISO 8601)
 status = "draft"                        # Required. Status: draft when submitted, published after review
+data_url = "https://github.com/Prism-Shadow/gdpevo-essential"  # Optional. External data repository URL
 references = [                          # Optional. Array of original reference URLs (e.g., data source, paper, repo)
   "https://arxiv.org/abs/...",
   "https://github.com/..."
@@ -83,6 +81,7 @@ Optional fields:
 
 - `title_zh` — Chinese display name for the Benchmark.
 - `description_zh` — Chinese description of the Benchmark.
+- `data_url` — URL of the external repository that hosts the Benchmark's raw data.
 - `references` — List of original reference links (array of strings) recording where the Benchmark data comes from, such as the original paper, dataset homepage, or upstream repository URLs.
 - `author.email` — Contact email address of the author.
 - `author.homepage` — Author homepage link (can default to a GitHub profile URL).
@@ -123,7 +122,7 @@ Optional fields:
   - `disk` — Allocated disk space limit in GB (e.g., `20`; omit for unlimited).
   - `gpus` — Allocated GPU count (`0` for no GPU / CPU-only, positive integer for GPU count; omit for unlimited).
 
-4. (Optional) If the tasks include large raw datasets or sandbox environment files (such as Harbor tasks), place the raw data under `data/<benchmark-id>/` along with a `README.md` entrypoint. The internal layout of `data/<benchmark-id>/` is unrestricted as long as an Agent can run the Benchmark by following the metadata and instructions in `packages/<benchmark-id>/`.
+4. If the tasks include large raw datasets or sandbox environment files, place the raw data in a dedicated external GitHub repository for that Benchmark and provide a `README.md` entrypoint. The external data repository can be created either by the contributor or by contacting the Community Committee. Full sets and subsets of the same Benchmark are maintained together in a single external data repository named after the full Benchmark, with unrestricted internal layout. The repository URL can be recorded in the optional `data_url` field in `benchmark_config.toml`. Which specific data a given `<benchmark-id>` uses is specified in `packages/<benchmark-id>/<task-id>/statement/README.md` via pinned-commit references and execution instructions, so that an Agent can fetch the required data and run the Benchmark by following the metadata and instructions in `packages/<benchmark-id>/`.
 
 ## Training Data & GDPevo Evaluation Protocol
 
