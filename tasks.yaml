@@ -1756,6 +1756,84 @@ Save outputs and grades by problem and run so an interrupted run can resume from
     linked_pr: null
 
   - id: "RSI-Q064"
+    issue_number: 127
+    author: "lzh368"
+    published_at: "2026-11-23T08:26:39Z"
+    status: "in_progress"
+    domain: "PenguinHarness"
+    exp: 100
+    target_repository: "https://github.com/Prism-Shadow/penguin-harness-apps"
+    related_issue: null
+    title: "Build an AI Short Drama Storyboard and Video Workbench"
+    title_zh: "开发 AI 短剧分镜与视频生成工作台"
+    description: "Integrate an AI short-drama creation application into PenguinHarness as an App Center workbench plugin, covering AI script-to-storyboard breakdown, character/scene consistency management, per-shot video generation, and final MP4 export (modeled on DSH Chapter 8 and `drama-skills`).
+
+**Deliverables and acceptance criteria**
+
+1. **AI script breakdown & editable storyboard**: Import a single-episode script and invoke the PenguinHarness Agent / LLM with the `drama-skills` workflow to automatically extract character profiles (with visual consistency anchors), scene descriptions, and a shot-by-shot storyboard table. Each shot records its characters, scene, camera/action notes, and video generation prompt, all editable by the user and linked to its generated clip.
+2. **Live video generation & single-shot non-destructive rerendering**: Integrate at least one live video generation provider (text-to-video or image-to-video). Support rendering shots after user confirmation and retrying failed shots independently. Modifying a single shot’s prompt and rerendering it must preserve all other generated clips and their timeline sequence without full-episode regeneration.
+3. **Timeline preview & playable MP4 export**: Preview generated clips in storyboard order and export a merged, playable MP4 video. Reproduce the *Cardboard House* (《纸箱小屋》) workflow from DSH Chapter 8 or an original short-drama episode of equivalent scope, recording a single-shot prompt edit + rerender and the final MP4 export.
+4. **Plugin packaging & App Center integration**: Submit the application source to `penguin-harness-apps` and the plugin registration PR to `penguin-harness-plugins`. Attach the implementation PR link, reproduction guide, and acceptance evidence, and verify that the plugin can be installed from the Marketplace, added to an Agent, and launched from the App Center."
+    description_zh: "将 AI 短剧创作应用集成到 PenguinHarness 应用中心插件中，在同一工作台内打通 AI 剧本拆解、角色与场景一致性管理、分镜提示词编辑、逐镜视频生成与成片 MP4 导出全流程（参考 DSH 第 8 章《纸箱小屋》与 `drama-skills`）。
+
+**交付与验收要求**
+
+1. **AI 剧本拆解与可编辑分镜表**：支持导入单集剧本，调用 PenguinHarness Agent / 大模型并结合 `drama-skills` 自动拆解生成角色设定卡（含外貌一致性描述）、场景设定与分镜列表。每个镜头至少包含出场角色、所属场景、运镜/画面描述与视频生成提示词，支持用户手动微调并与生成的视频片段关联。
+2. **接入真实视频生成服务与单镜头无损重做**：接入至少一个实际可用的视频生成模型服务（文生视频或图生视频），支持用户确认后逐镜生成及失败镜头单独重试。修改单个镜头的提示词并重新生成后，其余已生成镜头片段及时间轴排列顺序保持原样，无需整集重跑。
+3. **按序预览与成片 MP4 导出**：支持按分镜时间轴顺序预览全部片段并合成为可播放的 MP4 成片。使用 DSH 第 8 章《纸箱小屋》剧本或同等规模的原创短剧样例跑通全流程，提交包含「单镜头修改重做 + 最终导出 MP4」的复跑记录。
+4. **插件封装与应用中心集成**：在 `penguin-harness-apps` 提交应用源码 PR，在 `penguin-harness-plugins` 提交插件登记 PR。登记 PR 需附源码 PR 链接、复跑步骤与验收证据，并验证从插件市场安装后可挂载到 Agent 并从应用中心直接打开使用。"
+    references:
+      - "https://dshbook.penguin.ooo/chapter8/"
+      - "https://github.com/Prism-Shadow/deepseek-harness-book/tree/main/demo/chapter8-drama-design"
+      - "https://github.com/zenstory-ai/drama-skills"
+      - "https://github.com/Prism-Shadow/penguin-harness-apps"
+      - "https://github.com/Prism-Shadow/penguin-harness-plugins"
+    assignee: "lzh368"
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/127"
+    linked_pr: null
+
+  - id: "RSI-Q065"
+    issue_number: 128
+    author: "lzh368"
+    published_at: "2026-11-23T08:26:40Z"
+    status: "open"
+    domain: "PenguinHarness"
+    exp: 100
+    target_repository: "https://github.com/Prism-Shadow/penguin-harness-apps"
+    related_issue: "https://github.com/Prism-Shadow/penguin-harness-community/issues/94"
+    title: "Build a Super Agent Task Tree and Dependency Board"
+    title_zh: "开发 Super Agent 任务树与依赖看板"
+    description: "Integrate a visual Super Agent (AgentTeams) orchestration and dependency board into PenguinHarness as an App Center workbench plugin, combining a live sub-agent activity stream with an interactive task dependency DAG so users can monitor parallel execution and pinpoint blockers (modeled on DSH Chapter 11 and Issue #94).
+
+**Deliverables and acceptance criteria**
+
+1. **Split-pane live AgentTeams stream & interactive dependency DAG**: Connect to real PenguinHarness multi-agent team execution data (such as live sub-agent tool streams or `.agent-teams/*/team.json` runtime records; frontend-only static mocks or timer animations are not accepted) and present a split-pane workbench:
+   - **Left pane (Sub-Agent Activity Stream)**: Real-time status cards and execution stream for each sub-agent (owner, current action/tool call, status badge, and latest output).
+   - **Right pane (Task Tree & Dependency DAG Board)**: Interactive directed acyclic graph (DAG) showing task nodes, assigned sub-agents, execution states (`pending`, `waiting_on_dependencies`, `in_progress`, `completed`, `failed`), and directed prerequisite edges (`dependsOn` / `dependencies`). Clicking or hovering a task node highlights its upstream blockers and reveals its prerequisite deliverables and logs in a detail panel/drawer.
+2. **Parallel fan-out and fan-in dependency gating (DSH Chapter 11 workflow)**: Run a real multi-agent workflow with four parallel analysis tasks followed by one synthesis task that depends on all four (`dependsOn` / `dependencies`). While any prerequisite task remains incomplete, the synthesis node must explicitly display a `Waiting on dependencies` state and identify the unfinished upstream tasks; once all four prerequisites deliver their artifacts, the synthesis task automatically transitions to runnable/running and completes.
+3. **State persistence & consistency verification**: Close and reopen the workbench to verify that task owners, dependency edges, execution states, and delivered artifacts remain strictly consistent with the underlying team run records. Provide a reproducible multi-agent case and a screen recording capturing the live state transitions.
+4. **Plugin packaging & App Center integration**: Submit the application source to `penguin-harness-apps` and the plugin registration PR to `penguin-harness-plugins`. Attach the implementation PR link, reproduction guide, and acceptance evidence, and verify that the plugin can be installed from the Marketplace, added to an Agent, and launched from the App Center."
+    description_zh: "将 Super Agent（AgentTeams）多智能体任务协同与依赖看板集成到 PenguinHarness 应用中心插件中，通过「左侧子代理实时活动流 + 右侧可视化任务依赖 DAG 拓扑图」直观呈现多 Agent 任务分派、实时状态流转与前置阻塞关系（参考 DSH 第 11 章与 Issue #94）。
+
+**交付与验收要求**
+
+1. **双栏联动界面（子代理实时活动流 + 可视化任务依赖 DAG）**：接入真实的 PenguinHarness 多 Agent 团队运行数据（如子代理实时工具调用流或 `.agent-teams/*/team.json` 真实运行记录，不接受纯前端静态 Mock 或定时器动画），构建双栏协同看板：
+   - **左侧面板（AgentTeams 实时活动流）**：展示各子代理（Sub-Agent）的实时运行状态、当前执行的工具/动作摘要及最新输出流；
+   - **右侧面板（任务树与依赖 DAG 拓扑看板）**：以有向无环图（DAG）展示任务节点、负责子代理、执行状态（待执行、等待前置依赖、进行中、已完成、失败）及前置依赖连线（`dependsOn` / `dependencies`）。点击或悬停任务节点可高亮其上游阻塞项，并在详情面板/抽屉中查看前置任务的已交付产物与运行日志。
+2. **四路并行分析与汇总依赖门控验证（DSH 第 11 章工作流）**：运行包含四项并行子代理分析任务及一项依赖全部四项结果的汇总任务的真实多代理协同流程。任一前置任务未完成交付时，汇总任务节点必须明确显示「等待前置依赖」状态并标出未完成项；当四项前置任务全部交付后，汇总任务自动解锁为可执行并完成汇总产出。
+3. **状态持久化与一致性核验**：关闭并重新打开看板，核对任务负责人、DAG 依赖连线、任务状态及交付产物与底层运行记录完全一致。提交可复跑的多代理协同案例及完整覆盖状态跃迁过程的录屏。
+4. **插件封装与应用中心集成**：在 `penguin-harness-apps` 提交应用源码 PR，在 `penguin-harness-plugins` 提交插件登记 PR。登记 PR 需附源码 PR 链接、复跑步骤与验收证据，并验证从插件市场安装后可挂载到 Agent 并从应用中心直接打开使用。"
+    references:
+      - "https://dshbook.penguin.ooo/chapter11/"
+      - "https://github.com/Prism-Shadow/deepseek-harness-book/tree/main/demo/chapter11-agentteams-repo-review"
+      - "https://github.com/Prism-Shadow/penguin-harness-community/issues/94"
+      - "https://github.com/Prism-Shadow/penguin-harness-apps"
+      - "https://github.com/Prism-Shadow/penguin-harness-plugins"
+    assignee: null
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/128"
+    linked_pr: null
+
+  - id: "RSI-Q066"
     issue_number: 132
     author: "github-actions[bot]"
     published_at: "2026-11-23T09:15:15Z"
