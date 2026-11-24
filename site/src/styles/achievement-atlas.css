@@ -31,7 +31,7 @@
   /* layout */
   --pad-x: 20px;
   --pad-y: 30px;
-  --hub-w: 88px;
+  --hub-w: 114px;
   --trunk-gap: 36px;
   --domain-w: 206px;
   --fork-gap: 84px;
@@ -53,7 +53,7 @@
   background: var(--paper);
   box-shadow: 0 1px 2px rgb(16 24 40 / 0.04), 0 12px 32px -24px rgb(16 24 40 / 0.35);
 }
-.atlas:lang(en) { --hub-w: 112px; --trunk-gap: 46px; --category-w: 156px; }
+.atlas:lang(en) { --hub-w: 114px; --trunk-gap: 46px; --category-w: 156px; }
 .dark .atlas {
   --paper: #0d0d0d;
   --canvas: #050505;
@@ -147,19 +147,16 @@
 
 /* ---------- Hub ---------- */
 .atlas .hub { grid-column: 1; justify-self: center; display: grid; justify-items: center; }
-.atlas .medal { position: relative; display: grid; place-items: center; width: 88px; height: 88px; border-radius: 50%; background: var(--paper); box-shadow: 0 0 0 1px var(--line), var(--card-shadow); }
-.atlas .brand-mark { width: 34px; height: 34px; }
-.atlas .hub > b,
-.atlas .hub > small { position: absolute; left: 50%; transform: translateX(-50%); white-space: nowrap; text-align: center; }
+.atlas .medal { position: relative; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; width: 114px; height: 114px; padding: 14px 10px; border-radius: 50%; background: var(--paper); box-shadow: 0 0 0 1px var(--line), var(--card-shadow); text-align: center; }
+.atlas .brand-mark { width: 32px; height: 32px; flex: none; }
 /* Titles step up from the community to the research projects, which carry the content. */
-.atlas :is(.hub > b, .domain h3, .research-card h4, .research-details h3) { letter-spacing: normal; }
-.atlas .hub > b { font-size: 15px; font-weight: 600; line-height: 1.4; }
+.atlas :is(.hub b, .domain h3, .research-card h4, .research-details h3) { letter-spacing: normal; }
+.atlas .hub b { font-size: 13.5px; font-weight: 600; line-height: 1.2; }
+.atlas:lang(en) .medal { gap: 5px; }
+.atlas:lang(en) .hub b { font-size: 11px; line-height: 1.2; }
 .atlas .domain h3 { font-size: 15px; font-weight: 600; line-height: 1.4; }
 .atlas .research-card h4 { font-size: 15px; font-weight: 650; line-height: 1.5; }
 .atlas .research-details h3 { font-size: 16px; font-weight: 650; line-height: 1.4; }
-.atlas .hub > b { top: calc(100% + 10px); }
-.atlas .hub > small { top: calc(100% + 32px); color: var(--muted); font: 11px var(--mono); }
-.atlas .hub > small strong { color: var(--gold-text); font-weight: 700; }
 
 /* ---------- Branches ---------- */
 .atlas .branches { display: contents; }
@@ -272,19 +269,15 @@
 
 /* ---------- Narrow screens: keep the horizontal canvas, tighten the grid ---------- */
 @media (max-width: 650px) {
-  .atlas { --pad-x: 10px; --pad-y: 22px; --hub-w: 48px; --trunk-gap: 16px; --domain-w: 160px; --fork-gap: 22px; --category-w: 118px; --member-gap: 20px; --leaf-w: 208px; --leaf-gap: 20px; --lane-gap: 18px; --branch-gap: 28px; }
+  .atlas { --pad-x: 10px; --pad-y: 22px; --hub-w: 72px; --trunk-gap: 16px; --domain-w: 160px; --fork-gap: 22px; --category-w: 118px; --member-gap: 20px; --leaf-w: 208px; --leaf-gap: 20px; --lane-gap: 18px; --branch-gap: 28px; }
   .atlas .atlas-frame { margin-inline: -24px; border-inline: 0; border-radius: 0; }
   .atlas .toolbar { padding: 8px 12px; gap: 8px; }
   .atlas .filters { gap: 5px; }
   .atlas .filters button { min-height: 30px; padding: 3px 9px; gap: 5px; font-size: 12px; }
-  .atlas .medal { width: 44px; height: 44px; }
-  .atlas .brand-mark { width: 18px; height: 18px; }
-  /* Labels flow under the medal so a wrapped English name never collides with the count. */
-  .atlas .hub > b,
-  .atlas .hub > small { position: static; transform: none; white-space: normal; }
-  .atlas .hub > b { width: 64px; margin-top: 6px; font-size: 12px; }
-  .atlas .hub > small { margin-top: 2px; font-size: 9.5px; }
-  .atlas .hub > small span { display: none; }
+  .atlas .medal { width: 72px; height: 72px; gap: 4px; padding: 6px; }
+  .atlas .brand-mark { width: 22px; height: 22px; }
+  .atlas .hub b,
+  .atlas:lang(en) .hub b { font-size: 11px; line-height: 1.15; }
   .atlas .domain { grid-template-columns: 20px minmax(0, 1fr); column-gap: 6px; min-height: 58px; padding: 10px 7px; }
   .atlas .domain h3 { font-size: 13px; }
   .atlas .research-card h4 { font-size: 14px; }
@@ -296,7 +289,7 @@
   .atlas .leaf-title { font-size: 12.5px; }
 }
 @media (max-width: 650px) {
-  .atlas:lang(en) { --hub-w: 48px; --trunk-gap: 20px; --category-w: 128px; }
+  .atlas:lang(en) { --hub-w: 72px; --trunk-gap: 20px; --category-w: 128px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .atlas *, .atlas *::before, .atlas *::after { transition: none !important; }

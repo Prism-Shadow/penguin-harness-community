@@ -62,8 +62,10 @@ const zoom = { initial: 1, min: 0.5, max: 1.25 };
           <svg class="wires" data-wires aria-hidden="true"><g data-paths></g></svg>
 
           <div class="hub" data-hub style={`grid-row: 1 / span ${version.routes.length}`}>
-            <span class="medal"><Logo class="brand-mark" /></span>
-            <b>{t("RSI 社区", "RSI community")}</b>
+            <span class="medal">
+              <Logo class="brand-mark" />
+              <b>{t("RSI 社区", "RSI community")}</b>
+            </span>
           </div>
 
           <div class="branches">
