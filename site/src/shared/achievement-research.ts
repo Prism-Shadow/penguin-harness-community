@@ -1245,7 +1245,7 @@ export function researchVersions(quests: QuestItem[], locale: Locale) {
     const tasks = (phase.issues ?? []).map((number) => ({ number, quest: byIssue.get(number) }));
     const state: StageState = phase.state ?? (
       tasks.length > 0 && tasks.every(({ quest }) => quest?.status === "completed") ? "done"
-        : tasks.some(({ quest }) => quest?.status === "in_progress" || quest?.status === "completed") ? "active"
+        : tasks.some(({ quest }) => quest) ? "active"
         : "planned"
     );
     return {
