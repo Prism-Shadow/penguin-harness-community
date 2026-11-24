@@ -32,7 +32,10 @@ const COMMITTEE_HANDLES = new Set([
   "Myriad-Dreamin",
   "Yu-Yang-Li",
 ]);
-const AUTHORIZED_ISSUE_AUTHORS = new Set([...COMMITTEE_HANDLES, "github-actions[bot]"]);
+const STEWARD_HANDLE = "github-actions[bot]";
+const AUTHORIZED_ISSUE_AUTHORS = new Set([...COMMITTEE_HANDLES, STEWARD_HANDLE]);
+const recurringTaskKey = (task) => `${task.domain}::${task.title}`;
+const RECURRING_SOURCE = /\n<!-- recurring-task-source: #([1-9]\d*) -->\s*$/;
 const TOP_FIVE_BONUSES_RMB = [800, 400, 200, 100, 50];
 const GRACE_PERIOD_MS = 30 * 24 * 60 * 60 * 1000;
 
@@ -116,7 +119,7 @@ const COMMANDS_REFERENCE_MD = [
   "| `/complete @username https://github.com/.../pull/123` | Committee / 委员会成员 | Mark task as `completed`, record merged PR, settle EXP, and close issue / 标记任务完成、记录合入 PR、结算 EXP 并关闭 Issue |",
 ].join("\n");
 
-export function formatTaskIssueBody(task) {
+export function formatTaskIssueBody(task, sourceIssueNumber) {
   const refs =
     Array.isArray(task.references) && task.references.length > 0
       ? task.references.join("\n")
@@ -179,6 +182,9 @@ export function formatTaskIssueBody(task) {
     "",
     COMMANDS_REFERENCE_MD,
   );
+  if (sourceIssueNumber) {
+    lines.push("", `<!-- recurring-task-source: #${sourceIssueNumber} -->`);
+  }
   return lines.join("\n");
 }
 
@@ -312,6 +318,9 @@ async function syncFromGitHubIssues(baseTasks, maxConcurrent) {
   const sortedIssues = [...issues]
     .filter((it) => !it.pull_request)
     .sort((a, b) => a.number - b.number);
+  const issuesByNumber = new Map(sortedIssues.map((issue) => [issue.number, issue]));
+  const recurringSources = new Map();
+  const sourceNumbersByCopy = new Map();
 
   const activeTaskIssueNums = new Set(
     sortedIssues
@@ -341,6 +350,34 @@ async function syncFromGitHubIssues(baseTasks, maxConcurrent) {
     const existing = byIssueNum.get(issue.number);
     const id =
       existing?.id ?? `RSI-Q${String(++maxIdNum).padStart(3, "0")}`;
+    const recurring = Boolean(parsed.recurring || existing?.recurring);
+    const recurringKey = recurringTaskKey(parsed);
+    let sourceIssue;
+    let sourceIssueNumber;
+    if (recurring && author === STEWARD_HANDLE) {
+      const sourceNumber = Number(String(issue.body).match(RECURRING_SOURCE)?.[1]);
+      if (sourceNumber < issue.number) {
+        sourceIssueNumber = sourceNumber;
+        if (!issuesByNumber.has(sourceNumber)) {
+          try {
+            issuesByNumber.set(sourceNumber, await ghFetch(`repos/${REPO}/issues/${sourceNumber}`));
+          } catch (err) {
+            console.warn(`Warning: could not look up recurring task source #${sourceNumber}: ${err.message}`);
+          }
+        }
+        const candidate = issuesByNumber.get(sourceNumber);
+        if (!candidate?.pull_request && COMMITTEE_HANDLES.has(candidate?.user?.login)) {
+          sourceIssue = candidate;
+        }
+      } else {
+        // Older copies were grouped by domain and title and have no source Issue in their body.
+        sourceIssue = recurringSources.get(recurringKey);
+        sourceIssueNumber = sourceIssue?.number;
+      }
+      if (sourceIssueNumber) sourceNumbersByCopy.set(issue.number, sourceIssueNumber);
+    } else if (recurring && COMMITTEE_HANDLES.has(author) && !recurringSources.has(recurringKey)) {
+      recurringSources.set(recurringKey, issue);
+    }
 
     const comments =
       issue.comments > 0
@@ -433,15 +470,14 @@ async function syncFromGitHubIssues(baseTasks, maxConcurrent) {
     const updatedTask = {
       id,
       issue_number: issue.number,
-      // Authorship comes from GitHub metadata, independently of claim commands.
-      author: author || null,
+      author: sourceIssue?.user.login || author || null,
       pr_number: prNumber,
       published_at: publishedAt,
       status,
       domain: parsed.domain,
       exp: parsed.exp,
       target_repository: parsed.target_repository,
-      recurring: Boolean(parsed.recurring || existing?.recurring),
+      recurring,
       related_issue: parsed.related_issue,
       title: parsed.title,
       title_zh: parsed.title_zh,
@@ -454,7 +490,7 @@ async function syncFromGitHubIssues(baseTasks, maxConcurrent) {
     };
 
     // If issue body on GitHub is out of sync with resolved fields or missing the command table, update it when token is present
-    const expectedBody = formatTaskIssueBody(updatedTask);
+    const expectedBody = formatTaskIssueBody(updatedTask, sourceIssueNumber);
     if (
       (process.env.GH_TOKEN || process.env.GITHUB_TOKEN) &&
       (parsed.status !== status ||
@@ -503,13 +539,12 @@ async function syncFromGitHubIssues(baseTasks, maxConcurrent) {
     const recurringTemplates = new Map();
     for (const t of finalTasks) {
       if (t.recurring) {
-        const key = `${t.domain}::${t.title}`;
-        recurringTemplates.set(key, t);
+        recurringTemplates.set(recurringTaskKey(t), t);
       }
     }
     for (const [key, template] of recurringTemplates.entries()) {
       const hasOpenInstance = finalTasks.some(
-        (t) => `${t.domain}::${t.title}` === key && t.status === "open",
+        (t) => recurringTaskKey(t) === key && t.status === "open",
       );
       if (!hasOpenInstance) {
         const clonedDraft = {
@@ -520,13 +555,16 @@ async function syncFromGitHubIssues(baseTasks, maxConcurrent) {
           pr_number: null,
           recurring: true,
         };
+        const sourceIssueNumber =
+          sourceNumbersByCopy.get(template.issue_number) ??
+          (COMMITTEE_HANDLES.has(template.author) ? template.issue_number : undefined);
         try {
           const created = await ghFetch(`repos/${REPO}/issues`, {
             method: "POST",
             body: JSON.stringify({
               title: `[Task] ${template.title_zh} / ${template.title}`,
               labels: ["task"],
-              body: formatTaskIssueBody(clonedDraft),
+              body: formatTaskIssueBody(clonedDraft, sourceIssueNumber),
             }),
           });
           if (created?.number) {
@@ -535,7 +573,7 @@ async function syncFromGitHubIssues(baseTasks, maxConcurrent) {
               ...clonedDraft,
               id: newId,
               issue_number: created.number,
-              author: created.user?.login || null,
+              author: clonedDraft.author || created.user?.login || null,
               published_at: created.created_at || new Date().toISOString(),
               issue_url: created.html_url || `https://github.com/${REPO}/issues/${created.number}`,
             });
