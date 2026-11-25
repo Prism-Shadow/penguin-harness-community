@@ -1610,7 +1610,7 @@
       "author": "lzh368",
       "pr_number": null,
       "published_at": "2026-11-23T08:26:41Z",
-      "status": "open",
+      "status": "in_progress",
       "domain": "PenguinHarness",
       "exp": 100,
       "target_repository": "https://github.com/Prism-Shadow/penguin-harness-apps",
@@ -1627,7 +1627,7 @@
         "https://github.com/Prism-Shadow/penguin-harness-apps",
         "https://github.com/Prism-Shadow/penguin-harness-plugins"
       ],
-      "assignee": null,
+      "assignee": "yenanjing",
       "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/129",
       "linked_pr": null
     },

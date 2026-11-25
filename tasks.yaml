@@ -1837,7 +1837,7 @@ Save outputs and grades by problem and run so an interrupted run can resume from
     issue_number: 129
     author: "lzh368"
     published_at: "2026-11-23T08:26:41Z"
-    status: "open"
+    status: "in_progress"
     domain: "PenguinHarness"
     exp: 100
     target_repository: "https://github.com/Prism-Shadow/penguin-harness-apps"
@@ -1866,7 +1866,7 @@ Save outputs and grades by problem and run so an interrupted run can resume from
       - "https://github.com/Prism-Shadow/penguin-harness-community/issues/118"
       - "https://github.com/Prism-Shadow/penguin-harness-apps"
       - "https://github.com/Prism-Shadow/penguin-harness-plugins"
-    assignee: null
+    assignee: "yenanjing"
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/129"
     linked_pr: null
 
