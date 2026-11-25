@@ -11,7 +11,14 @@
 2. **提出 Issue**：在 [PenguinHarness Benchmark Issues](https://github.com/Prism-Shadow/penguin-harness-benchmark/issues) 中搜索是否已有对应 Benchmark 的 Issue；若没有，则新建一个 Issue 说明要整理的 Benchmark 来源与题目规模。若包含大体积原始数据，可使用自建仓库，也可联系社区委员会创建外部数据仓库。
 3. **Issue 评论区占坑**：在目标 Issue 评论区留言认领，占坑是可选步骤，主要用于防止多人同时整理同一个 Benchmark 撞车。
 4. **提交 PR**：按 `RFC-0001` 完成 Benchmark 转换与自测，提交时将 `benchmark_config.toml` 的 `status` 设为 `"draft"`；若包含大体积原始数据，将其推入对应的独立外部数据仓库并在 `statement/README.md` 中通过固定 Commit 引用，随后向 `penguin-harness-benchmark` 提交 `packages/<benchmark-id>/` 的 Pull Request 并关联 Issue。
-5. **Maintainer 审核合并**：等待 Maintainer 审核题目描述、评分标准与配置完整性；审核通过后将 `status` 更新为 `"published"` 并合并入库。
+5. **Maintainer 审核合并**：按 [Benchmark PR 合入标准](#benchmark-pr-合入标准)审核，通过后将 `status` 更新为 `"published"` 并合并入库。
+
+## Benchmark PR 合入标准
+
+- **来源清楚**。附上题目和数据的来源与许可。接入上游基准时，注明版本、纳入的题目范围以及对题目或评分规则所做的改动。
+- **任务能跑通**。检查提交范围内所有题目的目录、配置和数据路径，确保符合 RFC-0001 且能正常加载。按文档准备依赖与运行环境后，用代表性题目走完加载、执行和评分流程。
+- **评分能区分好坏**。评分规则对应题目要求。用达标样例（如参考解）和不达标样例（如空输出或错误结果）核对给分是否符合预期。有训练集和测试集时，说明划分方式并检查是否有题目重叠或答案泄漏。
+- **结果可复核**。提供验证用的题目或子集、运行环境、复现命令和评分记录，方便维护者核对验证范围和结果。
 
 ## 推荐验证指导与参考样例
 

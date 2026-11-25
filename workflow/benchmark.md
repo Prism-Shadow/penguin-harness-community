@@ -11,7 +11,14 @@
 2. **Open an Issue**: Check [PenguinHarness Benchmark Issues](https://github.com/Prism-Shadow/penguin-harness-benchmark/issues) for an existing Issue for the Benchmark, or open a new Issue describing the upstream source and number of tasks. If the Benchmark has large raw data, you may use your own repository or contact the Community Committee to create one.
 3. **Claim in Issue Comments**: Leave a comment on the Issue to claim the work; claiming is optional and primarily prevents duplicate effort.
 4. **Submit a PR**: Organize the Benchmark files according to `RFC-0001` with `status = "draft"` in `benchmark_config.toml`. If large raw data is required, push it to the dedicated external data repository and reference it at a pinned commit in `statement/README.md`, then open a Pull Request for `packages/<benchmark-id>/` linked to the Issue.
-5. **Maintainer Review & Merge**: Wait for a maintainer to review the task statements, rubrics, and configuration; once approved, `status` is updated to `"published"` and the PR is merged.
+5. **Maintainer Review & Merge**: Review the PR against the [Benchmark PR merge criteria](#benchmark-pr-merge-criteria), then set `status` to `"published"` and merge once approved.
+
+## Benchmark PR Merge Criteria
+
+- **Traceable sources.** Provide the sources and licenses for the tasks and data. For an upstream benchmark, state the version, which tasks are included, and any changes to the tasks or grading rules.
+- **Runnable tasks.** Check the directories, configuration, and data paths for all submitted tasks. Confirm that they follow RFC-0001 and load successfully. With the documented dependencies and environment, run representative tasks through loading, execution, and grading.
+- **Meaningful grading.** Check that the rubric measures what each task asks for. Confirm expected scores on passing outputs, such as reference solutions, and failing outputs, such as empty or incorrect results. If the benchmark includes training and test sets, explain the split and check for task overlap or answer leakage.
+- **Verifiable results.** Include the tasks or subset used for verification, the runtime environment, reproduction commands, and grading records so maintainers can check what was verified and how it scored.
 
 ## Recommended Verification & Examples
 

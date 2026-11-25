@@ -11,7 +11,14 @@
 2. **Open an Issue**: Search or open an Issue in [PenguinHarness Plugins Issues](https://github.com/Prism-Shadow/penguin-harness-plugins/issues) describing the RSI algorithm, paper reference, and planned plugin components.
 3. **Claim in Issue Comments (Optional)**: Leave a comment on the Issue to claim the plugin implementation (claiming is optional and prevents duplicate effort on the same algorithm).
 4. **Submit a PR**: Implement and test the plugin according to `RFC-0003`, then open a Pull Request linked to the Issue.
-5. **Maintainer Review & Merge**: Wait for a maintainer to review the package structure, `package.json` manifest, and functionality; once approved, the PR is merged.
+5. **Maintainer Review & Merge**: Merge the PR once it meets all [algorithm PR merge criteria](#algorithm-pr-merge-criteria).
+
+## Algorithm PR Merge Criteria
+
+- **Reproduce the original method**: Link to the paper or upstream implementation and identify the code or Skills for its key steps. Explain any differences. If the plugin changes a core mechanism, label it as a variant.
+- **Runnable plugin.** After installing the plugin as documented, run the algorithm in PenguinHarness using the provided example. Keep the algorithm independent of any hardcoded benchmark dataset.
+- **Measured improvement.** Compare the plugin in this PR against a baseline on suitable real tasks. Use the same test tasks and grading rules and report at least one improvement, such as a higher score on the same budget or fewer tokens or a shorter runtime at a comparable score. State the comparison conditions and which phases the budget covers. If there is a training or evolution phase, report its overhead separately from the test phase.
+- **Verifiable results.** List the test tasks, key settings, and reproduction commands. If you used a subset, explain what it covers and how you selected it. Provide structured run records for both the baseline and the plugin. You can link to an Evaluation PR or another accessible record.
 
 ## Implementation & Testing Guidelines
 

@@ -11,7 +11,14 @@
 2. **提出 Issue**：在 [PenguinHarness Benchmark Issues](https://github.com/Prism-Shadow/penguin-harness-benchmark/issues) 中创建 Issue，说明计划评测的 Benchmark、基座模型、Harness 与 RSI 算法组合。
 3. **Issue 评论区占坑（可选）**：在 Issue 评论区留言认领该组实验（占坑是可选步骤，主要用于防止多人跑完全相同的实验配置撞车）。
 4. **提交 PR**：完成评测实验后，按 `RFC-0002` 整理好 `experiments/<leaderboard-id>/<experiment-id>/` 下的 `meta_info.yaml`（`status` 设为 `"draft"`）、各阶段 `summary.yaml` 与 `attempt-<n>.yaml`，提交 Pull Request。
-5. **Maintainer 审核合并**：等待 Maintainer 审核实验配置、分数统计与计费数据；审核通过后将 `status` 更新为 `"published"` 并合并入库。
+5. **Maintainer 审核合并**：按 [Evaluation PR 合入标准](#evaluation-pr-合入标准)审核，通过后将 `status` 更新为 `"published"` 并合并入库。
+
+## Evaluation PR 合入标准
+
+- **配置可复现**。在 PR 说明中补充 Benchmark 版本、测试范围、运行预算、关键配置和复现命令。
+- **评测口径一致**。涉及对比时，使用相同的测试题目和评分规则，说明各组配置的差异及其对结论的影响。涉及训练或调参时，说明数据划分，确保测试题目独立于训练和调参。
+- **运行记录完整**。每次试验都在 `attempt-<n>.yaml` 中记录事先声明的测试范围内的全部题目。Agent 失败或超时按评分规则计入并说明。若环境故障导致结果缺失，说明原因并补齐结果后再汇总。
+- **汇总结果可复核**。用 `attempt-<n>.yaml` 核对 `summary.yaml` 的分数、耗时、Token 和费用。耗时以毫秒计，费用以美元计并按 MMSP 模型目录价核算。说明汇总覆盖的阶段与运行范围。单次试验填写 `score_std: null`，`pass@k` 选填。
 
 ## 推荐实验指导与例子
 

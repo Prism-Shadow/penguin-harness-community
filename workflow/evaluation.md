@@ -11,7 +11,14 @@
 2. **Open an Issue**: Open an Issue in [PenguinHarness Benchmark Issues](https://github.com/Prism-Shadow/penguin-harness-benchmark/issues) describing the target Benchmark, backbone model, Harness, and RSI algorithm setup.
 3. **Claim in Issue Comments (Optional)**: Leave a comment on the Issue to claim the experiment (claiming is optional and prevents duplicate evaluation runs).
 4. **Submit a PR**: Run the evaluation, organize `experiments/<leaderboard-id>/<experiment-id>/` according to `RFC-0002` (with `status: "draft"` in `meta_info.yaml`), and open a Pull Request linked to the Issue.
-5. **Maintainer Review & Merge**: Wait for a maintainer to verify the experiment metadata, score statistics, and cost calculation; once approved, `status` is updated to `"published"` and the PR is merged.
+5. **Maintainer Review & Merge**: Review the PR against the [Evaluation PR merge criteria](#evaluation-pr-merge-criteria), then set `status` to `"published"` and merge once approved.
+
+## Evaluation PR Merge Criteria
+
+- **Reproducible setup.** In the PR description, include the benchmark version, test scope, run budget, key settings, and reproduction commands.
+- **Comparable conditions.** When comparing runs, use the same test tasks and grading rules. Explain any differences in the setups and how they affect the conclusions. If training or tuning is involved, document the data splits and hold the test tasks out of training and tuning.
+- **Complete run records.** Record every task in the declared test scope for each attempt in `attempt-<n>.yaml`. Include agent failures and timeouts, score them according to the rubric, and explain how they were handled. If infrastructure errors leave missing results, document the cause and complete the records before aggregating.
+- **Verifiable summaries.** Check the scores, duration, token usage, and cost in `summary.yaml` against `attempt-<n>.yaml`. Report duration in milliseconds and cost in USD using MMSP model list prices. State which phases and runs the summary covers. For a single attempt, set `score_std: null`. The `pass@k` field is optional.
 
 ## Recommended Evaluation Guidelines & Examples
 
