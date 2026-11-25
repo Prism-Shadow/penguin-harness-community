@@ -1278,7 +1278,7 @@ Deliverables and acceptance criteria:
 
   - id: "RSI-Q051"
     issue_number: 111
-    author: "github-actions[bot]"
+    author: "hiyouga"
     published_at: "2026-11-18T12:05:44Z"
     status: "in_progress"
     domain: "Awesome RSI"
@@ -1421,7 +1421,7 @@ Use the fixed [Train package](https://github.com/Yu-Yang-Li/penguin-harness-benc
 
   - id: "RSI-Q054"
     issue_number: 115
-    author: "github-actions[bot]"
+    author: "hiyouga"
     pr_number: 91
     published_at: "2026-11-24T03:50:51Z"
     status: "completed"
@@ -1600,7 +1600,7 @@ Submit the revised LaTeX sources, figures, and compiled PDF in a pull request to
 
   - id: "RSI-Q061"
     issue_number: 124
-    author: "github-actions[bot]"
+    author: "Yu-Yang-Li"
     published_at: "2026-11-21T13:12:49Z"
     status: "open"
     domain: "Evaluation"
@@ -1701,7 +1701,7 @@ Save outputs and grades by problem and run so an interrupted run can resume from
 
   - id: "RSI-Q063"
     issue_number: 126
-    author: "github-actions[bot]"
+    author: "Yu-Yang-Li"
     published_at: "2026-11-22T12:37:04Z"
     status: "open"
     domain: "Evaluation"
@@ -1943,7 +1943,7 @@ Save outputs and grades by problem and run so an interrupted run can resume from
 
   - id: "RSI-Q069"
     issue_number: 132
-    author: "github-actions[bot]"
+    author: "hiyouga"
     published_at: "2026-11-23T09:15:15Z"
     status: "open"
     domain: "Awesome RSI"
