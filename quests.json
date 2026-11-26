@@ -1554,7 +1554,7 @@
       "id": "RSI-Q064",
       "issue_number": 127,
       "author": "lzh368",
-      "pr_number": null,
+      "pr_number": 40,
       "published_at": "2026-11-23T08:26:39Z",
       "status": "in_progress",
       "domain": "PenguinHarness",
@@ -1575,7 +1575,7 @@
       ],
       "assignee": "lzh368",
       "issue_url": "https://github.com/Prism-Shadow/penguin-harness-community/issues/127",
-      "linked_pr": null
+      "linked_pr": "https://github.com/Prism-Shadow/penguin-harness-apps/pull/40"
     },
     {
       "id": "RSI-Q065",
