@@ -128,3 +128,69 @@ test("retains the original author when repairing and creating recurring copies",
     rmSync(dir, { recursive: true, force: true });
   }
 });
+
+test("allows claiming related tasks beyond maxConcurrent while still capping unrelated claims", () => {
+  const dir = mkdtempSync(join(tmpdir(), "related-quest-claims-"));
+  try {
+    mkdirSync(join(dir, "community"));
+    writeFileSync(join(dir, "community/tasks.yaml"), "max_concurrent_claims_per_user: 2\ntasks:\n");
+    const now = new Date().toISOString();
+    const makeTaskIssue = (number, { status = "in_progress", assignee = "Nhckdvrl", linkedPr = "_No response_", relatedIssue = "_No response_", refs = "_No response_" } = {}) => ({
+      number,
+      user: { login: "lzh368" },
+      state: "open",
+      comments: 0,
+      created_at: now,
+      updated_at: now,
+      body: [
+        "### Domain", "", "Algorithm", "",
+        "### Status", "", status, "",
+        "### Assignee", "", assignee ? `@${assignee}` : "_No response_", "",
+        "### Pull Request", "", linkedPr, "",
+        "### Related Issue", "", relatedIssue, "",
+        "### Title (English)", "", `Task #${number}`, "",
+        "### Description (English)", "", `Description for #${number}`, "",
+        "### Original Papers & Repository Links", "", refs,
+      ].join("\n"),
+    });
+
+    const fixture = [
+      makeTaskIssue(71, { linkedPr: "https://github.com/Prism-Shadow/penguin-harness/pull/1551" }),
+      makeTaskIssue(74, { linkedPr: "https://github.com/Prism-Shadow/penguin-harness/pull/1690" }),
+      makeTaskIssue(120, { relatedIssue: "https://github.com/Prism-Shadow/penguin-harness-community/issues/83", refs: "https://github.com/Prism-Shadow/penguin-harness/pull/1551#issuecomment-6997394473" }),
+      makeTaskIssue(121, { relatedIssue: "https://github.com/Prism-Shadow/penguin-harness-community/issues/120" }),
+      makeTaskIssue(133, { relatedIssue: "_No response_" }),
+      makeTaskIssue(136, { relatedIssue: "https://github.com/Prism-Shadow/penguin-harness-community/issues/93", refs: "https://github.com/Prism-Shadow/penguin-harness/pull/1690" }),
+      makeTaskIssue(137, { relatedIssue: "https://github.com/Prism-Shadow/penguin-harness-community/issues/136" }),
+    ];
+    writeFileSync(join(dir, "issues.json"), JSON.stringify(fixture));
+    writeFileSync(join(dir, "mock-github.mjs"), `
+      import { readFileSync } from "node:fs";
+      const issues = JSON.parse(readFileSync(new URL("./issues.json", import.meta.url), "utf8"));
+      globalThis.fetch = async (input) => {
+        const pathname = new URL(input).pathname;
+        if (pathname.endsWith("/issues")) return new Response(JSON.stringify(issues), { status: 200 });
+        if (pathname.includes("/pulls/")) return new Response(JSON.stringify({ merged_at: null }), { status: 200 });
+        throw new Error("Unexpected request: " + pathname);
+      };
+    `);
+    const env = { ...process.env, GITHUB_REPOSITORY: "Prism-Shadow/penguin-harness-community" };
+    delete env.GH_TOKEN;
+    delete env.GITHUB_TOKEN;
+    const script = fileURLToPath(new URL("./community-agent-sync.mjs", import.meta.url));
+    execFileSync(process.execPath, ["--import", join(dir, "mock-github.mjs"), script, "--sync", "--out", "out"], { cwd: dir, env });
+    const { tasks } = JSON.parse(readFileSync(join(dir, "out/quests.json"), "utf8"));
+    const byNum = new Map(tasks.map((t) => [t.issue_number, t]));
+    assert.equal(byNum.get(71).status, "in_progress");
+    assert.equal(byNum.get(74).status, "in_progress");
+    assert.equal(byNum.get(120).status, "in_progress");
+    assert.equal(byNum.get(121).status, "in_progress");
+    assert.equal(byNum.get(136).status, "in_progress");
+    assert.equal(byNum.get(137).status, "in_progress");
+    // Unrelated 3rd claim (#133) is still capped and reset to open
+    assert.equal(byNum.get(133).status, "open");
+    assert.equal(byNum.get(133).assignee, null);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
