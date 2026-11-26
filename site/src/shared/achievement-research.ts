@@ -328,15 +328,15 @@ const autoBenchJudgeAlignment: TopicDefinition = {
       label: L.bench,
       pending: P.integrate,
       work: {
-        zh: "从已完成 Harbor 改造的 TableQA（#103）与写作拟人度评测（#96、#68）抽取边界争议样本，建立人类专家裁决金标准。",
-        en: "Curate ambiguous boundary samples from Harbor-adapted TableQA (#103) and writing realism benchmarks (#96, #68) with human expert gold labels.",
+        zh: "从已完成 Harbor 改造的 TableQA（#103）等基准抽取判分边界争议样本，建立人类专家裁决金标准。",
+        en: "Curate ambiguous boundary samples from Harbor-adapted TableQA (#103) with human expert gold labels.",
       },
       dataset: {
-        zh: "包含客观简答等价判分边界题（可复用 PR #32 与 PR #42 的双口径分歧样本）与长文成对盲测样本。",
-        en: "Combines short-answer equivalence boundary cases (bootstrapped with PR #32 and PR #42 judge disagreements) and paired writing samples.",
+        zh: "包含客观简答等价判分边界题（可复用 PR #32 与 PR #42 的双口径分歧样本）与主观成对盲测样本。",
+        en: "Combines short-answer equivalence boundary cases (bootstrapped with PR #32 and PR #42 judge disagreements) and paired blind samples.",
       },
       evidence: { zh: "带专家双盲标注与争议理由说明的校准样本集。", en: "A calibration dataset with double-blind expert labels and rationales." },
-      issues: [103, 96, 68],
+      issues: [103],
       references: [
         { label: { zh: "HLE 简答人工复核记录 PR #32", en: "HLE manual judge audit PR #32" }, url: hleEvalPr },
         { label: { zh: "盲测/非盲测判分对比 PR #42", en: "Blind vs. non-blind judge audit PR #42" }, url: honestyPr },
@@ -375,19 +375,19 @@ const turingBenchWritingRealism: TopicDefinition = {
       label: L.bench,
       pending: P.integrate,
       work: {
-        zh: "构建覆盖文本去 AI 味、自然语音合成与短剧视频分镜的拟人度与真实感基准（#96、#68）。",
-        en: "Build the TuringBench anthropomorphism and writing quality benchmark across text, speech, and video storyboards (#96, #68).",
+        zh: "构建覆盖文本去 AI 味、视觉多模态生成产物与交互行为的拟人度与真实感图灵基准 TuringBench（#96）。",
+        en: "Build the TuringBench anthropomorphism and naturalness benchmark across text writing, multimodal artifacts, and interactive behaviors (#96).",
       },
-      evidence: { zh: "多模态样本对、人类真实基线锚点与成对盲测协议。", en: "Multimodal sample pairs, human reference anchors, and pairwise blind evaluation protocol." },
-      issues: [96, 68],
+      evidence: { zh: "多模态样本对、人类真实基线锚点与成对盲测协议（#96）。", en: "Multimodal sample pairs, human reference anchors, and pairwise blind evaluation protocol (#96)." },
+      issues: [96],
     },
     {
       label: L.run,
       state: "planned",
       pending: P.benchAcceptance,
       work: {
-        zh: "待 #96、#68 基准构建完成后，交换正反位置运行多轮成对盲测，对比单维度总体打分与分项（句式多样性、情感自然度、分镜连贯性）规则判分，统计正反序翻转率、跨评审模型一致率及去偏置效果。",
-        en: "Once the #96 and #68 benchmarks are ready, run position-swapped pairwise blind evaluations comparing holistic scoring against decomposed criteria, reporting flip rates, cross-judge agreement, and debiasing effectiveness.",
+        zh: "待 #96 TuringBench 基准构建完成后，交换正反位置运行多轮成对盲测，对比单维度总体打分与分项（句式多样性、情感自然度、视觉排版与分镜连贯性）规则判分，统计正反序翻转率、跨评审模型一致率及去偏置效果。",
+        en: "Once the #96 TuringBench benchmark is ready, run position-swapped pairwise blind evaluations comparing holistic scoring against decomposed criteria, reporting flip rates, cross-judge agreement, and debiasing effectiveness.",
       },
       evidence: { zh: "位置偏置消融日志、主观评测稳定性量化结果表与基准评测报告。", en: "Position-bias ablation logs, subjective evaluation stability tables, and the benchmark evaluation report." },
     },
@@ -407,11 +407,11 @@ const contextCompactionHandoff: TopicDefinition = {
     {
       label: L.algo,
       work: {
-        zh: "优化 PenguinHarness 上下文压缩算法（#44，PR #1491 压缩前多轮工具写入 handoff 文件 + trace-lookup JSONL 行级检索、PR #1591 压缩配置），并推进 Obelisk 原始历史检索层与分层图视图记忆架构接入（#91）。",
-        en: "Optimize PenguinHarness context compaction (#44, PR #1491 handoff files + trace-lookup JSONL retrieval, PR #1591 UI) and integrate the Obelisk raw history retrieval & hierarchical graph memory layer (#91).",
+        zh: "优化 PenguinHarness 上下文压缩算法（#44）：实现压缩前多轮工具预算写入结构化 handoff 交接文件、压缩后按需检索 JSONL 原始历史轨迹的 trace-lookup 行级检索（PR #1491）及可调节压缩配置（PR #1591）。",
+        en: "Optimize PenguinHarness context compaction (#44) with pre-compaction multi-turn tool handoff files, on-demand JSONL trace-lookup retrieval (PR #1491), and configurable compaction settings (PR #1591).",
       },
-      evidence: { zh: "已合入主干的压缩交接实现（PR #1491、PR #1591）与分层记忆检索插件（#91）。", en: "Merged compaction handoff implementation (PR #1491, PR #1591) and hierarchical memory retrieval layer (#91)." },
-      issues: [44, 91],
+      evidence: { zh: "已合入主干的上下文压缩交接、轨迹行级检索与配置实现（#44 / PR #1491、PR #1591）。", en: "Merged context compaction handoff, JSONL trace-lookup, and settings implementation (#44 / PR #1491, PR #1591)." },
+      issues: [44],
       references: [
         { label: { zh: "压缩交接与轨迹检索 PR #1491", en: "Compaction handoff & trace-lookup PR #1491" }, url: compactionPr },
         { label: { zh: "压缩配置界面 PR #1591", en: "Compaction settings UI PR #1591" }, url: compactionUiPr },
@@ -421,19 +421,19 @@ const contextCompactionHandoff: TopicDefinition = {
       label: L.bench,
       pending: P.integrate,
       work: {
-        zh: "构建触发多次上下文压缩的长程任务评测集（#62）与 Agent Memory 第一性原理评测基准（#90，涵盖原始历史检索、跨会话溯源研究与 Memory Tax 净收益评测）。",
-        en: "Build the long-horizon context compaction benchmark (#62) and the first-principles Agent Memory benchmark (#90, covering raw history retrieval, cross-session provenance, and Memory Tax).",
+        zh: "构建触发多次上下文压缩的长程任务信息保留能力评测基准（#62），在多轮会话中埋入精确参数、工具中间产物与用户中途纠偏指令。",
+        en: "Build the long-horizon context compaction information retention benchmark (#62) with embedded parameters, intermediate tool states, and mid-run user steering across multiple compactions.",
       },
-      evidence: { zh: "固定压缩阈值与探针检查点的长程上下文压缩与 Memory 评测基准。", en: "A long-horizon compaction and memory benchmark with pinned token thresholds and probe checkpoints." },
-      issues: [62, 90],
+      evidence: { zh: "固定压缩阈值与探针检查点的长程上下文压缩评测基准包（#62）。", en: "A long-horizon context compaction benchmark package with pinned token thresholds and probe checkpoints (#62)." },
+      issues: [62],
     },
     {
       label: L.run,
       state: "planned",
       pending: P.benchAcceptance,
       work: {
-        zh: "待 #62、#90 基准接入后，在相同模型与压缩阈值下对比「纯文本摘要」、「压缩交接 + JSONL 行级检索（#44）」与「分层 Memory 检索（#91）」在关键事实保留率、跨会话溯源准确率及 Memory Tax 开销上的表现。",
-        en: "Once benchmarks #62 and #90 are integrated, compare plain text summaries, compaction handoff + JSONL trace lookup (#44), and hierarchical memory retrieval (#91) on fact recall, cross-session provenance accuracy, and token overhead.",
+        zh: "待 #62 基准接入后，在相同模型与压缩阈值下对比「纯文本摘要」与「压缩前 handoff 文件交接 + JSONL 行级轨迹检索（#44 / PR #1491）」在关键事实保留率、端到端长程任务完成率及额外 Token 开销上的表现。",
+        en: "Once benchmark #62 is integrated, compare plain text summaries against pre-compaction handoff files + JSONL trace lookup (#44 / PR #1491) on fact retention, long-horizon task completion rate, and token overhead.",
       },
       evidence: { zh: "关键信息召回率、端到端任务完成率与 Token 开销对照表及实验报告。", en: "Fact recall, task completion rate, and token overhead comparison tables and evaluation report." },
     },
@@ -451,14 +451,14 @@ const personalAgentComputerUse: TopicDefinition = {
     {
       label: L.algo,
       work: {
-        zh: "为 PenguinHarness 集成跨平台原生 Computer Use 桌面 GUI 视觉感知与键鼠操控能力（#92 / PR #1650，支持高分屏坐标自适应、辅助功能树定位与「动作执行—画面变化」闭环自检），结合 Personal Agent 主动任务推进机制（#52）实现跨终端、浏览器与原生桌面软件协同。",
-        en: "Integrate cross-platform native Computer Use GUI perception and mouse/keyboard control (#92 / PR #1650) with Personal Agent proactive workflows (#52) across terminal, browser, and desktop applications.",
+        zh: "为 PenguinHarness 集成跨平台原生 Computer Use 桌面 GUI 视觉感知与键鼠操控能力（#92 / PR #1650），支持高分屏坐标自适应、辅助功能树定位、浏览器协同与「动作执行—画面变化」闭环自检。",
+        en: "Integrate cross-platform native Computer Use GUI perception and mouse/keyboard control in PenguinHarness (#92 / PR #1650) with HiDPI coordinate scaling, accessibility tree targeting, browser coordination, and action-verification loops.",
       },
       evidence: {
-        zh: "跨平台 Computer Use 工具与 Skill 接口（#92 / PR #1650）及 Personal Agent 跨应用操控实现（#52）。",
-        en: "Cross-platform Computer Use tool/Skill interface (#92 / PR #1650) and Personal Agent cross-app automation (#52).",
+        zh: "已合入主干的跨平台 Computer Use 工具与 Skill 接口（#92 / PR #1650）。",
+        en: "Merged cross-platform Computer Use tool and Skill interface (#92 / PR #1650).",
       },
-      issues: [92, 52],
+      issues: [92],
       references: [{ label: { zh: "Computer Use 集成 PR #1650", en: "Computer Use integration PR #1650" }, url: computerUsePr }],
     },
     {
@@ -479,8 +479,8 @@ const personalAgentComputerUse: TopicDefinition = {
       state: "planned",
       pending: P.benchAcceptance,
       work: {
-        zh: "待 #93 基准接入后，在 OSWorld、WebArena 等真实桌面与浏览器任务集上评测 Personal Agent（#92、#52）的端到端任务完成率、键鼠/网页操作步数开销与异常界面视觉自纠错成功率。",
-        en: "Once benchmark #93 is integrated, evaluate Personal Agent (#92, #52) end-to-end task completion rate, action step efficiency, and visual self-correction rate on OSWorld and WebArena tasks.",
+        zh: "待 #93 基准接入后，在 OSWorld、WebArena 等真实桌面与浏览器任务集上评测 PenguinHarness Computer Use 与浏览器操控能力（#92）的端到端任务完成率、操作步数开销与异常界面视觉自纠错成功率。",
+        en: "Once benchmark #93 is integrated, evaluate PenguinHarness Computer Use and browser control (#92) on OSWorld and WebArena tasks across task completion rate, step efficiency, and visual self-correction rate.",
       },
       evidence: {
         zh: "桌面与浏览器操控轨迹及截图记录、成功率—步数对照表与评测报告。",
@@ -515,11 +515,11 @@ const agentBlockerHonesty: TopicDefinition = {
     {
       label: L.run,
       work: {
-        zh: "固定 gpt-6.1-sol（high 思考档），对「模型直答」「默认 Codex CLI」「注入 policy-v2 汇报规则的智能体」各独立运行 3 轮（252 份答复，#112、#124，PR #42）：首答合格率由 44/75 升至 70/75（+34.67%），待基准审校合入并扩展至 PenguinHarness。",
-        en: "Fix gpt-6.1-sol (high reasoning) across direct model calls, default Codex CLI, and policy-v2 rules for 3 trials each (252 runs, #112, #124, PR #42): honest disclosure rose from 44/75 to 70/75 (+34.67 pp), pending benchmark merge and PenguinHarness evaluation.",
+        zh: "固定 gpt-6.1-sol（high 思考档），对「模型直答」「默认 Codex CLI」「注入 policy-v2 汇报规则的智能体」各独立运行 3 轮（252 份答复，#112 / PR #42）：首答合格率由 44/75 升至 70/75（+34.67%），待基准审校合入并扩展至 PenguinHarness。",
+        en: "Fix gpt-6.1-sol (high reasoning) across direct model calls, default Codex CLI, and policy-v2 rules for 3 trials each (252 runs, #112 / PR #42): honest disclosure rose from 44/75 to 70/75 (+34.67 pp), pending benchmark merge and PenguinHarness evaluation.",
       },
       evidence: { zh: "252 份运行轨迹、非盲/盲测双口径对照表与阻碍如实汇报实验报告（#112 / PR #42）。", en: "252 run trajectories, non-blind vs. blind comparison tables, and the blocker honesty evaluation report (#112 / PR #42)." },
-      issues: [112, 124],
+      issues: [112],
       references: [{ label: { zh: "252 份实测记录与报告 PR #42", en: "252 run records & report in PR #42" }, url: honestyPr }],
     },
   ],
@@ -551,14 +551,14 @@ const companyModeCoordination: TopicDefinition = {
     {
       label: L.algo,
       work: {
-        zh: "优化 Company Mode 沟通规范（#50 / PR #1434，结论先行、禁刷屏与自我 @，两轮对照试跑将无指向刷屏由 16 条降至 0）并持续演进 Super Agent 协同架构（#94 / PR #1556，支持任务树拆解、里程碑并行调度与通知去重路由）。",
-        en: "Optimize Company Mode communication norms (#50 / PR #1434, reducing undirected status spam from 16 to 0 in two-round trials) and evolve the Super Agent coordination architecture (#94 / PR #1556, supporting task-tree decomposition, milestone parallel scheduling, and notification deduplication).",
+        zh: "持续优化 PenguinHarness Agent 公司（Company Mode）与 Super Agent 协同进化架构（#94 / PR #1556，支持任务树拆解、里程碑并行调度、通知去重路由与精简沟通规范 PR #1434）。",
+        en: "Evolve the PenguinHarness Company Mode and Super Agent coordination architecture (#94 / PR #1556, supporting task-tree decomposition, milestone parallel scheduling, notification deduplication, and concise communication norms from PR #1434).",
       },
-      evidence: { zh: "PR #1434 已合入的沟通手册补丁及两轮对照试跑记录，与 Super Agent 协同架构规范及任务树调度实现（#94 / PR #1556）。", en: "Merged communication handbook patch and two-round trial records in PR #1434, plus Super Agent architecture spec & task-tree scheduler (#94 / PR #1556)." },
-      issues: [50, 94],
+      evidence: { zh: "Super Agent 协同架构规范、任务树并行调度与沟通规范实现（#94 / PR #1556、PR #1434）。", en: "Super Agent coordination architecture spec, task-tree scheduler, and communication norms (#94 / PR #1556, PR #1434)." },
+      issues: [94],
       references: [
-        { label: { zh: "沟通规范优化与两轮对照试跑 PR #1434", en: "Communication norms & trial comparison PR #1434" }, url: companyPr },
         { label: { zh: "下一代 Company Mode 规范与原型 PR #1556", en: "Next-gen Company Mode spec & prototype PR #1556" }, url: companyNextSpecPr },
+        { label: { zh: "沟通规范优化与两轮对照试跑 PR #1434", en: "Communication norms & trial comparison PR #1434" }, url: companyPr },
       ],
     },
     {
@@ -566,8 +566,8 @@ const companyModeCoordination: TopicDefinition = {
       state: "planned",
       pending: P.benchAcceptance,
       work: {
-        zh: "待 SWE-CoWork 基准（#108 / PR #36）与 Super Agent 里程碑并行调度（#94 / PR #1556）合入后，在 101 道真实代码仓库维护任务上对比原始提示词、精简沟通规范（#50）与 Super Agent 任务树调度的协同效率与交付率。",
-        en: "Once the SWE-CoWork benchmark (#108 / PR #36) and Super Agent milestone scheduling (#94 / PR #1556) are merged, compare baseline prompts, concise communication norms (#50), and Super Agent task-tree scheduling across the 101 SWE-CoWork tasks.",
+        zh: "待 SWE-CoWork 基准（#108 / PR #36）与 Super Agent 里程碑并行调度（#94 / PR #1556）合入后，在 101 道真实代码仓库维护任务上对比原始提示词与 Super Agent 任务树协同调度的协作效率及交付率。",
+        en: "Once the SWE-CoWork benchmark (#108 / PR #36) and Super Agent milestone scheduling (#94 / PR #1556) are merged, compare baseline prompts against Super Agent task-tree scheduling across the 101 SWE-CoWork tasks.",
       },
       evidence: { zh: "频道消息长度、无效刷屏频次、Token 消耗与仓库级代码维护任务交付率对照报告。", en: "Comparison report of message length, status spam count, token cost, and repo-scale task delivery rate." },
     },
@@ -695,11 +695,11 @@ const hleDiamondSkillOpt: TopicDefinition = {
     {
       label: L.run,
       work: {
-        zh: "固定 PenguinHarness 0.2.18 与 DeepSeek-V4.1-Flash-1017（low 思考档），在 25 道进化题上做 1 轮与 3 轮 SkillOpt 迭代并冻结，在 25 道测试题上各测 3 次（共 225 份答卷，#75、#113，PR #32），揭示异构难题上正负迁移相抵现象。",
-        en: "Run 1 and 3 SkillOpt rounds on 25 HLE-Diamond train items and evaluate frozen skills 3 times each on 25 test items (225 runs, #75, #113, PR #32), highlighting positive/negative transfer cancellation on heterogeneous problems.",
+        zh: "固定 PenguinHarness 0.2.18 与 DeepSeek-V4.1-Flash-1017（low 思考档），在 25 道进化题上做 1 轮与 3 轮 SkillOpt 迭代并冻结，在 25 道测试题上各测 3 次（共 225 份答卷，#75 / PR #32），揭示异构难题上正负迁移相抵现象。",
+        en: "Run 1 and 3 SkillOpt rounds on 25 HLE-Diamond train items and evaluate frozen skills 3 times each on 25 test items (225 runs, #75 / PR #32), highlighting positive/negative transfer cancellation on heterogeneous problems.",
       },
       evidence: { zh: "PR #32 提交的 225 份测试记录、逐题正负翻转矩阵与泛化边界实验报告。", en: "225 test records, per-item flip matrices, and the generalization boundary report in PR #32." },
-      issues: [75, 113],
+      issues: [75],
       references: [{ label: { zh: "实验记录与报告 PR #32", en: "Experiment records & report PR #32" }, url: hleEvalPr }],
     },
   ],
@@ -719,11 +719,11 @@ const rrsiCrossBenchTransfer: TopicDefinition = {
       label: L.bench,
       pending: P.accept,
       work: {
-        zh: "固定 Terminal-Bench 2.1（#56）的 18 道进化题子集与 SWE-bench Verified（#30）的 100 道独立测试题子集（PR #30）。",
-        en: "Pin an 18-task evolution subset from Terminal-Bench 2.1 (#56) and a 100-task held-out test subset from SWE-bench Verified (#30, PR #30).",
+        zh: "固定 Terminal-Bench 2.1 的 18 道进化题子集与 SWE-bench Verified（#30）的 100 道独立测试题子集（PR #30）。",
+        en: "Pin an 18-task evolution subset from Terminal-Bench 2.1 and a 100-task held-out test subset from SWE-bench Verified (#30 / PR #30).",
       },
       evidence: { zh: "PR #30 提交的跨基准固定题目划分与评测入口。", en: "Fixed cross-benchmark task splits and evaluation entry points in PR #30." },
-      issues: [56, 30],
+      issues: [30],
       references: [{ label: { zh: "固定子集基准 PR #30", en: "Subset benchmark PR #30" }, url: rrsiDatasetPr }],
     },
     {
@@ -788,13 +788,6 @@ const multiDomainHarnessComparison: TopicDefinition = {
 };
 
 const tbenchBenchPr = `${REPO.bench}/pull/33`;
-const swebenchBenchPr = `${REPO.bench}/pull/25`;
-const rrsiMarketPr = `${REPO.plugins}/pull/43`;
-const dgmPluginPr = `${REPO.harness}/pull/1553`;
-const reflexionPluginPr = `${REPO.harness}/pull/1555`;
-const skillweaverPluginPr = `${REPO.harness}/pull/1690`;
-const rsiagentPluginPr = `${REPO.plugins}/pull/20`;
-
 const metaHarnessReproduction: TopicDefinition = {
   id: "meta-harness-reproduction",
   title: {
@@ -806,58 +799,52 @@ const metaHarnessReproduction: TopicDefinition = {
       label: L.bench,
       pending: P.accept,
       work: {
-        zh: "对齐外部 RSI 算法原论文采用的评测基准与任务集——核心包括斯坦福 Meta-Harness（arXiv:2603.28052）与 RRSI 原论文使用的 Terminal-Bench 2.0 / 2.1（#56，已提基准 PR #33 与固定子集 PR #30）及 SWE-bench Verified（#30，已提基准 PR #25），同时复用 GDPEVO Essential（#40 / PR #5）作为通用业务评测基准。",
-        en: "Align evaluation benchmarks used by external RSI papers—centered on Terminal-Bench 2.0 / 2.1 (#56, benchmark PR #33 & subset PR #30, used by Stanford Meta-Harness arXiv:2603.28052 and RRSI) and SWE-bench Verified (#30, benchmark PR #25), alongside GDPEVO Essential (#40 / PR #5).",
+        zh: "对齐斯坦福 Meta-Harness 原论文（arXiv:2603.28052）采用的核心智能体评测基准 Terminal-Bench 2.0（#56 / PR #33），固定任务划分、基线配置与自动判分口径。",
+        en: "Align the Terminal-Bench 2.0 agentic benchmark (#56 / PR #33) used in the Stanford Meta-Harness paper (arXiv:2603.28052) with pinned task splits, baseline configs, and automated scoring.",
       },
       dataset: {
-        zh: "Meta-Harness 原论文核心智能体基准为 Terminal-Bench 2.0（89 道 Docker 化真实终端任务，原论文实验产物仓 stanford-iris-lab/meta-harness-tbench2-artifact），辅以在线文本分类（LawBench / Symptom2Disease / USPTO-50k）与数学检索推理；社区 #56 已提交 Terminal-Bench 2.0 & 2.1 接入 PR #33（待审校合入）。",
-        en: "Meta-Harness's primary agentic benchmark is Terminal-Bench 2.0 (89 Dockerized terminal tasks; artifact repo stanford-iris-lab/meta-harness-tbench2-artifact), alongside text classification and math retrieval; community issue #56 has submitted Terminal-Bench 2.0 & 2.1 integration PR #33 (open for review).",
+        zh: "Meta-Harness 原论文核心智能体基准为 Terminal-Bench 2.0（89 道 Docker 化真实终端任务，原论文实验产物仓 stanford-iris-lab/meta-harness-tbench2-artifact）；社区 #56 已提交 Terminal-Bench 2.0 接入 PR #33（待审校合入）。",
+        en: "Meta-Harness's primary agentic benchmark is Terminal-Bench 2.0 (89 Dockerized terminal tasks; artifact repo stanford-iris-lab/meta-harness-tbench2-artifact); community issue #56 has submitted integration PR #33 (open for review).",
       },
       evidence: {
-        zh: "PR #33（Terminal-Bench 2.0/2.1）、PR #25（SWE-bench Verified）与 PR #30 提交的与原论文设定对齐的基准包及判分入口。",
-        en: "Benchmark packages and scoring entry points aligned with original paper settings in PR #33 (Terminal-Bench 2.0/2.1), PR #25 (SWE-bench Verified), and PR #30.",
+        zh: "PR #33 提交的与 Meta-Harness 原论文设定对齐的 Terminal-Bench 2.0 基准包及自动判分入口（#56）。",
+        en: "Terminal-Bench 2.0 benchmark package and automated scoring entry point aligned with the Meta-Harness paper in PR #33 (#56).",
       },
-      issues: [56, 30],
+      issues: [56],
       references: [
-        { label: { zh: "Terminal-Bench 2.0/2.1 基准 PR #33（在审）", en: "Terminal-Bench 2.0/2.1 benchmark PR #33 (open)" }, url: tbenchBenchPr },
-        { label: { zh: "SWE-bench Verified 基准 PR #25（在审）", en: "SWE-bench Verified benchmark PR #25 (open)" }, url: swebenchBenchPr },
+        { label: { zh: "Terminal-Bench 2.0 基准 PR #33（在审）", en: "Terminal-Bench 2.0 benchmark PR #33 (open)" }, url: tbenchBenchPr },
         { label: { zh: "Meta-Harness TerminalBench-2 原论文实验仓", en: "Meta-Harness TerminalBench-2 paper artifact repo" }, url: "https://github.com/stanford-iris-lab/meta-harness-tbench2-artifact" },
       ],
     },
     {
       label: L.algo,
       work: {
-        zh: "在 PenguinHarness 中复现并集成外部前沿 RSI 算法：（1）已合入发布：RRSI（#35 / 主仓 PR #1535 + 插件仓 PR #43）及 ACE / APE / AWM / OPRO 基线包；（2）已提 PR 在审：Darwin Gödel Machine（#72 / PR #1553）、Reflexion（#73 / PR #1555）、SkillWeaver（#74 / PR #1690）与 RSIAgent（#34 / 插件仓 PR #20）；（3）已认领开发中：斯坦福 Meta-Harness（#58，基于历史候选源码、得分与执行轨迹的 Proposer Agent 外层元搜索，认领者已先提交配套基准 PR #33，算法本体迁移中）。",
-        en: "Reproduce and integrate external RSI algorithms in PenguinHarness: (1) Merged & released: RRSI (#35 / PR #1535 + plugins PR #43) alongside ACE/APE/AWM/OPRO; (2) PR open for review: Darwin Gödel Machine (#72 / PR #1553), Reflexion (#73 / PR #1555), SkillWeaver (#74 / PR #1690), and RSIAgent (#34 / plugins PR #20); (3) Claimed & in development: Stanford Meta-Harness (#58, Proposer Agent outer meta-search; assignee submitted companion benchmark PR #33 while algorithm plugin is in progress).",
+        zh: "在 PenguinHarness 中复现并集成斯坦福 Meta-Harness 算法（#58，arXiv:2603.28052），通过将历史候选源码、得分与完整执行轨迹暴露为可检索文件系统，驱动 Proposer Agent 执行外层元搜索闭环。",
+        en: "Reproduce and integrate Stanford Meta-Harness (#58, arXiv:2603.28052) in PenguinHarness, exposing candidate source code, scores, and execution traces as a searchable filesystem for Proposer Agent outer meta-search.",
       },
       evidence: {
-        zh: "已合入 penguin-harness-rsi-platform / penguin-harness-plugins 的 RRSI（PR #1535 / PR #43）等算法包，以及在审的 DGM（PR #1553）、Reflexion（PR #1555）、SkillWeaver（PR #1690）、RSIAgent（PR #20）和开发中的 Meta-Harness（#58）。",
-        en: "Merged RRSI (PR #1535 / PR #43) toolkits in penguin-harness-rsi-platform & penguin-harness-plugins, open PRs for DGM (PR #1553), Reflexion (PR #1555), SkillWeaver (PR #1690), RSIAgent (PR #20), and in-progress Meta-Harness (#58).",
+        zh: "合入插件仓或主干的 Meta-Harness 算法复现插件与配置说明（#58）。",
+        en: "Meta-Harness algorithm reproduction plugin and configuration guide (#58).",
       },
-      issues: [58, 35, 72, 73, 74, 34],
+      issues: [58],
       references: [
         { label: { zh: "斯坦福 Meta-Harness 原论文 arXiv:2603.28052", en: "Stanford Meta-Harness paper arXiv:2603.28052" }, url: "https://arxiv.org/abs/2603.28052" },
-        { label: { zh: "RRSI 已合入主仓 PR #1535", en: "Merged RRSI core PR #1535" }, url: rrsiPluginPr },
-        { label: { zh: "RRSI 已合入插件商城 PR #43", en: "Merged RRSI marketplace PR #43" }, url: rrsiMarketPr },
-        { label: { zh: "DGM 复现 PR #1553（在审）", en: "DGM reproduction PR #1553 (open)" }, url: dgmPluginPr },
-        { label: { zh: "Reflexion 复现 PR #1555（在审）", en: "Reflexion reproduction PR #1555 (open)" }, url: reflexionPluginPr },
-        { label: { zh: "SkillWeaver 复现 PR #1690（在审）", en: "SkillWeaver reproduction PR #1690 (open)" }, url: skillweaverPluginPr },
-        { label: { zh: "RSIAgent 插件 PR #20（在审）", en: "RSIAgent plugin PR #20 (open)" }, url: rsiagentPluginPr },
+        { label: { zh: "Meta-Harness TerminalBench-2 原论文实验仓", en: "Meta-Harness TerminalBench-2 paper artifact repo" }, url: "https://github.com/stanford-iris-lab/meta-harness-tbench2-artifact" },
       ],
     },
     {
       label: L.run,
-      state: "active",
+      state: "planned",
+      pending: P.benchAcceptance,
       work: {
-        zh: "在对齐的原论文基准上检验各复现算法的提分幅度与复现准确度：其中 RRSI 已在 Terminal-Bench 2.1 + SWE-bench Verified 上完成 400 条评测（PR #31，训练分 83.33→91.67、测试 Token 降 38.69%）；待 Terminal-Bench 2.0（#56 / PR #33）与 Meta-Harness（#58）、DGM（#72）、Reflexion（#73）、SkillWeaver（#74）、RSIAgent（#34）合入后开展完整对照实验。",
-        en: "Verify score gains and reproduction accuracy on aligned benchmarks: RRSI completed 400 runs on Terminal-Bench 2.1 + SWE-bench Verified (PR #31, train 83.33→91.67, test tokens -38.69%); full comparisons for Meta-Harness (#58) on Terminal-Bench 2.0 (#56 / PR #33) and DGM/Reflexion/SkillWeaver/RSIAgent await benchmark and plugin merge.",
+        zh: "待 Terminal-Bench 2.0 基准（#56 / PR #33）与 Meta-Harness 算法插件（#58）就绪后，在对齐的原论文基准上运行 PenguinHarness 复现版 Meta-Harness，与原论文报告指标及官方 RSI 算法工具包（penguin-harness-rsi-platform）对比提分幅度、收敛步数与复现准确度。",
+        en: "Once the Terminal-Bench 2.0 benchmark (#56 / PR #33) and Meta-Harness plugin (#58) are ready, evaluate reproduced Meta-Harness on aligned tasks and compare score gains, convergence steps, and reproduction accuracy against the original paper and official RSI toolkits.",
       },
       evidence: {
-        zh: "RRSI 复现评测记录（PR #31），以及 Meta-Harness（#58）等复现算法相对原论文指标与官方算法工具包（penguin-harness-rsi-platform）的对比实验报告。",
-        en: "RRSI reproduction evaluation (PR #31) and full comparison reports against original paper metrics and official toolkits in penguin-harness-rsi-platform.",
+        zh: "Meta-Harness 复现版相对原论文指标与官方算法工具包（penguin-harness-rsi-platform）的对比表、演化轨迹日志与实验报告。",
+        en: "Comparison tables against original Meta-Harness paper metrics and official toolkits in penguin-harness-rsi-platform, evolution traces, and experiment report.",
       },
       references: [
-        { label: { zh: "RRSI 跨基准复现评测 PR #31（在审）", en: "RRSI reproduction evaluation PR #31 (open)" }, url: rrsiEvalPr },
         { label: { zh: "自进化工作台与算法仓 penguin-harness-rsi-platform", en: "RSI platform & toolkit repo penguin-harness-rsi-platform" }, url: REPO.rsiPlatform },
       ],
     },
