@@ -13,7 +13,7 @@ const t = (zh: string, en: string) => locale === "zh" ? zh : en;
 const progress = researchStageLabels[locale];
 const taskStatuses = { open: t("待认领", "Open"), in_progress: progress.active, completed: progress.done };
 const issueBase = "https://github.com/Prism-Shadow/penguin-harness-community/issues/";
-const allDone = !project.template && project.stages.every((stage) => stage.state === "done");
+const allDone = project.completed;
 ---
 <article class="leaf research-card" data-research-card={project.id} data-research-predecessor={predecessor?.id}
   data-template-card={project.template || undefined} data-state={allDone ? "lit" : project.achievement === "locked" ? "locked" : undefined}
@@ -21,12 +21,10 @@ const allDone = !project.template && project.stages.every((stage) => stage.state
   <h4 id={titleId} aria-label={project.titleParts ? project.title : undefined} data-two-line-title={project.twoLineTitle}>{project.titleParts
     ? project.titleParts.map((part) => <span class="research-title-part">{part}</span>)
     : project.title}</h4>
+  {project.stages.length > 0 && (
   <div class="research-phases" role="group" aria-label={t("课题阶段", "Research stages")}>
     {project.stages.map((stage) => {
-      const status = project.template ? t("待填写", "To be filled in")
-        : stage.state === "planned" && stage.pending ? stage.pending
-        : stage.state === "planned" && stage.tasks.length === 0 && stage.references.length === 0 ? t("暂无进度记录", "No progress recorded")
-        : progress[stage.state];
+      const status = progress[stage.state as keyof typeof progress];
       return (
         <div class="research-phase-cell">
           <button type="button" class="research-phase" data-research-phase data-progress={stage.state}
@@ -80,4 +78,5 @@ const allDone = !project.template && project.stages.every((stage) => stage.state
       );
     })}
   </div>
+  )}
 </article>

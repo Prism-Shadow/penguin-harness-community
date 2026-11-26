@@ -32,8 +32,8 @@ const routeTitles = {
 type RouteId = keyof typeof routeTitles;
 
 export const researchStageLabels = {
-  zh: { planned: "未开始", open: "待认领", active: "进行中", done: "已完成" },
-  en: { planned: "Not started", open: "Open", active: "In progress", done: "Complete" },
+  zh: { open: "待认领", active: "进行中", done: "已完成" },
+  en: { open: "Open", active: "In progress", done: "Complete" },
 };
 
 const L = {
@@ -1233,7 +1233,7 @@ export function researchRoutes(quests: QuestItem[], locale: Locale) {
     const state: StageState = phase.state ?? (
       tasks.length > 0 && tasks.every(({ quest }) => quest?.status === "completed") ? "done"
         : tasks.some(({ quest }) => quest?.status === "in_progress" || quest?.status === "completed") ? "active"
-        : tasks.some(({ quest }) => quest?.status === "open") ? "open"
+        : tasks.length > 0 ? "open"
         : "planned"
     );
     return {
@@ -1259,9 +1259,11 @@ export function researchRoutes(quests: QuestItem[], locale: Locale) {
         if (phases[i]?.label === L.run && rawStages[i].state === "done") rawStages[i].state = "active";
       }
     }
+    const completed = topic.phases !== undefined && rawStages.length > 0 && rawStages.every((stage) => stage.state === "done");
+    const visibleStages = rawStages.filter((stage) => stage.state !== "planned");
     const stages = (topic.phases === undefined
-      ? rawStages
-      : [...rawStages].sort((a, b) => (
+      ? visibleStages
+      : [...visibleStages].sort((a, b) => (
         stageOrder[a.state] - stageOrder[b.state]
         || (labelOrder.get(a.phaseLabel) ?? 99) - (labelOrder.get(b.phaseLabel) ?? 99)
       ))
@@ -1272,6 +1274,7 @@ export function researchRoutes(quests: QuestItem[], locale: Locale) {
       titleParts,
       twoLineTitle: titleParts && topic.twoLineTitle,
       template: topic.phases === undefined,
+      completed,
       achievement,
       stages,
     };
@@ -1281,11 +1284,10 @@ export function researchRoutes(quests: QuestItem[], locale: Locale) {
     title: resolveText(routeTitles[id], locale),
     projects: (routeProjects[id] ?? []).map((project) => {
       const resolved = topicDetails(project);
-      const completed = !resolved.template && resolved.stages.every((stage) => stage.state === "done");
       return {
         ...resolved,
         followUp: project.followUp
-          ? topicDetails(project.followUp, completed ? "unlocked" : "locked")
+          ? topicDetails(project.followUp, resolved.completed ? "unlocked" : "locked")
           : undefined,
       };
     }),

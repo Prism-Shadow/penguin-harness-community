@@ -64,7 +64,7 @@
 .atlas .research-phase:hover::before { box-shadow: inset 0 0 0 1px var(--phase-line, var(--line-strong)); }
 .atlas .research-phase:is(:focus-visible, [aria-expanded="true"])::before { outline: 2px solid var(--blue); outline-offset: 1px; }
 .atlas .research-phase:focus-visible { outline: none; }
-.atlas :is(.research-phase, .research-legend-swatch)[data-progress="open"] {
+.atlas :is(.research-phase, .research-legend-swatch)[data-progress="active"] {
   --phase-line: var(--open-line);
   --phase-fill: linear-gradient(
     45deg,
@@ -77,17 +77,13 @@
     transparent
   ), var(--open-bg);
 }
-.atlas .research-phase[data-progress="open"]::before,
-.atlas .research-legend-swatch[data-progress="open"] {
+.atlas .research-phase[data-progress="active"]::before,
+.atlas .research-legend-swatch[data-progress="active"] {
   background-size: 8px 8px;
 }
-.atlas :is(.research-phase, .research-legend-swatch)[data-progress="active"] {
+.atlas :is(.research-phase, .research-legend-swatch)[data-progress="done"] {
   --phase-line: var(--blue-ink);
   --phase-fill: var(--blue);
-}
-.atlas :is(.research-phase, .research-legend-swatch)[data-progress="done"] {
-  --phase-line: var(--gold-deep);
-  --phase-fill: var(--gold);
 }
 
 .atlas .research-details {
@@ -110,9 +106,8 @@
 .atlas .research-details [data-research-close] svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
 /* The status pill takes the colour of its segment. */
 .atlas .research-state { display: inline-block; padding: 1px 9px; border: 1px solid var(--line-strong); border-radius: 999px; background: var(--canvas); color: var(--muted); font-size: 11.5px; font-weight: 600; line-height: 1.6; }
-.atlas .research-state[data-progress="open"] { border-color: var(--blue-line); background: var(--blue-tint); color: var(--blue-ink); }
-.atlas .research-state[data-progress="active"] { border-color: var(--blue-line); background: var(--blue-tint); color: var(--blue-ink); }
-.atlas .research-state[data-progress="done"] { border-color: var(--gold-line); background: var(--gold-tint-2); color: var(--gold-ink); }
+.atlas .research-state[data-progress="active"],
+.atlas .research-state[data-progress="done"] { border-color: var(--blue-line); background: var(--blue-tint); color: var(--blue-ink); }
 .atlas .research-details h3 { margin: 8px 36px 4px 0; }
 .atlas .research-details p { margin: 0; }
 .atlas .research-detail-heading { margin-top: 12px !important; color: var(--muted); font-size: 12px; font-weight: 650; }
