@@ -1998,3 +1998,37 @@ Save outputs and grades by problem and run so an interrupted run can resume from
     assignee: null
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/133"
     linked_pr: null
+
+  - id: "RSI-Q071"
+    issue_number: 136
+    author: "lzh368"
+    published_at: "2026-11-26T07:09:45Z"
+    status: "open"
+    domain: "Benchmark"
+    exp: 50
+    target_repository: "https://github.com/Prism-Shadow/penguin-harness-benchmark"
+    related_issue: "https://github.com/Prism-Shadow/penguin-harness-community/issues/93"
+    title: "Integrate WebArena Shopping Browser-Use Benchmark"
+    title_zh: "集成 WebArena Shopping 浏览器交互评测基准"
+    description: "Integrate the self-hosted WebArena Shopping benchmark for browser-use agents into `penguin-harness-benchmark`. Use the 30-task WebArena Shopping benchmark generator, environment reset scripts, and reproducibility materials from [PenguinHarness PR #1690](https://github.com/Prism-Shadow/penguin-harness/pull/1690) ([`Nhckdvrl/penguin-harness@94a2fd3`](https://github.com/Nhckdvrl/penguin-harness/tree/94a2fd3ee21d35da8f71bbc500628c05b59a9860/experiments/skillweaver-webarena)) as the starting point. The benchmark should be reusable by SkillWeaver and other browser-use RSI methods. Track the related multi-benchmark browser/computer-use effort in [#93](https://github.com/Prism-Shadow/penguin-harness-community/issues/93) and share preparation or baseline components where practical.
+
+#### Deliverables and acceptance criteria
+
+1. Package the benchmark under [RFC-0001](https://github.com/Prism-Shadow/penguin-harness-community/blob/main/rfcs/RFC-0001-benchmark.md) with task metadata, deterministic task selection (`make_benchmark.py`), documented self-hosted Docker setup (`shopping_final_0712`), and site reset commands (`reset-shopping.sh`). Pin the upstream WebArena commit (`dce04686a56253aefba7b18a4fa0937cf1dc987b`), task splits, and image digest. Submit the benchmark as `draft`.
+2. Define and enforce the evaluation and anti-contamination contract. Keep the site reset workflow, authenticated customer session setup, and deterministic evaluation rules (`string_match` / `url_match`, including exact handling of currency/punctuation tokenization) fixed across runs. Document rules that prevent the target agent from reading reference answer files (`test.raw.json`), benchmark rubrics, or external repositories during evaluation.
+3. Provide baseline execution and an evaluator that verifies task completion and checks trace/state integrity. Verify the setup, site reset, and scoring end to end with a reproducible run."
+    description_zh: "将自托管的 WebArena Shopping 浏览器交互评测基准接入 `penguin-harness-benchmark`。以 [PenguinHarness PR #1690](https://github.com/Prism-Shadow/penguin-harness/pull/1690)（[`Nhckdvrl/penguin-harness@94a2fd3`](https://github.com/Nhckdvrl/penguin-harness/tree/94a2fd3ee21d35da8f71bbc500628c05b59a9860/experiments/skillweaver-webarena)）中的 30 题基准生成脚本、环境重置脚本和复现材料为起点，供 SkillWeaver 及其他浏览器交互 RSI 方法复用。综合浏览器/计算机交互基准接入见 [#93](https://github.com/Prism-Shadow/penguin-harness-community/issues/93)，可共用的环境准备与基线组件尽量复用。
+
+#### 交付与验收要求
+
+1. 遵循 [RFC-0001](https://github.com/Prism-Shadow/penguin-harness-community/blob/main/rfcs/RFC-0001-benchmark.md) 整理基准和任务元信息，锁定上游 WebArena 版本（`dce04686a56253aefba7b18a4fa0937cf1dc987b`）、题目划分与 Docker 镜像摘要（`shopping_final_0712`），提供可复现的基准构建脚本（`make_benchmark.py`）、容器重置脚本（`reset-shopping.sh`）和基线运行命令，提交状态设为 `draft`。
+2. 明确评测与防答案污染约定。固定站点重置流程、测试账号登录态以及 `string_match` / `url_match` 判分口径（含金额与标点分词规则）。明确防止被测 Agent 在评测期间读取本地或远端参考答案（如 `test.raw.json`）、评分细则或历史轨迹的隔离与审计要求。
+3. 提供基线运行入口，以及检查任务得分和轨迹/状态完整性的评测脚本。提供可复现的端到端环境重置、运行与评分验证。"
+    references:
+      - "https://arxiv.org/abs/2307.13854"
+      - "https://github.com/web-arena-x/webarena/tree/dce04686a56253aefba7b18a4fa0937cf1dc987b"
+      - "https://github.com/Prism-Shadow/penguin-harness/pull/1690"
+      - "https://github.com/Nhckdvrl/penguin-harness/tree/94a2fd3ee21d35da8f71bbc500628c05b59a9860/experiments/skillweaver-webarena"
+    assignee: null
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/136"
+    linked_pr: null
