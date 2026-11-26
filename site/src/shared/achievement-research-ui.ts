@@ -88,6 +88,5 @@ export function bindResearchDetails(root: HTMLDetailsElement, viewport: HTMLElem
   window.addEventListener("scroll", () => hide(), { passive: true });
   window.addEventListener("resize", () => hide());
   root.addEventListener("toggle", () => { if (!root.open) hide(); });
-  root.addEventListener("atlas-version-change", () => hide());
   return () => hide();
 }

@@ -17,6 +17,9 @@
   --blue-ink: #2f64ea;
   --blue-tint: #f1f5fe;
   --blue-line: #c9dafa;
+  --open-bg: #7ca5fd;
+  --open-stripe: rgb(255 255 255 / 0.38);
+  --open-line: #5b8def;
   --gold: #f59e0b;
   --gold-deep: #d97706;
   --gold-ink: #92400e;
@@ -68,6 +71,9 @@
   --blue-ink: #a5c0ff;
   --blue-tint: #0c1427;
   --blue-line: #233a6b;
+  --open-bg: #3b5fa8;
+  --open-stripe: rgb(255 255 255 / 0.24);
+  --open-line: #547dd1;
   --gold: #fbbf24;
   --gold-deep: #f59e0b;
   --gold-ink: #fde68a;

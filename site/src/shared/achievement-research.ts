@@ -2,7 +2,7 @@ import { resolveText, type QuestItem } from "./community";
 import type { Locale } from "./i18n";
 
 type Text = Record<Locale, string>;
-type StageState = "planned" | "active" | "done";
+type StageState = "planned" | "open" | "active" | "done";
 type Phase = {
   label: Text;
   work: Text;
@@ -30,15 +30,10 @@ const routeTitles = {
   apps: { zh: "垂域应用中心插件", en: "Vertical App Center plugins" },
 };
 type RouteId = keyof typeof routeTitles;
-type VersionDefinition = {
-  id: string;
-  preview?: true;
-  projects: Partial<Record<RouteId, ProjectDefinition[]>>;
-};
 
 export const researchStageLabels = {
-  zh: { planned: "未开始", active: "进行中", done: "已完成" },
-  en: { planned: "Not started", active: "In progress", done: "Complete" },
+  zh: { planned: "未开始", open: "待认领", active: "进行中", done: "已完成" },
+  en: { planned: "Not started", open: "Open", active: "In progress", done: "Complete" },
 };
 
 const L = {
@@ -79,6 +74,35 @@ const infraPr = `${REPO.harness}/pull/1551`;
 const infraRun = `${infraPr}#issuecomment-6997394473`;
 const trainingPhases: Phase[] = [
   {
+    label: L.algo,
+    work: {
+      zh: "在 PenguinHarness 中集成 InfraRSI 训练基础设施自进化方法（#71），支持围绕 micro-batch、编译配置与训练算子的候选生成、数值校验与成对复测闭环。",
+      en: "Integrate the InfraRSI self-evolution method (#71) in PenguinHarness to search micro-batch sizes, compiler flags, and training code edits with automated verification.",
+    },
+    evidence: {
+      zh: "合入插件仓的 InfraRSI 算法插件与自动化验证钩子（#71）。",
+      en: "Merged InfraRSI algorithm plugin and automated verification hooks (#71).",
+    },
+    issues: [71],
+    references: [{ label: { zh: "InfraRSI 实现与试跑 PR #1551", en: "InfraRSI implementation & trial PR #1551" }, url: infraPr }],
+  },
+  {
+    label: L.run,
+    work: {
+      zh: "在单张 NVIDIA A100 80GB 上固定 50.3M 参数模型与每步 2¹⁹ Token（基线 micro-batch 128），运行 InfraRSI 搜索训练配置与代码改动并统计第 21–60 步稳态耗时及验证集 BPB（#71、#121，PR #1551）。",
+      en: "On a single NVIDIA A100 80GB with a fixed 50.3M-parameter model and 2¹⁹ tokens/step, run InfraRSI (#71, #121, PR #1551) and measure steady-state step time (steps 21–60) and validation BPB.",
+    },
+    evidence: {
+      zh: "基线与进化候选的成对复测记录、单步耗时/Loss/BPB 对照表及可复跑实验报告。",
+      en: "Paired baseline vs. candidate measurements, step-time/loss/BPB comparison tables, and a reproducible experiment report.",
+    },
+    issues: [71, 121],
+    references: [
+      { label: { zh: "实验 PR #1551", en: "Experiment PR #1551" }, url: infraPr },
+      { label: { zh: "B-Comp 试跑记录", en: "B-Comp trial records" }, url: infraRun },
+    ],
+  },
+  {
     label: L.bench,
     pending: P.integrate,
     work: {
@@ -94,37 +118,6 @@ const trainingPhases: Phase[] = [
       en: "Deliver a runnable benchmark package with data preparation, baseline reproduction, and automated candidate scoring.",
     },
     issues: [120],
-  },
-  {
-    label: L.algo,
-    work: {
-      zh: "在 PenguinHarness 中集成 InfraRSI 训练基础设施自进化方法（#71），支持围绕 micro-batch、编译配置与训练算子的候选生成、数值校验与成对复测闭环。",
-      en: "Integrate the InfraRSI self-evolution method (#71) in PenguinHarness to search micro-batch sizes, compiler flags, and training code edits with automated verification.",
-    },
-    evidence: {
-      zh: "合入插件仓的 InfraRSI 算法插件与自动化验证钩子（#71）。",
-      en: "Merged InfraRSI algorithm plugin and automated verification hooks (#71).",
-    },
-    issues: [71],
-    references: [{ label: { zh: "InfraRSI 实现与试跑 PR #1551", en: "InfraRSI implementation & trial PR #1551" }, url: infraPr }],
-  },
-  {
-    label: L.run,
-    state: "planned",
-    pending: P.benchAcceptance,
-    work: {
-      zh: "在单张 NVIDIA A100 80GB 上固定 50.3M 参数模型与每步 2¹⁹ Token（基线 micro-batch 128），运行 InfraRSI 搜索训练配置与代码改动并统计第 21–60 步稳态耗时及验证集 BPB（#121）。",
-      en: "On a single NVIDIA A100 80GB with a fixed 50.3M-parameter model and 2¹⁹ tokens/step, run InfraRSI (#121) and measure steady-state step time (steps 21–60) and validation BPB.",
-    },
-    evidence: {
-      zh: "基线与进化候选的成对复测记录、单步耗时/Loss/BPB 对照表及可复跑实验报告。",
-      en: "Paired baseline vs. candidate measurements, step-time/loss/BPB comparison tables, and a reproducible experiment report.",
-    },
-    issues: [121],
-    references: [
-      { label: { zh: "实验 PR #1551", en: "Experiment PR #1551" }, url: infraPr },
-      { label: { zh: "B-Comp 试跑记录", en: "B-Comp trial records" }, url: infraRun },
-    ],
   },
 ];
 
@@ -145,16 +138,6 @@ const speedrun: TopicDefinition = {
   },
   phases: [
     {
-      label: L.bench,
-      pending: P.integrate,
-      work: {
-        zh: "选定 NanoGPT Speedrun 赛道（Track 1 或 Track 3），固定版本、FineWeb 数据流和目标验证集 Loss 达标线（#84）。",
-        en: "Select a NanoGPT Speedrun track (Track 1 or Track 3) and pin its version, FineWeb data stream, and target validation loss (#84).",
-      },
-      evidence: { zh: "可复跑的赛道基线与自动评分入口。", en: "A reproducible track baseline and automated scoring entry point." },
-      issues: [84],
-    },
-    {
       label: L.algo,
       work: {
         zh: "复用并扩展 InfraRSI 训练基础设施自进化策略（#71），适配 NanoGPT Speedrun 的分布式/编译与注意力算子搜索空间。",
@@ -165,15 +148,24 @@ const speedrun: TopicDefinition = {
       references: [{ label: { zh: "上游实验 PR #1551", en: "Upstream PR #1551" }, url: infraPr }],
     },
     {
+      label: L.bench,
+      pending: P.integrate,
+      work: {
+        zh: "选定 NanoGPT Speedrun 赛道（Track 1 或 Track 3），固定版本、FineWeb 数据流和目标验证集 Loss 达标线（#84）。",
+        en: "Select a NanoGPT Speedrun track (Track 1 or Track 3) and pin its version, FineWeb data stream, and target validation loss (#84).",
+      },
+      evidence: { zh: "可复跑的赛道基线与自动评分入口。", en: "A reproducible track baseline and automated scoring entry point." },
+      issues: [84],
+    },
+    {
       label: L.run,
       state: "planned",
       pending: P.benchAcceptance,
       work: {
-        zh: "在相同硬件和赛道规则下对照官方基线与 InfraRSI 演化版本，记录达到目标验证精度的端到端耗时（Time-to-Target）与稳态吞吐。",
-        en: "Compare the official Speedrun baseline against the InfraRSI evolved variant on identical hardware, recording time-to-target and steady-state throughput.",
+        zh: "待 #84 赛道基准接入后，在相同硬件和赛道规则下对照官方基线与 InfraRSI 演化版本，记录达到目标验证精度的端到端耗时（Time-to-Target）与稳态吞吐。",
+        en: "Once the #84 track benchmark is integrated, compare the official Speedrun baseline against the InfraRSI evolved variant on identical hardware, recording time-to-target and steady-state throughput.",
       },
       evidence: { zh: "迁移补丁、两组训练日志及可评审的 Speedrun 预训练速度优化实验报告。", en: "Transfer patches, paired training logs, and a reviewable Speedrun optimization experiment report." },
-      issues: [84],
     },
   ],
 };
@@ -187,40 +179,96 @@ const ascendInference: TopicDefinition = {
   },
   phases: [
     {
+      label: L.algo,
+      work: {
+        zh: "基于 InfraRSI（#71）构建面向昇腾 CANN 图编译、MTP 投机步数档位与调度参数的自动演化及精度门禁校验流程（#88 / PR #1627）。",
+        en: "Build an InfraRSI (#71) evolution workflow targeting Ascend CANN graph compilation, MTP speculative step modes, and scheduling parameters under accuracy gates (#88 / PR #1627).",
+      },
+      evidence: { zh: "昇腾推理参数与投机调度自进化补丁及自动门禁脚本（#88 / PR #1627）。", en: "Ascend inference evolution patches and automated accuracy gate scripts (#88 / PR #1627)." },
+      issues: [71, 88],
+      references: [{ label: { zh: "演化实现 PR #1627", en: "Evolution implementation PR #1627" }, url: ascendPr }],
+    },
+    {
+      label: L.run,
+      work: {
+        zh: "在单张 Ascend 950PR 上开展 Qwen3.8 推理 Infra 低时延与确定性吞吐 RSI 优化实验（#88 / PR #1627），对比 latency（MTP 3 tokens）、throughput（MTP 1 token）及动态投机调度，32 并发吞吐由 814.2 升至 904.7 tok/s（+11.1%）。",
+        en: "Run Qwen3.8 inference latency and throughput RSI optimization on a single Ascend 950PR (#88 / PR #1627), comparing latency (MTP 3), throughput (MTP 1), and dynamic scheduling to raise 32-concurrency throughput from 814.2 to 904.7 tok/s (+11.1%).",
+      },
+      evidence: { zh: "带 3×CV 噪声门限对照的多并发吞吐/TPOT/TTFT 结果表与实验报告（#88 / PR #1627）。", en: "Throughput, TPOT, and TTFT comparison tables against 3×CV noise thresholds and the verified report (#88 / PR #1627)." },
+      issues: [88],
+      references: [{ label: { zh: "试跑数据与报告 PR #1627", en: "Trial measurements & report PR #1627" }, url: ascendPr }],
+    },
+    {
       label: L.bench,
+      state: "planned",
       pending: P.integrate,
       work: {
-        zh: "将 32 并发/单流压测负载与 20 题问答精度门禁（temperature=0，要求 20/20 全过且偏差 ≤1 题）按 RFC-0001 拆分为独立基准（#88）。",
-        en: "Extract the 32-concurrency/single-stream benchmark workload and 20-question accuracy gate (temperature=0, 20/20 pass) under RFC-0001 (#88).",
+        zh: "待将 #88（PR #1627）中的 32 并发/单流压测负载与 20 题问答精度门禁（temperature=0，要求 20/20 全过且偏差 ≤1 题）按 RFC-0001 拆分为独立基准包并发布接入任务。",
+        en: "Pending extraction of the 32-concurrency/single-stream workload and 20-question accuracy gate (temperature=0, 20/20 pass) from #88 (PR #1627) into a standalone RFC-0001 benchmark package.",
       },
       dataset: {
         zh: "固定 Qwen3.8-27B-w8a8、32K 上下文、max-num-seqs=32 与 20 道固定问答校验题。",
         en: "Pin Qwen3.8-27B-w8a8, 32K context length, max-num-seqs=32, and a 20-question deterministic QA gate.",
       },
       evidence: { zh: "独立于进化产物的昇腾 vLLM 推理评测基准包。", en: "A standalone Ascend vLLM inference benchmark package." },
-      issues: [88],
+    },
+  ],
+};
+
+const postTrainBenchPr = `${REPO.bench}/pull/37`;
+const qwenPostTraining: TopicDefinition = {
+  id: "qwen-llamafactory-post-training",
+  title: {
+    zh: "基于 LlamaFactory 的 Qwen3.8 后训练优化",
+    en: "Optimizing Qwen3.8 Post-Training with LlamaFactory",
+  },
+  phases: [
+    {
+      label: L.bench,
+      pending: P.accept,
+      work: {
+        zh: "按 RFC-0001 接入大模型自主后训练评测基准 PostTrainBench（#61 / PR #37，覆盖数学、写作、科学问答、医疗、代码等 6 类基准），并搭建 Qwen3.8 训练与后训练评测环境（#87），固定算力与时间预算、训练吞吐（tokens/s、MFU）及下游评测指标。",
+        en: "Integrate the PostTrainBench autonomous post-training benchmark (#61 / PR #37 across 6 benchmarks including math, writing, science QA, medical, and coding) under RFC-0001 and set up the Qwen3.8 training and post-training evaluation harness (#87) with pinned compute/time budgets, throughput metrics, and downstream accuracy gates.",
+      },
+      dataset: {
+        zh: "涵盖 PostTrainBench 标准化后训练任务包（PR #37，6 个基准 × 4 个基座模型）与 Qwen3.8 评测集，固定 GPU 预算与自动评分流程。",
+        en: "Covers standardized PostTrainBench task packages (PR #37, 6 benchmarks × 4 base models) and Qwen3.8 evaluation splits under fixed GPU budgets and automated scoring.",
+      },
+      evidence: {
+        zh: "PR #37 提交的 PostTrainBench 基准包及 Qwen3.8 训练/后训练可复现评测入口（#61、#87）。",
+        en: "PostTrainBench benchmark package in PR #37 and reproducible Qwen3.8 training/post-training evaluation entry points (#61, #87).",
+      },
+      issues: [61, 87],
+      references: [{ label: { zh: "PostTrainBench 基准 PR #37（在审）", en: "PostTrainBench benchmark PR #37 (open)" }, url: postTrainBenchPr }],
     },
     {
       label: L.algo,
       work: {
-        zh: "基于 InfraRSI（#71）构建面向昇腾 CANN 图编译、MTP 投机步数档位与调度参数的自动演化及精度门禁校验流程。",
-        en: "Build an InfraRSI (#71) evolution workflow targeting Ascend CANN graph compilation, MTP speculative step modes, and scheduling parameters under accuracy gates.",
+        zh: "结合 LlamaFactory 与 PenguinHarness 的 InfraRSI 自进化闭环（#71），围绕 Qwen3.8 的数据配比与打包流水线、优化器与学习率日程、后训练配方及面向国产芯片的分布式训练算子与通信（#87、#89）开展多轮候选演化与自动验证。",
+        en: "Combine LlamaFactory with PenguinHarness's InfraRSI loop (#71) to iteratively evolve Qwen3.8 data packing pipelines, optimizer/LR schedules, post-training recipes, and distributed training kernels/communication on domestic accelerators (#87, #89).",
       },
-      evidence: { zh: "昇腾推理参数与投机调度自进化补丁及自动门禁脚本（PR #1627）。", en: "Ascend inference evolution patches and automated accuracy gate scripts (PR #1627)." },
-      issues: [71],
-      references: [{ label: { zh: "演化实现 PR #1627", en: "Evolution implementation PR #1627" }, url: ascendPr }],
+      evidence: {
+        zh: "LlamaFactory × PenguinHarness 自主后训练演化工作流、配方/算子搜索插件与自动校验脚本。",
+        en: "LlamaFactory × PenguinHarness autonomous post-training evolution workflow, recipe/kernel search plugins, and verification scripts.",
+      },
+      issues: [71, 87, 89],
+      references: [
+        { label: { zh: "LlamaFactory 开源仓库", en: "LlamaFactory repository" }, url: "https://github.com/hiyouga/LlamaFactory" },
+        { label: { zh: "InfraRSI 实现 PR #1551", en: "InfraRSI implementation PR #1551" }, url: infraPr },
+      ],
     },
     {
       label: L.run,
-      state: "planned",
       pending: P.benchAcceptance,
       work: {
-        zh: "在单张 Ascend 950PR 上对比 latency（MTP 3 tokens）、throughput（MTP 1 token）及动态投机调度。PR #1627 试跑 32 并发吞吐由 814.2 升至 904.7 tok/s（+11.1%），待独立基准拆分后复核。",
-        en: "Compare latency (MTP 3), throughput (MTP 1), and dynamic scheduling on a single Ascend 950PR. PR #1627 trial raised 32-concurrency throughput from 814.2 to 904.7 tok/s (+11.1%), pending standalone benchmark verification.",
+        zh: "在固定 GPU/NPU 与时间预算下，对比默认后训练基线与多轮自进化配方在 Qwen3.8 上的收敛速度（val loss / BPB）、训练系统吞吐（tokens/s、MFU）及下游基准准确率提升（#87、#61、#89）。",
+        en: "Under fixed GPU/NPU and time budgets, compare default post-training baselines against multi-round evolved recipes on Qwen3.8 across convergence speed, training throughput, and downstream benchmark accuracy (#87, #61, #89).",
       },
-      evidence: { zh: "带 3×CV 噪声门限对照的多并发吞吐/TPOT/TTFT 结果表与实验报告。", en: "Throughput, TPOT, and TTFT comparison tables against 3×CV noise thresholds and the verified report." },
-      issues: [88],
-      references: [{ label: { zh: "试跑数据与报告 PR #1627", en: "Trial measurements & report PR #1627" }, url: ascendPr }],
+      evidence: {
+        zh: "后训练配方与算子改动补丁、候选树演化日志及吞吐/精度前后对比实验报告。",
+        en: "Post-training recipe and kernel patches, candidate tree evolution logs, and before/after throughput and accuracy evaluation report.",
+      },
+      issues: [87],
     },
   ],
 };
@@ -232,6 +280,15 @@ const solExecBenchErnie: TopicDefinition = {
     en: "Automated GPU Kernel Optimization Experiment",
   },
   phases: [
+    {
+      label: L.algo,
+      work: {
+        zh: "在 PenguinHarness 中复现 ERNIE Evolve 双层循环自动研究系统（外层候选树规划 + 内层算子实现与硬件性能反馈验证，#86）。",
+        en: "Reproduce the ERNIE Evolve dual-loop system (outer tree planner + inner kernel implementation and hardware profiling verifier, #86) in PenguinHarness.",
+      },
+      evidence: { zh: "双层进化循环插件实现与算子编译/数值/性能自动校验工具链。", en: "Dual-loop evolution plugin implementation and automated kernel compilation/numerical/profiling verifier." },
+      issues: [86],
+    },
     {
       label: L.bench,
       pending: P.integrate,
@@ -247,24 +304,14 @@ const solExecBenchErnie: TopicDefinition = {
       issues: [85],
     },
     {
-      label: L.algo,
-      work: {
-        zh: "在 PenguinHarness 中复现 ERNIE Evolve 双层循环自动研究系统（外层候选树规划 + 内层算子实现与硬件性能反馈验证，#86）。",
-        en: "Reproduce the ERNIE Evolve dual-loop system (outer tree planner + inner kernel implementation and hardware profiling verifier, #86) in PenguinHarness.",
-      },
-      evidence: { zh: "双层进化循环插件实现与算子编译/数值/性能自动校验工具链。", en: "Dual-loop evolution plugin implementation and automated kernel compilation/numerical/profiling verifier." },
-      issues: [86],
-    },
-    {
       label: L.run,
       state: "planned",
       pending: P.benchAcceptance,
       work: {
-        zh: "在 SOL-ExecBench 12 类算子家族上对比单轮直接生成基线与多轮进化，统计数值正确率与相对硬件极限的 SOL 平均得分（参考值：ERNIE Evolve 0.819 vs Hyra-1.0 0.736）。",
-        en: "Compare single-pass generation against multi-round evolution across all 12 SOL-ExecBench operator families, measuring pass rate and mean SOL score.",
+        zh: "待 #85 算子基准与 #86 双层进化系统就绪后，在 SOL-ExecBench 12 类算子家族上对比单轮直接生成基线与多轮进化，统计数值正确率与相对硬件极限的 SOL 平均得分（参考值：ERNIE Evolve 0.819 vs Hyra-1.0 0.736）。",
+        en: "Once the #85 benchmark and #86 dual-loop system are ready, compare single-pass generation against multi-round evolution across all 12 SOL-ExecBench operator families, measuring pass rate and mean SOL score.",
       },
       evidence: { zh: "12 类算子家族的正确率、SOL 加速比对照表及典型算子（MLA/MoE）演化轨迹报告。", en: "Pass rate and SOL speedup breakdown across 12 operator families plus trajectory analysis on MLA/MoE." },
-      issues: [85, 86],
     },
   ],
 };
@@ -312,11 +359,10 @@ const autoBenchJudgeAlignment: TopicDefinition = {
       state: "planned",
       pending: P.benchAcceptance,
       work: {
-        zh: "对比「LLM 零样本自动生成判分规则」与「Auto Bench 人机协同校准判分器」，测量与人类专家裁决的一致率（Cohen's κ）、边界样本误判率及抑制奖励黑客的效果。",
-        en: "Compare zero-shot LLM rubric generation against the calibrated Auto Bench judge, measuring human agreement (Cohen's κ), boundary error rates, and reward-hacking resistance.",
+        zh: "待校准样本集与 #78 插件就绪后，对比「LLM 零样本自动生成判分规则」与「Auto Bench 人机协同校准判分器」，测量与人类专家裁决的一致率（Cohen's κ）、边界样本误判率及抑制奖励黑客的效果。",
+        en: "Once the calibration set and #78 plugin are ready, compare zero-shot LLM rubric generation against the calibrated Auto Bench judge, measuring human agreement (Cohen's κ), boundary error rates, and reward-hacking resistance.",
       },
       evidence: { zh: "判分一致率对照表、误判案例消融分析与 Auto Bench 验收报告。", en: "Judge agreement comparison tables, boundary error ablations, and the Auto Bench evaluation report." },
-      issues: [78, 103],
     },
   ],
 };
@@ -343,11 +389,10 @@ const turingBenchWritingRealism: TopicDefinition = {
       state: "planned",
       pending: P.benchAcceptance,
       work: {
-        zh: "交换正反位置运行多轮成对盲测，对比单维度总体打分与分项（句式多样性、情感自然度、分镜连贯性）规则判分，统计正反序翻转率、跨评审模型一致率及去偏置效果。",
-        en: "Run position-swapped pairwise blind evaluations comparing holistic scoring against decomposed criteria, reporting flip rates, cross-judge agreement, and debiasing effectiveness.",
+        zh: "待 #96、#68 基准构建完成后，交换正反位置运行多轮成对盲测，对比单维度总体打分与分项（句式多样性、情感自然度、分镜连贯性）规则判分，统计正反序翻转率、跨评审模型一致率及去偏置效果。",
+        en: "Once the #96 and #68 benchmarks are ready, run position-swapped pairwise blind evaluations comparing holistic scoring against decomposed criteria, reporting flip rates, cross-judge agreement, and debiasing effectiveness.",
       },
       evidence: { zh: "位置偏置消融日志、主观评测稳定性量化结果表与基准评测报告。", en: "Position-bias ablation logs, subjective evaluation stability tables, and the benchmark evaluation report." },
-      issues: [68, 96],
     },
   ],
 };
@@ -363,16 +408,6 @@ const contextCompactionHandoff: TopicDefinition = {
   },
   phases: [
     {
-      label: L.bench,
-      pending: P.integrate,
-      work: {
-        zh: "构建触发多次上下文压缩的长程任务评测集（#62）与 Agent Memory 第一性原理评测基准（#90，涵盖原始历史检索、跨会话溯源研究与 Memory Tax 净收益评测）。",
-        en: "Build the long-horizon context compaction benchmark (#62) and the first-principles Agent Memory benchmark (#90, covering raw history retrieval, cross-session provenance, and Memory Tax).",
-      },
-      evidence: { zh: "固定压缩阈值与探针检查点的长程上下文压缩与 Memory 评测基准。", en: "A long-horizon compaction and memory benchmark with pinned token thresholds and probe checkpoints." },
-      issues: [62, 90],
-    },
-    {
       label: L.algo,
       work: {
         zh: "优化 PenguinHarness 上下文压缩算法（#44，PR #1491 压缩前多轮工具写入 handoff 文件 + trace-lookup JSONL 行级检索、PR #1591 压缩配置），并推进 Obelisk 原始历史检索层与分层图视图记忆架构接入（#91）。",
@@ -386,15 +421,24 @@ const contextCompactionHandoff: TopicDefinition = {
       ],
     },
     {
+      label: L.bench,
+      pending: P.integrate,
+      work: {
+        zh: "构建触发多次上下文压缩的长程任务评测集（#62）与 Agent Memory 第一性原理评测基准（#90，涵盖原始历史检索、跨会话溯源研究与 Memory Tax 净收益评测）。",
+        en: "Build the long-horizon context compaction benchmark (#62) and the first-principles Agent Memory benchmark (#90, covering raw history retrieval, cross-session provenance, and Memory Tax).",
+      },
+      evidence: { zh: "固定压缩阈值与探针检查点的长程上下文压缩与 Memory 评测基准。", en: "A long-horizon compaction and memory benchmark with pinned token thresholds and probe checkpoints." },
+      issues: [62, 90],
+    },
+    {
       label: L.run,
       state: "planned",
       pending: P.benchAcceptance,
       work: {
-        zh: "在相同模型与压缩阈值下，对比「纯文本摘要」、「压缩交接 + JSONL 行级检索」与「分层 Memory 检索」在关键事实保留率、跨会话溯源准确率及 Memory Tax 开销上的表现。",
-        en: "Compare plain text summaries, compaction handoff + JSONL trace lookup, and hierarchical memory retrieval on fact recall, cross-session provenance accuracy, and token overhead.",
+        zh: "待 #62、#90 基准接入后，在相同模型与压缩阈值下对比「纯文本摘要」、「压缩交接 + JSONL 行级检索（#44）」与「分层 Memory 检索（#91）」在关键事实保留率、跨会话溯源准确率及 Memory Tax 开销上的表现。",
+        en: "Once benchmarks #62 and #90 are integrated, compare plain text summaries, compaction handoff + JSONL trace lookup (#44), and hierarchical memory retrieval (#91) on fact recall, cross-session provenance accuracy, and token overhead.",
       },
       evidence: { zh: "关键信息召回率、端到端任务完成率与 Token 开销对照表及实验报告。", en: "Fact recall, task completion rate, and token overhead comparison tables and evaluation report." },
-      issues: [44, 62, 90],
     },
   ],
 };
@@ -407,19 +451,6 @@ const personalAgentComputerUse: TopicDefinition = {
     en: "Evaluating Personal Agent Computer and Browser Use",
   },
   phases: [
-    {
-      label: L.bench,
-      pending: P.integrate,
-      work: {
-        zh: "按 RFC-0001 接入标准化 Computer Use（如 OSWorld 桌面跨应用任务集）与 Browser Use（如 WebArena、BrowserGym 网页交互）评测基准，固定容器沙箱快照与终态自动判分器（#93）。",
-        en: "Integrate standardized Computer Use (e.g., OSWorld desktop tasks) and Browser Use (e.g., WebArena, BrowserGym) benchmarks under RFC-0001 with deterministic sandbox snapshots and state evaluators (#93).",
-      },
-      evidence: {
-        zh: "可一键复现的桌面与浏览器交互评测沙箱、初始状态快照及自动判分入口（#93）。",
-        en: "Reproducible desktop and browser evaluation sandboxes, state snapshots, and automated evaluators (#93).",
-      },
-      issues: [93],
-    },
     {
       label: L.algo,
       work: {
@@ -434,18 +465,30 @@ const personalAgentComputerUse: TopicDefinition = {
       references: [{ label: { zh: "Computer Use 集成 PR #1650", en: "Computer Use integration PR #1650" }, url: computerUsePr }],
     },
     {
+      label: L.bench,
+      pending: P.integrate,
+      work: {
+        zh: "按 RFC-0001 接入标准化 Computer Use（如 OSWorld 桌面跨应用任务集）与 Browser Use（如 WebArena、BrowserGym 网页交互）评测基准，固定容器沙箱快照与终态自动判分器（#93）。",
+        en: "Integrate standardized Computer Use (e.g., OSWorld desktop tasks) and Browser Use (e.g., WebArena, BrowserGym) benchmarks under RFC-0001 with deterministic sandbox snapshots and state evaluators (#93).",
+      },
+      evidence: {
+        zh: "可一键复现的桌面与浏览器交互评测沙箱、初始状态快照及自动判分入口（#93）。",
+        en: "Reproducible desktop and browser evaluation sandboxes, state snapshots, and automated evaluators (#93).",
+      },
+      issues: [93],
+    },
+    {
       label: L.run,
       state: "planned",
       pending: P.benchAcceptance,
       work: {
-        zh: "在 OSWorld、WebArena 等真实桌面与浏览器任务集上评测 Personal Agent 的端到端任务完成率、键鼠/网页操作步数开销与异常界面视觉自纠错成功率（#93、#92、#52）。",
-        en: "Evaluate Personal Agent end-to-end task completion rate, action step efficiency, and visual self-correction rate on OSWorld and WebArena tasks (#93, #92, #52).",
+        zh: "待 #93 基准接入后，在 OSWorld、WebArena 等真实桌面与浏览器任务集上评测 Personal Agent（#92、#52）的端到端任务完成率、键鼠/网页操作步数开销与异常界面视觉自纠错成功率。",
+        en: "Once benchmark #93 is integrated, evaluate Personal Agent (#92, #52) end-to-end task completion rate, action step efficiency, and visual self-correction rate on OSWorld and WebArena tasks.",
       },
       evidence: {
         zh: "桌面与浏览器操控轨迹及截图记录、成功率—步数对照表与评测报告。",
         en: "Desktop and browser action trajectory logs, success-rate vs. step-cost comparison tables, and evaluation report.",
       },
-      issues: [93, 92, 52],
     },
   ],
 };
@@ -474,13 +517,11 @@ const agentBlockerHonesty: TopicDefinition = {
     },
     {
       label: L.run,
-      state: "planned",
-      pending: P.benchAcceptance,
       work: {
-        zh: "固定 gpt-6.1-sol（high 思考档），对「模型直答」「默认 Codex CLI」「注入 policy-v2 汇报规则的智能体」各独立运行 3 轮（252 份答复）。PR #42 试跑首答合格率由 44/75 升至 70/75（+34.67%），待基准审校合入并扩展至 PenguinHarness。",
-        en: "Fix gpt-6.1-sol (high reasoning) across direct model calls, default Codex CLI, and policy-v2 rules for 3 trials each (252 runs). PR #42 raised honest disclosure from 44/75 to 70/75 (+34.67 pp), pending benchmark merge and PenguinHarness evaluation.",
+        zh: "固定 gpt-6.1-sol（high 思考档），对「模型直答」「默认 Codex CLI」「注入 policy-v2 汇报规则的智能体」各独立运行 3 轮（252 份答复，#112、#124，PR #42）：首答合格率由 44/75 升至 70/75（+34.67%），待基准审校合入并扩展至 PenguinHarness。",
+        en: "Fix gpt-6.1-sol (high reasoning) across direct model calls, default Codex CLI, and policy-v2 rules for 3 trials each (252 runs, #112, #124, PR #42): honest disclosure rose from 44/75 to 70/75 (+34.67 pp), pending benchmark merge and PenguinHarness evaluation.",
       },
-      evidence: { zh: "252 份运行轨迹、非盲/盲测双口径对照表与阻碍如实汇报实验报告。", en: "252 run trajectories, non-blind vs. blind comparison tables, and the blocker honesty evaluation report." },
+      evidence: { zh: "252 份运行轨迹、非盲/盲测双口径对照表与阻碍如实汇报实验报告（#112 / PR #42）。", en: "252 run trajectories, non-blind vs. blind comparison tables, and the blocker honesty evaluation report (#112 / PR #42)." },
       issues: [112, 124],
       references: [{ label: { zh: "252 份实测记录与报告 PR #42", en: "252 run records & report in PR #42" }, url: honestyPr }],
     },
@@ -525,14 +566,12 @@ const companyModeCoordination: TopicDefinition = {
     },
     {
       label: L.run,
-      state: "planned",
-      pending: P.previousStage,
       work: {
-        zh: "在 SWE-CoWork 的 101 道真实代码仓库维护任务上对比原始提示词、精简沟通规范与 Super Agent 里程碑并行调度。PR #1434 试跑将无指向刷屏由 16 条降至 0，待 #94 完成后开展完整仓库级交付率评测。",
-        en: "Compare baseline prompts, concise communication norms, and Super Agent milestone scheduling on the 101 SWE-CoWork repository maintenance tasks.",
+        zh: "在 SWE-CoWork（#108）的 101 道真实代码仓库维护任务上对比原始提示词、精简沟通规范（#50 / PR #1434，两轮对照试跑将无指向刷屏由 16 条降至 0）与 Super Agent 里程碑并行调度（#94 / PR #1556）。",
+        en: "Compare baseline prompts, concise communication norms (#50 / PR #1434, reducing undirected status spam from 16 to 0 in two-round trials), and Super Agent milestone scheduling (#94 / PR #1556) on the 101 SWE-CoWork tasks (#108).",
       },
       evidence: { zh: "频道消息长度、无效刷屏频次、Token 消耗与仓库级代码维护任务交付率对照报告。", en: "Comparison report of message length, status spam count, token cost, and repo-scale task delivery rate." },
-      issues: [108, 94],
+      issues: [50, 108, 94],
       references: [{ label: { zh: "两轮对照试跑记录 PR #1434", en: "Two-round trial comparison in PR #1434" }, url: companyPr }],
     },
   ],
@@ -574,10 +613,11 @@ const gdpevoSkillEvolution: TopicDefinition = {
       label: L.algo,
       state: "done",
       work: {
-        zh: "在自进化工作台与官方算法工具包仓库（penguin-harness-rsi-platform）中集成并对齐 OpenSkill、SkillAdam、TRACE、SkillOpt 四种 Skill 自进化算法的训练更新循环与冻结测试接口。",
-        en: "Integrate and align the training update loops and frozen evaluation interfaces for OpenSkill, SkillAdam, TRACE, and SkillOpt in penguin-harness-rsi-platform.",
+        zh: "在自进化工作台与官方算法工具包仓库（penguin-harness-rsi-platform）中集成并对齐 OpenSkill、SkillAdam、TRACE、SkillOpt 四种 Skill 自进化算法的训练更新循环与冻结测试接口（#42）。",
+        en: "Integrate and align the training update loops and frozen evaluation interfaces for OpenSkill, SkillAdam, TRACE, and SkillOpt in penguin-harness-rsi-platform (#42).",
       },
       evidence: { zh: "随产品发布的四种官方 Skill 自进化算法工具包与统一评测驱动配置。", en: "Four official Skill self-evolution algorithm toolkits and unified evaluation driver configurations in penguin-harness-rsi-platform." },
+      issues: [42],
       references: [
         { label: { zh: "自进化工作台与算法仓 penguin-harness-rsi-platform", en: "RSI platform & toolkit repo penguin-harness-rsi-platform" }, url: REPO.rsiPlatform },
       ],
@@ -660,11 +700,9 @@ const hleDiamondSkillOpt: TopicDefinition = {
     },
     {
       label: L.run,
-      state: "planned",
-      pending: P.benchAcceptance,
       work: {
-        zh: "固定 PenguinHarness 0.2.18 与 DeepSeek-V4.1-Flash-1017（low 思考档），在 25 道进化题上做 1 轮与 3 轮 SkillOpt 迭代并冻结，在 25 道测试题上各测 3 次（共 225 份答卷，#75、#113）。PR #32 试跑揭示异构难题上正负迁移相抵现象。",
-        en: "Run 1 and 3 SkillOpt rounds on 25 HLE-Diamond train items and evaluate frozen skills 3 times each on 25 test items (225 runs, #75, #113). PR #32 highlights positive/negative transfer cancellation on heterogeneous problems.",
+        zh: "固定 PenguinHarness 0.2.18 与 DeepSeek-V4.1-Flash-1017（low 思考档），在 25 道进化题上做 1 轮与 3 轮 SkillOpt 迭代并冻结，在 25 道测试题上各测 3 次（共 225 份答卷，#75、#113，PR #32），揭示异构难题上正负迁移相抵现象。",
+        en: "Run 1 and 3 SkillOpt rounds on 25 HLE-Diamond train items and evaluate frozen skills 3 times each on 25 test items (225 runs, #75, #113, PR #32), highlighting positive/negative transfer cancellation on heterogeneous problems.",
       },
       evidence: { zh: "PR #32 提交的 225 份测试记录、逐题正负翻转矩阵与泛化边界实验报告。", en: "225 test records, per-item flip matrices, and the generalization boundary report in PR #32." },
       issues: [75, 113],
@@ -706,11 +744,9 @@ const rrsiCrossBenchTransfer: TopicDefinition = {
     },
     {
       label: L.run,
-      state: "planned",
-      pending: P.benchAcceptance,
       work: {
-        zh: "在 18 道终端题上演化 5 轮并冻结，跨基准在 100 道 SWE-bench Verified 上各测 2 轮（400 条记录，PR #31）：训练题由 83.33 升至 91.67，跨域测试总 Token 降低 38.69%。",
-        en: "Evolve for 5 rounds on 18 Terminal-Bench tasks and evaluate twice on 100 SWE-bench Verified tasks (400 runs, PR #31): train score rose from 83.33 to 91.67 while cross-domain test tokens dropped by 38.69%.",
+        zh: "在 18 道终端题上演化 5 轮并冻结，跨基准在 100 道 SWE-bench Verified 上各测 2 轮（400 条记录，#35 / PR #31）：训练题由 83.33 升至 91.67，跨域测试总 Token 降低 38.69%。",
+        en: "Evolve for 5 rounds on 18 Terminal-Bench tasks and evaluate twice on 100 SWE-bench Verified tasks (400 runs, #35 / PR #31): train score rose from 83.33 to 91.67 while cross-domain test tokens dropped by 38.69%.",
       },
       evidence: { zh: "PR #31 提交的 5 轮演化快照、400 条测试轨迹与跨基准评测报告。", en: "5-round evolution snapshots, 400 test trajectories, and the cross-benchmark report in PR #31." },
       issues: [35],
@@ -818,8 +854,6 @@ const metaHarnessReproduction: TopicDefinition = {
     },
     {
       label: L.run,
-      state: "planned",
-      pending: P.benchAcceptance,
       work: {
         zh: "在对齐的原论文基准上检验各复现算法的提分幅度与复现准确度：其中 RRSI（#35）已在 Terminal-Bench 2.1 + SWE-bench Verified 上完成 400 条评测（PR #31，训练分 83.33→91.67、测试 Token 降 38.69%），ontology-rsi-toolkit（#37）已在 GDPEVO Essential 上完成三轮评测（PR #28，均分 67.78±0.78）；待 Terminal-Bench 2.0（#56 / PR #33）与 Meta-Harness（#58）、DGM（#72）、Reflexion（#73）、SkillWeaver（#74）、RSIAgent（#34）合入后开展完整对照实验。",
         en: "Verify score gains and reproduction accuracy on aligned benchmarks: RRSI (#35) completed 400 runs on Terminal-Bench 2.1 + SWE-bench Verified (PR #31, train 83.33→91.67, test tokens -38.69%) and ontology-rsi-toolkit (#37) completed 3 rounds on GDPEVO Essential (PR #28, 67.78±0.78); full comparisons for Meta-Harness (#58) on Terminal-Bench 2.0 (#56 / PR #33) and DGM/Reflexion/SkillWeaver/RSIAgent await benchmark and plugin merge.",
@@ -1184,7 +1218,7 @@ const appDigitalSecretaryPoster = buildAppTopic({
   },
 });
 
-/* ---------- Versions (V1 & V2) ---------- */
+/* ---------- Routes ---------- */
 const publishedAppProjects = [
   appSuperAgentTaskTree,
   appOverleafPaper,
@@ -1194,65 +1228,30 @@ const publishedAppProjects = [
   appHealthAssistant,
 ];
 
-const versions: VersionDefinition[] = [
-  {
-    id: "v1",
-    projects: {
-      infra: [autoResearch, ascendInference, solExecBenchErnie],
-      "auto-bench": [turingBenchWritingRealism],
-      agent: [contextCompactionHandoff, personalAgentComputerUse, companyModeCoordination],
-      platform: [
-        { ...gdpevoSkillEvolution, followUp: gdpevoOntologyTransfer },
-        multiDomainHarnessComparison,
-        metaHarnessReproduction,
-      ],
-      apps: publishedAppProjects,
-    },
-  },
-  {
-    id: "v2",
-    preview: true,
-    projects: {
-      infra: [
-        { ...autoResearch, followUp: speedrun },
-        ascendInference,
-        solExecBenchErnie,
-      ],
-      "auto-bench": [
-        turingBenchWritingRealism,
-        autoBenchJudgeAlignment,
-      ],
-      agent: [
-        contextCompactionHandoff,
-        personalAgentComputerUse,
-        companyModeCoordination,
-        agentBlockerHonesty,
-      ],
-      platform: [
-        { ...gdpevoSkillEvolution, followUp: gdpevoOntologyTransfer },
-        multiDomainHarnessComparison,
-        metaHarnessReproduction,
-        hleDiamondSkillOpt,
-        rrsiCrossBenchTransfer,
-      ],
-      apps: [
-        ...publishedAppProjects,
-        appDigitalSecretaryPoster,
-      ],
-    },
-  },
-];
+const routeProjects: Record<RouteId, ProjectDefinition[]> = {
+  infra: [autoResearch, ascendInference, qwenPostTraining, solExecBenchErnie],
+  "auto-bench": [turingBenchWritingRealism],
+  agent: [contextCompactionHandoff, personalAgentComputerUse, companyModeCoordination],
+  platform: [
+    { ...gdpevoSkillEvolution, followUp: gdpevoOntologyTransfer },
+    multiDomainHarnessComparison,
+    metaHarnessReproduction,
+  ],
+  apps: publishedAppProjects,
+};
 
 const empty = { zh: "待填写", en: "To be filled in" };
 const blankPhases = trainingPhases.map(({ label }) => ({ label, work: empty, evidence: empty }));
 
-export function researchVersions(quests: QuestItem[], locale: Locale) {
+export function researchRoutes(quests: QuestItem[], locale: Locale) {
   const byIssue = new Map(quests.map((q) => [q.issueNumber, q]));
+  const stageOrder: Record<StageState, number> = { done: 0, active: 1, open: 2, planned: 3 };
   const stageDetails = (phase: Phase) => {
     const tasks = (phase.issues ?? []).map((number) => ({ number, quest: byIssue.get(number) }));
     const state: StageState = phase.state ?? (
       tasks.length > 0 && tasks.every(({ quest }) => quest?.status === "completed") ? "done"
-        : tasks.some(({ quest }) => quest) ? "active"
+        : tasks.some(({ quest }) => quest?.status === "in_progress" || quest?.status === "completed") ? "active"
+        : tasks.some(({ quest }) => quest?.status === "open") ? "open"
         : "planned"
     );
     return {
@@ -1270,13 +1269,16 @@ export function researchVersions(quests: QuestItem[], locale: Locale) {
     const title = topic.title[locale] || topic.title[locale === "zh" ? "en" : "zh"];
     const titleParts = typeof title === "string" ? undefined : title;
     const phases = topic.phases ?? blankPhases;
-    const stages = phases.map(stageDetails);
-    const bench = stages[0];
-    if (phases[0]?.label === L.bench && bench.state !== "done") {
-      for (const stage of stages.slice(1)) {
-        if (stage.state === "done") stage.state = "active";
+    const rawStages = phases.map(stageDetails);
+    const benchIndex = phases.findIndex((phase) => phase.label === L.bench);
+    if (benchIndex >= 0 && rawStages[benchIndex]?.state !== "done") {
+      for (let i = 0; i < rawStages.length; i++) {
+        if (i !== benchIndex && rawStages[i].state === "done") rawStages[i].state = "active";
       }
     }
+    const stages = topic.phases === undefined
+      ? rawStages
+      : [...rawStages].sort((a, b) => stageOrder[a.state] - stageOrder[b.state]);
     return {
       id: topic.id,
       title: typeof title === "string" ? title : title.join(""),
@@ -1287,25 +1289,21 @@ export function researchVersions(quests: QuestItem[], locale: Locale) {
       stages,
     };
   };
-  return versions.map((version) => ({
-    id: version.id,
-    preview: version.preview,
-    routes: (Object.keys(routeTitles) as RouteId[]).map((id) => ({
-      id,
-      title: resolveText(routeTitles[id], locale),
-      projects: (version.projects[id] ?? []).map((project) => {
-        const resolved = topicDetails(project);
-        const completed = !resolved.template && resolved.stages.every((stage) => stage.state === "done");
-        return {
-          ...resolved,
-          followUp: project.followUp
-            ? topicDetails(project.followUp, completed ? "unlocked" : "locked")
-            : undefined,
-        };
-      }),
-    })),
+  return (Object.keys(routeTitles) as RouteId[]).map((id) => ({
+    id,
+    title: resolveText(routeTitles[id], locale),
+    projects: (routeProjects[id] ?? []).map((project) => {
+      const resolved = topicDetails(project);
+      const completed = !resolved.template && resolved.stages.every((stage) => stage.state === "done");
+      return {
+        ...resolved,
+        followUp: project.followUp
+          ? topicDetails(project.followUp, completed ? "unlocked" : "locked")
+          : undefined,
+      };
+    }),
   }));
 }
 
-export type ResearchVersion = ReturnType<typeof researchVersions>[number];
-export type ResearchProject = Omit<ResearchVersion["routes"][number]["projects"][number], "followUp">;
+export type ResearchRoute = ReturnType<typeof researchRoutes>[number];
+export type ResearchProject = Omit<ResearchRoute["projects"][number], "followUp">;
