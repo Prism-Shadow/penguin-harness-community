@@ -2032,3 +2032,37 @@ Save outputs and grades by problem and run so an interrupted run can resume from
     assignee: null
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/136"
     linked_pr: null
+
+  - id: "RSI-Q072"
+    issue_number: 137
+    author: "lzh368"
+    published_at: "2026-11-26T07:10:13Z"
+    status: "open"
+    domain: "Evaluation"
+    exp: 50
+    target_repository: "https://github.com/Prism-Shadow/penguin-harness-benchmark"
+    related_issue: "https://github.com/Prism-Shadow/penguin-harness-community/issues/136"
+    title: "Evaluate SkillWeaver on the WebArena Shopping Benchmark"
+    title_zh: "在 WebArena Shopping 浏览器交互基准上评测 SkillWeaver"
+    description: "Evaluate SkillWeaver (`skillweaver-rsi-toolkit`) through PenguinHarness on the [WebArena Shopping Browser-Use Benchmark](https://github.com/Prism-Shadow/penguin-harness-community/issues/136). This task depends on a reproducible version of that benchmark. Use the practice-loop configuration, learned API skill library, paired measurement records, and contamination-audit artifacts from [PR #1690](https://github.com/Prism-Shadow/penguin-harness/pull/1690) ([`Nhckdvrl/penguin-harness@94a2fd3`](https://github.com/Nhckdvrl/penguin-harness/tree/94a2fd3ee21d35da8f71bbc500628c05b59a9860/experiments/skillweaver-webarena)) as a starting point.
+
+#### Deliverables and acceptance criteria
+
+1. Pin the benchmark, PenguinHarness plugin and engine versions, self-hosted image digest, model, and practice-loop settings (e.g., 40 exploration/testing iterations). Run SkillWeaver through PenguinHarness and include the commands, practice trace (proposals, Judge verdicts, Synthesiser outputs, code verification), and the resulting frozen skill library (`skillweaver-apis`).
+2. Compare the empty library baseline (`H1`) and the frozen learned library (`final`) across the benchmark tasks using at least three paired runs per task under the same site reset and anti-contamination audit (`trace-audit` and `state-diff`). Report per-run and mean scores, API invocation counts, wall-clock duration, and total exploration and evaluation cost (model requests and tokens). Document any contaminated cells and their audited reruns.
+3. Submit the evaluation artifacts to `penguin-harness-benchmark` under [RFC-0002](https://github.com/Prism-Shadow/penguin-harness-community/blob/main/rfcs/RFC-0002-evaluation.md), with the benchmark ID and version, reproducible run instructions, and raw traces/logs or links to them. If the learned library yields a neutral or negative delta (`no_change`), retain the baseline comparison and faithfully record the skill coverage and trace analysis."
+    description_zh: "使用 PenguinHarness 在 [WebArena Shopping 浏览器交互基准](https://github.com/Prism-Shadow/penguin-harness-community/issues/136) 上评测 SkillWeaver（`skillweaver-rsi-toolkit`）。本任务依赖前述基准的可复现版本，可复用 [PR #1690](https://github.com/Prism-Shadow/penguin-harness/pull/1690)（[`Nhckdvrl/penguin-harness@94a2fd3`](https://github.com/Nhckdvrl/penguin-harness/tree/94a2fd3ee21d35da8f71bbc500628c05b59a9860/experiments/skillweaver-webarena)）已公开的探索练习配置、习得技能库、成对评测记录与防污染审计材料。
+
+#### 交付与验收要求
+
+1. 记录 Benchmark、PenguinHarness 插件和引擎版本、自托管镜像摘要、模型与探索练习配置（如 40 轮探索/测试迭代）。通过 PenguinHarness 运行 SkillWeaver，提交复跑命令、练习迭代轨迹（Proposer 提议、Judge 判定、Synthesiser 合成与代码校验结果）以及冻结的最终技能库（`skillweaver-apis`）。
+2. 在相同的站点重置流程与防答案污染审计（`trace-audit` 与 `state-diff`）下，对比空技能库基线（`H1`）与冻结技能库（`final`）在全部基准任务上至少 3 轮的成对评测结果。报告每轮得分与均值、API 实际调用次数、运行耗时，以及探索与评测阶段的模型请求数与 token 总开销；如实记录触发污染审计的单元及重跑台账。
+3. 按 [RFC-0002](https://github.com/Prism-Shadow/penguin-harness-community/blob/main/rfcs/RFC-0002-evaluation.md) 将实验结果提交到 `penguin-harness-benchmark`，附上基准 ID 与版本、复跑说明和原始轨迹/日志或链接。即使习得技能库未带来正向净提升（如持平或回退），也请保留基线对照并如实记录技能覆盖范围与轨迹归因分析。"
+    references:
+      - "https://arxiv.org/abs/2504.07079"
+      - "https://github.com/OSU-NLP-Group/SkillWeaver"
+      - "https://github.com/Prism-Shadow/penguin-harness/pull/1690"
+      - "https://github.com/Nhckdvrl/penguin-harness/tree/94a2fd3ee21d35da8f71bbc500628c05b59a9860/experiments/skillweaver-webarena"
+    assignee: null
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/137"
+    linked_pr: null
