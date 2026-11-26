@@ -74,6 +74,23 @@ const infraPr = `${REPO.harness}/pull/1551`;
 const infraRun = `${infraPr}#issuecomment-6997394473`;
 const trainingPhases: Phase[] = [
   {
+    label: L.bench,
+    pending: P.integrate,
+    work: {
+      zh: "按 RFC-0001 接入 NanoChat AutoResearch 训练基础设施优化基准（#120），固定基准版本、数据准备流程和评测规则。",
+      en: "Integrate the NanoChat AutoResearch training infrastructure benchmark (#120) under RFC-0001 with pinned data preparation and evaluation rules.",
+    },
+    dataset: {
+      zh: "试跑使用 ClimbMix 镜像（karpathy/climbmix-400b-shuffle），训练分片 00000–00009，验证分片 06542。社区基准的数据版本与划分待 #120 确认。",
+      en: "The trial used the ClimbMix mirror (karpathy/climbmix-400b-shuffle), training shards 00000–00009, and validation shard 06542. Community benchmark splits are tracked in #120.",
+    },
+    evidence: {
+      zh: "交付可运行的基准包，支持数据准备、基线复跑和候选自动评分。",
+      en: "Deliver a runnable benchmark package with data preparation, baseline reproduction, and automated candidate scoring.",
+    },
+    issues: [120],
+  },
+  {
     label: L.algo,
     work: {
       zh: "在 PenguinHarness 中集成 InfraRSI 训练基础设施自进化方法（#71），支持围绕 micro-batch、编译配置与训练算子的候选生成、数值校验与成对复测闭环。",
@@ -101,23 +118,6 @@ const trainingPhases: Phase[] = [
       { label: { zh: "实验 PR #1551", en: "Experiment PR #1551" }, url: infraPr },
       { label: { zh: "B-Comp 试跑记录", en: "B-Comp trial records" }, url: infraRun },
     ],
-  },
-  {
-    label: L.bench,
-    pending: P.integrate,
-    work: {
-      zh: "按 RFC-0001 接入 NanoChat AutoResearch 训练基础设施优化基准（#120），固定基准版本、数据准备流程和评测规则。",
-      en: "Integrate the NanoChat AutoResearch training infrastructure benchmark (#120) under RFC-0001 with pinned data preparation and evaluation rules.",
-    },
-    dataset: {
-      zh: "试跑使用 ClimbMix 镜像（karpathy/climbmix-400b-shuffle），训练分片 00000–00009，验证分片 06542。社区基准的数据版本与划分待 #120 确认。",
-      en: "The trial used the ClimbMix mirror (karpathy/climbmix-400b-shuffle), training shards 00000–00009, and validation shard 06542. Community benchmark splits are tracked in #120.",
-    },
-    evidence: {
-      zh: "交付可运行的基准包，支持数据准备、基线复跑和候选自动评分。",
-      en: "Deliver a runnable benchmark package with data preparation, baseline reproduction, and automated candidate scoring.",
-    },
-    issues: [120],
   },
 ];
 
@@ -644,25 +644,23 @@ const gdpevoOntologyTransfer: TopicDefinition = {
       label: L.bench,
       state: "done",
       work: {
-        zh: "复用 GDPEVO Essential 6 场景 30 训练 / 30 测试划分，统一跨框架自进化评测与计费口径（#40）。",
-        en: "Reuse the GDPEVO Essential 30-train / 30-test split under a unified cross-harness evolution and cost protocol (#40).",
+        zh: "复用前置课题已合入的 GDPEVO Essential 6 场景 30 训练 / 30 测试划分，统一跨框架自进化评测与计费口径。",
+        en: "Reuse the GDPEVO Essential 30-train / 30-test split from the prerequisite topic under a unified cross-harness evolution and cost protocol.",
       },
       evidence: { zh: "已合入主干的 GDPEVO Essential 标准基准包（PR #5）。", en: "Merged GDPEVO Essential benchmark package (PR #5)." },
-      issues: [40],
       references: [{ label: { zh: "基准 PR #5", en: "Benchmark PR #5" }, url: gdpevoBenchPr }],
     },
     {
       label: L.run,
       state: "active",
       work: {
-        zh: "在相同 GDPEVO Essential 基准与模型配置下，以 PenguinHarness 四种 RSI 算法评测结果（#42 / PR #16）为参照基线，对比 Codex（#32 / PR #29）以及 Claude Code、DeepSeek Harness 与 Pi（#116）在 Default、OpenSkill、SkillAdam、SkillOpt、TRACE 等算法下的自进化提分幅度与单次测试成本。",
-        en: "Using PenguinHarness's GDPEVO Essential evolution results (#42 / PR #16) as reference, compare self-evolution score gains and per-test costs across Codex (#32 / PR #29), Claude Code, DeepSeek Harness, and Pi (#116).",
+        zh: "在相同 GDPEVO Essential 基准与模型配置下，以前置课题中 PenguinHarness 四种 RSI 算法评测结果为参照基线，对比 Codex（#32 / PR #29）以及 Claude Code、DeepSeek Harness 与 Pi（#116）在 Default、OpenSkill、SkillAdam、SkillOpt、TRACE 等算法下的自进化提分幅度与单次测试成本。",
+        en: "Using PenguinHarness's GDPEVO Essential evolution results from the prerequisite topic as reference, compare self-evolution score gains and per-test costs across Codex (#32 / PR #29), Claude Code, DeepSeek Harness, and Pi (#116).",
       },
       evidence: { zh: "多 Harness 自进化轨迹、提分效率—成本对照表与跨框架进化评测报告。", en: "Multi-harness evolution trajectories, efficiency-cost comparison tables, and cross-harness evaluation report." },
       issues: [32, 116],
       references: [
         { label: { zh: "Codex 自进化评测 PR #29", en: "Codex evolution evaluation PR #29" }, url: codexGdpevoPr },
-        { label: { zh: "PenguinHarness 基线评测 PR #16", en: "PenguinHarness baseline evaluation PR #16" }, url: gdpevoEvalPr },
         { label: { zh: "公开榜单仓库 penguin-harness-leaderboard", en: "Public leaderboard repo penguin-harness-leaderboard" }, url: REPO.leaderboard },
       ],
     },
@@ -1224,6 +1222,12 @@ const blankPhases = trainingPhases.map(({ label }) => ({ label, work: empty, evi
 export function researchRoutes(quests: QuestItem[], locale: Locale) {
   const byIssue = new Map(quests.map((q) => [q.issueNumber, q]));
   const stageOrder: Record<StageState, number> = { done: 0, active: 1, open: 2, planned: 3 };
+  const labelOrder = new Map<Text, number>([
+    [L.bench, 0],
+    [L.algo, 1],
+    [L.run, 2],
+    [L.dev, 3],
+  ]);
   const stageDetails = (phase: Phase) => {
     const tasks = (phase.issues ?? []).map((number) => ({ number, quest: byIssue.get(number) }));
     const state: StageState = phase.state ?? (
@@ -1233,6 +1237,7 @@ export function researchRoutes(quests: QuestItem[], locale: Locale) {
         : "planned"
     );
     return {
+      phaseLabel: phase.label,
       label: resolveText(phase.label, locale),
       work: resolveText(phase.work, locale),
       dataset: phase.dataset && resolveText(phase.dataset, locale),
@@ -1251,12 +1256,16 @@ export function researchRoutes(quests: QuestItem[], locale: Locale) {
     const benchIndex = phases.findIndex((phase) => phase.label === L.bench);
     if (benchIndex >= 0 && rawStages[benchIndex]?.state !== "done") {
       for (let i = 0; i < rawStages.length; i++) {
-        if (i !== benchIndex && rawStages[i].state === "done") rawStages[i].state = "active";
+        if (phases[i]?.label === L.run && rawStages[i].state === "done") rawStages[i].state = "active";
       }
     }
-    const stages = topic.phases === undefined
+    const stages = (topic.phases === undefined
       ? rawStages
-      : [...rawStages].sort((a, b) => stageOrder[a.state] - stageOrder[b.state]);
+      : [...rawStages].sort((a, b) => (
+        stageOrder[a.state] - stageOrder[b.state]
+        || (labelOrder.get(a.phaseLabel) ?? 99) - (labelOrder.get(b.phaseLabel) ?? 99)
+      ))
+    ).map(({ phaseLabel: _, ...stage }) => stage);
     return {
       id: topic.id,
       title: typeof title === "string" ? title : title.join(""),
