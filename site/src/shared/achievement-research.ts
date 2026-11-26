@@ -139,12 +139,13 @@ const speedrun: TopicDefinition = {
   phases: [
     {
       label: L.algo,
+      state: "planned",
+      pending: P.integrate,
       work: {
         zh: "基于 PenguinHarness 中的 ERNIE Evolve 双层循环自动研究系统（#86），适配 NanoGPT Speedrun 的分布式/编译、优化器与注意力算子搜索空间。",
         en: "Adapt the ERNIE Evolve dual-loop automated research system (#86) in PenguinHarness to NanoGPT Speedrun's compiler, optimizer, and kernel search space.",
       },
       evidence: { zh: "适配 Speedrun 赛道的自动演化配置与验证脚本。", en: "Evolution configuration and verifier scripts adapted for Speedrun." },
-      issues: [86],
     },
     {
       label: L.bench,
@@ -652,7 +653,6 @@ const gdpevoOntologyTransfer: TopicDefinition = {
     },
     {
       label: L.run,
-      state: "active",
       work: {
         zh: "在相同 GDPEVO Essential 基准与模型配置下，以前置课题中 PenguinHarness 四种 RSI 算法评测结果为参照基线，对比 Codex（#32 / PR #29）以及 Claude Code、DeepSeek Harness 与 Pi（#116）在 Default、OpenSkill、SkillAdam、SkillOpt、TRACE 等算法下的自进化提分幅度与单次测试成本。",
         en: "Using PenguinHarness's GDPEVO Essential evolution results from the prerequisite topic as reference, compare self-evolution score gains and per-test costs across Codex (#32 / PR #29), Claude Code, DeepSeek Harness, and Pi (#116).",
