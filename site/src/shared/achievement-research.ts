@@ -178,14 +178,25 @@ const ascendInference: TopicDefinition = {
   },
   phases: [
     {
-      label: L.algo,
+      label: L.run,
       work: {
-        zh: "在 PenguinHarness 中构建面向昇腾 CANN 图编译、MTP 投机步数档位与调度参数的自动演化及精度门禁校验流程（#88 / PR #1627，单张 Ascend 950PR 试跑将 32 并发吞吐由 814.2 升至 904.7 tok/s，+11.1%）。",
-        en: "Build an automated RSI evolution workflow in PenguinHarness targeting Ascend CANN graph compilation, MTP speculative step modes, and scheduling parameters under accuracy gates (#88 / PR #1627, raising single-card Ascend 950PR 32-concurrency throughput from 814.2 to 904.7 tok/s, +11.1%).",
+        zh: "在单张 Ascend 950PR 上开展 Qwen3.8 推理 Infra 低时延与确定性吞吐 RSI 优化实验（#88 / PR #1627），对比 latency（MTP 3 tokens）、throughput（MTP 1 token）及动态投机调度，32 并发吞吐由 814.2 升至 904.7 tok/s（+11.1%）。",
+        en: "Run Qwen3.8 inference latency and throughput RSI optimization on a single Ascend 950PR (#88 / PR #1627), comparing latency (MTP 3), throughput (MTP 1), and dynamic scheduling to raise 32-concurrency throughput from 814.2 to 904.7 tok/s (+11.1%).",
       },
-      evidence: { zh: "昇腾推理参数与投机调度自进化补丁、自动门禁脚本及 Ascend 950PR 试跑记录（#88 / PR #1627）。", en: "Ascend inference evolution patches, automated accuracy gate scripts, and Ascend 950PR trial records (#88 / PR #1627)." },
+      evidence: { zh: "带 3×CV 噪声门限对照的多并发吞吐/TPOT/TTFT 结果表与实验报告（#88 / PR #1627）。", en: "Throughput, TPOT, and TTFT comparison tables against 3×CV noise thresholds and the verified report (#88 / PR #1627)." },
       issues: [88],
-      references: [{ label: { zh: "演化实现与试跑数据 PR #1627", en: "Evolution implementation & trial data PR #1627" }, url: ascendPr }],
+      references: [{ label: { zh: "实验数据与报告 PR #1627", en: "Experiment measurements & report PR #1627" }, url: ascendPr }],
+    },
+    {
+      label: L.algo,
+      state: "planned",
+      pending: P.integrate,
+      work: {
+        zh: "待将 #88（PR #1627）中面向昇腾 CANN 图编译、MTP 投机步数档位与调度参数的搜索及精度门禁校验流程抽离为通用推理 Infra 自进化算法插件。",
+        en: "Pending extraction of the Ascend CANN graph compilation, MTP speculative step mode, and scheduling parameter evolution workflow from #88 (PR #1627) into a reusable inference Infra RSI plugin.",
+      },
+      evidence: { zh: "独立封装的国产算力芯片推理参数与投机调度自进化算法插件。", en: "A standalone inference parameter and speculative scheduling RSI algorithm plugin." },
+      references: [{ label: { zh: "演化实现参考 PR #1627", en: "Evolution implementation reference PR #1627" }, url: ascendPr }],
     },
     {
       label: L.bench,
@@ -201,16 +212,6 @@ const ascendInference: TopicDefinition = {
       },
       evidence: { zh: "独立于进化产物的昇腾 vLLM 推理评测基准包。", en: "A standalone Ascend vLLM inference benchmark package." },
     },
-    {
-      label: L.run,
-      state: "planned",
-      pending: P.benchAcceptance,
-      work: {
-        zh: "待独立昇腾推理评测基准包按 RFC-0001 拆分接入后，在单张 Ascend 950PR 上固定评测协议复跑 latency（MTP 3 tokens）、throughput（MTP 1 token）及动态投机调度对照实验。",
-        en: "Once the standalone Ascend inference benchmark package is integrated under RFC-0001, run formal paired evaluations comparing latency (MTP 3), throughput (MTP 1), and dynamic speculative scheduling on Ascend 950PR.",
-      },
-      evidence: { zh: "带 3×CV 噪声门限对照的多并发吞吐/TPOT/TTFT 正式基准评测报告。", en: "Formal benchmark evaluation report with throughput, TPOT, and TTFT tables against 3×CV noise thresholds." },
-    },
   ],
 };
 
@@ -222,14 +223,14 @@ const qwenPostTraining: TopicDefinition = {
   },
   phases: [
     {
-      label: L.algo,
+      label: L.run,
       work: {
-        zh: "结合 LlamaFactory 与 PenguinHarness 自进化闭环，围绕 Qwen3.8 的数据配比与打包流水线、优化器与学习率日程及后训练对齐配方（#87）开展多轮候选演化与自动验证。",
-        en: "Combine LlamaFactory with PenguinHarness's self-evolution loop to iteratively evolve Qwen3.8 data packing pipelines, optimizer/LR schedules, and post-training alignment recipes (#87).",
+        zh: "在固定算力与时间预算下，结合 LlamaFactory 与 PenguinHarness 自进化闭环优化 Qwen3.8 训练与后训练配方（#87），对比默认基线与多轮演化候选在收敛速度（val loss / BPB）、训练系统吞吐（tokens/s、MFU）及下游基准准确率上的提升。",
+        en: "Under fixed compute and time budgets, optimize Qwen3.8 training and post-training recipes with LlamaFactory and PenguinHarness (#87), comparing default baselines against evolved candidates on convergence speed, throughput, and downstream accuracy.",
       },
       evidence: {
-        zh: "LlamaFactory × PenguinHarness 自主后训练演化工作流、配方搜索插件与自动校验脚本（#87）。",
-        en: "LlamaFactory × PenguinHarness autonomous post-training evolution workflow, recipe search plugins, and verification scripts (#87).",
+        zh: "后训练配方改动补丁、候选树演化日志及吞吐/精度前后对比实验报告（#87）。",
+        en: "Post-training recipe patches, candidate tree evolution logs, and before/after throughput and accuracy evaluation report (#87).",
       },
       issues: [87],
       references: [
@@ -237,12 +238,25 @@ const qwenPostTraining: TopicDefinition = {
       ],
     },
     {
+      label: L.algo,
+      state: "planned",
+      pending: P.integrate,
+      work: {
+        zh: "待将围绕 LlamaFactory 数据配比打包、优化器学习率日程与后训练超参策略的多轮假设验证流程沉淀为可复用的后训练自进化算法插件。",
+        en: "Pending extraction of the multi-round hypothesis testing workflow over LlamaFactory data packing, optimizer/LR schedules, and alignment hyperparameters into a reusable post-training RSI plugin.",
+      },
+      evidence: {
+        zh: "LlamaFactory × PenguinHarness 通用后训练配方自进化算法插件与验证脚本。",
+        en: "Reusable LlamaFactory × PenguinHarness post-training recipe evolution plugin and verification scripts.",
+      },
+    },
+    {
       label: L.bench,
       state: "planned",
       pending: P.integrate,
       work: {
-        zh: "基于 LlamaFactory 搭建可复现的 Qwen3.8 训练与后训练评测基准，固定算力与时间预算、训练吞吐（tokens/s、MFU）、收敛指标（val loss / BPB）及下游评测协议。",
-        en: "Set up a reproducible Qwen3.8 training and post-training evaluation benchmark with LlamaFactory under pinned compute/time budgets, throughput metrics (tokens/s, MFU), convergence metrics, and downstream accuracy gates.",
+        zh: "待基于 LlamaFactory 拆分并固定可复现的 Qwen3.8 训练与后训练标准评测基准包，固定算力与时间预算、训练吞吐（tokens/s、MFU）、收敛指标（val loss / BPB）及下游评测协议。",
+        en: "Pending setup of a standalone reproducible Qwen3.8 + LlamaFactory training and post-training benchmark package with pinned compute/time budgets, throughput metrics, and downstream accuracy gates.",
       },
       dataset: {
         zh: "固定 Qwen3.8 训练/后训练数据配比、验证集划分、GPU 预算与下游标准评测集。",
@@ -251,19 +265,6 @@ const qwenPostTraining: TopicDefinition = {
       evidence: {
         zh: "可一键复跑的 Qwen3.8 + LlamaFactory 训练与后训练基线环境及自动评分入口。",
         en: "Reproducible Qwen3.8 + LlamaFactory training/post-training baseline environment and automated scoring entry point.",
-      },
-    },
-    {
-      label: L.run,
-      state: "planned",
-      pending: P.benchAcceptance,
-      work: {
-        zh: "待 #87 自进化工作流与评测基准就绪后，在固定算力与时间预算下对比默认后训练基线与多轮自进化配方在 Qwen3.8 上的收敛速度（val loss / BPB）、训练系统吞吐（tokens/s、MFU）及下游基准准确率提升。",
-        en: "Once the #87 evolution workflow and evaluation benchmark are ready, compare default post-training baselines against multi-round evolved recipes on Qwen3.8 under fixed compute and time budgets across convergence speed, training throughput, and downstream accuracy.",
-      },
-      evidence: {
-        zh: "后训练配方改动补丁、候选树演化日志及吞吐/精度前后对比实验报告。",
-        en: "Post-training recipe patches, candidate tree evolution logs, and before/after throughput and accuracy evaluation report.",
       },
     },
   ],
@@ -498,17 +499,17 @@ const agentBlockerHonesty: TopicDefinition = {
   phases: [
     {
       label: L.bench,
+      state: "active",
       pending: P.accept,
       work: {
-        zh: "从 Failure-Transparent Agents、RetryRealistic、Async-RBench 精选 50 道工具缺失/故障与异步后续事件题目（25 题归纳规则、25 题冻结测试），建立双口径（非盲复核 + 盲测 AI 判分）评测基准（#112、#124）。",
-        en: "Curate 50 tool-failure and async follow-up tasks from Failure-Transparent Agents, RetryRealistic, and Async-RBench (25 train, 25 frozen test) with dual-mode evaluation (#112, #124).",
+        zh: "从 Failure-Transparent Agents、RetryRealistic、Async-RBench 精选 50 道工具缺失/故障与异步后续事件题目（25 题归纳规则、25 题冻结测试），建立双口径（非盲复核 + 盲测 AI 判分）评测基准（PR #42）。",
+        en: "Curate 50 tool-failure and async follow-up tasks from Failure-Transparent Agents, RetryRealistic, and Async-RBench (25 train, 25 frozen test) with dual-mode evaluation (PR #42).",
       },
       dataset: {
         zh: "包含 25 道测试题与 3 类异步后续追问事件，检验首答阻碍披露与状态变化后的结论更新。",
         en: "25 frozen test tasks plus 3 async follow-up event types testing initial blocker disclosure and conclusion updates.",
       },
       evidence: { zh: "PR #42 提交的诚实性评测集与双口径评分器。", en: "The honesty benchmark dataset and dual-mode evaluator in PR #42." },
-      issues: [112, 124],
       references: [{ label: { zh: "基准与实验 PR #42", en: "Benchmark & experiment PR #42" }, url: honestyPr }],
     },
     {
@@ -607,11 +608,10 @@ const gdpevoSkillEvolution: TopicDefinition = {
       label: L.algo,
       state: "done",
       work: {
-        zh: "在自进化工作台与官方算法工具包仓库（penguin-harness-rsi-platform）中集成并对齐 OpenSkill、SkillAdam、TRACE、SkillOpt 四种 Skill 自进化算法的训练更新循环与冻结测试接口（#42）。",
-        en: "Integrate and align the training update loops and frozen evaluation interfaces for OpenSkill, SkillAdam, TRACE, and SkillOpt in penguin-harness-rsi-platform (#42).",
+        zh: "在自进化工作台与官方算法工具包仓库（penguin-harness-rsi-platform）中集成并对齐 OpenSkill、SkillAdam、TRACE、SkillOpt 四种 Skill 自进化算法的训练更新循环与冻结测试接口。",
+        en: "Integrate and align the training update loops and frozen evaluation interfaces for OpenSkill, SkillAdam, TRACE, and SkillOpt in penguin-harness-rsi-platform.",
       },
       evidence: { zh: "随产品发布的四种官方 Skill 自进化算法工具包与统一评测驱动配置。", en: "Four official Skill self-evolution algorithm toolkits and unified evaluation driver configurations in penguin-harness-rsi-platform." },
-      issues: [42],
       references: [
         { label: { zh: "自进化工作台与算法仓 penguin-harness-rsi-platform", en: "RSI platform & toolkit repo penguin-harness-rsi-platform" }, url: REPO.rsiPlatform },
       ],
@@ -738,12 +738,12 @@ const rrsiCrossBenchTransfer: TopicDefinition = {
     },
     {
       label: L.run,
+      state: "active",
       work: {
-        zh: "在 18 道终端题上演化 5 轮并冻结，跨基准在 100 道 SWE-bench Verified 上各测 2 轮（400 条记录，#35 / PR #31）：训练题由 83.33 升至 91.67，跨域测试总 Token 降低 38.69%。",
-        en: "Evolve for 5 rounds on 18 Terminal-Bench tasks and evaluate twice on 100 SWE-bench Verified tasks (400 runs, #35 / PR #31): train score rose from 83.33 to 91.67 while cross-domain test tokens dropped by 38.69%.",
+        zh: "在 18 道终端题上演化 5 轮并冻结，跨基准在 100 道 SWE-bench Verified 上各测 2 轮（400 条记录，PR #31）：训练题由 83.33 升至 91.67，跨域测试总 Token 降低 38.69%。",
+        en: "Evolve for 5 rounds on 18 Terminal-Bench tasks and evaluate twice on 100 SWE-bench Verified tasks (400 runs, PR #31): train score rose from 83.33 to 91.67 while cross-domain test tokens dropped by 38.69%.",
       },
       evidence: { zh: "PR #31 提交的 5 轮演化快照、400 条测试轨迹与跨基准评测报告。", en: "5-round evolution snapshots, 400 test trajectories, and the cross-benchmark report in PR #31." },
-      issues: [35],
       references: [{ label: { zh: "跨基准实验与报告 PR #31", en: "Cross-benchmark experiment & report PR #31" }, url: rrsiEvalPr }],
     },
   ],
@@ -847,15 +847,15 @@ const metaHarnessReproduction: TopicDefinition = {
     },
     {
       label: L.run,
+      state: "active",
       work: {
-        zh: "在对齐的原论文基准上检验各复现算法的提分幅度与复现准确度：其中 RRSI（#35）已在 Terminal-Bench 2.1 + SWE-bench Verified 上完成 400 条评测（PR #31，训练分 83.33→91.67、测试 Token 降 38.69%）；待 Terminal-Bench 2.0（#56 / PR #33）与 Meta-Harness（#58）、DGM（#72）、Reflexion（#73）、SkillWeaver（#74）、RSIAgent（#34）合入后开展完整对照实验。",
-        en: "Verify score gains and reproduction accuracy on aligned benchmarks: RRSI (#35) completed 400 runs on Terminal-Bench 2.1 + SWE-bench Verified (PR #31, train 83.33→91.67, test tokens -38.69%); full comparisons for Meta-Harness (#58) on Terminal-Bench 2.0 (#56 / PR #33) and DGM/Reflexion/SkillWeaver/RSIAgent await benchmark and plugin merge.",
+        zh: "在对齐的原论文基准上检验各复现算法的提分幅度与复现准确度：其中 RRSI 已在 Terminal-Bench 2.1 + SWE-bench Verified 上完成 400 条评测（PR #31，训练分 83.33→91.67、测试 Token 降 38.69%）；待 Terminal-Bench 2.0（#56 / PR #33）与 Meta-Harness（#58）、DGM（#72）、Reflexion（#73）、SkillWeaver（#74）、RSIAgent（#34）合入后开展完整对照实验。",
+        en: "Verify score gains and reproduction accuracy on aligned benchmarks: RRSI completed 400 runs on Terminal-Bench 2.1 + SWE-bench Verified (PR #31, train 83.33→91.67, test tokens -38.69%); full comparisons for Meta-Harness (#58) on Terminal-Bench 2.0 (#56 / PR #33) and DGM/Reflexion/SkillWeaver/RSIAgent await benchmark and plugin merge.",
       },
       evidence: {
         zh: "RRSI 复现评测记录（PR #31），以及 Meta-Harness（#58）等复现算法相对原论文指标与官方算法工具包（penguin-harness-rsi-platform）的对比实验报告。",
         en: "RRSI reproduction evaluation (PR #31) and full comparison reports against original paper metrics and official toolkits in penguin-harness-rsi-platform.",
       },
-      issues: [35],
       references: [
         { label: { zh: "RRSI 跨基准复现评测 PR #31（在审）", en: "RRSI reproduction evaluation PR #31 (open)" }, url: rrsiEvalPr },
         { label: { zh: "自进化工作台与算法仓 penguin-harness-rsi-platform", en: "RSI platform & toolkit repo penguin-harness-rsi-platform" }, url: REPO.rsiPlatform },
