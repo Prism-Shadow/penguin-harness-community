@@ -140,12 +140,11 @@ const speedrun: TopicDefinition = {
     {
       label: L.algo,
       work: {
-        zh: "复用并扩展 InfraRSI 训练基础设施自进化策略（#71），适配 NanoGPT Speedrun 的分布式/编译与注意力算子搜索空间。",
-        en: "Adapt the InfraRSI training optimization method (#71) to NanoGPT Speedrun's compiler and kernel search space.",
+        zh: "基于 PenguinHarness 中的 ERNIE Evolve 双层循环自动研究系统（#86），适配 NanoGPT Speedrun 的分布式/编译、优化器与注意力算子搜索空间。",
+        en: "Adapt the ERNIE Evolve dual-loop automated research system (#86) in PenguinHarness to NanoGPT Speedrun's compiler, optimizer, and kernel search space.",
       },
-      evidence: { zh: "适配 Speedrun 赛道的 InfraRSI 演化配置与验证脚本。", en: "InfraRSI evolution configuration and verifier scripts adapted for Speedrun." },
-      issues: [71],
-      references: [{ label: { zh: "上游实验 PR #1551", en: "Upstream PR #1551" }, url: infraPr }],
+      evidence: { zh: "适配 Speedrun 赛道的自动演化配置与验证脚本。", en: "Evolution configuration and verifier scripts adapted for Speedrun." },
+      issues: [86],
     },
     {
       label: L.bench,
@@ -162,8 +161,8 @@ const speedrun: TopicDefinition = {
       state: "planned",
       pending: P.benchAcceptance,
       work: {
-        zh: "待 #84 赛道基准接入后，在相同硬件和赛道规则下对照官方基线与 InfraRSI 演化版本，记录达到目标验证精度的端到端耗时（Time-to-Target）与稳态吞吐。",
-        en: "Once the #84 track benchmark is integrated, compare the official Speedrun baseline against the InfraRSI evolved variant on identical hardware, recording time-to-target and steady-state throughput.",
+        zh: "待 #84 赛道基准接入后，在相同硬件和赛道规则下对照官方基线与自进化版本，记录达到目标验证精度的端到端耗时（Time-to-Target）与训练步数。",
+        en: "Once the #84 track benchmark is integrated, compare the official Speedrun baseline against the evolved variant on identical hardware, recording time-to-target and step count.",
       },
       evidence: { zh: "迁移补丁、两组训练日志及可评审的 Speedrun 预训练速度优化实验报告。", en: "Transfer patches, paired training logs, and a reviewable Speedrun optimization experiment report." },
     },
@@ -181,11 +180,11 @@ const ascendInference: TopicDefinition = {
     {
       label: L.algo,
       work: {
-        zh: "基于 InfraRSI（#71）构建面向昇腾 CANN 图编译、MTP 投机步数档位与调度参数的自动演化及精度门禁校验流程（#88 / PR #1627）。",
-        en: "Build an InfraRSI (#71) evolution workflow targeting Ascend CANN graph compilation, MTP speculative step modes, and scheduling parameters under accuracy gates (#88 / PR #1627).",
+        zh: "在 PenguinHarness 中构建面向昇腾 CANN 图编译、MTP 投机步数档位与调度参数的自动演化及精度门禁校验流程（#88 / PR #1627）。",
+        en: "Build an automated RSI evolution workflow in PenguinHarness targeting Ascend CANN graph compilation, MTP speculative step modes, and scheduling parameters under accuracy gates (#88 / PR #1627).",
       },
       evidence: { zh: "昇腾推理参数与投机调度自进化补丁及自动门禁脚本（#88 / PR #1627）。", en: "Ascend inference evolution patches and automated accuracy gate scripts (#88 / PR #1627)." },
-      issues: [71, 88],
+      issues: [88],
       references: [{ label: { zh: "演化实现 PR #1627", en: "Evolution implementation PR #1627" }, url: ascendPr }],
     },
     {
@@ -244,29 +243,28 @@ const qwenPostTraining: TopicDefinition = {
     {
       label: L.algo,
       work: {
-        zh: "结合 LlamaFactory 与 PenguinHarness 的 InfraRSI 自进化闭环（#71），围绕 Qwen3.8 的数据配比与打包流水线、优化器与学习率日程、后训练配方及面向国产芯片的分布式训练算子与通信（#87、#89）开展多轮候选演化与自动验证。",
-        en: "Combine LlamaFactory with PenguinHarness's InfraRSI loop (#71) to iteratively evolve Qwen3.8 data packing pipelines, optimizer/LR schedules, post-training recipes, and distributed training kernels/communication on domestic accelerators (#87, #89).",
+        zh: "结合 LlamaFactory 与 PenguinHarness 自进化闭环，围绕 Qwen3.8 的数据配比与打包流水线、优化器与学习率日程及后训练对齐配方（#87）开展多轮候选演化与自动验证。",
+        en: "Combine LlamaFactory with PenguinHarness's self-evolution loop to iteratively evolve Qwen3.8 data packing pipelines, optimizer/LR schedules, and post-training alignment recipes (#87).",
       },
       evidence: {
-        zh: "LlamaFactory × PenguinHarness 自主后训练演化工作流、配方/算子搜索插件与自动校验脚本。",
-        en: "LlamaFactory × PenguinHarness autonomous post-training evolution workflow, recipe/kernel search plugins, and verification scripts.",
+        zh: "LlamaFactory × PenguinHarness 自主后训练演化工作流、配方搜索插件与自动校验脚本。",
+        en: "LlamaFactory × PenguinHarness autonomous post-training evolution workflow, recipe search plugins, and verification scripts.",
       },
-      issues: [71, 87, 89],
+      issues: [87],
       references: [
         { label: { zh: "LlamaFactory 开源仓库", en: "LlamaFactory repository" }, url: "https://github.com/hiyouga/LlamaFactory" },
-        { label: { zh: "InfraRSI 实现 PR #1551", en: "InfraRSI implementation PR #1551" }, url: infraPr },
       ],
     },
     {
       label: L.run,
       pending: P.benchAcceptance,
       work: {
-        zh: "在固定 GPU/NPU 与时间预算下，对比默认后训练基线与多轮自进化配方在 Qwen3.8 上的收敛速度（val loss / BPB）、训练系统吞吐（tokens/s、MFU）及下游基准准确率提升（#87、#61、#89）。",
-        en: "Under fixed GPU/NPU and time budgets, compare default post-training baselines against multi-round evolved recipes on Qwen3.8 across convergence speed, training throughput, and downstream benchmark accuracy (#87, #61, #89).",
+        zh: "在固定算力与时间预算下，对比默认后训练基线与多轮自进化配方在 Qwen3.8 上的收敛速度（val loss / BPB）、训练系统吞吐（tokens/s、MFU）及下游基准准确率提升（#87、#61）。",
+        en: "Under fixed compute and time budgets, compare default post-training baselines against multi-round evolved recipes on Qwen3.8 across convergence speed, training throughput, and downstream benchmark accuracy (#87, #61).",
       },
       evidence: {
-        zh: "后训练配方与算子改动补丁、候选树演化日志及吞吐/精度前后对比实验报告。",
-        en: "Post-training recipe and kernel patches, candidate tree evolution logs, and before/after throughput and accuracy evaluation report.",
+        zh: "后训练配方改动补丁、候选树演化日志及吞吐/精度前后对比实验报告。",
+        en: "Post-training recipe patches, candidate tree evolution logs, and before/after throughput and accuracy evaluation report.",
       },
       issues: [87],
     },
