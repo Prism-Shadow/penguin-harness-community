@@ -89,14 +89,14 @@ const trainingPhases: Phase[] = [
   {
     label: L.run,
     work: {
-      zh: "在单张 NVIDIA A100 80GB 上固定 50.3M 参数模型与每步 2¹⁹ Token（基线 micro-batch 128），运行 InfraRSI 搜索训练配置与代码改动并统计第 21–60 步稳态耗时及验证集 BPB（#71、#121，PR #1551）。",
-      en: "On a single NVIDIA A100 80GB with a fixed 50.3M-parameter model and 2¹⁹ tokens/step, run InfraRSI (#71, #121, PR #1551) and measure steady-state step time (steps 21–60) and validation BPB.",
+      zh: "在单张 NVIDIA A100 80GB 上固定 50.3M 参数模型与每步 2¹⁹ Token（基线 micro-batch 128），运行 InfraRSI 搜索训练配置与代码改动并统计第 21–60 步稳态耗时及验证集 BPB（#121 / PR #1551）。",
+      en: "On a single NVIDIA A100 80GB with a fixed 50.3M-parameter model and 2¹⁹ tokens/step, run InfraRSI (#121 / PR #1551) and measure steady-state step time (steps 21–60) and validation BPB.",
     },
     evidence: {
       zh: "基线与进化候选的成对复测记录、单步耗时/Loss/BPB 对照表及可复跑实验报告。",
       en: "Paired baseline vs. candidate measurements, step-time/loss/BPB comparison tables, and a reproducible experiment report.",
     },
-    issues: [71, 121],
+    issues: [121],
     references: [
       { label: { zh: "实验 PR #1551", en: "Experiment PR #1551" }, url: infraPr },
       { label: { zh: "B-Comp 试跑记录", en: "B-Comp trial records" }, url: infraRun },
@@ -180,22 +180,12 @@ const ascendInference: TopicDefinition = {
     {
       label: L.algo,
       work: {
-        zh: "在 PenguinHarness 中构建面向昇腾 CANN 图编译、MTP 投机步数档位与调度参数的自动演化及精度门禁校验流程（#88 / PR #1627）。",
-        en: "Build an automated RSI evolution workflow in PenguinHarness targeting Ascend CANN graph compilation, MTP speculative step modes, and scheduling parameters under accuracy gates (#88 / PR #1627).",
+        zh: "在 PenguinHarness 中构建面向昇腾 CANN 图编译、MTP 投机步数档位与调度参数的自动演化及精度门禁校验流程（#88 / PR #1627，单张 Ascend 950PR 试跑将 32 并发吞吐由 814.2 升至 904.7 tok/s，+11.1%）。",
+        en: "Build an automated RSI evolution workflow in PenguinHarness targeting Ascend CANN graph compilation, MTP speculative step modes, and scheduling parameters under accuracy gates (#88 / PR #1627, raising single-card Ascend 950PR 32-concurrency throughput from 814.2 to 904.7 tok/s, +11.1%).",
       },
-      evidence: { zh: "昇腾推理参数与投机调度自进化补丁及自动门禁脚本（#88 / PR #1627）。", en: "Ascend inference evolution patches and automated accuracy gate scripts (#88 / PR #1627)." },
+      evidence: { zh: "昇腾推理参数与投机调度自进化补丁、自动门禁脚本及 Ascend 950PR 试跑记录（#88 / PR #1627）。", en: "Ascend inference evolution patches, automated accuracy gate scripts, and Ascend 950PR trial records (#88 / PR #1627)." },
       issues: [88],
-      references: [{ label: { zh: "演化实现 PR #1627", en: "Evolution implementation PR #1627" }, url: ascendPr }],
-    },
-    {
-      label: L.run,
-      work: {
-        zh: "在单张 Ascend 950PR 上开展 Qwen3.8 推理 Infra 低时延与确定性吞吐 RSI 优化实验（#88 / PR #1627），对比 latency（MTP 3 tokens）、throughput（MTP 1 token）及动态投机调度，32 并发吞吐由 814.2 升至 904.7 tok/s（+11.1%）。",
-        en: "Run Qwen3.8 inference latency and throughput RSI optimization on a single Ascend 950PR (#88 / PR #1627), comparing latency (MTP 3), throughput (MTP 1), and dynamic scheduling to raise 32-concurrency throughput from 814.2 to 904.7 tok/s (+11.1%).",
-      },
-      evidence: { zh: "带 3×CV 噪声门限对照的多并发吞吐/TPOT/TTFT 结果表与实验报告（#88 / PR #1627）。", en: "Throughput, TPOT, and TTFT comparison tables against 3×CV noise thresholds and the verified report (#88 / PR #1627)." },
-      issues: [88],
-      references: [{ label: { zh: "试跑数据与报告 PR #1627", en: "Trial measurements & report PR #1627" }, url: ascendPr }],
+      references: [{ label: { zh: "演化实现与试跑数据 PR #1627", en: "Evolution implementation & trial data PR #1627" }, url: ascendPr }],
     },
     {
       label: L.bench,
@@ -211,10 +201,19 @@ const ascendInference: TopicDefinition = {
       },
       evidence: { zh: "独立于进化产物的昇腾 vLLM 推理评测基准包。", en: "A standalone Ascend vLLM inference benchmark package." },
     },
+    {
+      label: L.run,
+      state: "planned",
+      pending: P.benchAcceptance,
+      work: {
+        zh: "待独立昇腾推理评测基准包按 RFC-0001 拆分接入后，在单张 Ascend 950PR 上固定评测协议复跑 latency（MTP 3 tokens）、throughput（MTP 1 token）及动态投机调度对照实验。",
+        en: "Once the standalone Ascend inference benchmark package is integrated under RFC-0001, run formal paired evaluations comparing latency (MTP 3), throughput (MTP 1), and dynamic speculative scheduling on Ascend 950PR.",
+      },
+      evidence: { zh: "带 3×CV 噪声门限对照的多并发吞吐/TPOT/TTFT 正式基准评测报告。", en: "Formal benchmark evaluation report with throughput, TPOT, and TTFT tables against 3×CV noise thresholds." },
+    },
   ],
 };
 
-const postTrainBenchPr = `${REPO.bench}/pull/37`;
 const qwenPostTraining: TopicDefinition = {
   id: "qwen-llamafactory-post-training",
   title: {
@@ -223,32 +222,14 @@ const qwenPostTraining: TopicDefinition = {
   },
   phases: [
     {
-      label: L.bench,
-      pending: P.accept,
-      work: {
-        zh: "按 RFC-0001 接入大模型自主后训练评测基准 PostTrainBench（#61 / PR #37，覆盖数学、写作、科学问答、医疗、代码等 6 类基准），并搭建 Qwen3.8 训练与后训练评测环境（#87），固定算力与时间预算、训练吞吐（tokens/s、MFU）及下游评测指标。",
-        en: "Integrate the PostTrainBench autonomous post-training benchmark (#61 / PR #37 across 6 benchmarks including math, writing, science QA, medical, and coding) under RFC-0001 and set up the Qwen3.8 training and post-training evaluation harness (#87) with pinned compute/time budgets, throughput metrics, and downstream accuracy gates.",
-      },
-      dataset: {
-        zh: "涵盖 PostTrainBench 标准化后训练任务包（PR #37，6 个基准 × 4 个基座模型）与 Qwen3.8 评测集，固定 GPU 预算与自动评分流程。",
-        en: "Covers standardized PostTrainBench task packages (PR #37, 6 benchmarks × 4 base models) and Qwen3.8 evaluation splits under fixed GPU budgets and automated scoring.",
-      },
-      evidence: {
-        zh: "PR #37 提交的 PostTrainBench 基准包及 Qwen3.8 训练/后训练可复现评测入口（#61、#87）。",
-        en: "PostTrainBench benchmark package in PR #37 and reproducible Qwen3.8 training/post-training evaluation entry points (#61, #87).",
-      },
-      issues: [61, 87],
-      references: [{ label: { zh: "PostTrainBench 基准 PR #37（在审）", en: "PostTrainBench benchmark PR #37 (open)" }, url: postTrainBenchPr }],
-    },
-    {
       label: L.algo,
       work: {
         zh: "结合 LlamaFactory 与 PenguinHarness 自进化闭环，围绕 Qwen3.8 的数据配比与打包流水线、优化器与学习率日程及后训练对齐配方（#87）开展多轮候选演化与自动验证。",
         en: "Combine LlamaFactory with PenguinHarness's self-evolution loop to iteratively evolve Qwen3.8 data packing pipelines, optimizer/LR schedules, and post-training alignment recipes (#87).",
       },
       evidence: {
-        zh: "LlamaFactory × PenguinHarness 自主后训练演化工作流、配方搜索插件与自动校验脚本。",
-        en: "LlamaFactory × PenguinHarness autonomous post-training evolution workflow, recipe search plugins, and verification scripts.",
+        zh: "LlamaFactory × PenguinHarness 自主后训练演化工作流、配方搜索插件与自动校验脚本（#87）。",
+        en: "LlamaFactory × PenguinHarness autonomous post-training evolution workflow, recipe search plugins, and verification scripts (#87).",
       },
       issues: [87],
       references: [
@@ -256,17 +237,34 @@ const qwenPostTraining: TopicDefinition = {
       ],
     },
     {
+      label: L.bench,
+      state: "planned",
+      pending: P.integrate,
+      work: {
+        zh: "基于 LlamaFactory 搭建可复现的 Qwen3.8 训练与后训练评测基准，固定算力与时间预算、训练吞吐（tokens/s、MFU）、收敛指标（val loss / BPB）及下游评测协议。",
+        en: "Set up a reproducible Qwen3.8 training and post-training evaluation benchmark with LlamaFactory under pinned compute/time budgets, throughput metrics (tokens/s, MFU), convergence metrics, and downstream accuracy gates.",
+      },
+      dataset: {
+        zh: "固定 Qwen3.8 训练/后训练数据配比、验证集划分、GPU 预算与下游标准评测集。",
+        en: "Pin Qwen3.8 training/post-training data splits, validation sets, GPU budgets, and downstream evaluation suites.",
+      },
+      evidence: {
+        zh: "可一键复跑的 Qwen3.8 + LlamaFactory 训练与后训练基线环境及自动评分入口。",
+        en: "Reproducible Qwen3.8 + LlamaFactory training/post-training baseline environment and automated scoring entry point.",
+      },
+    },
+    {
       label: L.run,
+      state: "planned",
       pending: P.benchAcceptance,
       work: {
-        zh: "在固定算力与时间预算下，对比默认后训练基线与多轮自进化配方在 Qwen3.8 上的收敛速度（val loss / BPB）、训练系统吞吐（tokens/s、MFU）及下游基准准确率提升（#87、#61）。",
-        en: "Under fixed compute and time budgets, compare default post-training baselines against multi-round evolved recipes on Qwen3.8 across convergence speed, training throughput, and downstream benchmark accuracy (#87, #61).",
+        zh: "待 #87 自进化工作流与评测基准就绪后，在固定算力与时间预算下对比默认后训练基线与多轮自进化配方在 Qwen3.8 上的收敛速度（val loss / BPB）、训练系统吞吐（tokens/s、MFU）及下游基准准确率提升。",
+        en: "Once the #87 evolution workflow and evaluation benchmark are ready, compare default post-training baselines against multi-round evolved recipes on Qwen3.8 under fixed compute and time budgets across convergence speed, training throughput, and downstream accuracy.",
       },
       evidence: {
         zh: "后训练配方改动补丁、候选树演化日志及吞吐/精度前后对比实验报告。",
         en: "Post-training recipe patches, candidate tree evolution logs, and before/after throughput and accuracy evaluation report.",
       },
-      issues: [87],
     },
   ],
 };
@@ -552,25 +550,25 @@ const companyModeCoordination: TopicDefinition = {
     {
       label: L.algo,
       work: {
-        zh: "优化 Company Mode 沟通规范（#50 / PR #1434，结论先行、禁刷屏与自我 @）并持续演进 Super Agent 协同架构（#94 / PR #1556，支持任务树拆解、里程碑并行调度与通知去重路由）。",
-        en: "Optimize Company Mode communication norms (#50 / PR #1434) and evolve the Super Agent coordination architecture (#94 / PR #1556, supporting task-tree decomposition, milestone parallel scheduling, and notification deduplication).",
+        zh: "优化 Company Mode 沟通规范（#50 / PR #1434，结论先行、禁刷屏与自我 @，两轮对照试跑将无指向刷屏由 16 条降至 0）并持续演进 Super Agent 协同架构（#94 / PR #1556，支持任务树拆解、里程碑并行调度与通知去重路由）。",
+        en: "Optimize Company Mode communication norms (#50 / PR #1434, reducing undirected status spam from 16 to 0 in two-round trials) and evolve the Super Agent coordination architecture (#94 / PR #1556, supporting task-tree decomposition, milestone parallel scheduling, and notification deduplication).",
       },
-      evidence: { zh: "PR #1434 已合入的沟通手册补丁与 Super Agent 协同架构规范及任务树调度实现（#94 / PR #1556）。", en: "Merged communication handbook patch in PR #1434 and Super Agent architecture spec & task-tree scheduler (#94 / PR #1556)." },
+      evidence: { zh: "PR #1434 已合入的沟通手册补丁及两轮对照试跑记录，与 Super Agent 协同架构规范及任务树调度实现（#94 / PR #1556）。", en: "Merged communication handbook patch and two-round trial records in PR #1434, plus Super Agent architecture spec & task-tree scheduler (#94 / PR #1556)." },
       issues: [50, 94],
       references: [
-        { label: { zh: "沟通规范优化 PR #1434", en: "Communication norms PR #1434" }, url: companyPr },
+        { label: { zh: "沟通规范优化与两轮对照试跑 PR #1434", en: "Communication norms & trial comparison PR #1434" }, url: companyPr },
         { label: { zh: "下一代 Company Mode 规范与原型 PR #1556", en: "Next-gen Company Mode spec & prototype PR #1556" }, url: companyNextSpecPr },
       ],
     },
     {
       label: L.run,
+      state: "planned",
+      pending: P.benchAcceptance,
       work: {
-        zh: "在 SWE-CoWork（#108）的 101 道真实代码仓库维护任务上对比原始提示词、精简沟通规范（#50 / PR #1434，两轮对照试跑将无指向刷屏由 16 条降至 0）与 Super Agent 里程碑并行调度（#94 / PR #1556）。",
-        en: "Compare baseline prompts, concise communication norms (#50 / PR #1434, reducing undirected status spam from 16 to 0 in two-round trials), and Super Agent milestone scheduling (#94 / PR #1556) on the 101 SWE-CoWork tasks (#108).",
+        zh: "待 SWE-CoWork 基准（#108 / PR #36）与 Super Agent 里程碑并行调度（#94 / PR #1556）合入后，在 101 道真实代码仓库维护任务上对比原始提示词、精简沟通规范（#50）与 Super Agent 任务树调度的协同效率与交付率。",
+        en: "Once the SWE-CoWork benchmark (#108 / PR #36) and Super Agent milestone scheduling (#94 / PR #1556) are merged, compare baseline prompts, concise communication norms (#50), and Super Agent task-tree scheduling across the 101 SWE-CoWork tasks.",
       },
       evidence: { zh: "频道消息长度、无效刷屏频次、Token 消耗与仓库级代码维护任务交付率对照报告。", en: "Comparison report of message length, status spam count, token cost, and repo-scale task delivery rate." },
-      issues: [50, 108, 94],
-      references: [{ label: { zh: "两轮对照试跑记录 PR #1434", en: "Two-round trial comparison in PR #1434" }, url: companyPr }],
     },
   ],
 };
@@ -578,8 +576,6 @@ const companyModeCoordination: TopicDefinition = {
 /* ---------- 4. RSI Platform & Applications ---------- */
 const gdpevoBenchPr = `${REPO.bench}/pull/5`;
 const gdpevoEvalPr = `${REPO.bench}/pull/16`;
-const ontologyPluginPr = `${REPO.plugins}/pull/21`;
-const ontologyEvalPr = `${REPO.bench}/pull/28`;
 const codexGdpevoPr = `${REPO.bench}/pull/29`;
 
 const gdpevoSkillEvolution: TopicDefinition = {
@@ -663,7 +659,7 @@ const gdpevoOntologyTransfer: TopicDefinition = {
         en: "Using PenguinHarness's GDPEVO Essential evolution results (#42 / PR #16) as reference, compare self-evolution score gains and per-test costs across Codex (#32 / PR #29), Claude Code, DeepSeek Harness, and Pi (#116).",
       },
       evidence: { zh: "多 Harness 自进化轨迹、提分效率—成本对照表与跨框架进化评测报告。", en: "Multi-harness evolution trajectories, efficiency-cost comparison tables, and cross-harness evaluation report." },
-      issues: [32, 116, 42],
+      issues: [32, 116],
       references: [
         { label: { zh: "Codex 自进化评测 PR #29", en: "Codex evolution evaluation PR #29" }, url: codexGdpevoPr },
         { label: { zh: "PenguinHarness 基线评测 PR #16", en: "PenguinHarness baseline evaluation PR #16" }, url: gdpevoEvalPr },
@@ -831,14 +827,14 @@ const metaHarnessReproduction: TopicDefinition = {
     {
       label: L.algo,
       work: {
-        zh: "在 PenguinHarness 中复现并集成外部前沿 RSI 算法：（1）已合入发布：RRSI（#35 / 主仓 PR #1535 + 插件仓 PR #43）及 ACE / APE / AWM / OPRO 基线包；（2）已提 PR 在审：Darwin Gödel Machine（#72 / PR #1553）、Reflexion（#73 / PR #1555）、SkillWeaver（#74 / PR #1690）、RSIAgent（#34 / 插件仓 PR #20）与本体演化 ontology-rsi-toolkit（#37 / 插件仓 PR #21）；（3）已认领开发中：斯坦福 Meta-Harness（#58，基于历史候选源码、得分与执行轨迹的 Proposer Agent 外层元搜索，认领者已先提交配套基准 PR #33，算法本体迁移中）。",
-        en: "Reproduce and integrate external RSI algorithms in PenguinHarness: (1) Merged & released: RRSI (#35 / PR #1535 + plugins PR #43) alongside ACE/APE/AWM/OPRO; (2) PR open for review: Darwin Gödel Machine (#72 / PR #1553), Reflexion (#73 / PR #1555), SkillWeaver (#74 / PR #1690), RSIAgent (#34 / plugins PR #20), and ontology-rsi-toolkit (#37 / plugins PR #21); (3) Claimed & in development: Stanford Meta-Harness (#58, Proposer Agent outer meta-search; assignee submitted companion benchmark PR #33 while algorithm plugin is in progress).",
+        zh: "在 PenguinHarness 中复现并集成外部前沿 RSI 算法：（1）已合入发布：RRSI（#35 / 主仓 PR #1535 + 插件仓 PR #43）及 ACE / APE / AWM / OPRO 基线包；（2）已提 PR 在审：Darwin Gödel Machine（#72 / PR #1553）、Reflexion（#73 / PR #1555）、SkillWeaver（#74 / PR #1690）与 RSIAgent（#34 / 插件仓 PR #20）；（3）已认领开发中：斯坦福 Meta-Harness（#58，基于历史候选源码、得分与执行轨迹的 Proposer Agent 外层元搜索，认领者已先提交配套基准 PR #33，算法本体迁移中）。",
+        en: "Reproduce and integrate external RSI algorithms in PenguinHarness: (1) Merged & released: RRSI (#35 / PR #1535 + plugins PR #43) alongside ACE/APE/AWM/OPRO; (2) PR open for review: Darwin Gödel Machine (#72 / PR #1553), Reflexion (#73 / PR #1555), SkillWeaver (#74 / PR #1690), and RSIAgent (#34 / plugins PR #20); (3) Claimed & in development: Stanford Meta-Harness (#58, Proposer Agent outer meta-search; assignee submitted companion benchmark PR #33 while algorithm plugin is in progress).",
       },
       evidence: {
-        zh: "已合入 penguin-harness-rsi-platform / penguin-harness-plugins 的 RRSI（PR #1535 / PR #43）等算法包，以及在审的 DGM（PR #1553）、Reflexion（PR #1555）、SkillWeaver（PR #1690）、RSIAgent（PR #20）、Ontology（PR #21）和开发中的 Meta-Harness（#58）。",
-        en: "Merged RRSI (PR #1535 / PR #43) toolkits in penguin-harness-rsi-platform & penguin-harness-plugins, open PRs for DGM (PR #1553), Reflexion (PR #1555), SkillWeaver (PR #1690), RSIAgent (PR #20), Ontology (PR #21), and in-progress Meta-Harness (#58).",
+        zh: "已合入 penguin-harness-rsi-platform / penguin-harness-plugins 的 RRSI（PR #1535 / PR #43）等算法包，以及在审的 DGM（PR #1553）、Reflexion（PR #1555）、SkillWeaver（PR #1690）、RSIAgent（PR #20）和开发中的 Meta-Harness（#58）。",
+        en: "Merged RRSI (PR #1535 / PR #43) toolkits in penguin-harness-rsi-platform & penguin-harness-plugins, open PRs for DGM (PR #1553), Reflexion (PR #1555), SkillWeaver (PR #1690), RSIAgent (PR #20), and in-progress Meta-Harness (#58).",
       },
-      issues: [58, 35, 72, 73, 74, 34, 37],
+      issues: [58, 35, 72, 73, 74, 34],
       references: [
         { label: { zh: "斯坦福 Meta-Harness 原论文 arXiv:2603.28052", en: "Stanford Meta-Harness paper arXiv:2603.28052" }, url: "https://arxiv.org/abs/2603.28052" },
         { label: { zh: "RRSI 已合入主仓 PR #1535", en: "Merged RRSI core PR #1535" }, url: rrsiPluginPr },
@@ -847,23 +843,21 @@ const metaHarnessReproduction: TopicDefinition = {
         { label: { zh: "Reflexion 复现 PR #1555（在审）", en: "Reflexion reproduction PR #1555 (open)" }, url: reflexionPluginPr },
         { label: { zh: "SkillWeaver 复现 PR #1690（在审）", en: "SkillWeaver reproduction PR #1690 (open)" }, url: skillweaverPluginPr },
         { label: { zh: "RSIAgent 插件 PR #20（在审）", en: "RSIAgent plugin PR #20 (open)" }, url: rsiagentPluginPr },
-        { label: { zh: "Ontology 插件 PR #21（在审）", en: "Ontology plugin PR #21 (open)" }, url: ontologyPluginPr },
       ],
     },
     {
       label: L.run,
       work: {
-        zh: "在对齐的原论文基准上检验各复现算法的提分幅度与复现准确度：其中 RRSI（#35）已在 Terminal-Bench 2.1 + SWE-bench Verified 上完成 400 条评测（PR #31，训练分 83.33→91.67、测试 Token 降 38.69%），ontology-rsi-toolkit（#37）已在 GDPEVO Essential 上完成三轮评测（PR #28，均分 67.78±0.78）；待 Terminal-Bench 2.0（#56 / PR #33）与 Meta-Harness（#58）、DGM（#72）、Reflexion（#73）、SkillWeaver（#74）、RSIAgent（#34）合入后开展完整对照实验。",
-        en: "Verify score gains and reproduction accuracy on aligned benchmarks: RRSI (#35) completed 400 runs on Terminal-Bench 2.1 + SWE-bench Verified (PR #31, train 83.33→91.67, test tokens -38.69%) and ontology-rsi-toolkit (#37) completed 3 rounds on GDPEVO Essential (PR #28, 67.78±0.78); full comparisons for Meta-Harness (#58) on Terminal-Bench 2.0 (#56 / PR #33) and DGM/Reflexion/SkillWeaver/RSIAgent await benchmark and plugin merge.",
+        zh: "在对齐的原论文基准上检验各复现算法的提分幅度与复现准确度：其中 RRSI（#35）已在 Terminal-Bench 2.1 + SWE-bench Verified 上完成 400 条评测（PR #31，训练分 83.33→91.67、测试 Token 降 38.69%）；待 Terminal-Bench 2.0（#56 / PR #33）与 Meta-Harness（#58）、DGM（#72）、Reflexion（#73）、SkillWeaver（#74）、RSIAgent（#34）合入后开展完整对照实验。",
+        en: "Verify score gains and reproduction accuracy on aligned benchmarks: RRSI (#35) completed 400 runs on Terminal-Bench 2.1 + SWE-bench Verified (PR #31, train 83.33→91.67, test tokens -38.69%); full comparisons for Meta-Harness (#58) on Terminal-Bench 2.0 (#56 / PR #33) and DGM/Reflexion/SkillWeaver/RSIAgent await benchmark and plugin merge.",
       },
       evidence: {
-        zh: "RRSI 复现评测记录（PR #31）、Ontology 评测记录（PR #28），以及 Meta-Harness（#58）等复现算法相对原论文指标与官方算法工具包（penguin-harness-rsi-platform）的对比实验报告。",
-        en: "RRSI reproduction evaluation (PR #31), Ontology evaluation (PR #28), and full comparison reports against original paper metrics and official toolkits in penguin-harness-rsi-platform.",
+        zh: "RRSI 复现评测记录（PR #31），以及 Meta-Harness（#58）等复现算法相对原论文指标与官方算法工具包（penguin-harness-rsi-platform）的对比实验报告。",
+        en: "RRSI reproduction evaluation (PR #31) and full comparison reports against original paper metrics and official toolkits in penguin-harness-rsi-platform.",
       },
-      issues: [58, 35, 72, 73, 74, 34, 37],
+      issues: [35],
       references: [
         { label: { zh: "RRSI 跨基准复现评测 PR #31（在审）", en: "RRSI reproduction evaluation PR #31 (open)" }, url: rrsiEvalPr },
-        { label: { zh: "Ontology GDPEVO 评测 PR #28（在审）", en: "Ontology GDPEVO evaluation PR #28 (open)" }, url: ontologyEvalPr },
         { label: { zh: "自进化工作台与算法仓 penguin-harness-rsi-platform", en: "RSI platform & toolkit repo penguin-harness-rsi-platform" }, url: REPO.rsiPlatform },
       ],
     },
@@ -922,15 +916,14 @@ const appSuperAgentTaskTree = buildAppTopic({
   },
   protoRefs: [
     { label: { zh: "dshbook 第 11 章 AgentTeams 原型", en: "dshbook Ch.11 AgentTeams prototype" }, url: `${REPO.dshbook}/chapter11/` },
-    { label: { zh: "Company Mode 沟通规范 PR #1434", en: "Company Mode norms PR #1434" }, url: companyPr },
   ],
   protoWork: {
-    zh: "基于 dshbook 第 11 章 AgentTeams 代码审查团队原型与 Company Mode 协同规范，定义队长拆解派发、成员并行执行卡片及 t1..t4 → t5 任务依赖 DAG 视图。",
-    en: "Based on dshbook Ch.11 AgentTeams prototype and Company Mode norms, define leader decomposition, member execution cards, and the t1..t4 → t5 DAG dependency view.",
+    zh: "基于 dshbook 第 11 章 AgentTeams 代码审查团队原型，定义队长拆解派发、成员并行执行卡片及 t1..t4 → t5 任务依赖 DAG 视图。",
+    en: "Based on dshbook Ch.11 AgentTeams prototype, define leader decomposition, member execution cards, and the t1..t4 → t5 DAG dependency view.",
   },
   protoEvidence: {
-    zh: "AgentTeams 活动面板交互原型（含进行中/等待依赖/已交付进度条与依赖高亮）及协同规范。",
-    en: "AgentTeams activity panel specification (progress bar, member status cards, and DAG dependency highlighting) plus coordination norms.",
+    zh: "AgentTeams 活动面板交互原型（含进行中/等待依赖/已交付进度条与依赖高亮）。",
+    en: "AgentTeams activity panel specification (progress bar, member status cards, and DAG dependency highlighting).",
   },
   skillWork: {
     zh: "对接 Super Agent 多角色协同与子代理调度接口，支持任务树节点状态订阅、前置依赖解锁唤醒与成果交叉核对汇总。",
