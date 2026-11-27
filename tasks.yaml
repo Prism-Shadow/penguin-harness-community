@@ -2066,3 +2066,34 @@ Save outputs and grades by problem and run so an interrupted run can resume from
     assignee: null
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/137"
     linked_pr: null
+
+  - id: "RSI-Q073"
+    issue_number: 142
+    author: "lzh368"
+    published_at: "2026-11-27T05:19:34Z"
+    status: "open"
+    domain: "PenguinHarness"
+    exp: 150
+    target_repository: "https://github.com/Prism-Shadow/penguin-harness"
+    related_issue: null
+    title: "Reproduce PyBot: Evolve a Pure-Python Weightless Chatbot via Multi-Agent RSI in PenguinHarness"
+    title_zh: "复现 PyBot：基于 PenguinHarness 多智能体自进化构建纯 Python 零权重对话机器人"
+    description: "Referencing Hugging Face's open-source project **PyBot** (`https://github.com/huggingface/pybot`), which used an agent swarm over 5,000+ iterations to write a pure-Python standard-library chatbot (no model weights, no training, just rules/regex/lookup tables) and improved its win rate from 0% to 26% on **SmolTalkBench**, build and verify a reproducible pure-Python chatbot self-evolution case study in **PenguinHarness**.
+
+**Acceptance Criteria**:
+1. **Self-Evolution Pipeline**: Set up a multi-agent iterative evolution workflow in PenguinHarness (covering modular rule/code generation, automated unit testing, evaluation on `SmolTalkBench` or a representative subset via LLM-as-a-Judge, and regression-free merging).
+2. **Pure-Python Bot Artifact**: The evolved chatbot itself must run solely on Python standard library rules/heuristics at inference time (zero neural network weights or external LLM calls during bot response generation).
+3. **Verified Multi-Round Improvement**: Run multiple rounds of evolution and provide a clear experimental report showing the win-rate progression across iterations (from the initial baseline to the evolved version), along with one-command reproduction scripts and runnable demo examples."
+    description_zh: "参考 Hugging Face 开源的 **PyBot** 项目（`https://github.com/huggingface/pybot`，通过多智能体 Swarm 历经 5,000+ 次迭代，仅用纯 Python 标准库规则、正则与查找表编写零权重对话机器人，并在 **SmolTalkBench** 上将胜率从 0% 进化提升至 26%），在 **PenguinHarness** 中构建并跑通一个可复现的「纯 Python 零权重对话机器人」多智能体自进化实验案例。
+
+**验收标准**：
+1. **自进化闭环构建**：基于 PenguinHarness 搭建多智能体迭代进化流水线（包含模块化纯 Python 规则编写、自动单元测试、基于 `SmolTalkBench` 或其代表性子集的 LLM Judge 自动评测反馈，以及防退化的代码合入机制）。
+2. **纯 Python 零权重约束**：进化产出的对话机器人在推理对话时仅依赖 Python 标准库与规则逻辑（Bot 自身推理过程不调用大模型 API、不使用神经网络权重）。
+3. **多轮进化效果验证**：完成多轮自进化迭代，提供完整的实验报告与进化曲线（展示从初始基线到多轮迭代后的评测胜率提升过程），并附上可一键复现的脚本与交互示例。"
+    references:
+      - "https://github.com/huggingface/pybot"
+      - "https://huggingface.co/datasets/HuggingFaceSwarms/SmolTalkBench"
+      - "https://huggingface.co/spaces/HuggingFaceSwarms/PyBot"
+    assignee: null
+    issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/142"
+    linked_pr: null
