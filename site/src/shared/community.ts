@@ -44,6 +44,7 @@ export const TARGET_REPOSITORIES = [
   "https://github.com/Prism-Shadow/penguin-harness-community",
   "https://github.com/Prism-Shadow/penguin-harness-benchmark",
   "https://github.com/Prism-Shadow/penguin-harness-plugins",
+  "https://github.com/Prism-Shadow/penguin-harness-apps",
   "https://github.com/Prism-Shadow/awesome-rsi",
   "https://github.com/Prism-Shadow/penguin-harness-paper",
 ] as const;
