@@ -29,7 +29,6 @@
   box-shadow: var(--card-shadow);
 }
 .atlas .research-card:hover { transform: none; border-color: var(--line); box-shadow: var(--card-shadow); }
-.atlas .research-card[data-state="lit"]:hover { border-color: var(--gold-line); }
 .atlas .research-card[data-template-card] { border-style: dashed; }
 .atlas .research-card h4 {
   margin: 0;
