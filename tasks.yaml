@@ -2083,7 +2083,7 @@ Save outputs and grades by problem and run so an interrupted run can resume from
 **Deliverables and acceptance criteria**
 
 1. **Modular weightless rule engine & bot package management**: Implement a pure-code chatbot runtime that executes locally with zero LLM calls and zero neural network weights during dialogue inference:
-   - Support the three-phase modular execution pipeline: `observe(text, memory)` updates multi-turn conversation state $\\rightarrow$ rule modules in `modules/` propose candidate replies (`respond`) $\\rightarrow$ `arbiter` selects the winning reply (`choose`), backed by shared `understanding`, `memory`, `knowledge`, and `compose` layers.
+   - Support the three-phase modular execution pipeline: `observe(text, memory)` updates multi-turn conversation state → rule modules in `modules/` propose candidate replies (`respond`) → `arbiter` selects the winning reply (`choose`), backed by shared `understanding`, `memory`, `knowledge`, and `compose` layers.
    - Support creating a new custom rule bot (Chinese or bilingual) from a starter template as well as loading/inspecting existing PyBot-compatible rule packages.
 2. **Split-pane live chat & rule execution trace inspector**: Provide an interactive workbench UI combining real-time dialogue with white-box rule observability:
    - **Chat Pane**: Multi-turn local conversation with millisecond-level response and session reset (`/reset`).
@@ -2097,7 +2097,7 @@ Save outputs and grades by problem and run so an interrupted run can resume from
 **交付与验收要求**
 
 1. **模块化纯代码零权重对话引擎与规则包管理**：实现本地纯代码执行的对话运行时（Bot 对话推理过程 **0 模型权重、0 大模型 API 调用**，毫秒级本地响应）：
-   - 支持标准三阶段模块化执行流水线：`observe(text, memory)` 提取并更新多轮对话记忆槽位 $\\rightarrow$ 各规则模块 `respond(text, memory)` 并行提出候选回复（`candidates` 及优先级）$\\rightarrow$ 仲裁器 `arbiter.choose` 选出最终回复，底层共享 `understanding`（语义/指代解析）、`memory`（会话记忆）、`knowledge`（结构化知识表）与 `compose`（话术模板）组件；
+   - 支持标准三阶段模块化执行流水线：`observe(text, memory)` 提取并更新多轮对话记忆槽位 → 各规则模块 `respond(text, memory)` 并行提出候选回复（`candidates` 及优先级）→ 仲裁器 `arbiter.choose` 选出最终回复，底层共享 `understanding`（语义/指代解析）、`memory`（会话记忆）、`knowledge`（结构化知识表）与 `compose`（话术模板）组件；
    - 支持从零初始化自定义纯代码规则 Bot（支持中文或中英双语），同时支持加载或检视兼容 PyBot 结构的规则模块包。
 2. **实时对话与白盒规则决策链路透视面板**：提供左/右分栏联动的可视化工作台界面：
    - **实时对话面板**：支持与纯代码 Bot 进行多轮对话与 `/reset` 会话重置；
