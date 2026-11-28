@@ -1279,6 +1279,7 @@ Deliverables and acceptance criteria:
   - id: "RSI-Q051"
     issue_number: 111
     author: "hiyouga"
+    pr_number: 96
     published_at: "2026-11-18T12:05:44Z"
     status: "in_progress"
     domain: "Awesome RSI"
@@ -1296,7 +1297,7 @@ Deliverables and acceptance criteria:
       - "https://arxiv.org/abs/2610.14625"
     assignee: "Huster-LiShuangJia"
     issue_url: "https://github.com/Prism-Shadow/penguin-harness-community/issues/111"
-    linked_pr: null
+    linked_pr: "https://github.com/Prism-Shadow/awesome-rsi/pull/96"
 
   - id: "RSI-Q052"
     issue_number: 112
